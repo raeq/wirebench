@@ -27,6 +27,10 @@ class CD4043(Chip):
     OE distribution is a real internal wire from the OE pin's internal
     face to every tri-state buffer's enable input.  The topological sort
     over the internal mesh produces evaluation order automatically.
+
+    OE has no integrated pull-up.  In a real circuit OE must always be
+    tied to VDD or a control signal — left floating, the chip's outputs
+    are undefined.
     """
 
     __slots__ = ('_latches', '_buf_q', '_buf_q_bar')
@@ -40,11 +44,10 @@ class CD4043(Chip):
         self._buf_q_bar = tuple(TriStateBuffer(domain) for _ in range(self.CHANNELS))
 
         # --- Pins: the chip's external surface ---
-        # OE has a weak pull-up so an undriven OE behaves as enabled.
-        # Real CD4043 silicon doesn't do this — left-floating OE is
-        # forbidden — but modelling the convenience preserves prior
-        # behaviour.
-        oe = Pin('oe', Direction.IN, domain, mandatory=False, signal_type=Digital, default=True)
+        # OE has no integrated pull-up — real CD4043 silicon requires it
+        # to be tied to VDD or a control signal explicitly. Leaving OE
+        # floating produces undefined outputs (None propagates through).
+        oe = Pin('oe', Direction.IN, domain, mandatory=False, signal_type=Digital)
         s_pins, r_pins, q_pins, qb_pins = [], [], [], []
         for i in range(1, self.CHANNELS + 1):
             s_pins .append(Pin(f's_{i}',     Direction.IN,  domain, mandatory=False, signal_type=Digital))

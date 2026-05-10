@@ -35,13 +35,16 @@ class WaterAlarm(Circuit):
         latch     = CD4043()
         red_led   = LED('red')
         green_led = LED('green')
-        gnd       = Rail(False)   # GND tie for the five unused inverter gates
+        gnd       = Rail(False)   # GND tie for unused CMOS inputs and unused latches
+        vcc       = Rail(True)    # Vcc tie for the latch's OE pin
 
         wire(sensor.ports['out_1'], latch.ports['s_1'])
         wire(sensor.ports['out_2'], inv.ports['a_1'])
         wire(inv.ports['y_1'],      latch.ports['r_1'])
         wire(latch.ports['q_1'],    red_led.ports['anode'])
         wire(latch.ports['q_1_bar'], green_led.ports['anode'])
+        # CD4043 OE must be tied HIGH for outputs to be enabled.
+        wire(vcc.ports['out'], latch.ports['oe'])
         # CMOS inputs must never float — tie unused inverter inputs LOW
         # and unused latch S/R inputs LOW (so those latches sit in 'hold').
         wire(gnd.ports['out'],
@@ -52,7 +55,7 @@ class WaterAlarm(Circuit):
              latch.ports['s_4'], latch.ports['r_4'])
 
         super().__init__(
-            factor_nodes=[sensor, inv, latch, red_led, green_led, gnd],
+            factor_nodes=[sensor, inv, latch, red_led, green_led, gnd, vcc],
             ports={'low_probe':  sensor.ports['in_1'],
                    'high_probe': sensor.ports['in_2'],
                    'state':      latch.ports['q_1']},

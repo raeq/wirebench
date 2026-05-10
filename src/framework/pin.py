@@ -24,7 +24,7 @@ class Pin(FactorNode):
     `pin.internal` to whatever cell ports implement the pin's behaviour.
     """
 
-    __slots__ = ('_role', '_external', '_internal', '_default')
+    __slots__ = ('_role', '_external', '_internal')
 
     def __init__(
         self,
@@ -34,16 +34,10 @@ class Pin(FactorNode):
         *,
         mandatory: bool = True,
         signal_type: type,
-        default=None,
     ) -> None:
-        # `default` models an integrated pull-up / pull-down (or a chip-level
-        # default state). When the external face is undriven (None) at
-        # evaluation time, the internal face is driven to this value
-        # instead of propagating None into the chip.
         if direction is Direction.BIDIR:
             raise NotImplementedError("BIDIR pins are not yet supported")
         self._role = direction
-        self._default = default
         if direction is Direction.IN:
             # External: IN (consumer drives it). Internal: OUT (pin drives the mesh).
             self._external = Port(
@@ -88,10 +82,7 @@ class Pin(FactorNode):
 
     def evaluate(self) -> None:
         if self._role is Direction.IN:
-            v = self._external.value
-            if v is None and self._default is not None:
-                v = self._default
-            self._internal.drive(v)
+            self._internal.drive(self._external.value)
         else:
             self._external.drive(self._internal.value)
 

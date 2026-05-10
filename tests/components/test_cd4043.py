@@ -57,12 +57,15 @@ def test_oe_re_enables_after_tristate(chip):
     assert out[0] == (True, False)
 
 
-def test_oe_unconnected_defaults_to_enabled(chip):
-    # Drive via port-level interface; oe is never touched.
+def test_oe_unconnected_outputs_undefined(chip):
+    # No integrated pull-up — undriven OE → buffer enables see None →
+    # outputs propagate None. Real CD4043 silicon also requires OE to
+    # be tied explicitly; this is the honest model.
     chip.ports['s_1'].drive(True)
     chip.ports['r_1'].drive(False)
     chip.evaluate()
-    assert chip.ports['q_1'].value is True
+    assert chip.ports['q_1'].value is None
+    assert chip.ports['q_1_bar'].value is None
 
 
 def test_repr_undefined(chip):

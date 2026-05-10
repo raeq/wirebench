@@ -46,28 +46,6 @@ def test_in_pin_undriven_external_propagates_none():
     assert p.internal.value is None
 
 
-# --- default models a weak pull-up / pull-down on an IN pin ---
-
-def test_in_pin_default_applies_when_external_undriven():
-    p = Pin('oe', Direction.IN, ELECTRICAL, signal_type=Digital, default=True)
-    p.evaluate()
-    assert p.internal.value is True
-
-
-def test_in_pin_default_overridden_by_driven_external():
-    p = Pin('oe', Direction.IN, ELECTRICAL, signal_type=Digital, default=True)
-    p.external.drive(False)
-    p.evaluate()
-    assert p.internal.value is False
-
-
-def test_out_pin_default_is_irrelevant():
-    # default doesn't apply to OUT pins (they propagate internal -> external).
-    p = Pin('y', Direction.OUT, ELECTRICAL, signal_type=Digital, default=True)
-    p.evaluate()
-    assert p.external.value is None
-
-
 # --- ports surface ---
 
 def test_pin_ports_dict_keyed_by_port_name():
