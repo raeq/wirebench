@@ -1,7 +1,10 @@
+from typing import ClassVar
+
 from framework.chip import Chip
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin
 from framework.port import Direction
+from framework.refdes import validate_refdes
 from framework.signals import Digital
 from framework.wire import wire
 from .concepts.inverter import Inverter
@@ -27,11 +30,14 @@ class SN74HC04(Chip):
     circuits — never left floating.
     """
 
-    __slots__ = ('_gates',)
+    __slots__ = ('_gates', '_refdes_number')
 
     CHANNELS: int = 6
+    REFDES_PREFIX: ClassVar[str] = 'U'
 
-    def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
+    def __init__(self, domain: GroundDomain = ELECTRICAL, *, refdes_number: int) -> None:
+        validate_refdes(self.REFDES_PREFIX, refdes_number)
+        self._refdes_number = refdes_number
         self._gates = tuple(Inverter(domain) for _ in range(self.CHANNELS))
 
         a_pins, y_pins = [], []
@@ -44,6 +50,14 @@ class SN74HC04(Chip):
             wire(gate.ports['y'],    y_pins[i].internal)
 
         super().__init__(pins=a_pins + y_pins, cells=list(self._gates))
+
+    @property
+    def refdes(self) -> str:
+        return f"{self.REFDES_PREFIX}{self._refdes_number}"
+
+    @property
+    def refdes_number(self) -> int:
+        return self._refdes_number
 
     def __call__(
         self,
@@ -64,4 +78,4 @@ class SN74HC04(Chip):
 
     def __repr__(self) -> str:
         ys = tuple(self._ports[f'y_{i+1}'].value for i in range(self.CHANNELS))
-        return f"SN74HC04(y={ys})"
+        return f"SN74HC04(y={ys}, refdes={self.refdes!r})"

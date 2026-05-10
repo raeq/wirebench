@@ -44,7 +44,7 @@ def test_str_off(red_led):
 
 
 def test_repr(red_led):
-    assert repr(red_led) == "LED(color='red', lit=None)"
+    assert repr(red_led) == "LED(color='red', lit=None, refdes='D1')"
 
 
 def test_cathode_port_exists(red_led):

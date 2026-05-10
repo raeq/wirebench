@@ -76,6 +76,27 @@ class Circuit(FactorNode):
             detail = '; '.join(', '.join(group) for group in shorted)
             raise ValueError(f"Short circuit — multiple drivers on same node: {detail}")
 
+        # Duplicate-refdes detection. Walks only refdes-bearing children
+        # (chips and passives that declare REFDES_PREFIX). Cells inside
+        # chips are skipped — they don't carry a refdes — and Chip's
+        # own _validate is automatically a no-op for this check because
+        # its factor_nodes contain only Pins and refdes-less cells.
+        seen: dict[tuple[str, int], str] = {}
+        collisions: list[str] = []
+        for fn in factor_nodes:
+            if not hasattr(fn, 'REFDES_PREFIX'):
+                continue
+            key = (fn.REFDES_PREFIX, fn.refdes_number)
+            label = f"'{type(fn).__name__}.{fn.refdes}'"
+            if key in seen:
+                collisions.append(f"{seen[key]} and {label}")
+            else:
+                seen[key] = label
+        if collisions:
+            raise ValueError(
+                f"Duplicate refdes: {'; '.join(collisions)}"
+            )
+
     @property
     def ports(self) -> dict:
         return self._ports

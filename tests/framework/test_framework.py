@@ -122,7 +122,7 @@ def test_drive_rejects_uncoercible_value():
 # --- Circuit graph evaluation ---
 
 def test_sn74hc04_inverts_channel_1():
-    chip = SN74HC04()
+    chip = SN74HC04(refdes_number=1)
     assert chip(True)[0] is False
     assert chip(False)[0] is True
     assert chip(None)[0] is None
@@ -133,8 +133,8 @@ def test_topological_order_is_respected():
     from framework.circuit import Circuit
     from framework.wire import wire
 
-    chip = SN74HC04()
-    led = LED('green')
+    chip = SN74HC04(refdes_number=1)
+    led = LED('green', refdes_number=1)
 
     wire(chip.ports['y_1'], led.ports['anode'])
 
@@ -183,7 +183,7 @@ def test_wire_rejects_signal_type_mismatch():
 def test_circuit_rejects_unconnected_mandatory_port():
     from framework.circuit import Circuit
     latch = NORLatch()
-    chip = SN74HC04()
+    chip = SN74HC04(refdes_number=1)
     wire(chip.ports['y_1'], latch.ports['r'])   # r is wired
     # s is mandatory, unconnected, and not declared as a boundary port → must raise
     with pytest.raises(ValueError, match="Unconnected mandatory port"):
@@ -196,8 +196,8 @@ def test_circuit_rejects_unconnected_mandatory_port():
 def test_circuit_rejects_short_circuit():
     from framework.circuit import Circuit
     from framework.node import Node
-    a = SN74HC04()
-    b = SN74HC04()
+    a = SN74HC04(refdes_number=1)
+    b = SN74HC04(refdes_number=2)
     shared = Node('shared', ELECTRICAL)
     a.ports['y_1'].connect(shared)
     b.ports['y_1'].connect(shared)
@@ -216,8 +216,8 @@ def test_circuit_rejects_two_bidir_drivers_with_no_out():
     from framework.node import Node
     from components.passives.resistor import Resistor
 
-    r1 = Resistor(ohms=100)
-    r2 = Resistor(ohms=100)
+    r1 = Resistor(ohms=100, refdes_number=1)
+    r2 = Resistor(ohms=100, refdes_number=2)
     shared = Node('shared', ELECTRICAL)
     r1.ports['t1'].connect(shared)
     r2.ports['t1'].connect(shared)

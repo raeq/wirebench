@@ -1,6 +1,9 @@
+from typing import ClassVar
+
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
+from framework.refdes import validate_refdes
 from framework.signals import Digital
 from framework.units import Ohms
 
@@ -33,9 +36,19 @@ class LED(FactorNode):
     I_F_TYP: float = 0.010  # typical operating current, amps (10 mA)
     I_F_MAX: float = 0.020  # absolute maximum current, amps (20 mA)
 
-    __slots__ = ('_color', '_lit', '_ports')
+    __slots__ = ('_color', '_lit', '_ports', '_refdes_number')
 
-    def __init__(self, color: str, domain: GroundDomain = ELECTRICAL) -> None:
+    REFDES_PREFIX: ClassVar[str] = 'D'   # LEDs are diodes; standard prefix is D, not LED.
+
+    def __init__(
+        self,
+        color: str,
+        domain: GroundDomain = ELECTRICAL,
+        *,
+        refdes_number: int,
+    ) -> None:
+        validate_refdes(self.REFDES_PREFIX, refdes_number)
+        self._refdes_number = refdes_number
         self._color = color
         # Power-on with no signal: undriven, not "off". Until the anode is
         # actually driven, lit is None — same convention as a comparator
@@ -53,6 +66,14 @@ class LED(FactorNode):
     @property
     def lit(self) -> bool | None:
         return self._lit
+
+    @property
+    def refdes(self) -> str:
+        return f"{self.REFDES_PREFIX}{self._refdes_number}"
+
+    @property
+    def refdes_number(self) -> int:
+        return self._refdes_number
 
     def evaluate(self) -> None:
         anode_val = self._ports['anode'].value
@@ -90,4 +111,4 @@ class LED(FactorNode):
         return f"{self._color}: {state}"
 
     def __repr__(self) -> str:
-        return f"LED(color='{self._color}', lit={self._lit})"
+        return f"LED(color='{self._color}', lit={self._lit}, refdes={self.refdes!r})"

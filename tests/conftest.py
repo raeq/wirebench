@@ -13,7 +13,7 @@ from applications.water_alarm import WaterAlarm
 
 @pytest.fixture
 def shunt():
-    return Resistor(ohms=1)
+    return Resistor(ohms=1, refdes_number=1)
 
 
 @pytest.fixture
@@ -28,7 +28,7 @@ def latch():
 
 @pytest.fixture
 def red_led():
-    return LED('red')
+    return LED('red', refdes_number=1)
 
 
 @pytest.fixture

@@ -30,11 +30,11 @@ class WaterAlarm(Circuit):
     __slots__ = ('_red_led', '_green_led')
 
     def __init__(self) -> None:
-        sensor    = ULN2003A()
-        sn74hc04  = SN74HC04()
-        cd4043    = CD4043()
-        red_led   = LED('red')
-        green_led = LED('green')
+        sensor    = ULN2003A(refdes_number=1)
+        sn74hc04  = SN74HC04(refdes_number=2)
+        cd4043    = CD4043(refdes_number=3)
+        red_led   = LED('red',   refdes_number=1)
+        green_led = LED('green', refdes_number=2)
         gnd       = Rail(False)   # GND tie for unused CMOS inputs and unused latch cells
         vcc       = Rail(True)    # Vcc tie for the CD4043's OE pin
 

@@ -4,7 +4,7 @@ from components.chips.lm393 import LM393
 
 @pytest.fixture
 def chip():
-    return LM393()
+    return LM393(refdes_number=1)
 
 
 def test_channel_1_v_plus_greater_is_high(chip):
@@ -32,4 +32,4 @@ def test_undriven_channel_2_returns_none(chip):
 
 
 def test_repr(chip):
-    assert repr(chip) == "LM393(out=(None, None))"
+    assert repr(chip) == "LM393(out=(None, None), refdes='U1')"

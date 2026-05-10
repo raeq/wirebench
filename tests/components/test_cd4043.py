@@ -4,7 +4,7 @@ from components.chips.cd4043 import CD4043
 
 @pytest.fixture
 def chip():
-    return CD4043()
+    return CD4043(refdes_number=1)
 
 
 def test_initial_outputs_undefined(chip):
@@ -70,7 +70,7 @@ def test_oe_unconnected_outputs_undefined(chip):
 
 
 def test_repr_undefined(chip):
-    assert repr(chip) == "CD4043(q=(None, None, None, None))"
+    assert repr(chip) == "CD4043(q=(None, None, None, None), refdes='U1')"
 
 
 def test_call_refuses_when_input_pin_is_wired(chip):

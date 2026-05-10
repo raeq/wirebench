@@ -1,6 +1,9 @@
+from typing import ClassVar
+
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
+from framework.refdes import validate_refdes
 from framework.signals import Analog
 from framework.units import Amps, Ohms, Volts
 
@@ -28,9 +31,19 @@ class Resistor(FactorNode):
         r(Milliamps(10))                  # Volts(3.3)
     """
 
-    __slots__ = ('_ohms', '_ports')
+    __slots__ = ('_ohms', '_ports', '_refdes_number')
 
-    def __init__(self, ohms: float | Ohms, domain: GroundDomain = ELECTRICAL) -> None:
+    REFDES_PREFIX: ClassVar[str] = 'R'
+
+    def __init__(
+        self,
+        ohms: float | Ohms,
+        domain: GroundDomain = ELECTRICAL,
+        *,
+        refdes_number: int,
+    ) -> None:
+        validate_refdes(self.REFDES_PREFIX, refdes_number)
+        self._refdes_number = refdes_number
         # Normalise to a plain base-unit float so repr is canonical regardless
         # of input type (Ohms(47), Kilohms(4.7), and 4700 all store as 4700.0).
         self._ohms = float(ohms)
@@ -48,6 +61,14 @@ class Resistor(FactorNode):
     @property
     def ports(self) -> dict:
         return self._ports
+
+    @property
+    def refdes(self) -> str:
+        return f"{self.REFDES_PREFIX}{self._refdes_number}"
+
+    @property
+    def refdes_number(self) -> int:
+        return self._refdes_number
 
     def evaluate(self) -> None:
         # Current through a resistor cannot be derived from terminal
@@ -76,4 +97,4 @@ class Resistor(FactorNode):
         return f"{self._ohms} Ω"
 
     def __repr__(self) -> str:
-        return f"Resistor(ohms={self._ohms!r})"
+        return f"Resistor(ohms={self._ohms!r}, refdes={self.refdes!r})"

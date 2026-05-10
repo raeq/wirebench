@@ -1,7 +1,10 @@
+from typing import ClassVar
+
 from framework.chip import Chip
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin
 from framework.port import Direction
+from framework.refdes import validate_refdes
 from framework.signals import Analog, Digital
 from framework.wire import wire
 from .concepts.darlington_channel import DarlingtonChannel
@@ -34,13 +37,16 @@ class ULN2003A(Chip):
     transistor is off.
     """
 
-    __slots__ = ('_channels',)
+    __slots__ = ('_channels', '_refdes_number')
 
     CHANNELS:    int   = 7
     V_THRESHOLD: float = DarlingtonChannel.V_THRESHOLD   # mirror of cell's threshold
     I_OUT_MAX:   float = 0.500   # A — maximum sink current per channel
+    REFDES_PREFIX: ClassVar[str] = 'U'
 
-    def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
+    def __init__(self, domain: GroundDomain = ELECTRICAL, *, refdes_number: int) -> None:
+        validate_refdes(self.REFDES_PREFIX, refdes_number)
+        self._refdes_number = refdes_number
         self._channels = tuple(DarlingtonChannel(domain) for _ in range(self.CHANNELS))
 
         in_pins, out_pins = [], []
@@ -53,6 +59,14 @@ class ULN2003A(Chip):
             wire(channel.ports['out'], out_pins[i].internal)
 
         super().__init__(pins=in_pins + out_pins, cells=list(self._channels))
+
+    @property
+    def refdes(self) -> str:
+        return f"{self.REFDES_PREFIX}{self._refdes_number}"
+
+    @property
+    def refdes_number(self) -> int:
+        return self._refdes_number
 
     def __call__(
         self,
@@ -79,4 +93,4 @@ class ULN2003A(Chip):
 
     def __repr__(self) -> str:
         outs = tuple(self._ports[f'out_{i+1}'].value for i in range(self.CHANNELS))
-        return f'ULN2003A(out={outs})'
+        return f"ULN2003A(out={outs}, refdes={self.refdes!r})"

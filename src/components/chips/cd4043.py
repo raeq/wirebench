@@ -1,7 +1,10 @@
+from typing import ClassVar
+
 from framework.chip import Chip
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin
 from framework.port import Direction
+from framework.refdes import validate_refdes
 from framework.signals import Digital
 from framework.wire import wire
 from .concepts.nor_latch import NORLatch
@@ -33,11 +36,14 @@ class CD4043(Chip):
     are undefined.
     """
 
-    __slots__ = ('_latches', '_buf_q', '_buf_q_bar')
+    __slots__ = ('_latches', '_buf_q', '_buf_q_bar', '_refdes_number')
 
     CHANNELS: int = 4
+    REFDES_PREFIX: ClassVar[str] = 'U'
 
-    def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
+    def __init__(self, domain: GroundDomain = ELECTRICAL, *, refdes_number: int) -> None:
+        validate_refdes(self.REFDES_PREFIX, refdes_number)
+        self._refdes_number = refdes_number
         # --- Cells: the chip's private implementation ---
         self._latches   = tuple(NORLatch(domain)       for _ in range(self.CHANNELS))
         self._buf_q     = tuple(TriStateBuffer(domain) for _ in range(self.CHANNELS))
@@ -76,6 +82,14 @@ class CD4043(Chip):
             cells=list(self._latches) + list(self._buf_q) + list(self._buf_q_bar),
         )
 
+    @property
+    def refdes(self) -> str:
+        return f"{self.REFDES_PREFIX}{self._refdes_number}"
+
+    @property
+    def refdes_number(self) -> int:
+        return self._refdes_number
+
     def __call__(
         self,
         s_1: bool = False, r_1: bool = False,
@@ -99,4 +113,4 @@ class CD4043(Chip):
 
     def __repr__(self) -> str:
         latches = ', '.join(str(l.ports['q'].value) for l in self._latches)
-        return f"CD4043(q=({latches}))"
+        return f"CD4043(q=({latches}), refdes={self.refdes!r})"

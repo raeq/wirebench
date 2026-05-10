@@ -1,7 +1,10 @@
+from typing import ClassVar
+
 from framework.chip import Chip
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin
 from framework.port import Direction
+from framework.refdes import validate_refdes
 from framework.signals import Analog, Digital
 from framework.wire import wire
 from .concepts.comparator import Comparator
@@ -23,11 +26,14 @@ class LM393(Chip):
     (typically 1–10 kΩ) when building the physical circuit.
     """
 
-    __slots__ = ('_cells',)
+    __slots__ = ('_cells', '_refdes_number')
 
     CHANNELS: int = 2
+    REFDES_PREFIX: ClassVar[str] = 'U'
 
-    def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
+    def __init__(self, domain: GroundDomain = ELECTRICAL, *, refdes_number: int) -> None:
+        validate_refdes(self.REFDES_PREFIX, refdes_number)
+        self._refdes_number = refdes_number
         self._cells = tuple(Comparator(domain) for _ in range(self.CHANNELS))
 
         vp_pins, vm_pins, out_pins = [], [], []
@@ -46,6 +52,14 @@ class LM393(Chip):
             cells=list(self._cells),
         )
 
+    @property
+    def refdes(self) -> str:
+        return f"{self.REFDES_PREFIX}{self._refdes_number}"
+
+    @property
+    def refdes_number(self) -> int:
+        return self._refdes_number
+
     def __call__(
         self,
         v_plus_1:  float | None,
@@ -63,4 +77,4 @@ class LM393(Chip):
 
     def __repr__(self) -> str:
         outs = tuple(self._ports[f'out_{i}'].value for i in range(1, self.CHANNELS + 1))
-        return f"LM393(out={outs})"
+        return f"LM393(out={outs}, refdes={self.refdes!r})"
