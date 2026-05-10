@@ -42,6 +42,9 @@ class Resistor(FactorNode):
         # both driven or neither → nothing to propagate
 
     def __call__(self, current):
+        # __call__ commits to a t1 → t2 direction for this invocation: clear any
+        # value left on t2 by a previous call so _evaluate propagates afresh.
+        self._ports['t2']._local_value = None
         self._ports['t1'].drive(current)
         self._evaluate()
         return self._ports['t2'].value

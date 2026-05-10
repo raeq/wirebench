@@ -17,6 +17,13 @@ def test_zero_current(shunt):
     assert shunt(0) == 0
 
 
+def test_repeated_calls_recompute():
+    # second call must overwrite the result of the first, not no-op
+    r = Resistor(ohms=10)
+    assert r(5) == 50
+    assert r(7) == 70
+
+
 def test_port_names():
     r = Resistor(ohms=470)
     assert 't1' in r.ports
