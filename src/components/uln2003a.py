@@ -33,7 +33,10 @@ class ULN2003A(FactorNode):
     I_OUT_MAX:   float = 0.500 # A — maximum sink current per channel
 
     def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
-        self._out: tuple[bool, ...] = (True,) * self.CHANNELS
+        # Power-on with nothing driving the inputs: outputs are undriven,
+        # not "all HIGH". The HIGH-when-input-LOW behaviour is a property
+        # of evaluating the open-collector model, not a default state.
+        self._out: tuple[bool | None, ...] = (None,) * self.CHANNELS
         self._ports = {
             **{f'in_{i+1}':  Port(f'in_{i+1}',  Direction.IN,  domain, mandatory=False, signal_type=Analog)  for i in range(self.CHANNELS)},
             **{f'out_{i+1}': Port(f'out_{i+1}', Direction.OUT, domain, mandatory=False, signal_type=Digital) for i in range(self.CHANNELS)},
@@ -44,8 +47,8 @@ class ULN2003A(FactorNode):
         return self._ports
 
     @property
-    def out(self) -> tuple[bool, ...]:
-        """Output pin voltages as a tuple: True = HIGH, False = LOW."""
+    def out(self) -> tuple[bool | None, ...]:
+        """Output pin voltages as a tuple: True = HIGH, False = LOW, None = undriven."""
         return self._out
 
     def _evaluate(self) -> None:

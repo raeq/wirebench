@@ -37,7 +37,10 @@ class LED(FactorNode):
 
     def __init__(self, color: str, domain: GroundDomain = ELECTRICAL) -> None:
         self._color = color
-        self._lit = False
+        # Power-on with no signal: undriven, not "off". Until the anode is
+        # actually driven, lit is None — same convention as a comparator
+        # whose inputs are floating.
+        self._lit: bool | None = None
         self._ports = {
             'anode':   Port('anode',   Direction.IN, domain, mandatory=True,  signal_type=Digital),
             'cathode': Port('cathode', Direction.IN, domain, mandatory=False, signal_type=Digital),
@@ -48,11 +51,15 @@ class LED(FactorNode):
         return self._ports
 
     @property
-    def lit(self) -> bool:
+    def lit(self) -> bool | None:
         return self._lit
 
     def _evaluate(self) -> None:
-        anode   = bool(Digital(self._ports['anode'].value))
+        anode_val = self._ports['anode'].value
+        if anode_val is None:
+            self._lit = None
+            return
+        anode   = bool(Digital(anode_val))
         cathode = bool(Digital(self._ports['cathode'].value))
         self._lit = anode and not cathode   # conducts when anode HIGH, cathode LOW
 
@@ -72,13 +79,14 @@ class LED(FactorNode):
         i = i_target if i_target is not None else cls.I_F_TYP
         return Ohms((v_supply - cls.V_F) / i)
 
-    def __call__(self, anode: bool | None) -> bool:
+    def __call__(self, anode: bool | None) -> bool | None:
         self._ports['anode'].drive(anode)
         self._evaluate()
         return self._lit
 
     def __str__(self) -> str:
-        return f"{self._color}: {'ON' if self._lit else 'OFF'}"
+        state = '?' if self._lit is None else ('ON' if self._lit else 'OFF')
+        return f"{self._color}: {state}"
 
     def __repr__(self) -> str:
         return f"LED(color='{self._color}', lit={self._lit})"

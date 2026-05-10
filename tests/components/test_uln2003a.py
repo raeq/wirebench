@@ -2,10 +2,10 @@ import pytest
 from components.uln2003a import ULN2003A
 
 
-def test_all_channels_high_on_init():
-    # no input → all transistors off → all outputs pulled HIGH
+def test_all_channels_undriven_on_init():
+    # power-on with no evaluation: outputs are undriven (None), not "all HIGH"
     uln = ULN2003A()
-    assert uln.out == (True,) * 7
+    assert uln.out == (None,) * 7
 
 
 def test_channel_high_below_threshold():
@@ -60,7 +60,7 @@ def test_out_reflects_last_call():
 
 def test_repr():
     uln = ULN2003A()
-    assert repr(uln) == f'ULN2003A(out={(True,) * 7})'
+    assert repr(uln) == f'ULN2003A(out={(None,) * 7})'
 
 
 def test_str_channel_labels():

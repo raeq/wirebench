@@ -2,8 +2,9 @@ import pytest
 from components.led import LED
 
 
-def test_initially_unlit(red_led):
-    assert red_led.lit is False
+def test_initially_undriven(red_led):
+    # Power-on with no signal: lit is None, not False (parity with comparator).
+    assert red_led.lit is None
 
 
 def test_true_signal_lights(red_led):
@@ -17,10 +18,10 @@ def test_false_signal_extinguishes(red_led):
     assert red_led.lit is False
 
 
-def test_none_signal_extinguishes(red_led):
+def test_none_signal_returns_to_undriven(red_led):
     red_led(True)
     red_led(None)
-    assert red_led.lit is False
+    assert red_led.lit is None
 
 
 def test_lit_is_readonly(red_led):
@@ -33,12 +34,17 @@ def test_str_on(red_led):
     assert str(red_led) == "red: ON"
 
 
+def test_str_undriven(red_led):
+    assert str(red_led) == "red: ?"
+
+
 def test_str_off(red_led):
+    red_led(False)
     assert str(red_led) == "red: OFF"
 
 
 def test_repr(red_led):
-    assert repr(red_led) == "LED(color='red', lit=False)"
+    assert repr(red_led) == "LED(color='red', lit=None)"
 
 
 def test_cathode_port_exists(red_led):
