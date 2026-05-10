@@ -2,65 +2,87 @@ from framework.signals import Analog
 
 
 class _Unit(Analog):
+    """Numeric value carrying a SI scale factor.
+
+    The stored float is always in the family's base unit (volts, amps, ohms).
+    Display uses `_SCALE` to render the value back in the declared unit:
+
+        Millivolts(100)         # stored as 0.1 V
+        float(Millivolts(100))  # 0.1
+        str(Millivolts(100))    # "100 mV"
+        Volts(5) - Millivolts(100) == Volts(4.9)   # cross-unit arithmetic works
+    """
+
     __slots__ = ()
+    _SCALE: float = 1.0   # multiply by this to convert to base unit
+
+    def __new__(cls, value=0.0):
+        base = 0.0 if value is None else float(value) * cls._SCALE
+        return Analog.__new__(cls, base)
+
+    @classmethod
+    def _from_base(cls, base: float) -> '_Unit':
+        """Construct a unit instance from an already-base-unit float (no rescaling)."""
+        obj = Analog.__new__(cls, base)
+        return obj
 
     # Additive ops preserve unit type; mul/div intentionally return float (units change).
-    def __add__(self, other):  return type(self)(float(self) + float(other))
-    def __radd__(self, other): return type(self)(float(other) + float(self))
-    def __sub__(self, other):  return type(self)(float(self) - float(other))
-    def __rsub__(self, other): return type(self)(float(other) - float(self))
-    def __neg__(self):         return type(self)(-float(self))
-    def __abs__(self):         return type(self)(abs(float(self)))
-    def __pos__(self):         return type(self)(+float(self))
+    def __add__(self, other):  return type(self)._from_base(float(self) + float(other))
+    def __radd__(self, other): return type(self)._from_base(float(other) + float(self))
+    def __sub__(self, other):  return type(self)._from_base(float(self) - float(other))
+    def __rsub__(self, other): return type(self)._from_base(float(other) - float(self))
+    def __neg__(self):         return type(self)._from_base(-float(self))
+    def __abs__(self):         return type(self)._from_base(abs(float(self)))
+    def __pos__(self):         return type(self)._from_base(+float(self))
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({float(self)!r})"
+        return f"{self.__class__.__name__}({float(self) / self._SCALE!r})"
 
 
 class Amps(_Unit):
     __slots__ = ()
-
+    _SCALE = 1.0
     def __str__(self) -> str:
-        return f"{float(self):.3g} A"
+        return f"{float(self) / self._SCALE:.3g} A"
 
 
 class Milliamps(_Unit):
     __slots__ = ()
-
+    _SCALE = 1e-3
     def __str__(self) -> str:
-        return f"{float(self):.3g} mA"
+        return f"{float(self) / self._SCALE:.3g} mA"
 
 
 class Microamps(_Unit):
     __slots__ = ()
-
+    _SCALE = 1e-6
     def __str__(self) -> str:
-        return f"{float(self):.3g} µA"
-
-
-class Millivolts(_Unit):
-    __slots__ = ()
-
-    def __str__(self) -> str:
-        return f"{float(self):.3g} mV"
+        return f"{float(self) / self._SCALE:.3g} µA"
 
 
 class Volts(_Unit):
     __slots__ = ()
-
+    _SCALE = 1.0
     def __str__(self) -> str:
-        return f"{float(self):.3g} V"
+        return f"{float(self) / self._SCALE:.3g} V"
+
+
+class Millivolts(_Unit):
+    __slots__ = ()
+    _SCALE = 1e-3
+    def __str__(self) -> str:
+        return f"{float(self) / self._SCALE:.3g} mV"
 
 
 class Ohms(_Unit):
     __slots__ = ()
-
+    _SCALE = 1.0
     def __str__(self) -> str:
-        return f"{float(self):.3g} Ω"
+        return f"{float(self) / self._SCALE:.3g} Ω"
 
 
 class Kilohms(_Unit):
     __slots__ = ()
-
+    _SCALE = 1e3
     def __str__(self) -> str:
-        return f"{float(self):.3g} kΩ"
+        return f"{float(self) / self._SCALE:.3g} kΩ"
