@@ -1,5 +1,5 @@
 import pytest
-from components.resistor import Resistor
+from components.parts.concepts.resistor import Resistor
 
 
 def test_ohms_law(shunt):

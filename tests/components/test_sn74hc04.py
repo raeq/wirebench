@@ -1,5 +1,5 @@
 import pytest
-from components.sn74hc04 import SN74HC04
+from components.parts.sn74hc04 import SN74HC04
 
 
 def test_invert_high():

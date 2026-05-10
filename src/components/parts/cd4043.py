@@ -4,8 +4,8 @@ from framework.pin import Pin
 from framework.port import Direction
 from framework.signals import Digital
 from framework.wire import wire
-from .nor_latch import NORLatch
-from .tristate_buffer import TriStateBuffer
+from .concepts.nor_latch import NORLatch
+from .concepts.tristate_buffer import TriStateBuffer
 
 
 class CD4043(Circuit):

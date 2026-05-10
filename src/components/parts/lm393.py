@@ -1,6 +1,6 @@
 from framework.circuit import Circuit
 from framework.ground import GroundDomain, ELECTRICAL
-from .comparator import Comparator
+from .concepts.comparator import Comparator
 
 
 class LM393(Circuit):

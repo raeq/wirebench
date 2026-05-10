@@ -1,5 +1,5 @@
 import pytest
-from components.nor_latch import NORLatch
+from components.parts.concepts.nor_latch import NORLatch
 
 
 @pytest.fixture
