@@ -32,9 +32,15 @@ class Resistor(FactorNode):
         # Normalise to a plain base-unit float so repr is canonical regardless
         # of input type (Ohms(47), Kilohms(4.7), and 4700 all store as 4700.0).
         self._ohms = float(ohms)
+        # mandatory=False because the device is structurally inert under
+        # graph evaluation — evaluate() is a no-op, so wiring the
+        # terminals is not a *simulation* requirement.  In a real
+        # circuit both terminals must of course be connected; that is a
+        # hardware-design constraint the framework does not enforce
+        # because it cannot meaningfully act on it.
         self._ports = {
-            't1': Port('t1', Direction.BIDIR, domain, mandatory=True, signal_type=Analog),
-            't2': Port('t2', Direction.BIDIR, domain, mandatory=True, signal_type=Analog),
+            't1': Port('t1', Direction.BIDIR, domain, mandatory=False, signal_type=Analog),
+            't2': Port('t2', Direction.BIDIR, domain, mandatory=False, signal_type=Analog),
         }
 
     @property
