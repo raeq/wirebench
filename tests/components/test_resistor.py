@@ -22,7 +22,7 @@ def test_unit_typed_call():
     # Real-world sizing: 10 mA through 330 Ω → 3.3 V
     from framework.units import Milliamps
     r = Resistor(ohms=330)
-    assert r(Milliamps(10)) == 3.3
+    assert r(Milliamps(10)) == pytest.approx(3.3)
 
 
 def test_zero_current(shunt):
