@@ -22,7 +22,9 @@ class Resistor(FactorNode):
     __slots__ = ['_ohms', '_ports']
 
     def __init__(self, ohms: float | Ohms, domain: GroundDomain = ELECTRICAL) -> None:
-        self._ohms = ohms
+        # Normalise to a plain base-unit float so repr is canonical regardless
+        # of input type (Ohms(47), Kilohms(4.7), and 4700 all store as 4700.0).
+        self._ohms = float(ohms)
         self._ports = {
             't1': Port('t1', Direction.BIDIR, domain, mandatory=True, signal_type=Analog),
             't2': Port('t2', Direction.BIDIR, domain, mandatory=True, signal_type=Analog),

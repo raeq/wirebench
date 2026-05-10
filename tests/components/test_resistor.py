@@ -32,9 +32,15 @@ def test_port_names():
 
 def test_repr():
     r = Resistor(ohms=47)
-    assert repr(r) == "Resistor(ohms=47)"
+    assert repr(r) == "Resistor(ohms=47.0)"
+
+
+def test_repr_round_trip_for_unit_inputs():
+    from framework.units import Ohms, Kilohms
+    assert repr(Resistor(Ohms(47)))     == "Resistor(ohms=47.0)"
+    assert repr(Resistor(Kilohms(4.7))) == "Resistor(ohms=4700.0)"
 
 
 def test_str():
     r = Resistor(ohms=47)
-    assert str(r) == "47 Ω"
+    assert str(r) == "47.0 Ω"
