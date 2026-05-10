@@ -2,7 +2,7 @@ from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Analog
-from components.units import Ohms
+from framework.units import Ohms
 
 
 class Resistor(FactorNode):

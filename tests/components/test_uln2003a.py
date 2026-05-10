@@ -60,7 +60,7 @@ def test_state_reflects_last_call():
 
 def test_repr():
     uln = ULN2003A()
-    assert repr(uln) == f'ULN2003A(out={(True,) * 7})'
+    assert repr(uln) == f'ULN2003A(state={(True,) * 7})'
 
 
 def test_str_channel_labels():

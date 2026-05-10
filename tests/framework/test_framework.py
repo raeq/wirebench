@@ -23,6 +23,16 @@ def test_distinct_domains_are_not_identical():
     assert a is not b
 
 
+def test_same_name_returns_same_instance():
+    x = GroundDomain('optical')
+    y = GroundDomain('optical')
+    assert x is y
+
+
+def test_ground_domain_is_electrical_singleton():
+    assert GroundDomain('electrical') is ELECTRICAL
+
+
 # --- Node ---
 
 def test_node_initial_value_is_none():

@@ -77,4 +77,4 @@ class ULN2003A(FactorNode):
         return ' '.join(f'CH{i+1}:{"HIGH" if s else "LOW"}' for i, s in enumerate(self._out))
 
     def __repr__(self) -> str:
-        return f'ULN2003A(out={self._out})'
+        return f'ULN2003A(state={self._out})'
