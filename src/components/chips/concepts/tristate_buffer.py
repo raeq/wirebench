@@ -39,6 +39,7 @@ class TriStateBuffer(FactorNode):
         self._ports['y'].drive(None if a_val is None else bool(Digital(a_val)))
 
     def __call__(self, a: bool | None, oe: bool) -> bool | None:
+        self._assert_no_inputs_wired()
         self._ports['a'].drive(a)
         self._ports['oe'].drive(oe)
         self.evaluate()

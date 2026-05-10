@@ -30,6 +30,7 @@ class Inverter(FactorNode):
         self._ports['y'].drive(None if v is None else not v)
 
     def __call__(self, a: bool | None) -> bool | None:
+        self._assert_no_inputs_wired()
         self._ports['a'].drive(a)
         self.evaluate()
         return self._ports['y'].value

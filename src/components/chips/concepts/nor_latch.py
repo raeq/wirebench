@@ -53,6 +53,7 @@ class NORLatch(FactorNode):
         self._ports['q_bar'].drive(None if self._q is None else not self._q)
 
     def __call__(self, s: bool, r: bool) -> bool | None:
+        self._assert_no_inputs_wired()
         self._ports['s'].drive(s)
         self._ports['r'].drive(r)
         self.evaluate()

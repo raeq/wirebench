@@ -37,6 +37,7 @@ class Comparator(FactorNode):
             self._ports['out'].drive(vp > vm)
 
     def __call__(self, v_plus, v_minus):
+        self._assert_no_inputs_wired()
         self._ports['v_plus'].drive(v_plus)
         self._ports['v_minus'].drive(v_minus)
         self.evaluate()

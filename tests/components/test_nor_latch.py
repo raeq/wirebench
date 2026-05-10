@@ -49,3 +49,15 @@ def test_both_active_raises(cell):
 
 def test_repr(cell):
     assert repr(cell) == "NORLatch(q=None)"
+
+
+def test_call_refuses_when_input_is_wired(cell):
+    # Same silent-overwrite guard as Chip — every node with input ports
+    # has the hazard, so the check lives on FactorNode.
+    from framework.wire import wire
+    from framework.port import Port, Direction
+    from framework.signals import Digital
+    driver = Port('drv', Direction.OUT, cell.ports['s'].domain, signal_type=Digital)
+    wire(driver, cell.ports['s'])
+    with pytest.raises(RuntimeError, match="wired by an enclosing circuit"):
+        cell(s=True, r=False)

@@ -2,7 +2,6 @@ from abc import abstractmethod
 from framework.circuit import Circuit
 from framework.factor import FactorNode
 from framework.pin import Pin
-from framework.port import Direction
 
 
 class Chip(Circuit):
@@ -34,21 +33,8 @@ class Chip(Circuit):
             ports=ports,
         )
 
-    def _assert_no_inputs_wired(self) -> None:
-        """Raise if any input pin is already connected by an enclosing circuit.
-
-        Calling __call__ on a wired chip would silently overwrite the
-        parent's driven signal — refuse instead so the caller has to
-        choose between standalone use and wired use.
-        """
-        wired = [n for n, p in self._ports.items()
-                 if p.direction is Direction.IN and p.connected]
-        if wired:
-            raise RuntimeError(
-                f"{type(self).__name__}.__call__ refused: input pin(s) wired "
-                f"by an enclosing circuit ({', '.join(wired)}); drive via "
-                f"the parent's evaluate() instead."
-            )
+    # _assert_no_inputs_wired is inherited from FactorNode — every node
+    # with input ports has the same silent-overwrite hazard.
 
     @abstractmethod
     def __call__(self, *args, **kwargs):

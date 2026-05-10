@@ -50,6 +50,7 @@ class DarlingtonChannel(FactorNode):
         self._ports['out'].drive(float(Analog(v)) <= self.V_THRESHOLD)
 
     def __call__(self, b: float | None) -> bool | None:
+        self._assert_no_inputs_wired()
         self._ports['b'].drive(b)
         self.evaluate()
         return self._ports['out'].value

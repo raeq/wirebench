@@ -80,6 +80,7 @@ class LED(FactorNode):
         return Ohms((v_supply - cls.V_F) / i)
 
     def __call__(self, anode: bool | None) -> bool | None:
+        self._assert_no_inputs_wired()
         self._ports['anode'].drive(anode)
         self.evaluate()
         return self._lit
