@@ -78,11 +78,11 @@ class CD4043(Chip):
 
     def __call__(
         self,
-        s_1=False, r_1=False,
-        s_2=False, r_2=False,
-        s_3=False, r_3=False,
-        s_4=False, r_4=False,
-        oe=True,
+        s_1: bool = False, r_1: bool = False,
+        s_2: bool = False, r_2: bool = False,
+        s_3: bool = False, r_3: bool = False,
+        s_4: bool = False, r_4: bool = False,
+        oe:  bool = True,
     ) -> tuple:
         self._assert_no_inputs_wired()
         sr = ((s_1, r_1), (s_2, r_2), (s_3, r_3), (s_4, r_4))
