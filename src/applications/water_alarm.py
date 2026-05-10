@@ -31,34 +31,34 @@ class WaterAlarm(Circuit):
 
     def __init__(self) -> None:
         sensor    = ULN2003A()
-        inv       = SN74HC04()
-        latch     = CD4043()
+        sn74hc04  = SN74HC04()
+        cd4043    = CD4043()
         red_led   = LED('red')
         green_led = LED('green')
-        gnd       = Rail(False)   # GND tie for unused CMOS inputs and unused latches
-        vcc       = Rail(True)    # Vcc tie for the latch's OE pin
+        gnd       = Rail(False)   # GND tie for unused CMOS inputs and unused latch cells
+        vcc       = Rail(True)    # Vcc tie for the CD4043's OE pin
 
-        wire(sensor.ports['out_1'], latch.ports['s_1'])
-        wire(sensor.ports['out_2'], inv.ports['a_1'])
-        wire(inv.ports['y_1'],      latch.ports['r_1'])
-        wire(latch.ports['q_1'],    red_led.ports['anode'])
-        wire(latch.ports['q_1_bar'], green_led.ports['anode'])
+        wire(sensor.ports['out_1'], cd4043.ports['s_1'])
+        wire(sensor.ports['out_2'], sn74hc04.ports['a_1'])
+        wire(sn74hc04.ports['y_1'],      cd4043.ports['r_1'])
+        wire(cd4043.ports['q_1'],    red_led.ports['anode'])
+        wire(cd4043.ports['q_1_bar'], green_led.ports['anode'])
         # CD4043 OE must be tied HIGH for outputs to be enabled.
-        wire(vcc.ports['out'], latch.ports['oe'])
+        wire(vcc.ports['out'], cd4043.ports['oe'])
         # CMOS inputs must never float — tie unused inverter inputs LOW
-        # and unused latch S/R inputs LOW (so those latches sit in 'hold').
+        # and unused S/R inputs LOW (so the unused latch cells sit in 'hold').
         wire(gnd.ports['out'],
-             inv.ports['a_2'], inv.ports['a_3'], inv.ports['a_4'],
-             inv.ports['a_5'], inv.ports['a_6'],
-             latch.ports['s_2'], latch.ports['r_2'],
-             latch.ports['s_3'], latch.ports['r_3'],
-             latch.ports['s_4'], latch.ports['r_4'])
+             sn74hc04.ports['a_2'], sn74hc04.ports['a_3'], sn74hc04.ports['a_4'],
+             sn74hc04.ports['a_5'], sn74hc04.ports['a_6'],
+             cd4043.ports['s_2'], cd4043.ports['r_2'],
+             cd4043.ports['s_3'], cd4043.ports['r_3'],
+             cd4043.ports['s_4'], cd4043.ports['r_4'])
 
         super().__init__(
-            factor_nodes=[sensor, inv, latch, red_led, green_led, gnd, vcc],
+            factor_nodes=[sensor, sn74hc04, cd4043, red_led, green_led, gnd, vcc],
             ports={'low_probe':  sensor.ports['in_1'],
                    'high_probe': sensor.ports['in_2'],
-                   'state':      latch.ports['q_1']},
+                   'state':      cd4043.ports['q_1']},
         )
 
         self._red_led   = red_led
