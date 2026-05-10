@@ -2,7 +2,7 @@ from typing import ClassVar
 
 from framework.chip import Chip
 from framework.ground import GroundDomain, ELECTRICAL
-from framework.pin import Pin
+from framework.pin import Pin, PinId
 from framework.port import Direction
 from framework.refdes import validate_refdes
 from framework.signals import Analog, Digital
@@ -36,11 +36,20 @@ class LM393(Chip):
         self._refdes_number = refdes_number
         self._cells = tuple(Comparator(domain) for _ in range(self.CHANNELS))
 
+        # 8-pin DIP datasheet pinout: pins 4 (GND) and 8 (VCC) omitted.
+        #   ch 1: v_minus_1=2, v_plus_1=3, out_1=1
+        #   ch 2: v_plus_2=5,  v_minus_2=6, out_2=7
+        vp_numbers  = (3, 5)
+        vm_numbers  = (2, 6)
+        out_numbers = (1, 7)
         vp_pins, vm_pins, out_pins = [], [], []
-        for i in range(1, self.CHANNELS + 1):
-            vp_pins .append(Pin(f'v_plus_{i}',  Direction.IN,  domain, mandatory=False, signal_type=Analog))
-            vm_pins .append(Pin(f'v_minus_{i}', Direction.IN,  domain, mandatory=False, signal_type=Analog))
-            out_pins.append(Pin(f'out_{i}',     Direction.OUT, domain, mandatory=False, signal_type=Digital))
+        for i in range(self.CHANNELS):
+            vp_pins .append(Pin(PinId(vp_numbers[i],  f'v_plus_{i+1}'),
+                                Direction.IN,  domain, mandatory=False, signal_type=Analog))
+            vm_pins .append(Pin(PinId(vm_numbers[i], f'v_minus_{i+1}'),
+                                Direction.IN,  domain, mandatory=False, signal_type=Analog))
+            out_pins.append(Pin(PinId(out_numbers[i], f'out_{i+1}'),
+                                Direction.OUT, domain, mandatory=False, signal_type=Digital))
 
         for i, cell in enumerate(self._cells):
             wire(vp_pins[i].internal, cell.ports['v_plus'])

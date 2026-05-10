@@ -1,7 +1,7 @@
 import pytest
 from framework.chip import Chip
 from framework.ground import ELECTRICAL
-from framework.pin import Pin
+from framework.pin import Pin, PinId
 from framework.port import Port, Direction
 from framework.signals import Digital
 from framework.wire import wire
@@ -22,8 +22,8 @@ class _PassChip(Chip):
     __slots__ = ()
 
     def __init__(self) -> None:
-        a = Pin('a', Direction.IN,  ELECTRICAL, mandatory=False, signal_type=Digital)
-        y = Pin('y', Direction.OUT, ELECTRICAL, mandatory=False, signal_type=Digital)
+        a = Pin(PinId(1, 'a'), Direction.IN,  ELECTRICAL, mandatory=False, signal_type=Digital)
+        y = Pin(PinId(2, 'y'), Direction.OUT, ELECTRICAL, mandatory=False, signal_type=Digital)
         wire(a.internal, y.internal)   # IN pin's internal is OUT, OUT pin's internal is IN
         super().__init__(pins=[a, y], cells=[])
 

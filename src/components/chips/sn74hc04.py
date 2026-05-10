@@ -2,7 +2,7 @@ from typing import ClassVar
 
 from framework.chip import Chip
 from framework.ground import GroundDomain, ELECTRICAL
-from framework.pin import Pin
+from framework.pin import Pin, PinId
 from framework.port import Direction
 from framework.refdes import validate_refdes
 from framework.signals import Digital
@@ -40,10 +40,15 @@ class SN74HC04(Chip):
         self._refdes_number = refdes_number
         self._gates = tuple(Inverter(domain) for _ in range(self.CHANNELS))
 
+        # 14-pin DIP datasheet pinout: pins 7 (GND) and 14 (VCC) omitted.
+        a_pin_numbers = (1, 3, 5, 9, 11, 13)
+        y_pin_numbers = (2, 4, 6, 8, 10, 12)
         a_pins, y_pins = [], []
-        for i in range(1, self.CHANNELS + 1):
-            a_pins.append(Pin(f'a_{i}', Direction.IN,  domain, mandatory=False, signal_type=Digital))
-            y_pins.append(Pin(f'y_{i}', Direction.OUT, domain, mandatory=False, signal_type=Digital))
+        for i in range(self.CHANNELS):
+            a_pins.append(Pin(PinId(a_pin_numbers[i], f'a_{i+1}'),
+                              Direction.IN,  domain, mandatory=False, signal_type=Digital))
+            y_pins.append(Pin(PinId(y_pin_numbers[i], f'y_{i+1}'),
+                              Direction.OUT, domain, mandatory=False, signal_type=Digital))
 
         for i, gate in enumerate(self._gates):
             wire(a_pins[i].internal, gate.ports['a'])

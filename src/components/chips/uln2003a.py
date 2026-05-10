@@ -2,7 +2,7 @@ from typing import ClassVar
 
 from framework.chip import Chip
 from framework.ground import GroundDomain, ELECTRICAL
-from framework.pin import Pin
+from framework.pin import Pin, PinId
 from framework.port import Direction
 from framework.refdes import validate_refdes
 from framework.signals import Analog, Digital
@@ -49,10 +49,16 @@ class ULN2003A(Chip):
         self._refdes_number = refdes_number
         self._channels = tuple(DarlingtonChannel(domain) for _ in range(self.CHANNELS))
 
+        # 16-pin DIP datasheet pinout: pin 8 (GND) and pin 9 (COM)
+        # omitted. Inputs in_1..in_7 are pins 1..7; outputs are reverse-
+        # numbered for routing convenience: out_i is at pin (17 - i),
+        # so out_1=16, out_2=15, ..., out_7=10.
         in_pins, out_pins = [], []
         for i in range(1, self.CHANNELS + 1):
-            in_pins .append(Pin(f'in_{i}',  Direction.IN,  domain, mandatory=False, signal_type=Analog))
-            out_pins.append(Pin(f'out_{i}', Direction.OUT, domain, mandatory=False, signal_type=Digital))
+            in_pins .append(Pin(PinId(i, f'in_{i}'),
+                                Direction.IN,  domain, mandatory=False, signal_type=Analog))
+            out_pins.append(Pin(PinId(17 - i, f'out_{i}'),
+                                Direction.OUT, domain, mandatory=False, signal_type=Digital))
 
         for i, channel in enumerate(self._channels):
             wire(in_pins[i].internal,  channel.ports['b'])

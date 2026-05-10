@@ -3,7 +3,7 @@ from typing import ClassVar
 from framework.chip import Chip
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
-from framework.pin import Pin
+from framework.pin import Pin, PinId
 from framework.port import Direction
 from framework.refdes import validate_refdes
 from framework.signals import Digital
@@ -55,12 +55,25 @@ class CD4043(Chip):
         self._buf_q   = tuple(TriStateBuffer(domain) for _ in range(self.CHANNELS))
 
         # --- Pins: the chip's external surface ---
-        oe = Pin('oe', Direction.IN, domain, mandatory=False, signal_type=Digital)
+        # 16-pin DIP datasheet pinout: pin 8 (VSS), pin 15 (NC), pin 16
+        # (VDD) omitted from the model.
+        #   ch 1: q_1=1, r_1=2, s_1=3
+        #   ch 2: q_2=4, s_2=5, r_2=6
+        #   oe=7
+        #   ch 3: r_3=9, s_3=10, q_3=11
+        #   ch 4: s_4=12, r_4=13, q_4=14
+        s_numbers = (3, 5, 10, 12)
+        r_numbers = (2, 6, 9, 13)
+        q_numbers = (1, 4, 11, 14)
+        oe = Pin(PinId(7, 'oe'), Direction.IN, domain, mandatory=False, signal_type=Digital)
         s_pins, r_pins, q_pins = [], [], []
-        for i in range(1, self.CHANNELS + 1):
-            s_pins.append(Pin(f's_{i}', Direction.IN,  domain, mandatory=False, signal_type=Digital))
-            r_pins.append(Pin(f'r_{i}', Direction.IN,  domain, mandatory=False, signal_type=Digital))
-            q_pins.append(Pin(f'q_{i}', Direction.OUT, domain, mandatory=False, signal_type=Digital))
+        for i in range(self.CHANNELS):
+            s_pins.append(Pin(PinId(s_numbers[i], f's_{i+1}'),
+                              Direction.IN,  domain, mandatory=False, signal_type=Digital))
+            r_pins.append(Pin(PinId(r_numbers[i], f'r_{i+1}'),
+                              Direction.IN,  domain, mandatory=False, signal_type=Digital))
+            q_pins.append(Pin(PinId(q_numbers[i], f'q_{i+1}'),
+                              Direction.OUT, domain, mandatory=False, signal_type=Digital))
 
         # --- Internal wiring: pins ↔ cells ---
         for i, latch in enumerate(self._latches):
