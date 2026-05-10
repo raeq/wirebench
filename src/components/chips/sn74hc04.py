@@ -1,4 +1,4 @@
-from framework.circuit import Circuit
+from framework.chip import Chip
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin
 from framework.port import Direction
@@ -7,21 +7,20 @@ from framework.wire import wire
 from .concepts.inverter import Inverter
 
 
-class SN74HC04(Circuit):
+class SN74HC04(Chip):
     """Texas Instruments SN74HC04 — hex inverting buffer.
 
-    The chip's external surface is its 12 signal pins (Vcc/GND not modelled):
+    Pins (Vcc/GND not modelled):
         a_1 .. a_6 — gate inputs
         y_1 .. y_6 — gate outputs (y_i = NOT(a_i))
 
-    Each pin is a `Pin` — a bonded-wire relay between the package and the
-    silicon. Internally the chip composes six private Inverter cells.
+    Internally the chip composes six private Inverter cells.
 
     Supply voltage: 2 V – 6 V.  Typical propagation delay: 7 ns at 5 V.
     The SN74HC04 is buffered (three inversion stages internally per gate),
     so it is a hard-switched logic part — unlike the CD4069UB, which is
     unbuffered and usable in linear/oscillator modes.  The cell-level
-    Inverter does not model that distinction; it's a chip-level
+    Inverter does not model that distinction; it is a chip-level
     annotation only.
 
     Unused CMOS inputs must always be tied to GND or Vcc in real
@@ -44,23 +43,12 @@ class SN74HC04(Circuit):
             wire(a_pins[i].internal, gate.ports['a'])
             wire(gate.ports['y'],    y_pins[i].internal)
 
-        ports = {p.external.name: p.external for p in a_pins + y_pins}
-        super().__init__(
-            factor_nodes=list(a_pins + y_pins) + list(self._gates),
-            ports=ports,
-        )
+        super().__init__(pins=a_pins + y_pins, cells=list(self._gates))
 
     def __call__(self, *inputs) -> tuple:
         if len(inputs) > self.CHANNELS:
             raise ValueError(f"SN74HC04 has {self.CHANNELS} channels; got {len(inputs)} inputs")
-        wired = [n for n, p in self._ports.items()
-                 if p.direction is Direction.IN and p.connected]
-        if wired:
-            raise RuntimeError(
-                f"SN74HC04.__call__ refused: input pin(s) wired by an enclosing "
-                f"circuit ({', '.join(wired)}); drive via the parent's "
-                f"evaluate() instead."
-            )
+        self._assert_no_inputs_wired()
         for i in range(self.CHANNELS):
             v = inputs[i] if i < len(inputs) else False
             self._ports[f'a_{i+1}'].drive(v)

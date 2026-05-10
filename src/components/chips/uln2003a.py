@@ -1,4 +1,4 @@
-from framework.circuit import Circuit
+from framework.chip import Chip
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin
 from framework.port import Direction
@@ -7,7 +7,7 @@ from framework.wire import wire
 from .concepts.darlington_channel import DarlingtonChannel
 
 
-class ULN2003A(Circuit):
+class ULN2003A(Chip):
     """Seven-channel NPN Darlington transistor array (TI ULN2003A).
 
     The chip's external surface is its 14 signal pins (Vcc/COM/GND not
@@ -52,23 +52,12 @@ class ULN2003A(Circuit):
             wire(in_pins[i].internal,  channel.ports['in'])
             wire(channel.ports['out'], out_pins[i].internal)
 
-        ports = {p.external.name: p.external for p in in_pins + out_pins}
-        super().__init__(
-            factor_nodes=list(in_pins + out_pins) + list(self._channels),
-            ports=ports,
-        )
+        super().__init__(pins=in_pins + out_pins, cells=list(self._channels))
 
     def __call__(self, *inputs) -> tuple:
         if len(inputs) > self.CHANNELS:
             raise ValueError(f"ULN2003A has {self.CHANNELS} channels; got {len(inputs)} inputs")
-        wired = [n for n, p in self._ports.items()
-                 if p.direction is Direction.IN and p.connected]
-        if wired:
-            raise RuntimeError(
-                f"ULN2003A.__call__ refused: input pin(s) wired by an enclosing "
-                f"circuit ({', '.join(wired)}); drive via the parent's "
-                f"evaluate() instead."
-            )
+        self._assert_no_inputs_wired()
         for i in range(self.CHANNELS):
             v = inputs[i] if i < len(inputs) else 0.0
             self._ports[f'in_{i+1}'].drive(v)

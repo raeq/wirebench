@@ -1,4 +1,4 @@
-from framework.circuit import Circuit
+from framework.chip import Chip
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin
 from framework.port import Direction
@@ -8,28 +8,25 @@ from .concepts.nor_latch import NORLatch
 from .concepts.tristate_buffer import TriStateBuffer
 
 
-class CD4043(Circuit):
+class CD4043(Chip):
     """Texas Instruments CD4043B — quad NOR-based RS latch with tri-state outputs.
 
-    The chip's external surface is its 16 package pins:
+    Pins:
         s_1, r_1 .. s_4, r_4         — set/reset inputs
         q_1, q_1_bar .. q_4, q_4_bar — outputs (tri-stated when OE=LOW)
         oe                           — chip-level output enable (active HIGH)
 
-    Each pin is a `Pin` — a bonded-wire relay between the package and the
-    silicon. Internally the chip composes a private circuit of NOR latches
-    and tri-state buffers that consumers never see. The internal topology
-    is an implementation detail; only the pins are part of the API.
+    Internally the chip composes four NORLatch cells and eight
+    TriStateBuffer cells, connected by an internal OE distribution wire.
 
     OE behaviour
     ------------
     OE=1 — Q and /Q reflect each latch's state.
     OE=0 — Q and /Q are forced to high-impedance (None).
 
-    OE distribution is a real internal wire from the OE pin's internal face
-    to every tri-state buffer's enable input. The chip's evaluation order
-    is determined by the topological sort over the internal network — no
-    imperative fan-out, no override of `evaluate`.
+    OE distribution is a real internal wire from the OE pin's internal
+    face to every tri-state buffer's enable input.  The topological sort
+    over the internal mesh produces evaluation order automatically.
     """
 
     __slots__ = ['_latches', '_buf_q', '_buf_q_bar']
@@ -42,11 +39,11 @@ class CD4043(Circuit):
         self._buf_q     = tuple(TriStateBuffer(domain) for _ in range(self.CHANNELS))
         self._buf_q_bar = tuple(TriStateBuffer(domain) for _ in range(self.CHANNELS))
 
-        # --- Pins: the chip's external API surface ---
-        # OE has a weak pull-up: if no signal is asserted on the package pin
-        # the chip behaves as if OE=HIGH (outputs enabled). Real CD4043
-        # silicon doesn't do this — left-floating OE is forbidden — but
-        # modelling the convenience here matches the previous behaviour.
+        # --- Pins: the chip's external surface ---
+        # OE has a weak pull-up so an undriven OE behaves as enabled.
+        # Real CD4043 silicon doesn't do this — left-floating OE is
+        # forbidden — but modelling the convenience preserves prior
+        # behaviour.
         oe = Pin('oe', Direction.IN, domain, mandatory=False, signal_type=Digital, default=True)
         s_pins, r_pins, q_pins, qb_pins = [], [], [], []
         for i in range(1, self.CHANNELS + 1):
@@ -64,30 +61,17 @@ class CD4043(Circuit):
             wire(self._buf_q[i].ports['y'],     q_pins[i].internal)
             wire(self._buf_q_bar[i].ports['y'], qb_pins[i].internal)
 
-        # OE distribution: a single fan-out wire from the OE pin to every
-        # buffer's enable input. The topological sort sees this as a real
-        # edge — no imperative drive, no evaluate override.
+        # Shared OE: one fan-out wire from oe.internal to all 8 buffer enables.
         wire(
             oe.internal,
             *(b.ports['oe'] for b in self._buf_q),
             *(b.ports['oe'] for b in self._buf_q_bar),
         )
 
-        # --- Boundary surface visible to consumers: external pin faces ---
-        ports = {'oe': oe.external}
-        for i, p in enumerate(s_pins,  start=1): ports[f's_{i}']      = p.external
-        for i, p in enumerate(r_pins,  start=1): ports[f'r_{i}']      = p.external
-        for i, p in enumerate(q_pins,  start=1): ports[f'q_{i}']      = p.external
-        for i, p in enumerate(qb_pins, start=1): ports[f'q_{i}_bar']  = p.external
-
-        all_pins = [oe] + s_pins + r_pins + q_pins + qb_pins
-        factor_nodes = (
-            list(all_pins)
-            + list(self._latches)
-            + list(self._buf_q)
-            + list(self._buf_q_bar)
+        super().__init__(
+            pins=[oe] + s_pins + r_pins + q_pins + qb_pins,
+            cells=list(self._latches) + list(self._buf_q) + list(self._buf_q_bar),
         )
-        super().__init__(factor_nodes=factor_nodes, ports=ports)
 
     def __call__(
         self,
@@ -97,19 +81,7 @@ class CD4043(Circuit):
         s_4=False, r_4=False,
         oe=True,
     ) -> tuple:
-        # __call__ is the standalone-test entry point. If any input pin is
-        # already wired by an enclosing circuit, calling the chip directly
-        # would silently overwrite that signal — refuse instead.
-        wired = [
-            name for name, p in self._ports.items()
-            if p.direction is Direction.IN and p.connected
-        ]
-        if wired:
-            raise RuntimeError(
-                f"CD4043.__call__ refused: input pin(s) wired by an enclosing "
-                f"circuit ({', '.join(wired)}); drive via the parent's evaluate() "
-                f"instead."
-            )
+        self._assert_no_inputs_wired()
         sr = ((s_1, r_1), (s_2, r_2), (s_3, r_3), (s_4, r_4))
         for i, (s, r) in enumerate(sr, start=1):
             self._ports[f's_{i}'].drive(s)

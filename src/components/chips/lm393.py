@@ -1,4 +1,4 @@
-from framework.circuit import Circuit
+from framework.chip import Chip
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin
 from framework.port import Direction
@@ -7,16 +7,15 @@ from framework.wire import wire
 from .concepts.comparator import Comparator
 
 
-class LM393(Circuit):
+class LM393(Chip):
     """Texas Instruments LM393 — dual differential voltage comparator.
 
-    The chip's external surface is its 8 package pins:
+    Pins:
         v_plus_1, v_minus_1, out_1   — channel 1
         v_plus_2, v_minus_2, out_2   — channel 2
 
-    Each pin is a `Pin` — a bonded-wire relay between the package and the
-    silicon. Internally the chip composes two private Comparator cells.
-    The two channels share Vcc and GND but are otherwise independent.
+    Internally the chip composes two private Comparator cells.  The two
+    channels share Vcc and GND but are otherwise independent.
 
     Real-world note: the LM393 outputs are open-collector and require an
     external pull-up resistor to register a logic HIGH.  This model
@@ -42,21 +41,13 @@ class LM393(Circuit):
             wire(vm_pins[i].internal, cell.ports['v_minus'])
             wire(cell.ports['out'],   out_pins[i].internal)
 
-        ports = {p.external.name: p.external for p in vp_pins + vm_pins + out_pins}
         super().__init__(
-            factor_nodes=list(vp_pins + vm_pins + out_pins) + list(self._cells),
-            ports=ports,
+            pins=vp_pins + vm_pins + out_pins,
+            cells=list(self._cells),
         )
 
     def __call__(self, v_plus_1, v_minus_1, v_plus_2=None, v_minus_2=None) -> tuple:
-        wired = [n for n, p in self._ports.items()
-                 if p.direction is Direction.IN and p.connected]
-        if wired:
-            raise RuntimeError(
-                f"LM393.__call__ refused: input pin(s) wired by an enclosing "
-                f"circuit ({', '.join(wired)}); drive via the parent's "
-                f"evaluate() instead."
-            )
+        self._assert_no_inputs_wired()
         self._ports['v_plus_1'].drive(v_plus_1)
         self._ports['v_minus_1'].drive(v_minus_1)
         self._ports['v_plus_2'].drive(v_plus_2)
