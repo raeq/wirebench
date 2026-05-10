@@ -65,7 +65,7 @@ class ULN2003A(Chip):
         return tuple(self._ports[f'out_{i+1}'].value for i in range(self.CHANNELS))
 
     @property
-    def out(self) -> tuple:
+    def output_levels(self) -> tuple:
         """Output pin values as a tuple: True = HIGH, False = LOW, None = undriven."""
         return tuple(self._ports[f'out_{i+1}'].value for i in range(self.CHANNELS))
 

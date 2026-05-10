@@ -5,7 +5,7 @@ from components.chips.uln2003a import ULN2003A
 def test_all_channels_undriven_on_init():
     # power-on with no evaluation: outputs are undriven (None), not "all HIGH"
     uln = ULN2003A()
-    assert uln.out == (None,) * 7
+    assert uln.output_levels == (None,) * 7
 
 
 def test_channel_high_below_threshold():
@@ -54,8 +54,8 @@ def test_too_many_inputs_raises():
 def test_out_reflects_last_call():
     uln = ULN2003A()
     uln(5.0, 0.0)
-    assert uln.out[0] is False   # ch1 conducting → LOW
-    assert uln.out[1] is True    # ch2 off → HIGH
+    assert uln.output_levels[0] is False   # ch1 conducting → LOW
+    assert uln.output_levels[1] is True    # ch2 off → HIGH
 
 
 def test_repr():
