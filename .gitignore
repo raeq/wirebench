@@ -21,7 +21,6 @@ dist/
 build/
 eggs/
 parts/
-!src/components/parts/
 var/
 sdist/
 develop-eggs/

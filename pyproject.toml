@@ -1,8 +1,17 @@
 [project]
-name = "circuitry"
+name = "circuitbench"
 version = "0.1.0"
+description = "A Python framework for modelling real electronic circuits with physical fidelity."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
 dependencies = [
     "networkx>=3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
 ]
 
 [tool.pytest.ini_options]
