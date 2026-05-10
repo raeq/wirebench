@@ -5,6 +5,19 @@ from framework.signals import Digital
 
 
 class CD4043(FactorNode):
+    """CMOS NOR SR latch with tri-state output (one cell of the TI CD4043B quad).
+
+    OE (output enable, active HIGH):
+      OE=1 — Q and /Q reflect the latch state (normal operation).
+      OE=0 — Q and /Q are forced to high-impedance (None); downstream
+              components see no signal.  Use this to share a bus with
+              multiple latches.
+
+    If OE is left unconnected it defaults to HIGH (outputs enabled).
+    In a real circuit OE must always be explicitly tied to VDD or a
+    control signal — never left floating.
+    """
+
     __slots__ = ['_q', '_ports']
 
     def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
@@ -12,6 +25,7 @@ class CD4043(FactorNode):
         self._ports = {
             's':     Port('s',     Direction.IN,  domain, mandatory=True,  signal_type=Digital),
             'r':     Port('r',     Direction.IN,  domain, mandatory=True,  signal_type=Digital),
+            'oe':    Port('oe',    Direction.IN,  domain, mandatory=False, signal_type=Digital),
             'q':     Port('q',     Direction.OUT, domain, mandatory=False, signal_type=Digital),
             'q_bar': Port('q_bar', Direction.OUT, domain, mandatory=False, signal_type=Digital),
         }
@@ -34,8 +48,15 @@ class CD4043(FactorNode):
         elif s and r:
             raise ValueError("Invalid: S and R both active")
         # else: S=0, R=0 → hold
-        self._ports['q'].drive(self._q)
-        self._ports['q_bar'].drive(None if self._q is None else not self._q)
+
+        oe_val = self._ports['oe'].value
+        oe = oe_val if oe_val is not None else True  # unconnected → enabled
+        if oe:
+            self._ports['q'].drive(self._q)
+            self._ports['q_bar'].drive(None if self._q is None else not self._q)
+        else:
+            self._ports['q'].drive(None)      # tri-stated
+            self._ports['q_bar'].drive(None)  # tri-stated
 
     def __call__(self, s: bool, r: bool) -> bool | None:
         self._ports['s'].drive(s)

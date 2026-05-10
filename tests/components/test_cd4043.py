@@ -49,3 +49,36 @@ def test_both_active_raises(latch):
 
 def test_repr(latch):
     assert repr(latch) == "CD4043(q=None)"
+
+
+# --- OE (output enable) ---
+
+def test_oe_high_enables_outputs(latch):
+    latch(s=True, r=False)
+    latch.ports['oe'].drive(True)
+    latch._evaluate()
+    assert latch.ports['q'].value is True
+    assert latch.ports['q_bar'].value is False
+
+
+def test_oe_low_tristates_outputs(latch):
+    latch(s=True, r=False)
+    latch.ports['oe'].drive(False)
+    latch._evaluate()
+    assert latch.ports['q'].value is None
+    assert latch.ports['q_bar'].value is None
+
+
+def test_oe_unconnected_defaults_to_enabled(latch):
+    latch(s=True, r=False)
+    # oe port never driven — should behave as OE=HIGH
+    assert latch.ports['q'].value is True
+
+
+def test_oe_tristated_does_not_change_latch_state(latch):
+    latch(s=True, r=False)           # set
+    latch.ports['oe'].drive(False)
+    latch._evaluate()                # outputs tri-stated
+    latch.ports['oe'].drive(True)
+    latch._evaluate()                # outputs re-enabled
+    assert latch.ports['q'].value is True  # latch held its state

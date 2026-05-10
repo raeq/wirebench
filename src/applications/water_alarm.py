@@ -1,7 +1,7 @@
 from framework.circuit import Circuit
 from framework.wire import wire
 from components.uln2003a import ULN2003A
-from components.inverter import Inverter
+from components.sn74hc04 import SN74HC04
 from components.cd4043 import CD4043
 from components.led import LED
 
@@ -16,24 +16,28 @@ class WaterAlarm(Circuit):
     LOW when transistor conducting (probe submerged).
 
     Wiring:
-      low_probe  → ULN2003A ch1            → CD4043 S  (HIGH=dry → set alarm)
-      high_probe → ULN2003A ch2 → Inverter → CD4043 R  (LOW=wet → inverted → reset)
+      low_probe  → ULN2003A ch1                   → CD4043 S  (HIGH=dry → set alarm)
+      high_probe → ULN2003A ch2 → SN74HC04 gate 1 → CD4043 R  (LOW=wet → inverted → reset)
       CD4043 Q   → red LED   (alarm active)
       CD4043 /Q  → green LED (alarm clear)
+
+    The SN74HC04 is a 14-pin hex inverter (6 gates); only gate 1 is used here.
+    The remaining five gates (A2/Y2–A6/Y6) are available for other signals.
+    Leave unused inputs tied to GND or Vcc — never leave them floating.
     """
 
     __slots__ = ['_red_led', '_green_led']
 
     def __init__(self) -> None:
         sensor    = ULN2003A()
-        inv       = Inverter()
+        inv       = SN74HC04()
         latch     = CD4043()
         red_led   = LED('red')
         green_led = LED('green')
 
         wire(sensor.ports['out_1'], latch.ports['s'])
-        wire(sensor.ports['out_2'], inv.ports['a'])
-        wire(inv.ports['y'],        latch.ports['r'])
+        wire(sensor.ports['out_2'], inv.ports['a1'])
+        wire(inv.ports['y1'],       latch.ports['r'])
         wire(latch.ports['q'],      red_led.ports['anode'])
         wire(latch.ports['q_bar'],  green_led.ports['anode'])
 
