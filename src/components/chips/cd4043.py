@@ -94,5 +94,5 @@ class CD4043(Chip):
         )
 
     def __repr__(self) -> str:
-        latches = ', '.join(str(l._q) for l in self._latches)
+        latches = ', '.join(str(l.ports['q'].value) for l in self._latches)
         return f"CD4043(q=({latches}))"
