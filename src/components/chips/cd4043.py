@@ -83,7 +83,7 @@ class CD4043(Chip):
         s_3: bool = False, r_3: bool = False,
         s_4: bool = False, r_4: bool = False,
         oe:  bool = True,
-    ) -> tuple:
+    ) -> tuple[tuple[bool | None, bool | None], ...]:
         self._assert_no_inputs_wired()
         sr = ((s_1, r_1), (s_2, r_2), (s_3, r_3), (s_4, r_4))
         for i, (s, r) in enumerate(sr, start=1):

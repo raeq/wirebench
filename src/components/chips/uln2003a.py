@@ -59,7 +59,7 @@ class ULN2003A(Chip):
         in_1: float | None = 0.0, in_2: float | None = 0.0, in_3: float | None = 0.0,
         in_4: float | None = 0.0, in_5: float | None = 0.0, in_6: float | None = 0.0,
         in_7: float | None = 0.0,
-    ) -> tuple:
+    ) -> tuple[bool | None, ...]:
         self._assert_no_inputs_wired()
         for i, v in enumerate((in_1, in_2, in_3, in_4, in_5, in_6, in_7), start=1):
             self._ports[f'in_{i}'].drive(v)
@@ -67,7 +67,7 @@ class ULN2003A(Chip):
         return tuple(self._ports[f'out_{i+1}'].value for i in range(self.CHANNELS))
 
     @property
-    def output_levels(self) -> tuple:
+    def output_levels(self) -> tuple[bool | None, ...]:
         """Output pin values as a tuple: True = HIGH, False = LOW, None = undriven."""
         return tuple(self._ports[f'out_{i+1}'].value for i in range(self.CHANNELS))
 

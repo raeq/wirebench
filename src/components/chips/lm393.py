@@ -52,7 +52,7 @@ class LM393(Chip):
         v_minus_1: float | None,
         v_plus_2:  float | None = None,
         v_minus_2: float | None = None,
-    ) -> tuple:
+    ) -> tuple[bool | None, bool | None]:
         self._assert_no_inputs_wired()
         self._ports['v_plus_1'].drive(v_plus_1)
         self._ports['v_minus_1'].drive(v_minus_1)
