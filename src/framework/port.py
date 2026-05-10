@@ -54,6 +54,24 @@ class Port:
         self._node = node
 
     def drive(self, value) -> None:
+        # None is preserved as the high-impedance / undriven sentinel.
+        # Any other value is coerced to the port's signal_type at drive
+        # time, mirroring wire()'s connection-time type discipline.
+        # Digital ports canonicalise to Python bool — the logical-truth
+        # primitive — so downstream `is True/False` and `bool(v)` work
+        # uniformly.  Analog ports store their declared subtype.
+        if value is not None:
+            from framework.signals import Digital
+            if isinstance(self.signal_type, type) and issubclass(self.signal_type, Digital):
+                value = bool(Digital(value))
+            elif not isinstance(value, self.signal_type):
+                try:
+                    value = self.signal_type(value)
+                except (TypeError, ValueError) as e:
+                    raise TypeError(
+                        f"port '{self.name}' expects {self.signal_type.__name__}, "
+                        f"got {type(value).__name__}: {e}"
+                    ) from e
         if self._node is not None:
             self._node.drive(value)
         else:

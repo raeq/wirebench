@@ -88,6 +88,37 @@ def test_unconnected_port_stores_value_locally():
     assert p.value == 1.8
 
 
+def test_drive_coerces_to_signal_type_digital():
+    # Digital ports canonicalise truthy values to Python bool.
+    p = Port('d', Direction.IN, ELECTRICAL, signal_type=Digital)
+    p.drive(1)
+    assert p.value is True
+    p.drive(0)
+    assert p.value is False
+
+
+def test_drive_preserves_none_as_high_z():
+    # None is the high-impedance sentinel — never coerced to Digital(0)/False.
+    p = Port('d', Direction.IN, ELECTRICAL, signal_type=Digital)
+    p.drive(None)
+    assert p.value is None
+
+
+def test_drive_coerces_to_analog_subtype():
+    from framework.units import Volts
+    p = Port('v', Direction.IN, ELECTRICAL, signal_type=Volts)
+    p.drive(5)             # plain int
+    assert isinstance(p.value, Volts)
+    assert float(p.value) == 5.0
+
+
+def test_drive_rejects_uncoercible_value():
+    from framework.units import Volts
+    p = Port('v', Direction.IN, ELECTRICAL, signal_type=Volts)
+    with pytest.raises(TypeError, match="port 'v' expects Volts"):
+        p.drive("not a number")
+
+
 # --- Circuit graph evaluation ---
 
 def test_inverter_in_circuit():
