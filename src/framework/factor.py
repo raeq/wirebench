@@ -9,7 +9,7 @@ class FactorNode(metaclass=ABCMeta):
     sub-components wired together.
     """
 
-    __slots__ = []
+    __slots__ = ()
 
     @property
     @abstractmethod

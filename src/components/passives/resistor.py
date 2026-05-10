@@ -22,7 +22,7 @@ class Resistor(FactorNode):
         Resistor(Kilohms(4.7))      # 4700 Ω — use for pull-up resistors
     """
 
-    __slots__ = ['_ohms', '_ports']
+    __slots__ = ('_ohms', '_ports')
 
     def __init__(self, ohms: float | Ohms, domain: GroundDomain = ELECTRICAL) -> None:
         # Normalise to a plain base-unit float so repr is canonical regardless

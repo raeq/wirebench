@@ -15,7 +15,7 @@ class Rail(FactorNode):
         wire(gnd.ports['out'], chip.ports['unused_in'])
     """
 
-    __slots__ = ['_level', '_ports']
+    __slots__ = ('_level', '_ports')
 
     def __init__(self, level: bool, domain: GroundDomain = ELECTRICAL) -> None:
         self._level = bool(level)

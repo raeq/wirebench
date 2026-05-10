@@ -33,7 +33,7 @@ class LED(FactorNode):
     I_F_TYP: float = 0.010  # typical operating current, amps (10 mA)
     I_F_MAX: float = 0.020  # absolute maximum current, amps (20 mA)
 
-    __slots__ = ['_color', '_lit', '_ports']
+    __slots__ = ('_color', '_lit', '_ports')
 
     def __init__(self, color: str, domain: GroundDomain = ELECTRICAL) -> None:
         self._color = color

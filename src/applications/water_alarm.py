@@ -27,7 +27,7 @@ class WaterAlarm(Circuit):
     Leave unused inputs tied to GND or Vcc — never leave them floating.
     """
 
-    __slots__ = ['_red_led', '_green_led']
+    __slots__ = ('_red_led', '_green_led')
 
     def __init__(self) -> None:
         sensor    = ULN2003A()

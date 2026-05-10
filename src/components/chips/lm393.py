@@ -23,7 +23,7 @@ class LM393(Chip):
     (typically 1–10 kΩ) when building the physical circuit.
     """
 
-    __slots__ = ['_cells']
+    __slots__ = ('_cells',)
 
     CHANNELS: int = 2
 

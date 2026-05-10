@@ -5,7 +5,7 @@ class GroundDomain:
     so identity comparison (port.domain is node.domain) is always correct.
     """
 
-    __slots__ = ['name']
+    __slots__ = ('name',)
     _registry: dict[str, 'GroundDomain'] = {}
 
     def __new__(cls, name: str) -> 'GroundDomain':

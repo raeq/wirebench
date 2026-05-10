@@ -13,7 +13,7 @@ class Inverter(FactorNode):
     vs. unbuffered behaviour; that's a chip-level concern.
     """
 
-    __slots__ = ['_ports']
+    __slots__ = ('_ports',)
 
     def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
         self._ports = {

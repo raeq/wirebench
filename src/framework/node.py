@@ -4,7 +4,7 @@ from framework.ground import GroundDomain
 class Node:
     """A Kirchhoff junction node. Carries a potential value within one ground domain."""
 
-    __slots__ = ['name', 'domain', '_value']
+    __slots__ = ('name', 'domain', '_value')
 
     def __init__(self, name: str, domain: GroundDomain) -> None:
         self.name = name

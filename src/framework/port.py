@@ -18,7 +18,7 @@ class Port:
                   enforces that all connected ports share the same type
     """
 
-    __slots__ = ['name', 'direction', 'domain', 'mandatory', 'signal_type', '_node', '_local_value']
+    __slots__ = ('name', 'direction', 'domain', 'mandatory', 'signal_type', '_node', '_local_value')
 
     def __init__(
         self,

@@ -25,7 +25,7 @@ class Chip(Circuit):
     of parent-driven pins.
     """
 
-    __slots__ = []
+    __slots__ = ()
 
     def __init__(self, *, pins: list[Pin], cells: list[FactorNode]) -> None:
         ports = {pin.external.name: pin.external for pin in pins}

@@ -15,7 +15,7 @@ class Comparator(FactorNode):
     LM393 (dual) and LM339 (quad) are packages of these cells.
     """
 
-    __slots__ = ['_ports']
+    __slots__ = ('_ports',)
 
     def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
         self._ports = {

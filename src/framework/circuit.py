@@ -18,7 +18,7 @@ class Circuit(FactorNode):
     future extension.
     """
 
-    __slots__ = ['_factor_nodes', '_ports', '_eval_order']
+    __slots__ = ('_factor_nodes', '_ports', '_eval_order')
 
     def __init__(
         self,

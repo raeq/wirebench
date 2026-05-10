@@ -22,7 +22,7 @@ class DarlingtonChannel(FactorNode):
     happens to be inverting.
     """
 
-    __slots__ = ['_ports']
+    __slots__ = ('_ports',)
 
     V_THRESHOLD: float = 1.0   # V — base turn-on voltage
 

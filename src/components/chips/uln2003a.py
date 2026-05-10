@@ -34,7 +34,7 @@ class ULN2003A(Chip):
     transistor is off.
     """
 
-    __slots__ = ['_channels']
+    __slots__ = ('_channels',)
 
     CHANNELS:    int   = 7
     V_THRESHOLD: float = DarlingtonChannel.V_THRESHOLD   # mirror of cell's threshold

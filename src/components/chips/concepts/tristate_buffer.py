@@ -17,7 +17,7 @@ class TriStateBuffer(FactorNode):
     how a real chip frees a shared bus when its OE is asserted low.
     """
 
-    __slots__ = ['_ports']
+    __slots__ = ('_ports',)
 
     def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
         self._ports = {

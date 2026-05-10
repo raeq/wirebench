@@ -29,7 +29,7 @@ class CD4043(Chip):
     over the internal mesh produces evaluation order automatically.
     """
 
-    __slots__ = ['_latches', '_buf_q', '_buf_q_bar']
+    __slots__ = ('_latches', '_buf_q', '_buf_q_bar')
 
     CHANNELS: int = 4
 

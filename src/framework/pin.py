@@ -24,7 +24,7 @@ class Pin(FactorNode):
     `pin.internal` to whatever cell ports implement the pin's behaviour.
     """
 
-    __slots__ = ['_role', '_external', '_internal', '_default']
+    __slots__ = ('_role', '_external', '_internal', '_default')
 
     def __init__(
         self,

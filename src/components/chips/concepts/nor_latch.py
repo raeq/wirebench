@@ -23,7 +23,7 @@ class NORLatch(FactorNode):
     between this cell and the chip pin (as the CD4043B package does).
     """
 
-    __slots__ = ['_q', '_ports']
+    __slots__ = ('_q', '_ports')
 
     def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
         self._q: bool | None = None

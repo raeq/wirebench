@@ -29,7 +29,7 @@ class CD4069(Chip):
     circuits — never left floating.
     """
 
-    __slots__ = ['_gates']
+    __slots__ = ('_gates',)
 
     CHANNELS: int = 6
 
