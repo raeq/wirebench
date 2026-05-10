@@ -47,7 +47,7 @@ def test_all_seven_channels_conducting():
 
 def test_too_many_inputs_raises():
     uln = ULN2003A()
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         uln(5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0)
 
 

@@ -54,13 +54,15 @@ class ULN2003A(Chip):
 
         super().__init__(pins=in_pins + out_pins, cells=list(self._channels))
 
-    def __call__(self, *inputs) -> tuple:
-        if len(inputs) > self.CHANNELS:
-            raise ValueError(f"ULN2003A has {self.CHANNELS} channels; got {len(inputs)} inputs")
+    def __call__(
+        self,
+        in_1: float = 0.0, in_2: float = 0.0, in_3: float = 0.0,
+        in_4: float = 0.0, in_5: float = 0.0, in_6: float = 0.0,
+        in_7: float = 0.0,
+    ) -> tuple:
         self._assert_no_inputs_wired()
-        for i in range(self.CHANNELS):
-            v = inputs[i] if i < len(inputs) else 0.0
-            self._ports[f'in_{i+1}'].drive(v)
+        for i, v in enumerate((in_1, in_2, in_3, in_4, in_5, in_6, in_7), start=1):
+            self._ports[f'in_{i}'].drive(v)
         self.evaluate()
         return tuple(self._ports[f'out_{i+1}'].value for i in range(self.CHANNELS))
 

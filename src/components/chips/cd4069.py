@@ -47,13 +47,14 @@ class CD4069(Chip):
 
         super().__init__(pins=a_pins + y_pins, cells=list(self._gates))
 
-    def __call__(self, *inputs) -> tuple:
-        if len(inputs) > self.CHANNELS:
-            raise ValueError(f"CD4069 has {self.CHANNELS} channels; got {len(inputs)} inputs")
+    def __call__(
+        self,
+        a_1: bool = False, a_2: bool = False, a_3: bool = False,
+        a_4: bool = False, a_5: bool = False, a_6: bool = False,
+    ) -> tuple:
         self._assert_no_inputs_wired()
-        for i in range(self.CHANNELS):
-            v = inputs[i] if i < len(inputs) else False
-            self._ports[f'a_{i+1}'].drive(v)
+        for i, v in enumerate((a_1, a_2, a_3, a_4, a_5, a_6), start=1):
+            self._ports[f'a_{i}'].drive(v)
         self.evaluate()
         return tuple(self._ports[f'y_{i+1}'].value for i in range(self.CHANNELS))
 

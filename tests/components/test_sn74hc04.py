@@ -31,7 +31,7 @@ def test_all_six_channels():
 
 def test_too_many_inputs_raises():
     ic = SN74HC04()
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         ic(True, True, True, True, True, True, True)
 
 
