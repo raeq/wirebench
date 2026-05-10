@@ -1,3 +1,23 @@
+"""Water-level alarm — composite-circuit demo.
+
+A bench-style assembly of four chips, two LEDs, and Vcc/GND rails that
+implements a hysteresis-driven tank-level alarm.  See the WaterAlarm
+class docstring for the wiring diagram.
+
+Run directly to see a signal trace through five level scenarios:
+
+    python demos/water_alarm.py
+"""
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+# Make `src/` importable when this file is run as a script.
+_SRC = Path(__file__).resolve().parent.parent / 'src'
+if str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
+
 from framework.circuit import Circuit
 from framework.wire import wire
 from components.chips.uln2003a import ULN2003A
@@ -84,3 +104,55 @@ class WaterAlarm(Circuit):
 
     def __repr__(self) -> str:
         return "WaterAlarm()"
+
+
+def _main() -> None:
+    """Run a five-step level scenario and print a per-chip signal trace."""
+    from framework.refdes import RefdesBearing
+
+    VCC, GND = 5.0, 0.0
+    wa = WaterAlarm()
+
+    print("Bill of materials:")
+    chips = [fn for fn in wa._factor_nodes if isinstance(fn, RefdesBearing)]
+    for fn in chips:
+        print(f"  {fn.refdes:5s} {type(fn).__name__}")
+    print()
+
+    scenarios = [
+        ("initial — tank empty",                GND, GND),
+        ("water touches low probe (held set)",  VCC, GND),
+        ("water reaches high probe (reset)",    VCC, VCC),
+        ("water recedes below high (held clr)", VCC, GND),
+        ("water gone again (set)",              GND, GND),
+    ]
+
+    def chip_state(fn: object) -> str:
+        cls = type(fn).__name__
+        if cls == 'ULN2003A':
+            outs = fn.output_levels  # type: ignore[attr-defined]
+            return _level(outs[0])
+        if cls == 'SN74HC04':
+            return _level(fn.ports['y_1'].value)  # type: ignore[attr-defined]
+        if cls == 'CD4043':
+            return _level(fn.ports['q_1'].value)  # type: ignore[attr-defined]
+        if cls == 'LED':
+            lit = fn.lit  # type: ignore[attr-defined]
+            return 'on ' if lit else 'off' if lit is False else ' ? '
+        return '?'
+
+    hdr = '  '.join(f'{c.refdes:>4s}' for c in chips)
+    print(f'{"event":40s} | low | high | {hdr} | state')
+    print('-' * (40 + 14 + 4 * len(chips) + 6 + 9))
+    for label, low, high in scenarios:
+        state = wa(low, high)
+        cells = '  '.join(f'{chip_state(c):>4s}' for c in chips)
+        print(f'{label:40s} | {low:>3.1f} | {high:>4.1f} | {cells} | {state}')
+
+
+def _level(v: bool | None) -> str:
+    return 'H' if v else 'L' if v is False else '?'
+
+
+if __name__ == '__main__':
+    _main()

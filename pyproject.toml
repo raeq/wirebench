@@ -15,5 +15,9 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+pythonpath = ["src", "demos"]
 testpaths = ["tests"]
+
+[tool.mypy]
+mypy_path = ["src", "demos"]
+strict = true

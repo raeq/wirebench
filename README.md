@@ -57,7 +57,11 @@ assert red.lit is True
 
 A complete worked example — a water-level alarm composed from a ULN2003A,
 SN74HC04, CD4043, two LEDs, and Vcc/GND rails — lives in
-`src/applications/water_alarm.py`.
+`demos/water_alarm.py`. Run it directly:
+
+```bash
+python demos/water_alarm.py
+```
 
 ## Design principles
 

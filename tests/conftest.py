@@ -1,6 +1,8 @@
 import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+_HERE = os.path.dirname(__file__)
+sys.path.insert(0, os.path.join(_HERE, '..', 'src'))
+sys.path.insert(0, os.path.join(_HERE, '..', 'demos'))
 
 import pytest
 
@@ -8,7 +10,7 @@ from components.passives.resistor import Resistor
 from components.chips.concepts.comparator import Comparator
 from components.chips.concepts.nor_latch import NORLatch
 from components.passives.led import LED
-from applications.water_alarm import WaterAlarm
+from water_alarm import WaterAlarm
 
 
 @pytest.fixture

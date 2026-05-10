@@ -240,7 +240,7 @@ Notes for the implementer:
 
 The day-1 library covers the connectors found ubiquitously in modern consumer, hobbyist, and embedded electronics. It is grouped into modules by family. Each module declares one or two classes (board-side and, where applicable, the mating cable/board-side partner) and ends with a `declare_mating_pair()` call when both halves are present.
 
-A handful of categories — user-facing receptacles such as USB, audio jacks, microSD slots, HDMI, RJ45, DC barrel jacks — have no in-model mating partner because the other end is a physical cable / card / plug whose modelling adds nothing to the circuit graph. Their `MATES_WITH` is left as `None`; their external pins simply become board surface ports awaiting external traffic. Plug-side classes for these can be added as follow-up if a multi-board design needs to model the cable end explicitly.
+Every connector in the day-1 library that has a physical mating partner ships with both halves declared and a `declare_mating_pair()` call wiring them together. This includes the cable-side plugs for USB, HDMI, audio, RJ45 and the barrel-jack power, and the cards for SD/microSD slots. The only `MATES_WITH = None` part is the screw terminal block, where the other end is bare wire (genuinely not a connector). A cable in the model is two plug instances on either end with the user's own internal `wire()` calls running between corresponding pin internals — a thin `Cable` abstraction is out of scope for this work package.
 
 `src/components/connectors/__init__.py` re-exports every public class for convenience.
 
@@ -307,35 +307,35 @@ Mating pair declared symmetrically.
 
 ### 7.3 USB (`usb.py`)
 
-Receptacles only on day 1; cable-side plug classes are a follow-up. Each receptacle has a fixed `PIN_COUNT` and `PITCH_MM` and a fixed PINOUT with named functional roles:
+Each USB family ships as a receptacle/plug pair. Both halves have fixed `PIN_COUNT`, `PITCH_MM`, and a named-role PINOUT; the plug's PINOUT mirrors the receptacle's so that positional mating wires VBUS-to-VBUS, D+-to-D+, etc.:
 
-- `USBAReceptacle` — 4-pin (VBUS, D-, D+, GND); pitch nominally 2.5 mm internal contact spacing.
-- `USBBReceptacle` — 4-pin printer-style square housing.
-- `USBMicroBReceptacle` — 5-pin (VBUS, D-, D+, ID, GND).
-- `USBCReceptacle` — 24-pin, full pinout (VBUS×4, GND×4, CC1, CC2, D+×2, D-×2, SBU1, SBU2, SuperSpeed TX/RX×2 each). Most board designs leave many pins unwired; the connector still exposes them all.
+- `USBAReceptacle` ↔ `USBAPlug` — 4-pin (VBUS, D-, D+, GND). USB 2.0 only; USB 3.x SuperSpeed receptacles are a separate part (deferred).
+- `USBBReceptacle` ↔ `USBBPlug` — 4-pin printer-style square housing.
+- `USBMicroBReceptacle` ↔ `USBMicroBPlug` — 5-pin (VBUS, D-, D+, ID, GND).
+- `USBCReceptacle` ↔ `USBCPlug` — 24-pin full pinout (VBUS×4, GND×4, CC1, CC2, D+×2, D-×2, SBU1, SBU2, SuperSpeed TX/RX×2 each). Most board designs leave many pins unwired; the connector still exposes them all. (USB-C is physically reversible; positional mating per the standard pin numbering covers both insertion orientations because the pinout is duplicated and symmetric — the same VBUS pin is contacted whichever way the plug is inserted.)
 
-`MATES_WITH = None` on all four — the cable on the other end is the mating partner, and we don't currently model cables.
+All four pairs declared via `declare_mating_pair()`.
 
 ### 7.4 Network and video (`network.py`, `video.py`)
 
-- `RJ45Jack` — 8-pin 8P8C Ethernet jack (`network.py`). PINOUT names follow T568B convention (`pair_1_white_orange`, `pair_1_orange`, `pair_2_white_green`, `pair_3_blue`, …); board designs usually only wire the four active pairs.
-- `HDMITypeAReceptacle` — 19-pin full-size HDMI receptacle (`video.py`). PINOUT names follow the HDMI standard: TMDS data 0/1/2 (clock, shield, +, −), CEC, DDC clock/data, HEC, +5 V, GND, hot plug detect.
+- `RJ45Jack` ↔ `RJ45Plug` (`network.py`) — 8-pin 8P8C. PINOUT names follow T568B convention (`pair_1_white_orange`, `pair_1_orange`, `pair_2_white_green`, `pair_3_blue`, …); board designs usually only wire the four active pairs.
+- `HDMITypeAReceptacle` ↔ `HDMITypeAPlug` (`video.py`) — 19-pin. PINOUT names follow the HDMI standard: TMDS data 0/1/2 (clock, shield, +, −), CEC, DDC clock/data, HEC, +5 V, GND, hot plug detect.
 
-Both have `MATES_WITH = None`.
+Both pairs declared via `declare_mating_pair()`.
 
 ### 7.5 Audio (`audio.py`)
 
-- `Audio3p5mmTRSJack` — 3-contact 3.5 mm stereo jack (tip = left, ring = right, sleeve = GND).
-- `Audio3p5mmTRRSJack` — 4-contact 3.5 mm jack (tip = left, ring1 = right, ring2/sleeve = GND/MIC depending on CTIA vs OMTP wiring; document both options in the docstring).
+- `Audio3p5mmTRSJack` ↔ `Audio3p5mmTRSPlug` — 3-contact 3.5 mm stereo (tip = left, ring = right, sleeve = GND).
+- `Audio3p5mmTRRSJack` ↔ `Audio3p5mmTRRSPlug` — 4-contact 3.5 mm (tip = left, ring1 = right, ring2/sleeve = GND/MIC depending on CTIA vs OMTP wiring; document both options in the docstring).
 
-Both have `MATES_WITH = None`.
+Both pairs declared via `declare_mating_pair()`.
 
 ### 7.6 DC power (`barrel.py`)
 
-- `BarrelJack5p5x2p1` — 5.5 mm OD × 2.1 mm ID centre-positive DC jack. 3 contacts: `tip` (positive), `sleeve` (GND), `switch` (the disconnect contact tied to `sleeve` until a plug is inserted; useful for "external power present" detection).
-- `BarrelJack5p5x2p5` — 5.5 mm OD × 2.5 mm ID. Same pinout, mechanically incompatible plug.
+- `BarrelJack5p5x2p1` ↔ `BarrelPlug5p5x2p1` — 5.5 mm OD × 2.1 mm ID centre-positive DC. 2 contacts: `tip` (positive), `sleeve` (GND).
+- `BarrelJack5p5x2p5` ↔ `BarrelPlug5p5x2p5` — 5.5 mm OD × 2.5 mm ID. Same pinout, mechanically incompatible with the 2.1 mm pair — the distinct `MATES_WITH` partner classes enforce this so a 2.1 mm plug cannot mate with a 2.5 mm jack even though they look superficially similar.
 
-Both have `MATES_WITH = None`.
+Both pairs declared via `declare_mating_pair()`. The "plug-detect" / sleeve-disconnect contact found on many real DC jacks is intentionally omitted from the day-1 model — it is a mechanical-internal contact, not part of the mating interface, and modelling it cleanly is a separable refinement.
 
 ### 7.7 JST families (`jst_ph.py`, `jst_xh.py`, `jst_sh.py`, `jst_gh.py`)
 
@@ -360,10 +360,10 @@ Each board-side class sets `PITCH_MM` as a class attribute (so the constructor d
 
 ### 7.9 Storage card slots (`sd.py`)
 
-- `MicroSDCardSlot` — 8-contact microSD slot. PINOUT names: `dat2`, `dat3`, `cmd`, `vdd`, `clk`, `vss`, `dat0`, `dat1`.
-- `SDCardSlot` — 9-contact full-size SD slot. Same SD-bus pin names plus the extra `cd` (card-detect) contact.
+- `MicroSDCardSlot` ↔ `MicroSDCard` — 8-contact microSD pair. PINOUT names: `dat2`, `dat3`, `cmd`, `vdd`, `clk`, `vss`, `dat0`, `dat1`. The `MicroSDCard` class is itself a `Connector` — the card's gold contacts are its external pins. This lets a multi-board / multi-component model represent "card inserted in slot" via a `mate()` call. The card's internal storage controller is not modelled; the card is a bare connector for circuitry's purposes.
+- `SDCardSlot` ↔ `SDCard` — 9-contact full-size SD pair. Same SD-bus pin names plus the extra `cd` (card-detect) contact.
 
-Both have `MATES_WITH = None` (the card isn't modelled as a connector).
+Both pairs declared via `declare_mating_pair()`.
 
 ### 7.10 Naming and packaging convention
 
@@ -631,12 +631,13 @@ New test module `tests/framework/test_connector.py`:
 12. **Refdes prefix is `J` for female, `P` for male.** Per the IEEE 315 convention. Verify on a representative sample (`Header2xNFemale`, `Header2xNMale`, `JSTPHBoardSide`, `JSTPHCableHousing`).
 13. **Under-specified part rejects construction.** Calling `Header1xNMale(refdes_number=1)` (no `pin_count`, no class default) raises `TypeError`. Similarly omitting `pitch_mm`.
 14. **BIDIR pin support.** `Pin('x', Direction.BIDIR, ELECTRICAL, signal_type=Digital)` constructs without error. Drive external → internal sees the value; drive internal → external sees the value; drive both with same value → no-op; drive both with different values → `ValueError("contention")`.
-15. **User-facing receptacle has no mate.** `USBCReceptacle.MATES_WITH is None`; calling `mate(usb_c, anything)` raises `TypeError` mentioning the user-facing-receptacle constraint.
+15. **A `MATES_WITH = None` part refuses to mate.** `ScrewTerminalBlock.MATES_WITH is None` (the wire side isn't a connector); calling `mate(screw_block, anything)` raises `TypeError` mentioning the missing in-model mate.
 16. **Smoke test the whole library.** Iterate every public class re-exported from `components.connectors.__init__`; instantiate each with a representative `pin_count` (where required) and `refdes_number=1`; assert it produces a non-empty `external_ports` dict and a non-empty `pins` tuple. This catches forgotten ClassVars or missing `_build_pinout()` overrides without per-class boilerplate tests.
 
 New test module `tests/framework/test_mate.py`:
 
-17. **Successful mate.** `mate(female, male)` wires every external pin pair. After mating, driving `female.pins[0].external` results in `male.pins[0].external` reading the same value (after `evaluate()`).
+17. **Successful mate — board-to-board.** `mate(Header2xNFemale(...), Header2xNMale(...))` (matching pin_count and pitch) wires every external pin pair. After mating and `evaluate()`, driving the female's pin 0 external causes the male's pin 0 external to read the same value.
+17b. **Successful mate — receptacle-to-plug.** `mate(USBCReceptacle(...), USBCPlug(...))` wires VBUS-to-VBUS, D+-to-D+, etc. by position; after `evaluate()` a value driven on the receptacle's VBUS internal appears on the plug's VBUS internal. Repeat for one cable family per category in the test (USB, HDMI, audio, RJ45, barrel, microSD card-into-slot) as a smoke test.
 18. **Class-level mismatch raises.** `mate(jst_ph_board, jst_xh_cable)` raises `TypeError` mentioning `MATES_WITH`.
 19. **Pin-count mismatch raises.** `mate(JSTPHBoardSide(pin_count=4, ...), JSTPHCableHousing(pin_count=5, ...))` raises `ValueError` mentioning the counts.
 20. **Pitch mismatch raises.** `mate(Header2xNMale(pin_count=10, pitch_mm=2.54, ...), Header2xNFemale(pin_count=10, pitch_mm=1.27, ...))` raises `ValueError` mentioning the pitches.
@@ -647,8 +648,8 @@ New test module `tests/framework/test_mate.py`:
 New test module `tests/applications/test_water_alarm_split.py`:
 
 24. **End-to-end equivalence.** For the same sequence of `(low_probe, high_probe)` inputs, the split assembly's red/green LED states and the latch `q_1` value match the single-circuit `WaterAlarm`. Run a representative truth-table-ish exercise: `(0,0) → idle`, `(1,0) → set alarm`, `(1,1) → clear alarm`, `(0,1)` (impossible physically — high probe wet, low dry — verify the model behaves consistently, even if the result is implementation-defined).
-19. **Refdes scoping is correct in the assembly.** `assembly.refdes_in_use` (informal: walk and collect) shows `A1`, `A2`; descending into `A1` shows `U1`, `J1`; descending into `A2` shows `U1` (correct collision-free across boards), `U2`, `D1`, `D2`, `P1`.
-20. **Unmated assembly evaluation.** Construct sensor + controller boards but skip the `mate()` call. Driving the sensor's probe ports leaves the controller's LEDs in their power-on state (`None` for `LED.lit`) — i.e. the seam is open. This exercises the BIDIR-pin "neither side driven" path.
+25. **Refdes scoping is correct in the assembly.** `assembly.refdes_in_use` (informal: walk and collect) shows `A1`, `A2`; descending into `A1` shows `U1`, `J1`; descending into `A2` shows `U1` (correct collision-free across boards), `U2`, `D1`, `D2`, `P1`.
+26. **Unmated assembly evaluation.** Construct sensor + controller boards but skip the `mate()` call. Driving the sensor's probe ports leaves the controller's LEDs in their power-on state (`None` for `LED.lit`) — i.e. the seam is open. This exercises the BIDIR-pin "neither side driven" path.
 
 Existing-test impact: none. The work package adds capability; existing components and `WaterAlarm` are untouched.
 
@@ -659,7 +660,7 @@ The work is done when:
 1. `python -m pytest` passes including all new tests.
 2. The two-board `WaterAlarm` demo produces output equivalent to the single-circuit `WaterAlarm` for matched probe inputs.
 3. `Pin` accepts `Direction.BIDIR` and the contention rule is enforced.
-4. `Board`, `Connector`, `Pin2x20MaleHeader`, `Pin2x20FemaleHeader`, and `mate()` exist and behave per §6, §7, §8, §9.
+4. `Board`, `Connector`, `mate()`, and every connector class listed in §7.1–§7.9 exist and behave per their definitions.
 5. No setters added to any component class; all new identity/refdes accessors are read-only properties.
 6. Every new class declares `__slots__`.
 7. `mate()` uses positional pin correspondence and raises clearly when types or pin counts disagree.
@@ -671,6 +672,7 @@ The work is done when:
 - **Pin numbers on chip pins.** SPICE/KiCad export needs pin *numbers* (1, 2, 3, …) on chip and connector pins; today only pin *names* are modelled. Connector pins use `p1`–`p40` which doubles as a number, but chips don't yet — separate work.
 - **Cross-domain mating.** Modelling boards on different `GroundDomain`s (e.g. mains-isolated vs. battery-referenced) and the optical / capacitive isolation barriers between them.
 - **Cross-over / null-modem connectors.** Mating where pin order is permuted (cross-over Ethernet, null-modem serial). Implementable as a separate `mate_crossover()` function or as a connector subclass override; either is plausible.
-- **Wider connector library.** JST-XH series, USB-A/B/C, RJ-45, IDC ribbon, screw terminals, board-edge connectors. Add part-by-part as designs require.
+- **`Cable` abstraction.** A two-ended `Cable` framework primitive that owns two plug `Connector` instances and internally wires their corresponding pins. Today, a cable is modelled by the user constructing both plugs and writing the per-pin internal `wire()` calls themselves — manageable for a single-cable design, tedious for many.
+- **Less-common connector families.** USB Mini-B, RJ11, DisplayPort, HDMI Mini/Micro, VGA (DE-15), DB9, BNC/SMA/SMC RF, RCA, XLR, banana jacks, M.2 / mPCIe / SATA / DIMM internal-PC connectors, automotive (Deutsch DT, AMP MQS), industrial M8/M12 round connectors, pluggable Phoenix-style screw terminals (header + removable block). Add part-by-part as designs require.
 - **Multi-board enclosures and bus backplanes.** Boards mating into a shared backplane (Eurorack, VME, PCI). The framework supports this without changes — a backplane is just a `Board` with many connectors of the same type — but the demonstration is a separate work package.
 - **Sidecar JSON persistence**, **netlist exporters** (SPICE, KiCad, EDIF), **auto-annotation of refdes numbers** — all separately tracked, all unaffected by this spec.
