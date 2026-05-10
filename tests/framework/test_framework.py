@@ -4,9 +4,9 @@ from framework.node import Node
 from framework.port import Port, Direction
 from framework.signals import Analog, Digital
 from framework.wire import wire
-from components.parts.cd4043 import CD4043
-from components.parts.concepts.nor_latch import NORLatch
-from components.parts.sn74hc04 import SN74HC04
+from components.chips.cd4043 import CD4043
+from components.chips.concepts.nor_latch import NORLatch
+from components.chips.sn74hc04 import SN74HC04
 from components.passives.led import LED
 from components.passives.resistor import Resistor
 

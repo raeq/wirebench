@@ -1,8 +1,8 @@
 from framework.circuit import Circuit
 from framework.wire import wire
-from components.parts.uln2003a import ULN2003A
-from components.parts.sn74hc04 import SN74HC04
-from components.parts.cd4043 import CD4043
+from components.chips.uln2003a import ULN2003A
+from components.chips.sn74hc04 import SN74HC04
+from components.chips.cd4043 import CD4043
 from components.passives.led import LED
 from framework.rail import Rail
 

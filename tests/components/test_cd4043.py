@@ -1,5 +1,5 @@
 import pytest
-from components.parts.cd4043 import CD4043
+from components.chips.cd4043 import CD4043
 
 
 @pytest.fixture

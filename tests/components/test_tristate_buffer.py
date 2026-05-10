@@ -1,5 +1,5 @@
 import pytest
-from components.parts.concepts.tristate_buffer import TriStateBuffer
+from components.chips.concepts.tristate_buffer import TriStateBuffer
 
 
 def test_passes_input_when_oe_high():

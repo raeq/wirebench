@@ -1,5 +1,5 @@
 import pytest
-from components.parts.cd4069 import CD4069
+from components.chips.cd4069 import CD4069
 
 
 def test_invert_high():
