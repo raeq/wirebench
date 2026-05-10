@@ -38,8 +38,8 @@ def test_too_many_inputs_raises():
 def test_ports_named_a1_to_a6_and_y1_to_y6():
     ic = SN74HC04()
     for i in range(1, 7):
-        assert f'a{i}' in ic.ports
-        assert f'y{i}' in ic.ports
+        assert f'a_{i}' in ic.ports
+        assert f'y_{i}' in ic.ports
 
 
 def test_repr():

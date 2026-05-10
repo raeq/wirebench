@@ -8,11 +8,14 @@ from framework.units import Ohms
 class Resistor(FactorNode):
     """Ideal resistor. Ohm's law: V = I × R.
 
-    A resistor is symmetric: current may flow either way and the device has
-    no causal direction.  Both terminals are bidirectional ports — whichever
-    one is driven this evaluation, the other carries the resulting drop.
+    A real resistor is a passive 2-terminal device.  Both terminals are
+    voltage nodes; current through the device is determined by external
+    circuit constraints, which a voltage-only simulator cannot solve.
 
-    Pass resistance as a plain number (ohms) or as an Ohms/Kilohms unit value:
+    `__call__(current)` is the device's signal interface: given a current
+    flowing through the resistor (in amps), return the resulting voltage
+    drop (in volts).  The drop is also published on the t2 port so that a
+    downstream component can read it.
 
         Resistor(330)               # 330 Ω
         Resistor(Ohms(330))         # same, explicit units
@@ -35,21 +38,15 @@ class Resistor(FactorNode):
         return self._ports
 
     def _evaluate(self) -> None:
-        v1 = self._ports['t1'].value
-        v2 = self._ports['t2'].value
-        if v1 is not None and v2 is None:
-            self._ports['t2'].drive(v1 * self._ohms)
-        elif v2 is not None and v1 is None:
-            self._ports['t1'].drive(v2 * self._ohms)
-        # both driven or neither → nothing to propagate
+        # Current through a resistor cannot be derived from terminal voltages
+        # alone, so a wired resistor is opaque under graph evaluation.  Use
+        # __call__ directly when the current is known.
+        pass
 
-    def __call__(self, current):
-        # __call__ commits to a t1 → t2 direction for this invocation: clear any
-        # value left on t2 by a previous call so _evaluate propagates afresh.
-        self._ports['t2']._local_value = None
-        self._ports['t1'].drive(current)
-        self._evaluate()
-        return self._ports['t2'].value
+    def __call__(self, current: float) -> Analog:
+        drop = Analog(float(current) * self._ohms)
+        self._ports['t2'].drive(drop)
+        return drop
 
     def __str__(self) -> str:
         return f"{self._ohms} Ω"

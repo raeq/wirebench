@@ -62,7 +62,7 @@ class Circuit(FactorNode):
 
     @property
     def ports(self) -> dict:
-        return {}
+        return {**self._inputs, **self._outputs}
 
     def _evaluate(self) -> None:
         for fn in self._eval_order:

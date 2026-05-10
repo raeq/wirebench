@@ -23,8 +23,8 @@ class Inverter(FactorNode):
         v = self._ports['a'].value
         self._ports['y'].drive(None if v is None else not v)
 
-    def __call__(self, signal: bool | None) -> bool | None:
-        self._ports['a'].drive(signal)
+    def __call__(self, a: bool | None) -> bool | None:
+        self._ports['a'].drive(a)
         self._evaluate()
         return self._ports['y'].value
 

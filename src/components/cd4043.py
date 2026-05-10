@@ -34,10 +34,6 @@ class CD4043(FactorNode):
     def ports(self) -> dict:
         return self._ports
 
-    @property
-    def q(self) -> bool | None:
-        return self._q
-
     def _evaluate(self) -> None:
         s = bool(Digital(self._ports['s'].value))
         r = bool(Digital(self._ports['r'].value))
@@ -65,7 +61,7 @@ class CD4043(FactorNode):
         return self._q
 
     def __str__(self) -> str:
-        return str(self.q)
+        return str(self._q)
 
     def __repr__(self) -> str:
-        return f"CD4043(q={self.q})"
+        return f"CD4043(q={self._q})"

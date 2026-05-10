@@ -72,8 +72,8 @@ class LED(FactorNode):
         i = i_target if i_target is not None else cls.I_F_TYP
         return Ohms((v_supply - cls.V_F) / i)
 
-    def __call__(self, signal: bool | None) -> bool:
-        self._ports['anode'].drive(signal)
+    def __call__(self, anode: bool | None) -> bool:
+        self._ports['anode'].drive(anode)
         self._evaluate()
         return self._lit
 

@@ -4,6 +4,7 @@ from components.uln2003a import ULN2003A
 from components.sn74hc04 import SN74HC04
 from components.cd4043 import CD4043
 from components.led import LED
+from components.rail import Rail
 
 
 class WaterAlarm(Circuit):
@@ -22,7 +23,7 @@ class WaterAlarm(Circuit):
       CD4043 /Q  → green LED (alarm clear)
 
     The SN74HC04 is a 14-pin hex inverter (6 gates); only gate 1 is used here.
-    The remaining five gates (A2/Y2–A6/Y6) are available for other signals.
+    The remaining five gates (a_2/y_2 – a_6/y_6) are available for other signals.
     Leave unused inputs tied to GND or Vcc — never leave them floating.
     """
 
@@ -34,15 +35,20 @@ class WaterAlarm(Circuit):
         latch     = CD4043()
         red_led   = LED('red')
         green_led = LED('green')
+        gnd       = Rail(False)   # GND tie for the five unused inverter gates
 
         wire(sensor.ports['out_1'], latch.ports['s'])
-        wire(sensor.ports['out_2'], inv.ports['a1'])
-        wire(inv.ports['y1'],       latch.ports['r'])
+        wire(sensor.ports['out_2'], inv.ports['a_1'])
+        wire(inv.ports['y_1'],      latch.ports['r'])
         wire(latch.ports['q'],      red_led.ports['anode'])
         wire(latch.ports['q_bar'],  green_led.ports['anode'])
+        # CMOS inputs must never float — tie the unused inverter inputs LOW.
+        wire(gnd.ports['out'],
+             inv.ports['a_2'], inv.ports['a_3'], inv.ports['a_4'],
+             inv.ports['a_5'], inv.ports['a_6'])
 
         super().__init__(
-            factor_nodes=[sensor, inv, latch, red_led, green_led],
+            factor_nodes=[sensor, inv, latch, red_led, green_led, gnd],
             inputs={'low_probe':  sensor.ports['in_1'],
                     'high_probe': sensor.ports['in_2']},
             outputs={'state': latch.ports['q']},

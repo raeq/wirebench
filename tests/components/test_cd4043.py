@@ -8,7 +8,7 @@ def latch():
 
 
 def test_initial_q_unknown(latch):
-    assert latch.q is None
+    assert latch.ports['q'].value is None
 
 
 def test_initial_q_bar_port_unknown(latch):
