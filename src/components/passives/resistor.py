@@ -23,7 +23,9 @@ class Resistor(FactorNode):
         Resistor(330)                     # 330 Ω
         Resistor(Ohms(330))               # same, explicit units
         Resistor(Kilohms(4.7))            # 4700 Ω — pull-up size
-        Resistor(330)(Milliamps(10))      # Volts(3.3)
+
+        r = Resistor(330)
+        r(Milliamps(10))                  # Volts(3.3)
     """
 
     __slots__ = ('_ohms', '_ports')
