@@ -1,5 +1,5 @@
 import pytest
-from components.parts.concepts.led import LED
+from components.passives.led import LED
 
 
 def test_initially_undriven(red_led):

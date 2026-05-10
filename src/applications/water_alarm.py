@@ -3,8 +3,8 @@ from framework.wire import wire
 from components.parts.uln2003a import ULN2003A
 from components.parts.sn74hc04 import SN74HC04
 from components.parts.cd4043 import CD4043
-from components.parts.concepts.led import LED
-from components.parts.concepts.rail import Rail
+from components.passives.led import LED
+from framework.rail import Rail
 
 
 class WaterAlarm(Circuit):

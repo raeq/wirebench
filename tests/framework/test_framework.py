@@ -7,8 +7,8 @@ from framework.wire import wire
 from components.parts.cd4043 import CD4043
 from components.parts.concepts.nor_latch import NORLatch
 from components.parts.sn74hc04 import SN74HC04
-from components.parts.concepts.led import LED
-from components.parts.concepts.resistor import Resistor
+from components.passives.led import LED
+from components.passives.resistor import Resistor
 
 
 # --- GroundDomain ---
