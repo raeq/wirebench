@@ -79,7 +79,12 @@ class Pin(FactorNode):
         # topological sort wires the pin into the dependency order). Only
         # `external` should be exposed to consumers; that is the chip's
         # responsibility, not the pin's.
-        return {'external': self._external, 'internal': self._internal}
+        #
+        # Keys are the ports' own names — same convention as every other
+        # FactorNode. This keeps Circuit._validate's error messages
+        # honest ('Pin.oe' instead of 'Pin.external').
+        return {self._external.name: self._external,
+                self._internal.name: self._internal}
 
     def evaluate(self) -> None:
         if self._role is Direction.IN:

@@ -70,11 +70,17 @@ def test_out_pin_default_is_irrelevant():
 
 # --- ports surface ---
 
-def test_pin_ports_dict_exposes_both_faces():
+def test_pin_ports_dict_keyed_by_port_name():
+    # Convention: every FactorNode's ports dict keys match the port name.
+    # For Pin, that means {'a': external, 'a_inner': internal} for an IN
+    # pin called 'a' — not {'external': ..., 'internal': ...}.
     p = Pin('a', Direction.IN, ELECTRICAL, signal_type=Digital)
-    assert set(p.ports.keys()) == {'external', 'internal'}
-    assert p.ports['external'] is p.external
-    assert p.ports['internal'] is p.internal
+    assert set(p.ports.keys()) == {'a', 'a_inner'}
+    assert p.ports['a']       is p.external
+    assert p.ports['a_inner'] is p.internal
+    # Each entry's port.name matches its dict key.
+    for name, port in p.ports.items():
+        assert port.name == name
 
 
 def test_pin_carries_signal_type_to_both_faces():
