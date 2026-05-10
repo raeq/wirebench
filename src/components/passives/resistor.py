@@ -2,24 +2,28 @@ from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Analog
-from framework.units import Ohms
+from framework.units import Amps, Ohms, Volts
 
 
 class Resistor(FactorNode):
     """Ideal resistor. Ohm's law: V = I × R.
 
-    A real resistor is a passive 2-terminal device.  Both terminals are
-    voltage nodes; current through the device is determined by external
-    circuit constraints, which a voltage-only simulator cannot solve.
+    A real resistor is passive: both terminals are voltage nodes; the
+    current through the device is determined by the rest of the circuit.
+    A voltage-only simulator cannot solve for that current, so a wired
+    resistor is opaque under graph evaluation — `evaluate()` is a
+    no-op.
 
-    `__call__(current)` is the device's signal interface: given a current
-    flowing through the resistor (in amps), return the resulting voltage
-    drop (in volts).  The drop is also published on the t2 port so that a
-    downstream component can read it.
+    `__call__(current)` is a sizing calculator, not a signal interface:
+    given a known current through the resistor, return the resulting
+    voltage drop.  It does not write to the terminal ports — there is
+    no node value that "the drop" corresponds to (a drop is a delta
+    between t1 and t2, not a value at either).
 
-        Resistor(330)               # 330 Ω
-        Resistor(Ohms(330))         # same, explicit units
-        Resistor(Kilohms(4.7))      # 4700 Ω — use for pull-up resistors
+        Resistor(330)                     # 330 Ω
+        Resistor(Ohms(330))               # same, explicit units
+        Resistor(Kilohms(4.7))            # 4700 Ω — pull-up size
+        Resistor(330)(Milliamps(10))      # Volts(3.3)
     """
 
     __slots__ = ('_ohms', '_ports')
@@ -38,15 +42,14 @@ class Resistor(FactorNode):
         return self._ports
 
     def evaluate(self) -> None:
-        # Current through a resistor cannot be derived from terminal voltages
-        # alone, so a wired resistor is opaque under graph evaluation.  Use
-        # __call__ directly when the current is known.
+        # Current through a resistor cannot be derived from terminal
+        # voltages alone, so a wired resistor is opaque under graph
+        # evaluation.  Use __call__ directly when the current is known.
         pass
 
-    def __call__(self, current: float) -> Analog:
-        drop = Analog(float(current) * self._ohms)
-        self._ports['t2'].drive(drop)
-        return drop
+    def __call__(self, current: float | Amps) -> Volts:
+        # Calculator, not actuator: returns Volts; does not touch ports.
+        return Volts(float(current) * self._ohms)
 
     def __str__(self) -> str:
         return f"{self._ohms} Ω"
