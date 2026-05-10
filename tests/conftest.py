@@ -17,13 +17,8 @@ def shunt():
 
 
 @pytest.fixture
-def comp_low():
-    return LM393(vref=100, ref_on_plus=True)
-
-
-@pytest.fixture
-def comp_high():
-    return LM393(vref=150, ref_on_plus=False)
+def comparator():
+    return LM393()
 
 
 @pytest.fixture

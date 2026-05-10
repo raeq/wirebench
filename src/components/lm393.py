@@ -5,11 +5,16 @@ from framework.signals import Analog, Digital
 
 
 class LM393(FactorNode):
-    __slots__ = ['_vref', '_ref_on_plus', '_ports']
+    """Single-channel voltage comparator (TI LM393).
 
-    def __init__(self, vref, ref_on_plus: bool = True, domain: GroundDomain = ELECTRICAL) -> None:
-        self._vref = vref
-        self._ref_on_plus = ref_on_plus  # True: Vref on V+, sensor on V−
+    Output is HIGH when V+ exceeds V−.  The chip itself has no notion of
+    "reference" or polarity — those are properties of the surrounding
+    circuit, decided by which input the reference voltage is wired to.
+    """
+
+    __slots__ = ['_ports']
+
+    def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
         self._ports = {
             'v_plus':  Port('v_plus',  Direction.IN,  domain, mandatory=True,  signal_type=Analog),
             'v_minus': Port('v_minus', Direction.IN,  domain, mandatory=True,  signal_type=Analog),
@@ -23,23 +28,19 @@ class LM393(FactorNode):
     def _evaluate(self) -> None:
         vp = self._ports['v_plus'].value
         vm = self._ports['v_minus'].value
-        if vp is not None and vm is not None:
-            self._ports['out'].drive(vp > vm)
-        else:
+        if vp is None or vm is None:
             self._ports['out'].drive(None)
-
-    def __call__(self, sensor):
-        if self._ref_on_plus:
-            self._ports['v_plus'].drive(self._vref)
-            self._ports['v_minus'].drive(sensor)
         else:
-            self._ports['v_plus'].drive(sensor)
-            self._ports['v_minus'].drive(self._vref)
+            self._ports['out'].drive(vp > vm)
+
+    def __call__(self, v_plus, v_minus):
+        self._ports['v_plus'].drive(v_plus)
+        self._ports['v_minus'].drive(v_minus)
         self._evaluate()
         return self._ports['out'].value
 
     def __str__(self) -> str:
-        return f"{'<' if self._ref_on_plus else '>'} {self._vref}"
+        return f"LM393({self._ports['v_plus'].value} > {self._ports['v_minus'].value})"
 
     def __repr__(self) -> str:
-        return f"LM393(vref={self._vref!r}, ref_on_plus={self._ref_on_plus})"
+        return "LM393()"
