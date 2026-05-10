@@ -207,3 +207,22 @@ def test_circuit_rejects_short_circuit():
             ports={'a_in': a.ports['a_1'], 'b_in': b.ports['a_1'],
                    'out':  a.ports['y_1']},
         )
+
+
+def test_circuit_rejects_two_bidir_drivers_with_no_out():
+    # Two BIDIR ports sharing a node with no OUT to dominate them are
+    # fighting passive drivers — same hazard as two OUTs.
+    from framework.circuit import Circuit
+    from framework.node import Node
+    from components.passives.resistor import Resistor
+
+    r1 = Resistor(ohms=100)
+    r2 = Resistor(ohms=100)
+    shared = Node('shared', ELECTRICAL)
+    r1.ports['t1'].connect(shared)
+    r2.ports['t1'].connect(shared)
+    with pytest.raises(ValueError, match="Short circuit"):
+        Circuit(
+            factor_nodes=[r1, r2],
+            ports={'a': r1.ports['t2'], 'b': r2.ports['t2']},
+        )

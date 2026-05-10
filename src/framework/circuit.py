@@ -45,18 +45,35 @@ class Circuit(FactorNode):
                 f"Unconnected mandatory port(s): {', '.join(unconnected)}"
             )
 
-        # No two OUT ports may drive the same node (short circuit)
-        node_drivers: dict[int, list[str]] = {}
+        # Short-circuit detection. Two kinds of conflict:
+        #   * 2+ OUT ports on the same node — unconditional drivers fighting.
+        #   * 0 OUT + 2+ BIDIR ports on the same node — passive drivers
+        #     fighting (two voltage sources pushing into the same wire).
+        # A node with 1 OUT and N BIDIRs is fine: the OUT is the
+        # unconditional driver, BIDIRs are passive readers (matches the
+        # toposort writer/reader resolution in _topological_sort).
+        node_outs:   dict[int, list[str]] = {}
+        node_bidirs: dict[int, list[str]] = {}
         for fn in factor_nodes:
             for name, port in fn.ports.items():
-                if port.direction is Direction.OUT and port.node is not None:
-                    nid = id(port.node)
-                    node_drivers.setdefault(nid, []).append(
-                        f"'{type(fn).__name__}.{name}'"
-                    )
-        shorted = {nid: drivers for nid, drivers in node_drivers.items() if len(drivers) > 1}
+                if port.node is None:
+                    continue
+                nid = id(port.node)
+                label = f"'{type(fn).__name__}.{name}'"
+                if port.direction is Direction.OUT:
+                    node_outs.setdefault(nid, []).append(label)
+                elif port.direction is Direction.BIDIR:
+                    node_bidirs.setdefault(nid, []).append(label)
+        shorted = []
+        for nid in set(node_outs) | set(node_bidirs):
+            outs   = node_outs.get(nid, [])
+            bidirs = node_bidirs.get(nid, [])
+            if len(outs) > 1:
+                shorted.append(outs + bidirs)
+            elif not outs and len(bidirs) > 1:
+                shorted.append(bidirs)
         if shorted:
-            detail = '; '.join(', '.join(d) for d in shorted.values())
+            detail = '; '.join(', '.join(group) for group in shorted)
             raise ValueError(f"Short circuit — multiple drivers on same node: {detail}")
 
     @property
