@@ -26,7 +26,7 @@ def test_channel_2_independent_of_channel_1(chip):
 def test_undriven_channel_2_returns_none(chip):
     chip.ports['v_plus_1'].drive(100.0)
     chip.ports['v_minus_1'].drive(80.0)
-    chip._evaluate()
+    chip.evaluate()
     assert chip.ports['out_1'].value is True
     assert chip.ports['out_2'].value is None
 

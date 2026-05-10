@@ -51,7 +51,7 @@ class ULN2003A(FactorNode):
         """Output pin voltages as a tuple: True = HIGH, False = LOW, None = undriven."""
         return self._out
 
-    def _evaluate(self) -> None:
+    def evaluate(self) -> None:
         voltages = tuple(
             Analog(self._ports[f'in_{i+1}'].value)
             for i in range(self.CHANNELS)
@@ -68,7 +68,7 @@ class ULN2003A(FactorNode):
             self._ports[f'in_{i+1}'].drive(v)
         for i in range(len(inputs), self.CHANNELS):
             self._ports[f'in_{i+1}'].drive(0.0)
-        self._evaluate()
+        self.evaluate()
         return self._out
 
     def __str__(self) -> str:

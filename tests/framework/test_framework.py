@@ -140,12 +140,11 @@ def test_topological_order_is_respected():
 
     circuit = Circuit(
         factor_nodes=[led, chip],   # deliberately wrong order — circuit must fix it
-        inputs={'sig': chip.ports['a_1']},
-        outputs={'out': chip.ports['y_1']},
+        ports={'sig': chip.ports['a_1'], 'out': chip.ports['y_1']},
     )
 
-    circuit._inputs['sig'].drive(False)
-    circuit._evaluate()
+    circuit._ports['sig'].drive(False)
+    circuit.evaluate()
     assert led.lit is True   # False → inverted → True → LED on
 
 
@@ -190,8 +189,7 @@ def test_circuit_rejects_unconnected_mandatory_port():
     with pytest.raises(ValueError, match="Unconnected mandatory port"):
         Circuit(
             factor_nodes=[chip, latch],
-            inputs={'a': chip.ports['a_1']},
-            outputs={'q': latch.ports['q']},
+            ports={'a': chip.ports['a_1'], 'q': latch.ports['q']},
         )
 
 
@@ -206,6 +204,6 @@ def test_circuit_rejects_short_circuit():
     with pytest.raises(ValueError, match="Short circuit"):
         Circuit(
             factor_nodes=[a, b],
-            inputs={'a_in': a.ports['a_1'], 'b_in': b.ports['a_1']},
-            outputs={'out': a.ports['y_1']},
+            ports={'a_in': a.ports['a_1'], 'b_in': b.ports['a_1'],
+                   'out':  a.ports['y_1']},
         )

@@ -15,7 +15,7 @@ class Pin(FactorNode):
                    an external OUT pin reads the internal mesh (so its
                    internal face is IN).
 
-    Pin._evaluate copies signal across the boundary in the appropriate
+    Pin.evaluate copies signal across the boundary in the appropriate
     direction. This makes the chip's pin a real, modelled component —
     identical in spirit to a bonded wire on a die.
 
@@ -81,7 +81,7 @@ class Pin(FactorNode):
         # responsibility, not the pin's.
         return {'external': self._external, 'internal': self._internal}
 
-    def _evaluate(self) -> None:
+    def evaluate(self) -> None:
         if self._role is Direction.IN:
             v = self._external.value
             if v is None and self._default is not None:

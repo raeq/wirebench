@@ -38,7 +38,7 @@ class NORLatch(FactorNode):
     def ports(self) -> dict:
         return self._ports
 
-    def _evaluate(self) -> None:
+    def evaluate(self) -> None:
         s = bool(Digital(self._ports['s'].value))
         r = bool(Digital(self._ports['r'].value))
         if s and r:
@@ -55,7 +55,7 @@ class NORLatch(FactorNode):
     def __call__(self, s: bool, r: bool) -> bool | None:
         self._ports['s'].drive(s)
         self._ports['r'].drive(r)
-        self._evaluate()
+        self.evaluate()
         return self._q
 
     def __str__(self) -> str:

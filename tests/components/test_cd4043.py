@@ -61,9 +61,21 @@ def test_oe_unconnected_defaults_to_enabled(chip):
     # Drive via port-level interface; oe is never touched.
     chip.ports['s_1'].drive(True)
     chip.ports['r_1'].drive(False)
-    chip._evaluate()
+    chip.evaluate()
     assert chip.ports['q_1'].value is True
 
 
 def test_repr_undefined(chip):
     assert repr(chip) == "CD4043(q=(None, None, None, None))"
+
+
+def test_call_refuses_when_input_pin_is_wired(chip):
+    # Once an input pin is wired by an enclosing circuit, calling the chip
+    # directly would silently overwrite that signal. The guard should raise.
+    from framework.wire import wire
+    from framework.port import Port, Direction
+    from framework.signals import Digital
+    driver = Port('drv', Direction.OUT, chip.ports['s_1'].domain, signal_type=Digital)
+    wire(driver, chip.ports['s_1'])
+    with pytest.raises(RuntimeError, match="wired by an enclosing circuit"):
+        chip(s_1=True, r_1=False)

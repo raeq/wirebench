@@ -39,7 +39,7 @@ class SN74HC04(FactorNode):
     def ports(self) -> dict:
         return self._ports
 
-    def _evaluate(self) -> None:
+    def evaluate(self) -> None:
         for i in range(self.CHANNELS):
             v = self._ports[f'a_{i+1}'].value
             self._ports[f'y_{i+1}'].drive(None if v is None else not bool(Digital(v)))
@@ -51,7 +51,7 @@ class SN74HC04(FactorNode):
             self._ports[f'a_{i+1}'].drive(v)
         for i in range(len(inputs), self.CHANNELS):
             self._ports[f'a_{i+1}'].drive(False)
-        self._evaluate()
+        self.evaluate()
         return tuple(self._ports[f'y_{i+1}'].value for i in range(self.CHANNELS))
 
     def __str__(self) -> str:

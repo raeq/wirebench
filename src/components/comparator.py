@@ -28,7 +28,7 @@ class Comparator(FactorNode):
     def ports(self) -> dict:
         return self._ports
 
-    def _evaluate(self) -> None:
+    def evaluate(self) -> None:
         vp = self._ports['v_plus'].value
         vm = self._ports['v_minus'].value
         if vp is None or vm is None:
@@ -39,7 +39,7 @@ class Comparator(FactorNode):
     def __call__(self, v_plus, v_minus):
         self._ports['v_plus'].drive(v_plus)
         self._ports['v_minus'].drive(v_minus)
-        self._evaluate()
+        self.evaluate()
         return self._ports['out'].value
 
     def __str__(self) -> str:

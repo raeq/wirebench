@@ -54,7 +54,7 @@ class LED(FactorNode):
     def lit(self) -> bool | None:
         return self._lit
 
-    def _evaluate(self) -> None:
+    def evaluate(self) -> None:
         anode_val = self._ports['anode'].value
         if anode_val is None:
             self._lit = None
@@ -81,7 +81,7 @@ class LED(FactorNode):
 
     def __call__(self, anode: bool | None) -> bool | None:
         self._ports['anode'].drive(anode)
-        self._evaluate()
+        self.evaluate()
         return self._lit
 
     def __str__(self) -> str:

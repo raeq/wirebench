@@ -53,19 +53,19 @@ class WaterAlarm(Circuit):
 
         super().__init__(
             factor_nodes=[sensor, inv, latch, red_led, green_led, gnd],
-            inputs={'low_probe':  sensor.ports['in_1'],
-                    'high_probe': sensor.ports['in_2']},
-            outputs={'state': latch.ports['q_1']},
+            ports={'low_probe':  sensor.ports['in_1'],
+                   'high_probe': sensor.ports['in_2'],
+                   'state':      latch.ports['q_1']},
         )
 
         self._red_led   = red_led
         self._green_led = green_led
 
-    def __call__(self, low_probe_v, high_probe_v) -> bool | None:
-        self._inputs['low_probe'].drive(low_probe_v)
-        self._inputs['high_probe'].drive(high_probe_v)
-        self._evaluate()
-        return self._outputs['state'].value
+    def __call__(self, low_probe, high_probe) -> bool | None:
+        self._ports['low_probe'].drive(low_probe)
+        self._ports['high_probe'].drive(high_probe)
+        self.evaluate()
+        return self._ports['state'].value
 
     @property
     def red_led(self) -> LED:

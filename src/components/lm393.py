@@ -28,25 +28,20 @@ class LM393(Circuit):
 
     def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
         self._cells = tuple(Comparator(domain) for _ in range(self.CHANNELS))
-        inputs = {}
-        outputs = {}
+        ports = {}
         for i, c in enumerate(self._cells, start=1):
-            inputs[f'v_plus_{i}']  = c.ports['v_plus']
-            inputs[f'v_minus_{i}'] = c.ports['v_minus']
-            outputs[f'out_{i}']    = c.ports['out']
-        super().__init__(
-            factor_nodes=list(self._cells),
-            inputs=inputs,
-            outputs=outputs,
-        )
+            ports[f'v_plus_{i}']  = c.ports['v_plus']
+            ports[f'v_minus_{i}'] = c.ports['v_minus']
+            ports[f'out_{i}']     = c.ports['out']
+        super().__init__(factor_nodes=list(self._cells), ports=ports)
 
     def __call__(self, v_plus_1, v_minus_1, v_plus_2=None, v_minus_2=None) -> tuple:
-        self._inputs['v_plus_1'].drive(v_plus_1)
-        self._inputs['v_minus_1'].drive(v_minus_1)
-        self._inputs['v_plus_2'].drive(v_plus_2)
-        self._inputs['v_minus_2'].drive(v_minus_2)
-        self._evaluate()
-        return (self._outputs['out_1'].value, self._outputs['out_2'].value)
+        self._ports['v_plus_1'].drive(v_plus_1)
+        self._ports['v_minus_1'].drive(v_minus_1)
+        self._ports['v_plus_2'].drive(v_plus_2)
+        self._ports['v_minus_2'].drive(v_minus_2)
+        self.evaluate()
+        return (self._ports['out_1'].value, self._ports['out_2'].value)
 
     def __repr__(self) -> str:
         return "LM393()"

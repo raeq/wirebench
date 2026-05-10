@@ -30,7 +30,7 @@ class TriStateBuffer(FactorNode):
     def ports(self) -> dict:
         return self._ports
 
-    def _evaluate(self) -> None:
+    def evaluate(self) -> None:
         oe_val = self._ports['oe'].value
         if oe_val is None or not bool(Digital(oe_val)):
             self._ports['y'].drive(None)
@@ -41,7 +41,7 @@ class TriStateBuffer(FactorNode):
     def __call__(self, a: bool | None, oe: bool) -> bool | None:
         self._ports['a'].drive(a)
         self._ports['oe'].drive(oe)
-        self._evaluate()
+        self.evaluate()
         return self._ports['y'].value
 
     def __repr__(self) -> str:

@@ -16,7 +16,7 @@ def test_equal_inputs_low(comparator):
 
 def test_unconnected_input_yields_none(comparator):
     comparator.ports['v_plus'].drive(5.0)
-    comparator._evaluate()
+    comparator.evaluate()
     assert comparator.ports['out'].value is None
 
 

@@ -29,7 +29,7 @@ class CD4043(Circuit):
     OE distribution is a real internal wire from the OE pin's internal face
     to every tri-state buffer's enable input. The chip's evaluation order
     is determined by the topological sort over the internal network — no
-    imperative fan-out, no override of `_evaluate`.
+    imperative fan-out, no override of `evaluate`.
     """
 
     __slots__ = ['_latches', '_buf_q', '_buf_q_bar']
@@ -66,7 +66,7 @@ class CD4043(Circuit):
 
         # OE distribution: a single fan-out wire from the OE pin to every
         # buffer's enable input. The topological sort sees this as a real
-        # edge — no imperative drive, no _evaluate override.
+        # edge — no imperative drive, no evaluate override.
         wire(
             oe.internal,
             *(b.ports['oe'] for b in self._buf_q),
@@ -74,12 +74,11 @@ class CD4043(Circuit):
         )
 
         # --- Boundary surface visible to consumers: external pin faces ---
-        inputs = {'oe': oe.external}
-        for i, p in enumerate(s_pins, start=1):  inputs [f's_{i}']     = p.external
-        for i, p in enumerate(r_pins, start=1):  inputs [f'r_{i}']     = p.external
-        outputs = {}
-        for i, p in enumerate(q_pins,  start=1): outputs[f'q_{i}']     = p.external
-        for i, p in enumerate(qb_pins, start=1): outputs[f'q_{i}_bar'] = p.external
+        ports = {'oe': oe.external}
+        for i, p in enumerate(s_pins,  start=1): ports[f's_{i}']      = p.external
+        for i, p in enumerate(r_pins,  start=1): ports[f'r_{i}']      = p.external
+        for i, p in enumerate(q_pins,  start=1): ports[f'q_{i}']      = p.external
+        for i, p in enumerate(qb_pins, start=1): ports[f'q_{i}_bar']  = p.external
 
         all_pins = [oe] + s_pins + r_pins + q_pins + qb_pins
         factor_nodes = (
@@ -88,11 +87,7 @@ class CD4043(Circuit):
             + list(self._buf_q)
             + list(self._buf_q_bar)
         )
-        super().__init__(
-            factor_nodes=factor_nodes,
-            inputs=inputs,
-            outputs=outputs,
-        )
+        super().__init__(factor_nodes=factor_nodes, ports=ports)
 
     def __call__(
         self,
@@ -102,14 +97,27 @@ class CD4043(Circuit):
         s_4=False, r_4=False,
         oe=True,
     ) -> tuple:
+        # __call__ is the standalone-test entry point. If any input pin is
+        # already wired by an enclosing circuit, calling the chip directly
+        # would silently overwrite that signal — refuse instead.
+        wired = [
+            name for name, p in self._ports.items()
+            if p.direction is Direction.IN and p.connected
+        ]
+        if wired:
+            raise RuntimeError(
+                f"CD4043.__call__ refused: input pin(s) wired by an enclosing "
+                f"circuit ({', '.join(wired)}); drive via the parent's evaluate() "
+                f"instead."
+            )
         sr = ((s_1, r_1), (s_2, r_2), (s_3, r_3), (s_4, r_4))
         for i, (s, r) in enumerate(sr, start=1):
-            self._inputs[f's_{i}'].drive(s)
-            self._inputs[f'r_{i}'].drive(r)
-        self._inputs['oe'].drive(oe)
-        self._evaluate()
+            self._ports[f's_{i}'].drive(s)
+            self._ports[f'r_{i}'].drive(r)
+        self._ports['oe'].drive(oe)
+        self.evaluate()
         return tuple(
-            (self._outputs[f'q_{i}'].value, self._outputs[f'q_{i}_bar'].value)
+            (self._ports[f'q_{i}'].value, self._ports[f'q_{i}_bar'].value)
             for i in range(1, self.CHANNELS + 1)
         )
 
