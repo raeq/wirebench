@@ -254,13 +254,6 @@ Per TI/onsemi CD4043B datasheet:
 | 15  | NC              | —                  | no      |
 | 16  | VDD             | —                  | no      |
 
-**Discrepancy flag.** The existing codebase exposes a `q_1_bar` port (used in `water_alarm.py`'s wiring of the green LED). The CD4043B datasheet does not provide complementary outputs on the package — there is no Q-bar pin. The implementer should flag this when assigning pin numbers and resolve in one of two ways:
-
-- (preferred) Drop `q_1_bar` from the chip's external surface; the consumer wires a separate `Inverter` between `q_1` and the LED if they need an active-low signal. This is the physically faithful resolution.
-- (interim) Keep `q_1_bar` but mark it as a non-package port with no `PinId`. Document the divergence and schedule the cleanup.
-
-This decision is out of scope for this spec; the implementer's pin-number pass surfaces it for follow-up.
-
 ### 7.5 ULN2003A — 7-channel Darlington array, 16-pin DIP
 
 Per Texas Instruments ULN2003A datasheet:
@@ -319,7 +312,7 @@ Modified files:
 - `src/components/chips/sn74hc04.py` — every `Pin(name, ...)` becomes `Pin(PinId(number, name), ...)` per §7.1.
 - `src/components/chips/cd4069.py` — same per §7.2.
 - `src/components/chips/lm393.py` — same per §7.3.
-- `src/components/chips/cd4043.py` — same per §7.4. Implementer flags the `q_1_bar` discrepancy.
+- `src/components/chips/cd4043.py` — same per §7.4.
 - `src/components/chips/uln2003a.py` — same per §7.5.
 
 The board-connector spec's connector files (`headers.py`, `usb.py`, `network.py`, `video.py`, `audio.py`, `barrel.py`, `jst_*.py`, `screw_terminal.py`, `sd.py`, `idc.py`) all use the new PINOUT format from inception — they do not exist yet, so there is no migration to perform. The board-connector spec is updated in lockstep (see §11).

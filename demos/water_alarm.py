@@ -22,6 +22,7 @@ from framework.circuit import Circuit
 from framework.wire import wire
 from components.chips.uln2003a import ULN2003A
 from components.chips.sn74hc04 import SN74HC04
+from components.chips.cd4069 import CD4069
 from components.chips.cd4043 import CD4043
 from components.passives.led import LED
 from components.passives.rail import Rail
@@ -39,12 +40,19 @@ class WaterAlarm(Circuit):
     Wiring:
       low_probe  → ULN2003A ch1                   → CD4043 S  (HIGH=dry → set alarm)
       high_probe → ULN2003A ch2 → SN74HC04 gate 1 → CD4043 R  (LOW=wet → inverted → reset)
-      CD4043 Q   → red LED   (alarm active)
-      CD4043 /Q  → green LED (alarm clear)
+      CD4043 Q                                    → red LED   (alarm active)
+      CD4043 Q   → CD4069 gate 1                  → green LED (alarm clear; /Q derived externally)
 
-    The SN74HC04 is a 14-pin hex inverter (6 gates); only gate 1 is used here.
-    The remaining five gates (a_2/y_2 – a_6/y_6) are available for other signals.
-    Leave unused inputs tied to GND or Vcc — never leave them floating.
+    Real CD4043B silicon does not bond /Q out to a package pin, so the
+    green LED's drive is generated externally by inverting Q.  We use a
+    second inverter chip (CD4069) for that; sharing gates of the same
+    SN74HC04 between the high-probe inversion and the Q inversion would
+    place the chip on both sides of the latch in the dataflow,
+    appearing as a cycle to the framework's chip-granularity
+    topological sort.  Splitting the function across two chips keeps
+    the graph acyclic.
+
+    Leave unused CMOS inputs tied to GND or Vcc — never floating.
     """
 
     __slots__ = ('_red_led', '_green_led')
@@ -52,30 +60,36 @@ class WaterAlarm(Circuit):
     def __init__(self) -> None:
         sensor    = ULN2003A(refdes_number=1)
         sn74hc04  = SN74HC04(refdes_number=2)
-        cd4043    = CD4043(refdes_number=3)
+        cd4069    = CD4069(refdes_number=3)
+        cd4043    = CD4043(refdes_number=4)
         red_led   = LED('red',   refdes_number=1)
         green_led = LED('green', refdes_number=2)
         gnd       = Rail(False)   # GND tie for unused CMOS inputs and unused latch cells
         vcc       = Rail(True)    # Vcc tie for the CD4043's OE pin
 
-        wire(sensor.ports['out_1'], cd4043.ports['s_1'])
-        wire(sensor.ports['out_2'], sn74hc04.ports['a_1'])
-        wire(sn74hc04.ports['y_1'],      cd4043.ports['r_1'])
+        wire(sensor.ports['out_1'],  cd4043.ports['s_1'])
+        wire(sensor.ports['out_2'],  sn74hc04.ports['a_1'])
+        wire(sn74hc04.ports['y_1'],  cd4043.ports['r_1'])
         wire(cd4043.ports['q_1'],    red_led.ports['anode'])
-        wire(cd4043.ports['q_1_bar'], green_led.ports['anode'])
+        # /Q is not a CD4043 package pin — derive it via gate 1 of the CD4069.
+        wire(cd4043.ports['q_1'],    cd4069.ports['a_1'])
+        wire(cd4069.ports['y_1'],    green_led.ports['anode'])
         # CD4043 OE must be tied HIGH for outputs to be enabled.
         wire(vcc.ports['out'], cd4043.ports['oe'])
-        # CMOS inputs must never float — tie unused inverter inputs LOW
-        # and unused S/R inputs LOW (so the unused latch cells sit in 'hold').
+        # CMOS inputs must never float — tie all unused inverter inputs
+        # LOW (5 unused gates on the SN74HC04, 5 on the CD4069), and the
+        # unused latch S/R inputs LOW (latches 2..4 sit in 'hold').
         wire(gnd.ports['out'],
              sn74hc04.ports['a_2'], sn74hc04.ports['a_3'], sn74hc04.ports['a_4'],
              sn74hc04.ports['a_5'], sn74hc04.ports['a_6'],
+             cd4069.ports['a_2'], cd4069.ports['a_3'], cd4069.ports['a_4'],
+             cd4069.ports['a_5'], cd4069.ports['a_6'],
              cd4043.ports['s_2'], cd4043.ports['r_2'],
              cd4043.ports['s_3'], cd4043.ports['r_3'],
              cd4043.ports['s_4'], cd4043.ports['r_4'])
 
         super().__init__(
-            factor_nodes=[sensor, sn74hc04, cd4043, red_led, green_led, gnd, vcc],
+            factor_nodes=[sensor, sn74hc04, cd4069, cd4043, red_led, green_led, gnd, vcc],
             ports={'low_probe':  sensor.ports['in_1'],
                    'high_probe': sensor.ports['in_2'],
                    'state':      cd4043.ports['q_1']},
@@ -132,7 +146,7 @@ def _main() -> None:
         if cls == 'ULN2003A':
             outs = fn.output_levels  # type: ignore[attr-defined]
             return _level(outs[0])
-        if cls == 'SN74HC04':
+        if cls in ('SN74HC04', 'CD4069'):
             return _level(fn.ports['y_1'].value)  # type: ignore[attr-defined]
         if cls == 'CD4043':
             return _level(fn.ports['q_1'].value)  # type: ignore[attr-defined]

@@ -10,12 +10,19 @@ def chip():
 def test_initial_outputs_undefined(chip):
     for i in range(1, 5):
         assert chip.ports[f'q_{i}'].value is None
-        assert chip.ports[f'q_{i}_bar'].value is None
+
+
+def test_no_q_bar_pins():
+    # CD4043B silicon does not bond /Q to a package pin; the chip
+    # exposes only Q. Consumers needing /Q must derive it externally.
+    chip = CD4043(refdes_number=1)
+    for i in range(1, 5):
+        assert f'q_{i}_bar' not in chip.ports
 
 
 def test_set_latch_1(chip):
     out = chip(s_1=True, r_1=False, oe=True)
-    assert out[0] == (True, False)
+    assert out[0] is True
 
 
 def test_each_latch_independent(chip):
@@ -26,16 +33,13 @@ def test_each_latch_independent(chip):
         s_4=False, r_4=True,
         oe=True,
     )
-    assert out[0] == (True,  False)
-    assert out[1] == (False, True)
-    assert out[2] == (True,  False)
-    assert out[3] == (False, True)
+    assert out == (True, False, True, False)
 
 
 def test_hold_after_set(chip):
     chip(s_1=True, r_1=False, oe=True)
     out = chip(s_1=False, r_1=False, oe=True)
-    assert out[0] == (True, False)
+    assert out[0] is True
 
 
 def test_both_active_raises(chip):
@@ -48,14 +52,13 @@ def test_oe_low_tristates_all_outputs(chip):
     chip(s_1=False, r_1=False, s_2=False, r_2=False, oe=False)
     for i in range(1, 5):
         assert chip.ports[f'q_{i}'].value is None
-        assert chip.ports[f'q_{i}_bar'].value is None
 
 
 def test_oe_re_enables_after_tristate(chip):
     chip(s_1=True, r_1=False, oe=True)
     chip(s_1=False, r_1=False, oe=False)
     out = chip(s_1=False, r_1=False, oe=True)
-    assert out[0] == (True, False)
+    assert out[0] is True
 
 
 def test_oe_unconnected_outputs_undefined(chip):
@@ -66,7 +69,6 @@ def test_oe_unconnected_outputs_undefined(chip):
     chip.ports['r_1'].drive(False)
     chip.evaluate()
     assert chip.ports['q_1'].value is None
-    assert chip.ports['q_1_bar'].value is None
 
 
 def test_repr_undefined(chip):
