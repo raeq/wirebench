@@ -150,7 +150,7 @@ def test_topological_order_is_respected():
 
 def test_ground_domain_enforced_at_wiring_time():
     thermal = GroundDomain('thermal')
-    elec_port = Port('out', Direction.OUT, ELECTRICAL)
+    elec_port = Port('out', Direction.OUT, ELECTRICAL, signal_type=Analog)
     thermal_node = Node('temp', thermal)
     with pytest.raises(ValueError):
         elec_port.connect(thermal_node)
