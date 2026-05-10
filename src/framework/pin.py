@@ -86,5 +86,8 @@ class Pin(FactorNode):
         else:
             self._external.drive(self._internal.value)
 
+    def __str__(self) -> str:
+        return f"{self._external.name}={self._external.value}"
+
     def __repr__(self) -> str:
         return f"Pin('{self._external.name}', {self._role.value})"

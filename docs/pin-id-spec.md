@@ -380,15 +380,13 @@ The work is done when:
 3. `Pin.__init__` accepts a `PinId` as its first argument and rejects bare strings.
 4. `Pin` exposes read-only `id`, `number`, `name` properties.
 5. Every `Pin(...)` call in every existing chip class passes a `PinId` whose number matches the §7.x table for that chip.
-6. The CD4043 `q_1_bar` discrepancy is documented (in code, in the implementation PR description, or as a follow-on issue) — its resolution is out of scope but its existence is not silently ignored.
-7. The water-alarm tests continue to pass.
-8. No setters added anywhere; no new mutator methods; `__slots__` declared on `PinId` and on the (already-slotted) `Pin`.
+6. The water-alarm tests continue to pass.
+7. No setters added anywhere; no new mutator methods; `__slots__` declared on `PinId` and on the (already-slotted) `Pin`.
 
 ## 13. Out of scope (for follow-up work packages)
 
 - **Pin numbers on passive terminals.** `Resistor.t1` / `t2`, `LED.anode` / `cathode` are conventionally pins 1 and 2; explicit `PinId`s would let exporters reference them by number. Defer until an exporter actually needs it.
 - **VCC / GND pins on chips.** The existing chip models intentionally omit power pins. Adding them as `Pin(PinId(7, 'GND'), ...)` etc. is straightforward but is a separable refinement — adding them at the same time as the pin-number pass would conflate two changes.
-- **Resolving the CD4043 `q_1_bar` discrepancy.** Surface it now; resolve in a follow-on by either dropping the synthesised port or introducing an explicit external `Inverter` in `WaterAlarm`'s wiring.
 - **Pin number assignments for SOIC, QFN, QFP, BGA package variants.** Today the models assume the DIP layout per chip. If the same logical part is used in a different package, its pin numbering changes — that's a per-package class (`SN74HC04SOIC` vs `SN74HC04DIP`) and a substantial library expansion.
 - **Migrating `PinId` to pydantic.** If the sidecar-JSON / serialisation work package adopts pydantic project-wide, `PinId` migrates with it via a five-line swap to `pydantic.dataclasses.dataclass`. No work required now.
 - **Netlist exporters.** SPICE, KiCad, EDIF emitters that consume `pin.number` are tracked separately.
