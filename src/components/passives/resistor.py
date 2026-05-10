@@ -49,6 +49,10 @@ class Resistor(FactorNode):
 
     def __call__(self, current: float | Amps) -> Volts:
         # Calculator, not actuator: returns Volts; does not touch ports.
+        # Deliberately skips _assert_no_inputs_wired — there's no port
+        # write, so calling a wired resistor cannot overwrite anything.
+        # Every other __call__ in the codebase guards; this one doesn't,
+        # by design.
         return Volts(float(current) * self._ohms)
 
     def __str__(self) -> str:
