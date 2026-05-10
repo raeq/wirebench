@@ -9,12 +9,17 @@ class DarlingtonChannel(FactorNode):
 
     The cell that the ULN2003A and ULN2803 are built from.  A Darlington
     pair (two cascaded NPN transistors) is fed by a series base resistor
-    and drives an open-collector output that sinks current to ground when
-    the input is above the turn-on threshold.
+    and drives an open-collector output that sinks current to ground
+    when the base voltage is above the turn-on threshold.
+
+    Pins
+    ----
+    b   (IN, Analog)  — base voltage of the input transistor
+    out (OUT, Digital) — open-collector output
 
     Behaviour:
-      input ≤ V_THRESHOLD  → transistor off  → output pin HIGH
-      input  > V_THRESHOLD → transistor on   → output pin LOW (sinking)
+      b ≤ V_THRESHOLD → transistor off → out pin HIGH
+      b  > V_THRESHOLD → transistor on  → out pin LOW (sinking)
 
     Note that this inverts the input level, but the cell takes an analog
     voltage rather than a logic level, so it is not a logic inverter
@@ -28,7 +33,7 @@ class DarlingtonChannel(FactorNode):
 
     def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
         self._ports = {
-            'in':  Port('in',  Direction.IN,  domain, mandatory=False, signal_type=Analog),
+            'b':   Port('b',   Direction.IN,  domain, mandatory=False, signal_type=Analog),
             'out': Port('out', Direction.OUT, domain, mandatory=False, signal_type=Digital),
         }
 
@@ -37,15 +42,15 @@ class DarlingtonChannel(FactorNode):
         return self._ports
 
     def evaluate(self) -> None:
-        v = self._ports['in'].value
+        v = self._ports['b'].value
         if v is None:
             self._ports['out'].drive(None)
             return
         # open-collector: conducting → LOW, off → HIGH
         self._ports['out'].drive(float(Analog(v)) <= self.V_THRESHOLD)
 
-    def __call__(self, v: float | None) -> bool | None:
-        self._ports['in'].drive(v)
+    def __call__(self, b: float | None) -> bool | None:
+        self._ports['b'].drive(b)
         self.evaluate()
         return self._ports['out'].value
 

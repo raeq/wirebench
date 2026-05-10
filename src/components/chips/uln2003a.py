@@ -49,7 +49,7 @@ class ULN2003A(Chip):
             out_pins.append(Pin(f'out_{i}', Direction.OUT, domain, mandatory=False, signal_type=Digital))
 
         for i, channel in enumerate(self._channels):
-            wire(in_pins[i].internal,  channel.ports['in'])
+            wire(in_pins[i].internal,  channel.ports['b'])
             wire(channel.ports['out'], out_pins[i].internal)
 
         super().__init__(pins=in_pins + out_pins, cells=list(self._channels))
