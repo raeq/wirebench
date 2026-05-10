@@ -26,14 +26,14 @@ class ULN2003A(FactorNode):
     transistor is off.
     """
 
-    __slots__ = ['_state', '_ports']
+    __slots__ = ['_out', '_ports']
 
     CHANNELS:    int   = 7
     V_THRESHOLD: float = 1.0   # V — minimum input voltage to turn on a channel
     I_OUT_MAX:   float = 0.500 # A — maximum sink current per channel
 
     def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
-        self._state: tuple[bool, ...] = (True,) * self.CHANNELS
+        self._out: tuple[bool, ...] = (True,) * self.CHANNELS
         self._ports = {
             **{f'in_{i+1}':  Port(f'in_{i+1}',  Direction.IN,  domain, mandatory=False, signal_type=Analog)  for i in range(self.CHANNELS)},
             **{f'out_{i+1}': Port(f'out_{i+1}', Direction.OUT, domain, mandatory=False, signal_type=Digital) for i in range(self.CHANNELS)},
@@ -44,8 +44,14 @@ class ULN2003A(FactorNode):
         return self._ports
 
     @property
+    def out(self) -> tuple[bool, ...]:
+        """Output pin voltages as a tuple: True = HIGH, False = LOW."""
+        return self._out
+
+    @property
     def state(self) -> tuple[bool, ...]:
-        return self._state
+        """Alias for .out — same tuple of output pin voltages."""
+        return self._out
 
     def _evaluate(self) -> None:
         voltages = tuple(
@@ -53,8 +59,8 @@ class ULN2003A(FactorNode):
             for i in range(self.CHANNELS)
         )
         # open-collector: conducting pulls pin LOW (False); off leaves pin HIGH (True)
-        self._state = tuple(float(v) <= self.V_THRESHOLD for v in voltages)
-        for i, high in enumerate(self._state):
+        self._out = tuple(float(v) <= self.V_THRESHOLD for v in voltages)
+        for i, high in enumerate(self._out):
             self._ports[f'out_{i+1}'].drive(high)
 
     def __call__(self, *inputs) -> tuple[bool, ...]:
@@ -65,10 +71,10 @@ class ULN2003A(FactorNode):
         for i in range(len(inputs), self.CHANNELS):
             self._ports[f'in_{i+1}'].drive(0.0)
         self._evaluate()
-        return self._state
+        return self._out
 
     def __str__(self) -> str:
-        return ' '.join(f'CH{i+1}:{"HIGH" if s else "LOW"}' for i, s in enumerate(self._state))
+        return ' '.join(f'CH{i+1}:{"HIGH" if s else "LOW"}' for i, s in enumerate(self._out))
 
     def __repr__(self) -> str:
-        return f'ULN2003A(state={self._state})'
+        return f'ULN2003A(out={self._out})'

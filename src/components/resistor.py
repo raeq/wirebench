@@ -2,6 +2,7 @@ from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Analog
+from components.units import Ohms
 
 
 class Resistor(FactorNode):
@@ -10,11 +11,17 @@ class Resistor(FactorNode):
     A resistor is symmetric: current may flow either way and the device has
     no causal direction.  Both terminals are bidirectional ports — whichever
     one is driven this evaluation, the other carries the resulting drop.
+
+    Pass resistance as a plain number (ohms) or as an Ohms/Kilohms unit value:
+
+        Resistor(330)               # 330 Ω
+        Resistor(Ohms(330))         # same, explicit units
+        Resistor(Kilohms(4.7))      # 4700 Ω — use for pull-up resistors
     """
 
     __slots__ = ['_ohms', '_ports']
 
-    def __init__(self, ohms, domain: GroundDomain = ELECTRICAL) -> None:
+    def __init__(self, ohms: float | Ohms, domain: GroundDomain = ELECTRICAL) -> None:
         self._ohms = ohms
         self._ports = {
             't1': Port('t1', Direction.BIDIR, domain, mandatory=True, signal_type=Analog),
