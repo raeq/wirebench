@@ -47,8 +47,8 @@ class SN74HC04(Chip):
 
     def __call__(
         self,
-        a_1: bool = False, a_2: bool = False, a_3: bool = False,
-        a_4: bool = False, a_5: bool = False, a_6: bool = False,
+        a_1: bool | None = False, a_2: bool | None = False, a_3: bool | None = False,
+        a_4: bool | None = False, a_5: bool | None = False, a_6: bool | None = False,
     ) -> tuple:
         self._assert_no_inputs_wired()
         for i, v in enumerate((a_1, a_2, a_3, a_4, a_5, a_6), start=1):

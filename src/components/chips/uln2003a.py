@@ -56,9 +56,9 @@ class ULN2003A(Chip):
 
     def __call__(
         self,
-        in_1: float = 0.0, in_2: float = 0.0, in_3: float = 0.0,
-        in_4: float = 0.0, in_5: float = 0.0, in_6: float = 0.0,
-        in_7: float = 0.0,
+        in_1: float | None = 0.0, in_2: float | None = 0.0, in_3: float | None = 0.0,
+        in_4: float | None = 0.0, in_5: float | None = 0.0, in_6: float | None = 0.0,
+        in_7: float | None = 0.0,
     ) -> tuple:
         self._assert_no_inputs_wired()
         for i, v in enumerate((in_1, in_2, in_3, in_4, in_5, in_6, in_7), start=1):
