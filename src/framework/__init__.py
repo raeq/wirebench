@@ -4,5 +4,8 @@ from framework.factor import FactorNode
 from framework.circuit import Circuit
 from framework.pin import Pin, PinId
 from framework.chip import Chip
+from framework.connector import Connector, declare_mating_pair
+from framework.board import Board
+from framework.mate import mate
 from framework.wire import wire
 from framework.signals import Analog, Digital

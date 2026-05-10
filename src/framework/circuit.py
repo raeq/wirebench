@@ -5,6 +5,7 @@ import warnings
 import networkx as nx  # type: ignore[import-untyped]
 
 from framework.factor import FactorNode
+from framework.pin import Pin
 from framework.port import Direction, Port
 from framework.refdes import RefdesBearing
 
@@ -34,10 +35,96 @@ class Circuit(FactorNode):
         self._validate(factor_nodes)
         self._eval_order   = self._topological_sort(factor_nodes)
 
+    # -----------------------------------------------------------------
+    # Logical-net machinery
+    # -----------------------------------------------------------------
+
+    def _collect_components(self, roots: list[FactorNode]) -> list[FactorNode]:
+        """Walk every Circuit composite to collect all components (chips,
+        connectors, cells, pins, passives, …) reachable from `roots`.
+
+        Used by the logical-net walker so that Pin instances buried inside
+        chips and connectors are visible at the parent's ERC pass —
+        otherwise the walker can't traverse through them across mated
+        boards or up out of a chip.
+        """
+        result: list[FactorNode] = []
+        stack: list[FactorNode] = list(roots)
+        while stack:
+            fn = stack.pop()
+            result.append(fn)
+            if isinstance(fn, Circuit):
+                stack.extend(fn._factor_nodes)
+        return result
+
+    def _build_node_index(
+        self,
+        components: list[FactorNode],
+    ) -> dict[int, list[tuple[FactorNode, Port]]]:
+        """Index every connected Port by its Node, keyed by id(node).
+
+        For ports owned by a `Pin` (back-referenced via `Port._owner`),
+        the recorded owner is the Pin instance — so the walker can call
+        `IS_CONDUCTOR` and `other_face()` on it directly.  For all other
+        ports the recorded owner is the iterating factor-node.
+
+        Each Port object is indexed at most once (the same physical port
+        may be reached through both a chip's `ports` view and the Pin's
+        `ports` view; we dedupe on port identity).
+        """
+        index: dict[int, list[tuple[FactorNode, Port]]] = {}
+        seen_ports: set[int] = set()
+        for fn in components:
+            for port in fn.ports.values():
+                if id(port) in seen_ports:
+                    continue
+                seen_ports.add(id(port))
+                if port.node is None:
+                    continue
+                owner = port._owner if port._owner is not None else fn
+                index.setdefault(id(port.node), []).append((owner, port))
+        return index
+
+    def _logical_net(
+        self,
+        start_nid: int,
+        index: dict[int, list[tuple[FactorNode, Port]]],
+    ) -> set[int]:
+        """All Node ids that form one logical net, found by walking
+        through every IS_CONDUCTOR component attached.
+
+        A conductor's two faces sit on different Node objects (typically),
+        but represent one extended copper net.  Stepping through
+        `conductor.other_face(port)` jumps the walker from one node to
+        the next, growing the net until no more conductors are
+        traversable.
+        """
+        net: set[int] = {start_nid}
+        frontier: list[int] = [start_nid]
+        while frontier:
+            nid = frontier.pop()
+            for owner, port in index.get(nid, []):
+                if not getattr(owner, 'IS_CONDUCTOR', False):
+                    continue
+                other = owner.other_face(port)
+                if other.node is None:
+                    continue
+                onid = id(other.node)
+                if onid not in net:
+                    net.add(onid)
+                    frontier.append(onid)
+        return net
+
+    # -----------------------------------------------------------------
+    # Validation
+    # -----------------------------------------------------------------
+
     def _validate(self, factor_nodes: list[FactorNode]) -> None:
         boundary = set(id(p) for p in self._ports.values())
 
-        # A6: mandatory ports must be connected (boundary ports are exempt)
+        # A6: mandatory ports must be connected (boundary ports are exempt).
+        # Only direct factor_nodes — child Circuits validated their own
+        # internals at construction.
         unconnected = [
             f"'{type(fn).__name__}.{name}'"
             for fn in factor_nodes
@@ -49,43 +136,55 @@ class Circuit(FactorNode):
                 f"Unconnected mandatory port(s): {', '.join(unconnected)}"
             )
 
-        # Short-circuit detection. Two kinds of conflict:
-        #   * 2+ OUT ports on the same node — unconditional drivers fighting.
-        #   * 0 OUT + 2+ BIDIR ports on the same node — passive drivers
-        #     fighting (two voltage sources pushing into the same wire).
-        # A node with 1 OUT and N BIDIRs is fine: the OUT is the
-        # unconditional driver, BIDIRs are passive readers (matches the
-        # toposort writer/reader resolution in _topological_sort).
-        node_outs:   dict[int, list[str]] = {}
-        node_bidirs: dict[int, list[str]] = {}
-        for fn in factor_nodes:
-            for name, port in fn.ports.items():
-                if port.node is None:
-                    continue
-                nid = id(port.node)
-                label = f"'{type(fn).__name__}.{name}'"
-                if port.direction is Direction.OUT:
-                    node_outs.setdefault(nid, []).append(label)
-                elif port.direction is Direction.BIDIR:
-                    node_bidirs.setdefault(nid, []).append(label)
-        shorted: list[list[str]] = []
-        for nid in set(node_outs) | set(node_bidirs):
-            outs   = node_outs.get(nid, [])
-            bidirs = node_bidirs.get(nid, [])
+        # Net-aware short-circuit / floating detection.  Walk through every
+        # IS_CONDUCTOR component (chip and connector pins) to extend each
+        # Node into its full logical net.  Drivers and readers are counted
+        # only on real (non-conductor) ports of that net — exactly the
+        # behaviour KiCad / Altium / OrCAD ERC implement when reporting
+        # shorts across PCB boundaries.
+        components = self._collect_components(factor_nodes)
+        index      = self._build_node_index(components)
+        shorts: list[str] = []
+        floats: list[str] = []
+        visited: set[int] = set()
+        for nid in index:
+            if nid in visited:
+                continue
+            net = self._logical_net(nid, index)
+            visited |= net
+
+            # Real ports on this logical net (skip conductors — they're the
+            # wire, not a driver or a reader).
+            real_ports: list[tuple[FactorNode, Port]] = []
+            for member_nid in net:
+                for owner, port in index.get(member_nid, []):
+                    if getattr(owner, 'IS_CONDUCTOR', False):
+                        continue
+                    real_ports.append((owner, port))
+            outs   = [(o, p) for (o, p) in real_ports if p.direction is Direction.OUT]
+            bidirs = [(o, p) for (o, p) in real_ports if p.direction is Direction.BIDIR]
+
             if len(outs) > 1:
-                shorted.append(outs + bidirs)
-            elif not outs and len(bidirs) > 1:
-                shorted.append(bidirs)
-        if shorted:
-            detail = '; '.join(', '.join(group) for group in shorted)
-            raise ValueError(f"Short circuit — multiple drivers on same node: {detail}")
+                shorts.append(', '.join(
+                    f"'{type(o).__name__}.{p.name}'" for o, p in outs))
+            elif len(outs) == 0 and len(bidirs) > 1:
+                floats.append(', '.join(
+                    f"'{type(o).__name__}.{p.name}'" for o, p in bidirs))
+
+        if shorts:
+            raise ValueError(
+                "Short circuit on logical net — multiple drivers: "
+                + '; '.join(shorts)
+            )
+        if floats:
+            raise ValueError(
+                "Floating logical net — multiple passive BIDIRs with no driver: "
+                + '; '.join(floats)
+            )
 
         # Duplicate-refdes detection. Walks only refdes-bearing children
-        # (chips and passives that match the RefdesBearing protocol).
-        # Cells inside chips don't satisfy the protocol — they have no
-        # REFDES_PREFIX — so they are skipped automatically. Chip's own
-        # _validate is therefore a no-op for refdes: its factor_nodes are
-        # only Pins and refdes-less cells.
+        # of the *direct* factor_nodes — child Boards/Circuits manage
+        # their own internal refdes namespace.
         seen: dict[tuple[str, int], str] = {}
         collisions: list[str] = []
         for fn in factor_nodes:
@@ -110,45 +209,153 @@ class Circuit(FactorNode):
         for fn in self._eval_order:
             fn.evaluate()
 
+    def _flatten_for_toposort(self, factor_nodes: list[FactorNode]) -> list[FactorNode]:
+        """Recursively expand Circuit composites and IS_TRANSPARENT
+        components (connectors) into their leaf sub-components, so the
+        toposort operates at pin-and-cell granularity.
+
+        Without this, multi-pin parts (a chip with gates on both sides
+        of a downstream latch, or a connector with pins flowing in both
+        directions through a board) appear as single nodes in the
+        dependency graph and form false cycles.  Real EDA tools flatten
+        the netlist; this is the framework's equivalent.
+        """
+        flat: list[FactorNode] = []
+        for fn in factor_nodes:
+            if isinstance(fn, Circuit):
+                flat.extend(self._flatten_for_toposort(fn._factor_nodes))
+            elif getattr(fn, 'IS_TRANSPARENT', False):
+                flat.extend(getattr(fn, '_pins', ()))
+            else:
+                flat.append(fn)
+        return flat
+
     def _topological_sort(self, factor_nodes: list[FactorNode]) -> list[FactorNode]:
+        # Flatten transparent composites (connectors) and Circuit
+        # composites (chips, boards) into their leaf sub-components so
+        # the dependency graph operates at pin-and-cell granularity.
+        factor_nodes = self._flatten_for_toposort(factor_nodes)
         fn_by_id = {id(fn): fn for fn in factor_nodes}
 
         g = nx.DiGraph()
         g.add_nodes_from(id(fn) for fn in factor_nodes)
 
-        # Per node: collect OUT and BIDIR factor ids touching it.
-        # OUT factors are unconditional writers; BIDIR factors are passive —
-        # they write only if no OUT exists on the same node, otherwise they read.
+        # Per node: collect OUT, BIDIR, IN port owners.
+        # The owner recorded is the factor_node from `factor_nodes` (Pin /
+        # cell / passive); Pins' ports back-reference their owning Pin
+        # via Port._owner.
+        node_index: dict[int, list[tuple[FactorNode, Port]]] = {}
         node_outs:   dict[int, set[int]] = {}
-        node_bidirs: dict[int, set[int]] = {}
+        node_bidirs: dict[int, list[tuple[FactorNode, Port]]] = {}
         node_ins:    dict[int, set[int]] = {}
         for fn in factor_nodes:
             for port in fn.ports.values():
                 if port.node is None:
                     continue
                 nid = id(port.node)
+                node_index.setdefault(nid, []).append((fn, port))
                 if port.direction is Direction.OUT:
                     node_outs.setdefault(nid, set()).add(id(fn))
                 elif port.direction is Direction.BIDIR:
-                    node_bidirs.setdefault(nid, set()).add(id(fn))
+                    node_bidirs.setdefault(nid, []).append((fn, port))
                 else:
                     node_ins.setdefault(nid, set()).add(id(fn))
 
-        # Resolve writer/reader role per node
+        def conductor_role(start_port: Port, source_owner: FactorNode) -> str:
+            """Walk through conductor chains from `start_port` to find
+            the closest non-conductor port and classify the original
+            position as 'writer' (downstream of an OUT) or 'reader'
+            (upstream of an IN).
+
+            Used only to break direction ambiguity on multi-BIDIR
+            conductor nodes (mated connector pins).
+            """
+            if start_port.node is None:
+                return 'unknown'
+            visited: set[int] = {id(start_port.node)}
+            frontier: list[tuple[Port, FactorNode]] = [(start_port, source_owner)]
+            while frontier:
+                face, prev_owner = frontier.pop()
+                for next_owner, next_port in node_index.get(id(face.node), []):
+                    if next_owner is prev_owner:
+                        continue
+                    if getattr(next_owner, 'IS_CONDUCTOR', False):
+                        deeper = next_owner.other_face(next_port)
+                        if deeper.node is None:
+                            continue
+                        dnid = id(deeper.node)
+                        if dnid in visited:
+                            continue
+                        visited.add(dnid)
+                        frontier.append((deeper, next_owner))
+                    else:
+                        if next_port.direction is Direction.OUT:
+                            return 'writer'
+                        if next_port.direction is Direction.IN:
+                            return 'reader'
+                        # Non-conductor BIDIR (resistor terminal): treat
+                        # as passive — no direction signal.
+            return 'unknown'
+
+        # Resolve writer/reader role per node and add toposort edges.
         for nid in set(node_outs) | set(node_bidirs) | set(node_ins):
-            outs   = node_outs.get(nid, set())
-            bidirs = node_bidirs.get(nid, set())
-            ins    = node_ins.get(nid, set())
+            outs        = node_outs.get(nid, set())
+            bidir_pairs = node_bidirs.get(nid, [])
+            ins         = node_ins.get(nid, set())
+            bidirs      = {id(fn) for fn, _ in bidir_pairs}
             if outs:
                 writers = outs
                 readers = ins | bidirs
+            elif len(bidir_pairs) > 1:
+                # No OUT, multiple BIDIR ports on the same node.  This is
+                # typical of mated connector pins: signals flow through
+                # via conductor relays.  Classify each BIDIR by walking
+                # through it to find the real driver / reader on either
+                # side of the chain.
+                writers = set()
+                readers = set()
+                for fn, port in bidir_pairs:
+                    owner = port._owner if port._owner is not None else fn
+                    if isinstance(owner, Pin):
+                        # Walk through the conductor to the far side.
+                        far_face = owner.other_face(port)
+                        role = conductor_role(far_face, owner)
+                        on_external = port is owner._external
+                        if role == 'writer':
+                            writers.add(id(fn))
+                            # Pin is feeding the shared node
+                            # (signal flows internal → external).
+                            owner._effective_role = (
+                                Direction.OUT if on_external else Direction.IN
+                            )
+                        elif role == 'reader':
+                            readers.add(id(fn))
+                            # Pin reads from the shared node
+                            # (signal flows external → internal).
+                            owner._effective_role = (
+                                Direction.IN if on_external else Direction.OUT
+                            )
+                        else:
+                            # 'unknown' — no real driver/reader on the
+                            # internal side (e.g. an unused mated pin
+                            # on the controller side of the connector).
+                            # Treat as IN so its evaluate unconditionally
+                            # relays external → internal; the internal
+                            # face is a dangling node nobody else reads.
+                            owner._effective_role = (
+                                Direction.IN if on_external else Direction.OUT
+                            )
+                            # No toposort edge: no ordering constraint.
+                    else:
+                        # A non-conductor BIDIR (resistor terminal).
+                        # Treat as passive — both writer and reader.
+                        writers.add(id(fn))
+                        readers.add(id(fn))
+                readers |= ins
             else:
-                # No OUT — BIDIRs are the writers; IN ports are readers.
-                # Multiple BIDIRs on a passive-only node have no canonical
-                # direction, so leave them all as both writers and readers
-                # and rely on the cycle fallback if it forms one.
+                # No OUT, one BIDIR — it's the only writer.
                 writers = bidirs
-                readers = ins | (bidirs if len(bidirs) > 1 else set())
+                readers = ins
             for w in writers:
                 for r in readers:
                     if w != r:

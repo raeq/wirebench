@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import ABCMeta, abstractmethod
+from typing import ClassVar
 
 from framework.port import Direction, Port
 
@@ -14,6 +15,32 @@ class FactorNode(metaclass=ABCMeta):
     """
 
     __slots__ = ()
+
+    # If True, this component is a conductor: the framework treats its
+    # internal and external faces as one logical net for ERC, and
+    # Circuit._validate walks through the component when counting drivers.
+    # Used for chip pins (bonded wire from silicon to package) and
+    # connector contacts (spring contact in housing). Default False.
+    IS_CONDUCTOR: ClassVar[bool] = False
+
+    # If True, this component is *transparent* to the parent's
+    # topological sort and evaluation: the parent walks into its
+    # sub-components and orders them individually rather than treating
+    # this component as a single eval step.  Used for connectors (a
+    # connector's pins go in independent directions and need pin-level
+    # toposort granularity).  Chips remain opaque (False); their pins +
+    # cells live within their own Circuit.evaluate.
+    IS_TRANSPARENT: ClassVar[bool] = False
+
+    def other_face(self, port: Port) -> Port:
+        """Return the opposite face of this conductor, given one face.
+
+        Only meaningful on IS_CONDUCTOR components (Pin).  The default
+        raises — non-conductors have no notion of paired faces.
+        """
+        raise NotImplementedError(
+            f"{type(self).__name__} is not a conductor; other_face() not defined"
+        )
 
     @property
     @abstractmethod

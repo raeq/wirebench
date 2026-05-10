@@ -19,9 +19,51 @@ def test_out_pin_external_is_out_internal_is_in():
     assert p.internal.direction is Direction.IN
 
 
-def test_bidir_pin_not_supported():
-    with pytest.raises(NotImplementedError, match="BIDIR"):
-        Pin(PinId(1, 't'), Direction.BIDIR, ELECTRICAL, signal_type=Digital)
+def test_bidir_pin_supported():
+    # BIDIR pins are now supported — connector contacts need them.
+    p = Pin(PinId(1, 't'), Direction.BIDIR, ELECTRICAL, signal_type=Digital)
+    assert p.external.direction is Direction.BIDIR
+    assert p.internal.direction is Direction.BIDIR
+
+
+def test_bidir_pin_relays_external_to_internal():
+    p = Pin(PinId(1, 't'), Direction.BIDIR, ELECTRICAL, signal_type=Digital)
+    p.external.drive(True)
+    p.evaluate()
+    assert p.internal.value is True
+
+
+def test_bidir_pin_relays_internal_to_external():
+    p = Pin(PinId(1, 't'), Direction.BIDIR, ELECTRICAL, signal_type=Digital)
+    p.internal.drive(False)
+    p.evaluate()
+    assert p.external.value is False
+
+
+def test_bidir_pin_contention_raises():
+    p = Pin(PinId(1, 't'), Direction.BIDIR, ELECTRICAL, signal_type=Digital)
+    p.external.drive(True)
+    p.internal.drive(False)
+    with pytest.raises(ValueError, match="contention"):
+        p.evaluate()
+
+
+def test_pin_is_conductor():
+    assert Pin.IS_CONDUCTOR is True
+
+
+def test_pin_other_face_returns_opposite():
+    p = Pin(PinId(1, 'x'), Direction.IN, ELECTRICAL, signal_type=Digital)
+    assert p.other_face(p.external) is p.internal
+    assert p.other_face(p.internal) is p.external
+
+
+def test_pin_other_face_rejects_stranger_port():
+    from framework.port import Port
+    p = Pin(PinId(1, 'x'), Direction.IN, ELECTRICAL, signal_type=Digital)
+    stranger = Port('stranger', Direction.IN, ELECTRICAL, signal_type=Digital)
+    with pytest.raises(ValueError):
+        p.other_face(stranger)
 
 
 def test_pin_rejects_bare_string():

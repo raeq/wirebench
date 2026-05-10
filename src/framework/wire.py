@@ -37,11 +37,23 @@ def wire(*ports: Port) -> None:
         if issubclass(t, Analog):  return t        # specific unit — must match exactly
         return t
 
+    # A BIDIR port declared as the generic `Analog` base class is a
+    # *conductor wildcard* — it represents a piece of copper (a chip
+    # bond wire, a connector contact, a PCB trace) that carries
+    # whatever signal the rest of the circuit puts on it.  When at
+    # least one such wildcard is on the wire, we skip the type check
+    # entirely: the conductor takes on the type imposed by the other
+    # parties.
+    has_conductor_wildcard = any(
+        p.direction is Direction.BIDIR and p.signal_type is Analog
+        for p in ports
+    )
+
     # Bidirectional-only nets carry no committed direction yet, so we don't
     # enforce signal-type agreement on them — the type is settled once a
     # directional port joins the wire (or implicitly, by the components'
     # behavior at evaluation time).
-    if any(p.direction is not Direction.BIDIR for p in ports):
+    if not has_conductor_wildcard and any(p.direction is not Direction.BIDIR for p in ports):
         base_types = {_base(p.signal_type) for p in ports}
         # Analog (generic) is compatible with any specific Analog subtype.
         # After discarding the wildcard, all remaining specific types must agree.

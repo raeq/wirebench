@@ -89,6 +89,128 @@ def declare_mating_pair(a: type['Connector'], b: type['Connector']) -> None:
     b.MATES_WITH = a
 ```
 
+### 5.3 The mated-pin "BIDIR short" — physical reframing
+
+**Problem.** After §5.1 generalises `Pin` to support `Direction.BIDIR`, both faces of a BIDIR `Pin` are themselves `Direction.BIDIR` ports. When `mate(a, b)` calls `wire(a.external, b.external)` on each pin pair, the resulting node has two BIDIR ports and zero OUT ports. The current `Circuit._validate` rule
+
+```python
+elif not outs and len(bidirs) > 1:
+    shorted.append(bidirs)
+```
+
+(added in commit `b2f5bec` to catch resistor-vs-resistor floating-node topology) would false-positive on every mated pin pair.
+
+**The physical insight.** A mated 40-pin GPIO header is 40 pieces of metal — one per pin position. Each piece runs from one board's PCB trace, through the male pin, through the female socket's spring contact, into the other board's PCB trace. That whole length is *one conductor* with *one voltage* at any instant. It isn't "two BIDIRs negotiating"; it's a wire.
+
+This is how real EDA tools model it. In KiCad / Altium / OrCAD, connector pin symbols and chip pin symbols are typed as **passive** (a "passive" symbol pin in EDA terminology is a conductor, not a driver). ERC computes each pin's **logical net** by walking *through* every passive symbol in its path — the bonded wire from the silicon, the chip pin, the PCB trace, the connector contact on each side of the mate, and out into the next chip — treating them collectively as one extended copper net. ERC then counts drivers per logical net and reports a short only when more than one *real* driver (an active component's OUT, a Rail, an externally-driven surface port) is on the same extended net. Connector contacts and chip pin bonded wires are transparent to that count because, electrically, they are.
+
+**The framework change.** `FactorNode` gains one class attribute:
+
+```python
+class FactorNode(metaclass=ABCMeta):
+    __slots__ = ()
+
+    # If True, this component is a conductor: the framework treats its
+    # internal and external faces as one logical net for ERC, and
+    # Circuit._validate walks through the component when counting drivers.
+    # Used for chip pins (bonded wire from silicon to package) and
+    # connector contacts (spring contact in housing). Default False.
+    IS_CONDUCTOR: ClassVar[bool] = False
+```
+
+`Pin` is the only class in the day-1 codebase that sets it `True`:
+
+```python
+class Pin(FactorNode):
+    __slots__ = (...)
+    IS_CONDUCTOR: ClassVar[bool] = True
+
+    def other_face(self, port: Port) -> Port:
+        """Return the opposite face of this conductor, given one face.
+        Used by Circuit._validate when walking logical nets."""
+        if port is self._external:
+            return self._internal
+        if port is self._internal:
+            return self._external
+        raise ValueError(f"port {port!r} is not a face of pin {self!r}")
+```
+
+`Resistor`, `LED`, `Rail`, every chip, every cell concept, and every `Circuit` keep the default `IS_CONDUCTOR = False`. Those are real components, not wires.
+
+**`Circuit._validate` becomes net-aware.** The existing per-`Node` short-circuit checks are replaced by per-logical-net checks. The algorithm:
+
+```python
+def _logical_net(self, start_node_id, node_to_owners):
+    """All Nodes that form one logical net, found by walking through
+    every IS_CONDUCTOR component attached to them."""
+    net = {start_node_id}
+    frontier = [start_node_id]
+    while frontier:
+        nid = frontier.pop()
+        for owner, port in node_to_owners.get(nid, []):
+            if not owner.IS_CONDUCTOR:
+                continue
+            other = owner.other_face(port)
+            if other.node is not None:
+                onid = id(other.node)
+                if onid not in net:
+                    net.add(onid)
+                    frontier.append(onid)
+    return net
+
+
+def _validate(self, factor_nodes):
+    ...existing mandatory-port check...
+
+    # Index every connected port by its Node.
+    node_to_owners: dict[int, list[tuple[FactorNode, Port]]] = {}
+    for fn in factor_nodes:
+        for port in fn.ports.values():
+            if port.node is None:
+                continue
+            node_to_owners.setdefault(id(port.node), []).append((fn, port))
+
+    # Walk every Node into its logical net; check each net once.
+    seen = set()
+    for nid in node_to_owners:
+        if nid in seen:
+            continue
+        net = self._logical_net(nid, node_to_owners)
+        seen |= net
+
+        # Ports that are real (non-conductor) on this logical net.
+        ports_on_net = [
+            (o, p)
+            for member_nid in net
+            for (o, p) in node_to_owners.get(member_nid, [])
+            if not o.IS_CONDUCTOR
+        ]
+        outs   = [(o, p) for (o, p) in ports_on_net if p.direction is Direction.OUT]
+        bidirs = [(o, p) for (o, p) in ports_on_net if p.direction is Direction.BIDIR]
+
+        if len(outs) > 1:
+            raise ValueError(
+                f"Short circuit on logical net — multiple drivers: "
+                f"{', '.join(f'{type(o).__name__}.{p.name}' for o, p in outs)}"
+            )
+
+        # Floating: no OUT driver, only passive BIDIRs (resistor-vs-resistor case).
+        # The conductors themselves don't count — they're walked through above.
+        if len(outs) == 0 and len(bidirs) > 1:
+            raise ValueError(
+                f"Floating logical net — multiple passive BIDIRs with no driver: "
+                f"{', '.join(f'{type(o).__name__}.{p.name}' for o, p in bidirs)}"
+            )
+```
+
+**Why this is physically faithful.** It models the EDA ERC algorithm directly: walk passive (conductor) symbols to extend nets across package and board boundaries, then count active drivers and readers on the extended net. The framework's `IS_CONDUCTOR` flag captures a real physical property of the part — *"is this thing a wire?"* — not a software meta-attribute about runtime behaviour.
+
+**Mated connector case.** Two `Pin` externals on the mated node are conductors. The walker recurses through each pin to its internal face, lands on each board's wiring, and finds whatever real drivers are there (the chip OUTs / Rails / surface inputs on each side). If only one side drives, the net has one driver: OK. If both sides drive, the net has two OUT drivers: correctly flagged as a short *across the board boundary* — exactly the ERC behaviour you want from a real PCB toolchain.
+
+**Resistor-vs-resistor case.** Both resistors are non-conductor (`Resistor.IS_CONDUCTOR = False`). The two BIDIR terminals are *real* ports on the net. No OUT drivers, multi-BIDIR-only: correctly flagged as a floating net. The rule from `b2f5bec` survives in the new algorithm, just expressed at the logical-net level.
+
+**Chip OUT pin to consumer.** A chip's OUT-role `Pin` has an external Port of `Direction.OUT`. From outside the chip, that external face *looks* like a driver. But it's still a `Pin` (conductor), so the walker steps through it to the internal face, finds the chip cell's actual OUT port (e.g., `Inverter.y`), and counts *that* as the real driver. The net's driver count is unchanged either way; the framing is just cleaner.
+
 ## 6. The `Connector` base class
 
 New file `src/framework/connector.py`. `Connector` extends `FactorNode` directly (not `Circuit` — a connector has no internal wiring graph; it is a housing of `Pin`s).
@@ -565,7 +687,9 @@ New files:
 
 Modified files:
 
-- `src/framework/pin.py` — generalise `__init__` and `evaluate` to support `Direction.BIDIR` (§5.1).
+- `src/framework/pin.py` — generalise `__init__` and `evaluate` to support `Direction.BIDIR` (§5.1); declare `IS_CONDUCTOR = True`; add `other_face()` method (§5.3).
+- `src/framework/factor.py` — add `IS_CONDUCTOR: ClassVar[bool] = False` to `FactorNode` (§5.3). Default applies to every existing component without further edits.
+- `src/framework/circuit.py` — rewrite `_validate`'s short-circuit and floating-node checks at the logical-net level (§5.3). The walker traverses `IS_CONDUCTOR` components to compute extended nets and counts only real (non-conductor) drivers and readers.
 - `src/applications/water_alarm_split/__init__.py` — new demo (§12). Or place under `src/applications/` as a peer module of `water_alarm.py`. Do not modify the existing `water_alarm.py`.
 
 Unmodified:
@@ -631,6 +755,12 @@ New test module `tests/framework/test_connector.py`:
 12. **Refdes prefix is `J` for female, `P` for male.** Per the IEEE 315 convention. Verify on a representative sample (`Header2xNFemale`, `Header2xNMale`, `JSTPHBoardSide`, `JSTPHCableHousing`).
 13. **Under-specified part rejects construction.** Calling `Header1xNMale(refdes_number=1)` (no `pin_count`, no class default) raises `TypeError`. Similarly omitting `pitch_mm`.
 14. **BIDIR pin support.** `Pin('x', Direction.BIDIR, ELECTRICAL, signal_type=Digital)` constructs without error. Drive external → internal sees the value; drive internal → external sees the value; drive both with same value → no-op; drive both with different values → `ValueError("contention")`.
+14b. **`Pin.IS_CONDUCTOR` is True; other components are False.** `Pin.IS_CONDUCTOR is True`. `Resistor.IS_CONDUCTOR is False`. `LED.IS_CONDUCTOR is False`. `Rail.IS_CONDUCTOR is False`. `SN74HC04.IS_CONDUCTOR is False`. Spot-check a couple of cell concepts (`Inverter`, `NorLatch`): also `False`.
+14c. **`Pin.other_face()` returns the opposite face.** For a pin built with name `'x'`: `pin.other_face(pin.external) is pin.internal` and vice versa. `pin.other_face(some_other_port)` raises `ValueError`.
+14d. **Logical-net walker spans mated boards.** Build a small assembly: two `Board`s, each with one `Header1xNMale`/`Header1xNFemale` of `pin_count=2`, mated, with one board's pin wired to a `Rail(True).out` and the other board's pin wired to an `LED('test').anode`. The parent `Circuit._validate` constructs without raising — the mated net's logical-net walk finds the Rail's OUT driver from one board, satisfies the per-net "at least one driver" rule.
+14e. **`_validate` rejects multi-driver cross-board shorts.** Same assembly, but now both boards have a `Rail(True)` wired to the mated pin. `_validate` raises `ValueError` mentioning "logical net" and naming both `Rail` drivers — the cross-board multi-OUT case ERC is supposed to catch.
+14f. **`_validate` rejects resistor-resistor floating nets.** Build a `Circuit` containing two `Resistor`s wired terminal-to-terminal with nothing else driving the node. `Circuit.__init__` raises `ValueError` mentioning "floating logical net" and naming the two resistor terminals. (The rule from `b2f5bec` survives in the new algorithm.)
+14g. **Logical-net walker does not loop on cycles.** Pathological topology: a `Pin` whose external is wire'd to a Connector contact, whose other face is wire'd back to the original Pin's internal (a degenerate self-loop). The walker terminates with a finite logical net rather than spinning. Use `pytest.timeout` or equivalent.
 15. **A `MATES_WITH = None` part refuses to mate.** `ScrewTerminalBlock.MATES_WITH is None` (the wire side isn't a connector); calling `mate(screw_block, anything)` raises `TypeError` mentioning the missing in-model mate.
 16. **Smoke test the whole library.** Iterate every public class re-exported from `components.connectors.__init__`; instantiate each with a representative `pin_count` (where required) and `refdes_number=1`; assert it produces a non-empty `external_ports` dict and a non-empty `pins` tuple. This catches forgotten ClassVars or missing `_build_pinout()` overrides without per-class boilerplate tests.
 
@@ -660,11 +790,13 @@ The work is done when:
 1. `python -m pytest` passes including all new tests.
 2. The two-board `WaterAlarm` demo produces output equivalent to the single-circuit `WaterAlarm` for matched probe inputs.
 3. `Pin` accepts `Direction.BIDIR` and the contention rule is enforced.
+3b. `FactorNode.IS_CONDUCTOR` exists with default `False`; `Pin` overrides to `True`; `Pin.other_face()` is implemented (§5.3).
+3c. `Circuit._validate` operates at the logical-net level: it walks through `IS_CONDUCTOR` components to extend nets across package and board boundaries. Mated connector pairs no longer trigger a spurious short; cross-board multi-OUT shorts are correctly detected; resistor-resistor floating nets are still rejected.
 4. `Board`, `Connector`, `mate()`, and every connector class listed in §7.1–§7.9 exist and behave per their definitions.
 5. No setters added to any component class; all new identity/refdes accessors are read-only properties.
 6. Every new class declares `__slots__`.
 7. `mate()` uses positional pin correspondence and raises clearly when types or pin counts disagree.
-8. The existing `water_alarm.py` and all other existing files except `framework/pin.py` are unmodified.
+8. The existing `water_alarm.py` and all other existing application/component files are unmodified. Within the framework, only `pin.py`, `port.py`, and `circuit.py` are touched (the three files called out in §11).
 
 ## 15. Out of scope (for follow-up work packages)
 
