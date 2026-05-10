@@ -48,11 +48,6 @@ class ULN2003A(FactorNode):
         """Output pin voltages as a tuple: True = HIGH, False = LOW."""
         return self._out
 
-    @property
-    def state(self) -> tuple[bool, ...]:
-        """Alias for .out — same tuple of output pin voltages."""
-        return self._out
-
     def _evaluate(self) -> None:
         voltages = tuple(
             Analog(self._ports[f'in_{i+1}'].value)
@@ -77,4 +72,4 @@ class ULN2003A(FactorNode):
         return ' '.join(f'CH{i+1}:{"HIGH" if s else "LOW"}' for i, s in enumerate(self._out))
 
     def __repr__(self) -> str:
-        return f'ULN2003A(state={self._out})'
+        return f'ULN2003A(out={self._out})'
