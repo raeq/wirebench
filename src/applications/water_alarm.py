@@ -1,10 +1,10 @@
 from framework.circuit import Circuit
 from framework.wire import wire
-from components.uln2003a import ULN2003A
-from components.sn74hc04 import SN74HC04
-from components.cd4043 import CD4043
-from components.led import LED
-from components.rail import Rail
+from components.parts.uln2003a import ULN2003A
+from components.parts.sn74hc04 import SN74HC04
+from components.parts.cd4043 import CD4043
+from components.concepts.led import LED
+from components.concepts.rail import Rail
 
 
 class WaterAlarm(Circuit):
@@ -20,7 +20,7 @@ class WaterAlarm(Circuit):
       low_probe  → ULN2003A ch1                   → CD4043 S  (HIGH=dry → set alarm)
       high_probe → ULN2003A ch2 → SN74HC04 gate 1 → CD4043 R  (LOW=wet → inverted → reset)
       CD4043 Q   → red LED   (alarm active)
-      CD4043 /Q  → green LED (alarm clear)
+      CD4043 /Q  → green LED (alarm clear)0
 
     The SN74HC04 is a 14-pin hex inverter (6 gates); only gate 1 is used here.
     The remaining five gates (a_2/y_2 – a_6/y_6) are available for other signals.

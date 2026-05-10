@@ -3,8 +3,8 @@ from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Digital
 from framework.wire import wire
-from .nor_latch import NORLatch
-from .tristate_buffer import TriStateBuffer
+from components.concepts.nor_latch import NORLatch
+from components.concepts.tristate_buffer import TriStateBuffer
 
 
 class CD4043(Circuit):

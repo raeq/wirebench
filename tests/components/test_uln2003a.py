@@ -1,5 +1,5 @@
 import pytest
-from components.uln2003a import ULN2003A
+from components.parts.uln2003a import ULN2003A
 
 
 def test_all_channels_undriven_on_init():

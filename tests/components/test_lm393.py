@@ -1,5 +1,5 @@
 import pytest
-from components.lm393 import LM393
+from components.parts.lm393 import LM393
 
 
 @pytest.fixture

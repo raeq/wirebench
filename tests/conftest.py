@@ -4,10 +4,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 import pytest
 
-from components.resistor import Resistor
-from components.comparator import Comparator
-from components.nor_latch import NORLatch
-from components.led import LED
+from components.concepts.resistor import Resistor
+from components.concepts.comparator import Comparator
+from components.concepts.nor_latch import NORLatch
+from components.concepts.led import LED
 from applications.water_alarm import WaterAlarm
 
 

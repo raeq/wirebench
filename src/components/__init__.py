@@ -1,11 +1,2 @@
-from .resistor import Resistor
-from .lm393 import LM393
-from .comparator import Comparator
-from .cd4043 import CD4043
-from .nor_latch import NORLatch
-from .tristate_buffer import TriStateBuffer
-from .led import LED
-from .uln2003a import ULN2003A
-from .sn74hc04 import SN74HC04
-from .cd4069 import CD4069
-from .rail import Rail
+from .concepts import Resistor, LED, Rail, NORLatch, TriStateBuffer, Comparator
+from .parts import LM393, CD4043, ULN2003A, SN74HC04, CD4069

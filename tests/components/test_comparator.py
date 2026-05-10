@@ -1,5 +1,5 @@
 import pytest
-from components.comparator import Comparator
+from components.concepts.comparator import Comparator
 
 
 def test_v_plus_greater_is_high(comparator):

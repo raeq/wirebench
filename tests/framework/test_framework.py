@@ -4,11 +4,11 @@ from framework.node import Node
 from framework.port import Port, Direction
 from framework.signals import Analog, Digital
 from framework.wire import wire
-from components.cd4043 import CD4043
-from components.nor_latch import NORLatch
-from components.sn74hc04 import SN74HC04
-from components.led import LED
-from components.resistor import Resistor
+from components.parts.cd4043 import CD4043
+from components.parts.sn74hc04 import SN74HC04
+from components.concepts.nor_latch import NORLatch
+from components.concepts.led import LED
+from components.concepts.resistor import Resistor
 
 
 # --- GroundDomain ---
