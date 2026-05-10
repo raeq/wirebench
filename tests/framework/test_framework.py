@@ -5,6 +5,7 @@ from framework.port import Port, Direction
 from framework.signals import Analog, Digital
 from framework.wire import wire
 from components.cd4043 import CD4043
+from components.nor_latch import NORLatch
 from components.inverter import Inverter
 from components.led import LED
 from components.resistor import Resistor
@@ -151,7 +152,7 @@ def test_wire_rejects_signal_type_mismatch():
 
 def test_circuit_rejects_unconnected_mandatory_port():
     from framework.circuit import Circuit
-    latch = CD4043()
+    latch = NORLatch()
     inv = Inverter()
     wire(inv.ports['y'], latch.ports['r'])   # r is wired
     # s is mandatory, unconnected, and not declared as a boundary port → must raise

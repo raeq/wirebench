@@ -37,21 +37,25 @@ class WaterAlarm(Circuit):
         green_led = LED('green')
         gnd       = Rail(False)   # GND tie for the five unused inverter gates
 
-        wire(sensor.ports['out_1'], latch.ports['s'])
+        wire(sensor.ports['out_1'], latch.ports['s_1'])
         wire(sensor.ports['out_2'], inv.ports['a_1'])
-        wire(inv.ports['y_1'],      latch.ports['r'])
-        wire(latch.ports['q'],      red_led.ports['anode'])
-        wire(latch.ports['q_bar'],  green_led.ports['anode'])
-        # CMOS inputs must never float — tie the unused inverter inputs LOW.
+        wire(inv.ports['y_1'],      latch.ports['r_1'])
+        wire(latch.ports['q_1'],    red_led.ports['anode'])
+        wire(latch.ports['q_1_bar'], green_led.ports['anode'])
+        # CMOS inputs must never float — tie unused inverter inputs LOW
+        # and unused latch S/R inputs LOW (so those latches sit in 'hold').
         wire(gnd.ports['out'],
              inv.ports['a_2'], inv.ports['a_3'], inv.ports['a_4'],
-             inv.ports['a_5'], inv.ports['a_6'])
+             inv.ports['a_5'], inv.ports['a_6'],
+             latch.ports['s_2'], latch.ports['r_2'],
+             latch.ports['s_3'], latch.ports['r_3'],
+             latch.ports['s_4'], latch.ports['r_4'])
 
         super().__init__(
             factor_nodes=[sensor, inv, latch, red_led, green_led, gnd],
             inputs={'low_probe':  sensor.ports['in_1'],
                     'high_probe': sensor.ports['in_2']},
-            outputs={'state': latch.ports['q']},
+            outputs={'state': latch.ports['q_1']},
         )
 
         self._red_led   = red_led

@@ -50,8 +50,24 @@ def wire(*ports: Port) -> None:
             details = ', '.join(f"'{p.name}': {p.signal_type.__name__}" for p in ports)
             raise ValueError(f"Signal type mismatch in wire(): {details}")
 
+    # If any port is already on a node, extend that node (Kirchhoff junction).
+    # This is what makes a composite's already-wired boundary port joinable by
+    # a parent circuit. Two distinct existing nodes would have to merge — not
+    # supported yet (would require rewriting node references on every joined
+    # port).
+    existing = {id(p.node): p.node for p in ports if p.node is not None}
+    if len(existing) > 1:
+        names = ', '.join(f"'{p.name}' on {p.node.name}" for p in ports if p.node is not None)
+        raise ValueError(
+            f"wire() would merge two existing nodes — not supported: {names}"
+        )
+
     domain = next(iter(domains))
-    name = '—'.join(p.name for p in ports)
-    node = Node(name, domain)
+    if existing:
+        node = next(iter(existing.values()))
+    else:
+        name = '—'.join(p.name for p in ports)
+        node = Node(name, domain)
     for p in ports:
-        p.connect(node)
+        if p.node is None:
+            p.connect(node)
