@@ -44,9 +44,11 @@ class Resistor(FactorNode):
     ) -> None:
         validate_refdes(self.REFDES_PREFIX, refdes_number)
         self._refdes_number = refdes_number
-        # Normalise to a plain base-unit float so repr is canonical regardless
-        # of input type (Ohms(47), Kilohms(4.7), and 4700 all store as 4700.0).
-        self._ohms = float(ohms)
+        # Store as Ohms (base-SI) for unit-system consistency.  Ohms(x)
+        # canonicalises any input — Kilohms(4.7), Ohms(330), or a plain
+        # number — to a base-SI float instance, so repr is canonical
+        # regardless of input type.
+        self._ohms: Ohms = Ohms(ohms)
         # mandatory=False because the device is structurally inert under
         # graph evaluation — evaluate() is a no-op, so wiring the
         # terminals is not a *simulation* requirement.  In a real
@@ -94,7 +96,7 @@ class Resistor(FactorNode):
         return Volts(current * self._ohms)
 
     def __str__(self) -> str:
-        return f"{self._ohms} Ω"
+        return f"{float(self._ohms)} Ω"
 
     def __repr__(self) -> str:
-        return f"Resistor(ohms={self._ohms!r}, refdes={self.refdes!r})"
+        return f"Resistor(ohms={float(self._ohms)!r}, refdes={self.refdes!r})"
