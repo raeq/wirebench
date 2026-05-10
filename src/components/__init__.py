@@ -8,5 +8,4 @@ from .led import LED
 from .uln2003a import ULN2003A
 from .sn74hc04 import SN74HC04
 from .cd4069 import CD4069
-from .inverter import Inverter
 from .rail import Rail

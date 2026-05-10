@@ -6,7 +6,7 @@ from framework.signals import Analog, Digital
 from framework.wire import wire
 from components.cd4043 import CD4043
 from components.nor_latch import NORLatch
-from components.inverter import Inverter
+from components.sn74hc04 import SN74HC04
 from components.led import LED
 from components.resistor import Resistor
 
@@ -121,27 +121,27 @@ def test_drive_rejects_uncoercible_value():
 
 # --- Circuit graph evaluation ---
 
-def test_inverter_in_circuit():
-    inv = Inverter()
-    assert inv(True) is False
-    assert inv(False) is True
-    assert inv(None) is None
+def test_sn74hc04_inverts_channel_1():
+    chip = SN74HC04()
+    assert chip(True)[0] is False
+    assert chip(False)[0] is True
+    assert chip(None)[0] is None
 
 
 def test_topological_order_is_respected():
-    """Inverter must evaluate before LED for the LED to see the inverted signal."""
+    """A logic gate must evaluate before its downstream load reads its output."""
     from framework.circuit import Circuit
     from framework.wire import wire
 
-    inv = Inverter()
+    chip = SN74HC04()
     led = LED('green')
 
-    wire(inv.ports['y'], led.ports['anode'])
+    wire(chip.ports['y_1'], led.ports['anode'])
 
     circuit = Circuit(
-        factor_nodes=[led, inv],   # deliberately wrong order — circuit must fix it
-        inputs={'sig': inv.ports['a']},
-        outputs={'out': inv.ports['y']},
+        factor_nodes=[led, chip],   # deliberately wrong order — circuit must fix it
+        inputs={'sig': chip.ports['a_1']},
+        outputs={'out': chip.ports['y_1']},
     )
 
     circuit._inputs['sig'].drive(False)
@@ -184,13 +184,13 @@ def test_wire_rejects_signal_type_mismatch():
 def test_circuit_rejects_unconnected_mandatory_port():
     from framework.circuit import Circuit
     latch = NORLatch()
-    inv = Inverter()
-    wire(inv.ports['y'], latch.ports['r'])   # r is wired
+    chip = SN74HC04()
+    wire(chip.ports['y_1'], latch.ports['r'])   # r is wired
     # s is mandatory, unconnected, and not declared as a boundary port → must raise
     with pytest.raises(ValueError, match="Unconnected mandatory port"):
         Circuit(
-            factor_nodes=[inv, latch],
-            inputs={'a': inv.ports['a']},
+            factor_nodes=[chip, latch],
+            inputs={'a': chip.ports['a_1']},
             outputs={'q': latch.ports['q']},
         )
 
@@ -198,15 +198,14 @@ def test_circuit_rejects_unconnected_mandatory_port():
 def test_circuit_rejects_short_circuit():
     from framework.circuit import Circuit
     from framework.node import Node
-    from framework.port import Port, Direction
-    a = Inverter()
-    b = Inverter()
+    a = SN74HC04()
+    b = SN74HC04()
     shared = Node('shared', ELECTRICAL)
-    a.ports['y'].connect(shared)
-    b.ports['y'].connect(shared)
+    a.ports['y_1'].connect(shared)
+    b.ports['y_1'].connect(shared)
     with pytest.raises(ValueError, match="Short circuit"):
         Circuit(
             factor_nodes=[a, b],
-            inputs={'a_in': a.ports['a'], 'b_in': b.ports['a']},
-            outputs={'out': a.ports['y']},
+            inputs={'a_in': a.ports['a_1'], 'b_in': b.ports['a_1']},
+            outputs={'out': a.ports['y_1']},
         )
