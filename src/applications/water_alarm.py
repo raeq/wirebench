@@ -64,11 +64,12 @@ class WaterAlarm(Circuit):
         self._red_led   = red_led
         self._green_led = green_led
 
-    def __call__(self, low_probe, high_probe) -> bool | None:
+    def __call__(self, low_probe: float, high_probe: float) -> bool | None:
         self._ports['low_probe'].drive(low_probe)
         self._ports['high_probe'].drive(high_probe)
         self.evaluate()
-        return self._ports['state'].value
+        result: bool | None = self._ports['state'].value
+        return result
 
     @property
     def red_led(self) -> LED:

@@ -1,8 +1,12 @@
 from __future__ import annotations
+
 import warnings
-import networkx as nx
+
+import networkx as nx  # type: ignore[import-untyped]
+
 from framework.factor import FactorNode
-from framework.port import Port, Direction
+from framework.port import Direction, Port
+from framework.refdes import RefdesBearing
 
 
 class Circuit(FactorNode):
@@ -64,7 +68,7 @@ class Circuit(FactorNode):
                     node_outs.setdefault(nid, []).append(label)
                 elif port.direction is Direction.BIDIR:
                     node_bidirs.setdefault(nid, []).append(label)
-        shorted = []
+        shorted: list[list[str]] = []
         for nid in set(node_outs) | set(node_bidirs):
             outs   = node_outs.get(nid, [])
             bidirs = node_bidirs.get(nid, [])
@@ -77,14 +81,15 @@ class Circuit(FactorNode):
             raise ValueError(f"Short circuit — multiple drivers on same node: {detail}")
 
         # Duplicate-refdes detection. Walks only refdes-bearing children
-        # (chips and passives that declare REFDES_PREFIX). Cells inside
-        # chips are skipped — they don't carry a refdes — and Chip's
-        # own _validate is automatically a no-op for this check because
-        # its factor_nodes contain only Pins and refdes-less cells.
+        # (chips and passives that match the RefdesBearing protocol).
+        # Cells inside chips don't satisfy the protocol — they have no
+        # REFDES_PREFIX — so they are skipped automatically. Chip's own
+        # _validate is therefore a no-op for refdes: its factor_nodes are
+        # only Pins and refdes-less cells.
         seen: dict[tuple[str, int], str] = {}
         collisions: list[str] = []
         for fn in factor_nodes:
-            if not hasattr(fn, 'REFDES_PREFIX'):
+            if not isinstance(fn, RefdesBearing):
                 continue
             key = (fn.REFDES_PREFIX, fn.refdes_number)
             label = f"'{type(fn).__name__}.{fn.refdes}'"
@@ -98,7 +103,7 @@ class Circuit(FactorNode):
             )
 
     @property
-    def ports(self) -> dict:
+    def ports(self) -> dict[str, Port]:
         return self._ports
 
     def evaluate(self) -> None:
@@ -114,9 +119,9 @@ class Circuit(FactorNode):
         # Per node: collect OUT and BIDIR factor ids touching it.
         # OUT factors are unconditional writers; BIDIR factors are passive —
         # they write only if no OUT exists on the same node, otherwise they read.
-        node_outs:   dict[int, set] = {}
-        node_bidirs: dict[int, set] = {}
-        node_ins:    dict[int, set] = {}
+        node_outs:   dict[int, set[int]] = {}
+        node_bidirs: dict[int, set[int]] = {}
+        node_ins:    dict[int, set[int]] = {}
         for fn in factor_nodes:
             for port in fn.ports.values():
                 if port.node is None:

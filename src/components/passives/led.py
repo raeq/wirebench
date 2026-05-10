@@ -60,7 +60,7 @@ class LED(FactorNode):
         }
 
     @property
-    def ports(self) -> dict:
+    def ports(self) -> dict[str, Port]:
         return self._ports
 
     @property

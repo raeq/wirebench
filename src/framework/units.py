@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Any, cast
+
 from framework.signals import Analog
 
 
@@ -16,24 +20,23 @@ class _Unit(Analog):
     __slots__ = ()
     _SCALE: float = 1.0   # multiply by this to convert to base unit
 
-    def __new__(cls, value=0.0):
+    def __new__(cls, value: Any = 0.0) -> "_Unit":
         base = 0.0 if value is None else float(value) * cls._SCALE
-        return Analog.__new__(cls, base)
+        return cast("_Unit", Analog.__new__(cls, base))
 
     @classmethod
-    def _from_base(cls, base: float) -> '_Unit':
+    def _from_base(cls, base: float) -> "_Unit":
         """Construct a unit instance from an already-base-unit float (no rescaling)."""
-        obj = Analog.__new__(cls, base)
-        return obj
+        return cast("_Unit", Analog.__new__(cls, base))
 
     # Additive ops preserve unit type; mul/div intentionally return float (units change).
-    def __add__(self, other):  return type(self)._from_base(float(self) + float(other))
-    def __radd__(self, other): return type(self)._from_base(float(other) + float(self))
-    def __sub__(self, other):  return type(self)._from_base(float(self) - float(other))
-    def __rsub__(self, other): return type(self)._from_base(float(other) - float(self))
-    def __neg__(self):         return type(self)._from_base(-float(self))
-    def __abs__(self):         return type(self)._from_base(abs(float(self)))
-    def __pos__(self):         return type(self)._from_base(+float(self))
+    def __add__(self, other: float) -> "_Unit":  return type(self)._from_base(float(self) + float(other))
+    def __radd__(self, other: float) -> "_Unit": return type(self)._from_base(float(other) + float(self))
+    def __sub__(self, other: float) -> "_Unit":  return type(self)._from_base(float(self) - float(other))
+    def __rsub__(self, other: float) -> "_Unit": return type(self)._from_base(float(other) - float(self))
+    def __neg__(self) -> "_Unit":                return type(self)._from_base(-float(self))
+    def __abs__(self) -> "_Unit":                return type(self)._from_base(abs(float(self)))
+    def __pos__(self) -> "_Unit":                return type(self)._from_base(+float(self))
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({float(self) / self._SCALE!r})"

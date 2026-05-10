@@ -24,7 +24,7 @@ class Rail(FactorNode):
         }
 
     @property
-    def ports(self) -> dict:
+    def ports(self) -> dict[str, Port]:
         return self._ports
 
     def evaluate(self) -> None:

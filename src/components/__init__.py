@@ -13,3 +13,8 @@ its silicon is not part of the consumer API.
 """
 from .chips    import CD4043, CD4069, LM393, SN74HC04, ULN2003A
 from .passives import LED, Rail, Resistor
+
+__all__ = [
+    'CD4043', 'CD4069', 'LM393', 'SN74HC04', 'ULN2003A',
+    'LED', 'Rail', 'Resistor',
+]

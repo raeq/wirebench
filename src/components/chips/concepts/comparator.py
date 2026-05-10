@@ -25,7 +25,7 @@ class Comparator(FactorNode):
         }
 
     @property
-    def ports(self) -> dict:
+    def ports(self) -> dict[str, Port]:
         return self._ports
 
     def evaluate(self) -> None:
@@ -41,7 +41,8 @@ class Comparator(FactorNode):
         self._ports['v_plus'].drive(v_plus)
         self._ports['v_minus'].drive(v_minus)
         self.evaluate()
-        return self._ports['out'].value
+        result: bool | None = self._ports['out'].value
+        return result
 
     def __str__(self) -> str:
         return f"Comparator({self._ports['v_plus'].value} > {self._ports['v_minus'].value})"

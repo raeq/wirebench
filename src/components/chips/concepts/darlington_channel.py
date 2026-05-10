@@ -38,7 +38,7 @@ class DarlingtonChannel(FactorNode):
         }
 
     @property
-    def ports(self) -> dict:
+    def ports(self) -> dict[str, Port]:
         return self._ports
 
     def evaluate(self) -> None:
@@ -53,7 +53,8 @@ class DarlingtonChannel(FactorNode):
         self._assert_no_inputs_wired()
         self._ports['b'].drive(b)
         self.evaluate()
-        return self._ports['out'].value
+        result: bool | None = self._ports['out'].value
+        return result
 
     def __repr__(self) -> str:
         return f"DarlingtonChannel(out={self._ports['out'].value!r})"

@@ -27,7 +27,7 @@ class TriStateBuffer(FactorNode):
         }
 
     @property
-    def ports(self) -> dict:
+    def ports(self) -> dict[str, Port]:
         return self._ports
 
     def evaluate(self) -> None:
@@ -43,7 +43,8 @@ class TriStateBuffer(FactorNode):
         self._ports['a'].drive(a)
         self._ports['oe'].drive(oe)
         self.evaluate()
-        return self._ports['y'].value
+        result: bool | None = self._ports['y'].value
+        return result
 
     def __repr__(self) -> str:
         return f"TriStateBuffer(y={self._ports['y'].value!r})"

@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from abc import ABCMeta, abstractmethod
-from framework.port import Direction
+
+from framework.port import Direction, Port
 
 
 class FactorNode(metaclass=ABCMeta):
@@ -14,7 +17,7 @@ class FactorNode(metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def ports(self) -> dict[str, 'Port']:
+    def ports(self) -> dict[str, Port]:
         ...
 
     @abstractmethod

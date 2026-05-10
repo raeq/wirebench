@@ -15,6 +15,9 @@ PCB.  The enclosing chip carries the refdes; exporters synthesise per-
 channel references like `U3A` at export time from the chip's refdes plus
 its channel index.
 """
+from __future__ import annotations
+
+from typing import ClassVar, Protocol, runtime_checkable
 
 
 # Full IEEE 315 prefix set the codebase will recognise. Authors choose
@@ -57,6 +60,27 @@ IEEE_315_PREFIXES: frozenset[str] = frozenset({
     'Y',   # crystal / oscillator
     'Z',   # zener (legacy)
 })
+
+
+@runtime_checkable
+class RefdesBearing(Protocol):
+    """Structural type for components that carry a reference designator.
+
+    Any class with `REFDES_PREFIX`, `refdes_number`, and `refdes` attributes
+    matches.  Used by `Circuit._validate` to find refdes-bearing children
+    without resorting to dynamic `hasattr` checks; lets type-checkers
+    narrow inside the validation loop.
+
+    Cells (no `REFDES_PREFIX`) and framework primitives (Pin, Rail, Ground)
+    don't satisfy this protocol — they're skipped automatically.
+    """
+    REFDES_PREFIX: ClassVar[str]
+
+    @property
+    def refdes(self) -> str: ...
+
+    @property
+    def refdes_number(self) -> int: ...
 
 
 def validate_refdes(prefix: str, number: int) -> None:

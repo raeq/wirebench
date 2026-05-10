@@ -9,3 +9,5 @@ they're re-exported here.
 from .led      import LED
 from .rail     import Rail
 from .resistor import Resistor
+
+__all__ = ['LED', 'Rail', 'Resistor']

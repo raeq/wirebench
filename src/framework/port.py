@@ -1,5 +1,8 @@
 from __future__ import annotations
+
 from enum import Enum
+from typing import Any
+
 from framework.ground import GroundDomain
 from framework.node import Node
 
@@ -27,7 +30,7 @@ class Port:
         domain: GroundDomain,
         *,
         mandatory: bool = True,
-        signal_type: type = float,
+        signal_type: type[Any] = float,
     ) -> None:
         self.name        = name
         self.direction   = direction
@@ -35,14 +38,14 @@ class Port:
         self.mandatory   = mandatory
         self.signal_type = signal_type
         self._node: Node | None = None
-        self._local_value       = None
+        self._local_value: Any = None
 
     @property
     def connected(self) -> bool:
         return self._node is not None
 
     @property
-    def node(self) -> 'Node | None':
+    def node(self) -> Node | None:
         return self._node
 
     def connect(self, node: Node) -> None:
@@ -53,7 +56,7 @@ class Port:
             )
         self._node = node
 
-    def drive(self, value) -> None:
+    def drive(self, value: Any) -> None:
         # None is preserved as the high-impedance / undriven sentinel.
         # Any other value is coerced to the port's signal_type at drive
         # time, mirroring wire()'s connection-time type discipline.
@@ -78,7 +81,7 @@ class Port:
             self._local_value = value
 
     @property
-    def value(self):
+    def value(self) -> Any:
         return self._node.value if self._node is not None else self._local_value
 
     def __repr__(self) -> str:

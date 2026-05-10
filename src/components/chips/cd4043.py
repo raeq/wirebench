@@ -1,6 +1,7 @@
 from typing import ClassVar
 
 from framework.chip import Chip
+from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin
 from framework.port import Direction
@@ -77,9 +78,13 @@ class CD4043(Chip):
             *(b.ports['oe'] for b in self._buf_q_bar),
         )
 
+        cells: list[FactorNode] = []
+        cells.extend(self._latches)
+        cells.extend(self._buf_q)
+        cells.extend(self._buf_q_bar)
         super().__init__(
             pins=[oe] + s_pins + r_pins + q_pins + qb_pins,
-            cells=list(self._latches) + list(self._buf_q) + list(self._buf_q_bar),
+            cells=cells,
         )
 
     @property

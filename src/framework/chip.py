@@ -1,4 +1,8 @@
+from __future__ import annotations
+
 from abc import abstractmethod
+from typing import Any, Sequence
+
 from framework.circuit import Circuit
 from framework.factor import FactorNode
 from framework.pin import Pin
@@ -26,7 +30,7 @@ class Chip(Circuit):
 
     __slots__ = ()
 
-    def __init__(self, *, pins: list[Pin], cells: list[FactorNode]) -> None:
+    def __init__(self, *, pins: Sequence[Pin], cells: Sequence[FactorNode]) -> None:
         ports = {pin.external.name: pin.external for pin in pins}
         super().__init__(
             factor_nodes=list(pins) + list(cells),
@@ -37,5 +41,5 @@ class Chip(Circuit):
     # with input ports has the same silent-overwrite hazard.
 
     @abstractmethod
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: Any, **kwargs: Any) -> Any:
         ...

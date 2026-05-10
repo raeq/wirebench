@@ -68,7 +68,7 @@ class Pin(FactorNode):
         return self._internal
 
     @property
-    def ports(self) -> dict:
+    def ports(self) -> dict[str, Port]:
         # Both faces are visible to the chip-internal eval graph (so the
         # topological sort wires the pin into the dependency order). Only
         # `external` should be exposed to consumers; that is the chip's
