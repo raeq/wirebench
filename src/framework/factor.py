@@ -22,18 +22,23 @@ class FactorNode(metaclass=ABCMeta):
         ...
 
     def _assert_no_inputs_wired(self) -> None:
-        """Raise if any input port is connected to a node.
+        """Raise if any input or BIDIR port is connected to a node.
 
         Direct invocation of `__call__` on a wired node would silently
         overwrite the externally driven signal — refuse instead. Every
         leaf component and every chip uses this guard so the silent-
         overwrite hazard is mechanically prevented across the codebase.
+
+        BIDIR ports are included because they may be written from
+        __call__ (Resistor's __call__ does this today, but skips this
+        guard deliberately because it doesn't actually touch ports).
+        Any future BIDIR-driving __call__ inherits the protection.
         """
         wired = [n for n, p in self.ports.items()
-                 if p.direction is Direction.IN and p.connected]
+                 if p.direction in (Direction.IN, Direction.BIDIR) and p.connected]
         if wired:
             raise RuntimeError(
-                f"{type(self).__name__}.__call__ refused: input port(s) wired "
+                f"{type(self).__name__}.__call__ refused: port(s) wired "
                 f"by an enclosing circuit ({', '.join(wired)}); drive via "
                 f"the parent's evaluate() instead."
             )

@@ -80,3 +80,32 @@ def test_assert_no_inputs_wired_does_not_consider_outputs():
     sink = Port('sink', Direction.IN, ELECTRICAL, signal_type=Digital)
     wire(chip.ports['y'], sink)   # OUT pin externally wired — should NOT trigger guard
     assert chip(True) is True
+
+
+def test_assert_no_inputs_wired_catches_bidir():
+    # BIDIR ports may be written from __call__, so they must trigger
+    # the same silent-overwrite guard as IN ports.
+    from framework.factor import FactorNode
+    from framework.signals import Analog
+
+    class _DummyBidir(FactorNode):
+        __slots__ = ('_t',)
+
+        def __init__(self):
+            self._t = Port('t', Direction.BIDIR, ELECTRICAL, signal_type=Analog)
+
+        @property
+        def ports(self):
+            return {'t': self._t}
+
+        def evaluate(self):
+            pass
+
+        def __call__(self):
+            self._assert_no_inputs_wired()
+
+    dummy = _DummyBidir()
+    other = Port('drv', Direction.OUT, ELECTRICAL, signal_type=Analog)
+    wire(other, dummy.ports['t'])
+    with pytest.raises(RuntimeError, match="wired by an enclosing circuit"):
+        dummy()
