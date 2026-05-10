@@ -30,7 +30,7 @@ class Port:
         domain: GroundDomain,
         *,
         mandatory: bool = True,
-        signal_type: type[Any] = float,
+        signal_type: type[Any],
     ) -> None:
         self.name        = name
         self.direction   = direction

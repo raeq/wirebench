@@ -51,7 +51,7 @@ def test_node_drive_sets_value():
 
 def test_port_connects_to_same_domain():
     domain = GroundDomain('electrical')
-    p = Port('out', Direction.OUT, domain)
+    p = Port('out', Direction.OUT, domain, signal_type=Analog)
     n = Node('v1', domain)
     p.connect(n)
     assert p._node is n
@@ -60,14 +60,14 @@ def test_port_connects_to_same_domain():
 def test_port_rejects_domain_mismatch():
     elec    = GroundDomain('electrical')
     thermal = GroundDomain('thermal')
-    p = Port('out', Direction.OUT, elec)
+    p = Port('out', Direction.OUT, elec, signal_type=Analog)
     n = Node('temp', thermal)
     with pytest.raises(ValueError, match="Ground domain mismatch"):
         p.connect(n)
 
 
 def test_port_drive_writes_to_node():
-    p = Port('out', Direction.OUT, ELECTRICAL)
+    p = Port('out', Direction.OUT, ELECTRICAL, signal_type=Analog)
     n = Node('v1', ELECTRICAL)
     p.connect(n)
     p.drive(5.0)
@@ -75,7 +75,7 @@ def test_port_drive_writes_to_node():
 
 
 def test_port_value_reads_from_node():
-    p = Port('in', Direction.IN, ELECTRICAL)
+    p = Port('in', Direction.IN, ELECTRICAL, signal_type=Analog)
     n = Node('v1', ELECTRICAL)
     p.connect(n)
     n.drive(2.5)
@@ -83,7 +83,7 @@ def test_port_value_reads_from_node():
 
 
 def test_unconnected_port_stores_value_locally():
-    p = Port('in', Direction.IN, ELECTRICAL)
+    p = Port('in', Direction.IN, ELECTRICAL, signal_type=Analog)
     p.drive(1.8)
     assert p.value == 1.8
 
