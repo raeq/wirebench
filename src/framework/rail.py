@@ -27,11 +27,11 @@ class Rail(FactorNode):
     def ports(self) -> dict:
         return self._ports
 
-    def _evaluate(self) -> None:
+    def evaluate(self) -> None:
         self._ports['out'].drive(self._level)
 
     def __call__(self) -> bool:
-        self._evaluate()
+        self.evaluate()
         return self._level
 
     def __repr__(self) -> str:

@@ -37,7 +37,7 @@ class Resistor(FactorNode):
     def ports(self) -> dict:
         return self._ports
 
-    def _evaluate(self) -> None:
+    def evaluate(self) -> None:
         # Current through a resistor cannot be derived from terminal voltages
         # alone, so a wired resistor is opaque under graph evaluation.  Use
         # __call__ directly when the current is known.

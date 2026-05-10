@@ -17,5 +17,5 @@ class FactorNode(metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    def _evaluate(self) -> None:
+    def evaluate(self) -> None:
         ...

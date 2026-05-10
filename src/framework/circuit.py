@@ -9,30 +9,29 @@ class Circuit(FactorNode):
     """A composite factor node: a set of factor nodes wired together.
 
     Nodes are implicit — they are created by wire() when ports are connected.
-    inputs and outputs are Port references on the boundary components.
+    `ports` is the boundary surface: a single dict of name → Port. Each
+    Port already declares its Direction (IN, OUT, BIDIR), so an explicit
+    inputs/outputs split is redundant and is rejected.
 
     Evaluation propagates signals through the internal graph in topological order.
     Cycles (SCCs) fall back to the declared order — fixed-point iteration is a
     future extension.
     """
 
-    __slots__ = ['_factor_nodes', '_inputs', '_outputs', '_eval_order']
+    __slots__ = ['_factor_nodes', '_ports', '_eval_order']
 
     def __init__(
         self,
         factor_nodes: list[FactorNode],
-        inputs: dict[str, Port],
-        outputs: dict[str, Port],
+        ports: dict[str, Port],
     ) -> None:
         self._factor_nodes = factor_nodes
-        self._inputs       = inputs
-        self._outputs      = outputs
+        self._ports        = ports
         self._validate(factor_nodes)
         self._eval_order   = self._topological_sort(factor_nodes)
 
     def _validate(self, factor_nodes: list[FactorNode]) -> None:
-        boundary = set(id(p) for p in self._inputs.values()) | \
-                   set(id(p) for p in self._outputs.values())
+        boundary = set(id(p) for p in self._ports.values())
 
         # A6: mandatory ports must be connected (boundary ports are exempt)
         unconnected = [
@@ -62,11 +61,11 @@ class Circuit(FactorNode):
 
     @property
     def ports(self) -> dict:
-        return {**self._inputs, **self._outputs}
+        return self._ports
 
-    def _evaluate(self) -> None:
+    def evaluate(self) -> None:
         for fn in self._eval_order:
-            fn._evaluate()
+            fn.evaluate()
 
     def _topological_sort(self, factor_nodes: list[FactorNode]) -> list[FactorNode]:
         fn_by_id = {id(fn): fn for fn in factor_nodes}

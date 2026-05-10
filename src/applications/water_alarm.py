@@ -1,10 +1,10 @@
 from framework.circuit import Circuit
 from framework.wire import wire
-from components.parts.uln2003a import ULN2003A
-from components.parts.sn74hc04 import SN74HC04
-from components.parts.cd4043 import CD4043
-from components.concepts.led import LED
-from components.concepts.rail import Rail
+from components.chips.uln2003a import ULN2003A
+from components.chips.sn74hc04 import SN74HC04
+from components.chips.cd4043 import CD4043
+from components.passives.led import LED
+from framework.rail import Rail
 
 
 class WaterAlarm(Circuit):
@@ -20,7 +20,7 @@ class WaterAlarm(Circuit):
       low_probe  → ULN2003A ch1                   → CD4043 S  (HIGH=dry → set alarm)
       high_probe → ULN2003A ch2 → SN74HC04 gate 1 → CD4043 R  (LOW=wet → inverted → reset)
       CD4043 Q   → red LED   (alarm active)
-      CD4043 /Q  → green LED (alarm clear)0
+      CD4043 /Q  → green LED (alarm clear)
 
     The SN74HC04 is a 14-pin hex inverter (6 gates); only gate 1 is used here.
     The remaining five gates (a_2/y_2 – a_6/y_6) are available for other signals.
@@ -53,19 +53,19 @@ class WaterAlarm(Circuit):
 
         super().__init__(
             factor_nodes=[sensor, inv, latch, red_led, green_led, gnd],
-            inputs={'low_probe':  sensor.ports['in_1'],
-                    'high_probe': sensor.ports['in_2']},
-            outputs={'state': latch.ports['q_1']},
+            ports={'low_probe':  sensor.ports['in_1'],
+                   'high_probe': sensor.ports['in_2'],
+                   'state':      latch.ports['q_1']},
         )
 
         self._red_led   = red_led
         self._green_led = green_led
 
-    def __call__(self, low_probe_v, high_probe_v) -> bool | None:
-        self._inputs['low_probe'].drive(low_probe_v)
-        self._inputs['high_probe'].drive(high_probe_v)
-        self._evaluate()
-        return self._outputs['state'].value
+    def __call__(self, low_probe, high_probe) -> bool | None:
+        self._ports['low_probe'].drive(low_probe)
+        self._ports['high_probe'].drive(high_probe)
+        self.evaluate()
+        return self._ports['state'].value
 
     @property
     def red_led(self) -> LED:

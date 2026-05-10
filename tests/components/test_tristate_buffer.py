@@ -1,5 +1,5 @@
 import pytest
-from components.concepts.tristate_buffer import TriStateBuffer
+from components.chips.concepts.tristate_buffer import TriStateBuffer
 
 
 def test_passes_input_when_oe_high():
@@ -17,7 +17,7 @@ def test_high_z_when_oe_low():
 def test_high_z_when_oe_undriven():
     buf = TriStateBuffer()
     buf.ports['a'].drive(True)
-    buf._evaluate()
+    buf.evaluate()
     assert buf.ports['y'].value is None
 
 
