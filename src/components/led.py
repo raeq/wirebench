@@ -2,7 +2,7 @@ from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Digital
-from framework.units import Ohms, Volts, Milliamps
+from framework.units import Ohms
 
 
 class LED(FactorNode):
