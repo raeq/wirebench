@@ -21,4 +21,4 @@ def test_unconnected_input_yields_none(comparator):
 
 
 def test_repr(comparator):
-    assert repr(comparator) == "Comparator()"
+    assert repr(comparator) == "Comparator(out=None)"

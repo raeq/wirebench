@@ -32,4 +32,4 @@ def test_undriven_channel_2_returns_none(chip):
 
 
 def test_repr(chip):
-    assert repr(chip) == "LM393()"
+    assert repr(chip) == "LM393(out=(None, None))"

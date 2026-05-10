@@ -56,4 +56,5 @@ class LM393(Chip):
         return (self._ports['out_1'].value, self._ports['out_2'].value)
 
     def __repr__(self) -> str:
-        return "LM393()"
+        outs = tuple(self._ports[f'out_{i}'].value for i in range(1, self.CHANNELS + 1))
+        return f"LM393(out={outs})"

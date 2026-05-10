@@ -63,4 +63,5 @@ class SN74HC04(Chip):
         )
 
     def __repr__(self) -> str:
-        return 'SN74HC04()'
+        ys = tuple(self._ports[f'y_{i+1}'].value for i in range(self.CHANNELS))
+        return f"SN74HC04(y={ys})"

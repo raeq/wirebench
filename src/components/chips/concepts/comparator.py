@@ -47,4 +47,4 @@ class Comparator(FactorNode):
         return f"Comparator({self._ports['v_plus'].value} > {self._ports['v_minus'].value})"
 
     def __repr__(self) -> str:
-        return "Comparator()"
+        return f"Comparator(out={self._ports['out'].value!r})"

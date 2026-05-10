@@ -65,4 +65,5 @@ class CD4069(Chip):
         )
 
     def __repr__(self) -> str:
-        return 'CD4069()'
+        ys = tuple(self._ports[f'y_{i+1}'].value for i in range(self.CHANNELS))
+        return f"CD4069(y={ys})"

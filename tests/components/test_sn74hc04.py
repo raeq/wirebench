@@ -43,4 +43,4 @@ def test_ports_named_a1_to_a6_and_y1_to_y6():
 
 
 def test_repr():
-    assert repr(SN74HC04()) == 'SN74HC04()'
+    assert repr(SN74HC04()) == f"SN74HC04(y={(None,) * 6})"

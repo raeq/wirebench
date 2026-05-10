@@ -43,4 +43,4 @@ def test_ports_named_a1_to_a6_and_y1_to_y6():
 
 
 def test_repr():
-    assert repr(CD4069()) == 'CD4069()'
+    assert repr(CD4069()) == f"CD4069(y={(None,) * 6})"
