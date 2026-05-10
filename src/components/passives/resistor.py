@@ -53,7 +53,16 @@ class Resistor(FactorNode):
         # write, so calling a wired resistor cannot overwrite anything.
         # Every other __call__ in the codebase guards; this one doesn't,
         # by design.
-        return Volts(float(current) * self._ohms)
+        #
+        # `current * self._ohms` lets the unit machinery resolve the
+        # conversion: every _Unit subclass stores its value in base SI,
+        # and float's __mul__ returns a plain float in that base, so
+        # Volts(...) wraps the answer correctly whether `current` came
+        # in as Amps, Milliamps, or a plain number. Avoid float(current)
+        # — it would still work today (Amps._SCALE == 1.0) but masks
+        # the unit pathway and would silently break if the unit machinery
+        # ever stops storing values in base SI.
+        return Volts(current * self._ohms)
 
     def __str__(self) -> str:
         return f"{self._ohms} Ω"
