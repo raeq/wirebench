@@ -2,6 +2,7 @@ from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Digital
+from components.units import Ohms, Volts, Milliamps
 
 
 class LED(FactorNode):
@@ -54,6 +55,22 @@ class LED(FactorNode):
         anode   = bool(Digital(self._ports['anode'].value))
         cathode = bool(Digital(self._ports['cathode'].value))
         self._lit = anode and not cathode   # conducts when anode HIGH, cathode LOW
+
+    @classmethod
+    def limit_resistor(cls, v_supply: float, i_target: float | None = None) -> Ohms:
+        """Return the minimum series resistor value for this LED type.
+
+        Uses I_F_TYP by default; pass i_target (amps) to override.
+
+        Example
+        -------
+        >>> LED.limit_resistor(5.0)          # 5 V supply, default 10 mA
+        Ohms(300.0)
+        >>> LED.limit_resistor(3.3, 0.005)   # 3.3 V supply, 5 mA
+        Ohms(260.0)
+        """
+        i = i_target if i_target is not None else cls.I_F_TYP
+        return Ohms((v_supply - cls.V_F) / i)
 
     def __call__(self, signal: bool | None) -> bool:
         self._ports['anode'].drive(signal)

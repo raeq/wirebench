@@ -17,6 +17,13 @@ class _Unit(Analog):
         return f"{self.__class__.__name__}({float(self)!r})"
 
 
+class Amps(_Unit):
+    __slots__ = ()
+
+    def __str__(self) -> str:
+        return f"{float(self):.3g} A"
+
+
 class Milliamps(_Unit):
     __slots__ = ()
 

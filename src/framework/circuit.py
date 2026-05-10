@@ -1,4 +1,5 @@
 from __future__ import annotations
+import warnings
 import networkx as nx
 from framework.factor import FactorNode
 from framework.port import Port, Direction
@@ -73,22 +74,53 @@ class Circuit(FactorNode):
         g = nx.DiGraph()
         g.add_nodes_from(id(fn) for fn in factor_nodes)
 
-        # node id → set of factor node ids that write to it
-        node_writers: dict[int, set] = {}
+        # Per node: collect OUT and BIDIR factor ids touching it.
+        # OUT factors are unconditional writers; BIDIR factors are passive —
+        # they write only if no OUT exists on the same node, otherwise they read.
+        node_outs:   dict[int, set] = {}
+        node_bidirs: dict[int, set] = {}
+        node_ins:    dict[int, set] = {}
         for fn in factor_nodes:
             for port in fn.ports.values():
-                if port.node is not None and port.direction is Direction.OUT:
-                    node_writers.setdefault(id(port.node), set()).add(id(fn))
+                if port.node is None:
+                    continue
+                nid = id(port.node)
+                if port.direction is Direction.OUT:
+                    node_outs.setdefault(nid, set()).add(id(fn))
+                elif port.direction is Direction.BIDIR:
+                    node_bidirs.setdefault(nid, set()).add(id(fn))
+                else:
+                    node_ins.setdefault(nid, set()).add(id(fn))
 
-        # edge: writer → reader, for each shared node
-        for fn in factor_nodes:
-            for port in fn.ports.values():
-                if port.node is not None and port.direction is Direction.IN:
-                    for writer_id in node_writers.get(id(port.node), ()):
-                        if writer_id != id(fn):
-                            g.add_edge(writer_id, id(fn))
+        # Resolve writer/reader role per node
+        for nid in set(node_outs) | set(node_bidirs) | set(node_ins):
+            outs   = node_outs.get(nid, set())
+            bidirs = node_bidirs.get(nid, set())
+            ins    = node_ins.get(nid, set())
+            if outs:
+                writers = outs
+                readers = ins | bidirs
+            else:
+                # No OUT — BIDIRs are the writers; IN ports are readers.
+                # Multiple BIDIRs on a passive-only node have no canonical
+                # direction, so leave them all as both writers and readers
+                # and rely on the cycle fallback if it forms one.
+                writers = bidirs
+                readers = ins | (bidirs if len(bidirs) > 1 else set())
+            for w in writers:
+                for r in readers:
+                    if w != r:
+                        g.add_edge(w, r)
 
         if not nx.is_directed_acyclic_graph(g):
-            return factor_nodes  # cycles present — SCC fixed-point iteration TBD
+            warnings.warn(
+                "Circuit contains a feedback loop: evaluation order is undefined "
+                "and results may be incorrect. Fixed-point iteration is not yet "
+                "supported — restructure the circuit to remove the cycle, or "
+                "model state explicitly inside a component (e.g. SR latch).",
+                RuntimeWarning,
+                stacklevel=4,
+            )
+            return factor_nodes
 
         return [fn_by_id[fn_id] for fn_id in nx.topological_sort(g)]

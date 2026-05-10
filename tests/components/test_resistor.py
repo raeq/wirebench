@@ -19,8 +19,8 @@ def test_zero_current(shunt):
 
 def test_port_names():
     r = Resistor(ohms=470)
-    assert 'i' in r.ports   # current input terminal
-    assert 'v' in r.ports   # voltage output terminal
+    assert 't1' in r.ports
+    assert 't2' in r.ports
 
 
 def test_repr():

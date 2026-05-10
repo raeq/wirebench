@@ -7,12 +7,9 @@ from framework.signals import Analog
 class Resistor(FactorNode):
     """Ideal resistor. Ohm's law: V = I × R.
 
-    Drive port 'i' with current in amps; read the resulting voltage in volts
-    from port 'v'.  Real resistors are bidirectional — current may flow either
-    way — but this model fixes the direction: current enters 'i', and the
-    voltage drop V = I × R appears at 'v'.  When building a real circuit,
-    always add a current-limiting resistor in series with any LED or other
-    current-sensitive load.
+    A resistor is symmetric: current may flow either way and the device has
+    no causal direction.  Both terminals are bidirectional ports — whichever
+    one is driven this evaluation, the other carries the resulting drop.
     """
 
     __slots__ = ['_ohms', '_ports']
@@ -20,8 +17,8 @@ class Resistor(FactorNode):
     def __init__(self, ohms, domain: GroundDomain = ELECTRICAL) -> None:
         self._ohms = ohms
         self._ports = {
-            'i': Port('i', Direction.IN,  domain, mandatory=True,  signal_type=Analog),
-            'v': Port('v', Direction.OUT, domain, mandatory=False, signal_type=Analog),
+            't1': Port('t1', Direction.BIDIR, domain, mandatory=True, signal_type=Analog),
+            't2': Port('t2', Direction.BIDIR, domain, mandatory=True, signal_type=Analog),
         }
 
     @property
@@ -29,14 +26,18 @@ class Resistor(FactorNode):
         return self._ports
 
     def _evaluate(self) -> None:
-        current = self._ports['i'].value
-        if current is not None:
-            self._ports['v'].drive(current * self._ohms)   # V = I × R
+        v1 = self._ports['t1'].value
+        v2 = self._ports['t2'].value
+        if v1 is not None and v2 is None:
+            self._ports['t2'].drive(v1 * self._ohms)
+        elif v2 is not None and v1 is None:
+            self._ports['t1'].drive(v2 * self._ohms)
+        # both driven or neither → nothing to propagate
 
     def __call__(self, current):
-        self._ports['i'].drive(current)
+        self._ports['t1'].drive(current)
         self._evaluate()
-        return self._ports['v'].value
+        return self._ports['t2'].value
 
     def __str__(self) -> str:
         return f"{self._ohms} Ω"
