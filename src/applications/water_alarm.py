@@ -4,7 +4,7 @@ from components.chips.uln2003a import ULN2003A
 from components.chips.sn74hc04 import SN74HC04
 from components.chips.cd4043 import CD4043
 from components.passives.led import LED
-from framework.rail import Rail
+from components.passives.rail import Rail
 
 
 class WaterAlarm(Circuit):
