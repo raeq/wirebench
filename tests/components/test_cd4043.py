@@ -14,7 +14,7 @@ def test_initial_outputs_undefined(chip):
 
 
 def test_set_latch_1(chip):
-    out = chip(s_1=True, r_1=False)
+    out = chip(s_1=True, r_1=False, oe=True)
     assert out[0] == (True, False)
 
 
@@ -24,6 +24,7 @@ def test_each_latch_independent(chip):
         s_2=False, r_2=True,
         s_3=True,  r_3=False,
         s_4=False, r_4=True,
+        oe=True,
     )
     assert out[0] == (True,  False)
     assert out[1] == (False, True)
@@ -32,18 +33,18 @@ def test_each_latch_independent(chip):
 
 
 def test_hold_after_set(chip):
-    chip(s_1=True, r_1=False)
-    out = chip(s_1=False, r_1=False)
+    chip(s_1=True, r_1=False, oe=True)
+    out = chip(s_1=False, r_1=False, oe=True)
     assert out[0] == (True, False)
 
 
 def test_both_active_raises(chip):
     with pytest.raises(ValueError):
-        chip(s_1=True, r_1=True)
+        chip(s_1=True, r_1=True, oe=True)
 
 
 def test_oe_low_tristates_all_outputs(chip):
-    chip(s_1=True, r_1=False, s_2=True, r_2=False)
+    chip(s_1=True, r_1=False, s_2=True, r_2=False, oe=True)
     chip(s_1=False, r_1=False, s_2=False, r_2=False, oe=False)
     for i in range(1, 5):
         assert chip.ports[f'q_{i}'].value is None
@@ -51,7 +52,7 @@ def test_oe_low_tristates_all_outputs(chip):
 
 
 def test_oe_re_enables_after_tristate(chip):
-    chip(s_1=True, r_1=False)
+    chip(s_1=True, r_1=False, oe=True)
     chip(s_1=False, r_1=False, oe=False)
     out = chip(s_1=False, r_1=False, oe=True)
     assert out[0] == (True, False)
@@ -81,4 +82,4 @@ def test_call_refuses_when_input_pin_is_wired(chip):
     driver = Port('drv', Direction.OUT, chip.ports['s_1'].domain, signal_type=Digital)
     wire(driver, chip.ports['s_1'])
     with pytest.raises(RuntimeError, match="wired by an enclosing circuit"):
-        chip(s_1=True, r_1=False)
+        chip(s_1=True, r_1=False, oe=True)
