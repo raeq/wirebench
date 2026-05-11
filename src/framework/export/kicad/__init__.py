@@ -211,34 +211,6 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
     return ctx.output()
 
 
-def _find_board_stack(design: FactorNode, target: FactorNode) -> list[Board]:
-    """Return the list of enclosing boards (outermost first) that
-    contain `target` in the design tree, or [] if it's top-level."""
-    if not isinstance(design, Circuit):
-        return []
-    path: list[Board] = []
-
-    def search(node: FactorNode, stack: list[Board]) -> bool:
-        if node is target:
-            path.extend(stack)
-            return True
-        if isinstance(node, Board):
-            for c in node._factor_nodes:
-                if search(c, stack + [node]):
-                    return True
-            return False
-        if isinstance(node, Circuit):
-            for c in node._factor_nodes:
-                if search(c, stack):
-                    return True
-        return False
-
-    for c in design._factor_nodes:
-        if search(c, []):
-            break
-    return path
-
-
 def _kicad_pintype(owner: FactorNode, port) -> str:
     """Map a port's direction to a KiCad pintype string, per spec
     §5.1's table."""

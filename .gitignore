@@ -5,6 +5,7 @@ responses.md
 # Dotfiles and environment files
 .*
 !.gitignore
+!.github
 .?env
 *.env
 *.env.*
@@ -43,6 +44,9 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
+.mutmut-cache
+mutants/
+mutants.json
 
 # Type checking
 .mypy_cache/

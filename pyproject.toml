@@ -13,6 +13,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
+    "pytest-cov>=7.0",
+    "coverage[toml]>=7.0",
+    "mutmut>=3.0",
 ]
 
 [project.scripts]
@@ -21,6 +24,77 @@ circuitry = "cli.export:main"
 [tool.pytest.ini_options]
 pythonpath = ["src", "demos"]
 testpaths = ["tests"]
+# Coverage is NOT in addopts: pytest-cov + mutmut don't co-exist
+# (mutmut's in-process pytest.main() exits 4 silently when pytest-cov
+# is auto-enabled).  Use `scripts/cov.sh` to run with coverage; plain
+# `pytest` is the fast feedback loop.
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+omit = [
+    "src/applications/*",
+    "src/cli/*",
+    "src/demos/*",
+]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+skip_covered = false
+# Lines genuinely uncoverable by tests (abstract methods, defensive
+# unreachable defaults). Real gaps must be fixed, not pragma'd away.
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "@(abc\\.)?abstractmethod",
+    "\\.\\.\\.$",
+]
+# Lines whose fall-through is the only possible branch (no real
+# conditional).  Coverage.py records the not-taken fall-through as a
+# missed branch even though it can't actually be taken.
+partial_branches = [
+    "pragma: no branch",
+    # Pydantic discriminator-record class declarations — long runs of
+    # `class XxxRecord(_YyyRecord):` definitions in format_records.py.
+    "^class [A-Z][A-Za-z0-9_]*Record\\(",
+    # Bare `type: Literal[...]` field declarations on those records.
+    "^\\s+type:\\s+Literal\\[",
+    # Single-line `def ...: return ...` (renderer stubs, unit dunder
+    # arithmetic, etc.).  Coverage records the def→next-line fall-
+    # through as a branch even when the def body is unconditional.
+    "^\\s*def [a-zA-Z_][a-zA-Z0-9_]*\\(.*\\)(\\s*->\\s*[^:]+)?\\s*:\\s*return\\s",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+[tool.mutmut]
+# Mutation testing — restricted to the framework.  Components are
+# mostly data-driven (pin tables, refdes prefixes) where mutating a
+# constant doesn't reveal a real bug; mutmut runs there are noise.
+# The framework's logical-net walker, ERC rules, validators, and
+# registry dispatch are where mutation testing earns its keep.
+paths_to_mutate = ["src/framework/"]
+tests_dir = ["tests/"]
+# Fast pytest invocation per mutant: --no-cov skips coverage overhead
+# (mutmut measures kills, not lines), -x stops at first failure
+# (a kill), -q quiets pytest output.
+# Demos are imported by conftest (water_alarm + water_alarm_split);
+# mutmut must include them in the mutants/ workspace.
+# Demos + non-mutated src dirs must accompany mutants/ so the test
+# suite's imports resolve.  mutmut only auto-copies paths_to_mutate;
+# the rest of src/ and demos/ ride along verbatim.
+also_copy = [
+    "demos/",
+    "src/components/",
+    "src/applications/",
+    "src/cli/",
+]
 
 [tool.mypy]
 mypy_path = ["src", "demos"]
