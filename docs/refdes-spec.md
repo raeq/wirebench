@@ -83,7 +83,7 @@ These are fixed by the standard and must be encoded as `REFDES_PREFIX` class att
 Classes that **shall not** carry a refdes (no `REFDES_PREFIX`, constructor unchanged):
 
 - `components.passives.rail.Rail` — represents a power net, not a part. Exports map this to a SPICE net name (`Vcc`, `GND`) or a power-flag symbol, not a refdes.
-- `framework.ground.Ground` — same reasoning; this is net `0`.
+- There is no `Ground` component class in the codebase. Ground is a *net*, not a part — `framework.ground.GroundDomain` is the domain-of-reference abstraction, not a placeable component. The SPICE net `0` is identified by `Rail(False)` presence on a logical net; KiCad's `GND` is a passive power-flag symbol playing the same role. Neither is something you solder.
 - `framework.circuit.Circuit` and all its subclasses **other than** `framework.chip.Chip` — composites are hierarchy, not parts. `applications.water_alarm.WaterAlarm` is hierarchy and shall not have a refdes. (A `Chip` *is* a part: it gets a refdes.)
 - **All cell concept classes** under `components.chips.concepts.` (`NORLatch`, `TriStateBuffer`, `Comparator`, `Inverter`, `DarlingtonChannel`) — cells are private chip implementation, never individually visible on a PCB. The enclosing chip carries the refdes; the cells inside it are nameless from a netlist perspective. If an exporter needs to refer to a specific channel of a chip (e.g. `U3A` for the second comparator of an LM393), it synthesises that string at export time from the chip's refdes plus the internal channel index — without storing it on the cell.
 

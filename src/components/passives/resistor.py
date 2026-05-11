@@ -70,6 +70,10 @@ class Resistor(FactorNode):
         return self._ports
 
     @property
+    def ohms(self) -> Ohms:
+        return self._ohms
+
+    @property
     def refdes(self) -> str:
         return f"{self.REFDES_PREFIX}{self._refdes_number}"
 

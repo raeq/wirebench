@@ -39,86 +39,6 @@ class Circuit(FactorNode):
         self._eval_order   = self._topological_sort(factor_nodes)
 
     # -----------------------------------------------------------------
-    # Logical-net machinery
-    # -----------------------------------------------------------------
-
-    def _collect_components(self, roots: list[FactorNode]) -> list[FactorNode]:
-        """Walk every Circuit composite to collect all components (chips,
-        connectors, cells, pins, passives, …) reachable from `roots`.
-
-        Used by the logical-net walker so that Pin instances buried inside
-        chips and connectors are visible at the parent's ERC pass —
-        otherwise the walker can't traverse through them across mated
-        boards or up out of a chip.
-        """
-        result: list[FactorNode] = []
-        stack: list[FactorNode] = list(roots)
-        while stack:
-            fn = stack.pop()
-            result.append(fn)
-            if isinstance(fn, Circuit):
-                stack.extend(fn._factor_nodes)
-        return result
-
-    def _build_node_index(
-        self,
-        components: list[FactorNode],
-    ) -> dict[int, list[tuple[FactorNode, Port]]]:
-        """Index every connected Port by its Node, keyed by id(node).
-
-        For ports owned by a `Pin` (back-referenced via `Port._owner`),
-        the recorded owner is the Pin instance — so the walker can call
-        `IS_CONDUCTOR` and `other_face()` on it directly.  For all other
-        ports the recorded owner is the iterating factor-node.
-
-        Each Port object is indexed at most once (the same physical port
-        may be reached through both a chip's `ports` view and the Pin's
-        `ports` view; we dedupe on port identity).
-        """
-        index: dict[int, list[tuple[FactorNode, Port]]] = {}
-        seen_ports: set[int] = set()
-        for fn in components:
-            for port in fn.ports.values():
-                if id(port) in seen_ports:
-                    continue
-                seen_ports.add(id(port))
-                if port.node is None:
-                    continue
-                owner = port._owner if port._owner is not None else fn
-                index.setdefault(id(port.node), []).append((owner, port))
-        return index
-
-    def _logical_net(
-        self,
-        start_nid: int,
-        index: dict[int, list[tuple[FactorNode, Port]]],
-    ) -> set[int]:
-        """All Node ids that form one logical net, found by walking
-        through every IS_CONDUCTOR component attached.
-
-        A conductor's two faces sit on different Node objects (typically),
-        but represent one extended copper net.  Stepping through
-        `conductor.other_face(port)` jumps the walker from one node to
-        the next, growing the net until no more conductors are
-        traversable.
-        """
-        net: set[int] = {start_nid}
-        frontier: list[int] = [start_nid]
-        while frontier:
-            nid = frontier.pop()
-            for owner, port in index.get(nid, []):
-                if not getattr(owner, 'IS_CONDUCTOR', False):
-                    continue
-                other = owner.other_face(port)
-                if other.node is None:
-                    continue
-                onid = id(other.node)
-                if onid not in net:
-                    net.add(onid)
-                    frontier.append(onid)
-        return net
-
-    # -----------------------------------------------------------------
     # Validation
     # -----------------------------------------------------------------
 
@@ -139,33 +59,18 @@ class Circuit(FactorNode):
                 f"Unconnected mandatory port(s): {', '.join(unconnected)}"
             )
 
-        # Net-aware short-circuit / floating detection.  Walk through every
-        # IS_CONDUCTOR component (chip and connector pins) to extend each
-        # Node into its full logical net.  Drivers and readers are counted
-        # only on real (non-conductor) ports of that net — exactly the
-        # behaviour KiCad / Altium / OrCAD ERC implement when reporting
-        # shorts across PCB boundaries.
-        components = self._collect_components(factor_nodes)
-        index      = self._build_node_index(components)
+        # Net-aware short-circuit / floating detection.  Delegated to
+        # framework.export.nets — the canonical IS_CONDUCTOR walker.
+        # Drivers and readers are counted only on real (non-conductor)
+        # ports of each net — exactly the behaviour KiCad / Altium /
+        # OrCAD ERC implement when reporting shorts across PCB
+        # boundaries.
+        from framework.export.nets import compute_logical_nets
         shorts: list[str] = []
         floats: list[str] = []
-        visited: set[int] = set()
-        for nid in index:
-            if nid in visited:
-                continue
-            net = self._logical_net(nid, index)
-            visited |= net
-
-            # Real ports on this logical net (skip conductors — they're the
-            # wire, not a driver or a reader).
-            real_ports: list[tuple[FactorNode, Port]] = []
-            for member_nid in net:
-                for owner, port in index.get(member_nid, []):
-                    if getattr(owner, 'IS_CONDUCTOR', False):
-                        continue
-                    real_ports.append((owner, port))
-            outs   = [(o, p) for (o, p) in real_ports if p.direction is Direction.OUT]
-            bidirs = [(o, p) for (o, p) in real_ports if p.direction is Direction.BIDIR]
+        for net in compute_logical_nets(self):
+            outs   = [(o, p) for (o, p) in net.ports if p.direction is Direction.OUT]
+            bidirs = [(o, p) for (o, p) in net.ports if p.direction is Direction.BIDIR]
 
             if len(outs) > 1:
                 shorts.append(', '.join(

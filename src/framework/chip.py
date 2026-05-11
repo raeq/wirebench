@@ -40,6 +40,13 @@ class Chip(Circuit):
             ports=ports,
         )
 
+    @property
+    def pins(self) -> tuple[Pin, ...]:
+        """The chip's package pins, in declaration order. Exporters
+        rely on this to enumerate the surface in datasheet-pin-number
+        order via `sorted(chip.pins, key=lambda p: p.id.number)`."""
+        return tuple(fn for fn in self._factor_nodes if isinstance(fn, Pin))
+
     # _assert_no_inputs_wired is inherited from FactorNode — every node
     # with input ports has the same silent-overwrite hazard.
 

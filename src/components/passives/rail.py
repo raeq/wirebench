@@ -32,6 +32,10 @@ class Rail(FactorNode):
     def ports(self) -> dict[str, Port]:
         return self._ports
 
+    @property
+    def level(self) -> bool:
+        return self._level
+
     def evaluate(self) -> None:
         self._ports['out'].drive(self._level)
 

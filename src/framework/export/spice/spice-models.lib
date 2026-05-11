@@ -1,0 +1,65 @@
+* circuitry — default SPICE model library
+*
+* Behavioural placeholders for the chips and devices supported by the
+* circuitry component library. Pin order in each .SUBCKT matches the
+* exporter's datasheet-pin-number sort, so swapping in a vendor-supplied
+* model is a one-line .LIB change.
+
+.MODEL D_LED D(IS=1E-15 N=2.0 BV=5.0)
+
+* -----------------------------------------------------------------
+* SN74HC04 — hex inverter. Pin order (datasheet 14-DIP, GND/VCC omitted):
+*   1=a_1 2=y_1 3=a_2 4=y_2 5=a_3 6=y_3 8=y_4 9=a_4 10=y_5 11=a_5 12=y_6 13=a_6
+.SUBCKT SN74HC04 a_1 y_1 a_2 y_2 a_3 y_3 y_4 a_4 y_5 a_5 y_6 a_6
+By1 y_1 0 V = IF(V(a_1) > 2.5, 0, 5)
+By2 y_2 0 V = IF(V(a_2) > 2.5, 0, 5)
+By3 y_3 0 V = IF(V(a_3) > 2.5, 0, 5)
+By4 y_4 0 V = IF(V(a_4) > 2.5, 0, 5)
+By5 y_5 0 V = IF(V(a_5) > 2.5, 0, 5)
+By6 y_6 0 V = IF(V(a_6) > 2.5, 0, 5)
+.ENDS SN74HC04
+
+* CD4069UB — hex unbuffered inverter. Identical pin map to SN74HC04.
+.SUBCKT CD4069 a_1 y_1 a_2 y_2 a_3 y_3 y_4 a_4 y_5 a_5 y_6 a_6
+By1 y_1 0 V = IF(V(a_1) > 2.5, 0, 5)
+By2 y_2 0 V = IF(V(a_2) > 2.5, 0, 5)
+By3 y_3 0 V = IF(V(a_3) > 2.5, 0, 5)
+By4 y_4 0 V = IF(V(a_4) > 2.5, 0, 5)
+By5 y_5 0 V = IF(V(a_5) > 2.5, 0, 5)
+By6 y_6 0 V = IF(V(a_6) > 2.5, 0, 5)
+.ENDS CD4069
+
+* LM393 — dual comparator. Pin order (8-DIP, GND/VCC omitted):
+*   1=out_1 2=v_minus_1 3=v_plus_1 5=v_plus_2 6=v_minus_2 7=out_2
+.SUBCKT LM393 out_1 v_minus_1 v_plus_1 v_plus_2 v_minus_2 out_2
+Bo1 out_1 0 V = IF(V(v_plus_1) > V(v_minus_1), 5, 0)
+Bo2 out_2 0 V = IF(V(v_plus_2) > V(v_minus_2), 5, 0)
+.ENDS LM393
+
+* CD4043B — quad NOR-based RS latch with tri-state outputs.
+* Pin order (16-DIP, VSS/NC/VDD omitted):
+*   1=q_1 2=r_1 3=s_1 4=q_2 5=s_2 6=r_2 7=oe 9=r_3 10=s_3 11=q_3
+*   12=s_4 13=r_4 14=q_4
+* Behavioural placeholder — replace with vendor model for accurate
+* latching dynamics.  Outputs are simple SR-derived expressions and
+* do not retain state across simulator time-steps.
+.SUBCKT CD4043 q_1 r_1 s_1 q_2 s_2 r_2 oe r_3 s_3 q_3 s_4 r_4 q_4
+Bq1 q_1 0 V = IF(V(oe) > 2.5, IF(V(s_1) > 2.5, 5, IF(V(r_1) > 2.5, 0, V(q_1))), 0)
+Bq2 q_2 0 V = IF(V(oe) > 2.5, IF(V(s_2) > 2.5, 5, IF(V(r_2) > 2.5, 0, V(q_2))), 0)
+Bq3 q_3 0 V = IF(V(oe) > 2.5, IF(V(s_3) > 2.5, 5, IF(V(r_3) > 2.5, 0, V(q_3))), 0)
+Bq4 q_4 0 V = IF(V(oe) > 2.5, IF(V(s_4) > 2.5, 5, IF(V(r_4) > 2.5, 0, V(q_4))), 0)
+.ENDS CD4043
+
+* ULN2003A — seven-channel Darlington array (open-collector).
+* Pin order (16-DIP, GND/COM omitted):
+*   1=in_1 2=in_2 3=in_3 4=in_4 5=in_5 6=in_6 7=in_7
+*   10=out_7 11=out_6 12=out_5 13=out_4 14=out_3 15=out_2 16=out_1
+.SUBCKT ULN2003A in_1 in_2 in_3 in_4 in_5 in_6 in_7 out_7 out_6 out_5 out_4 out_3 out_2 out_1
+Bo1 out_1 0 V = IF(V(in_1) > 1.0, 0, 5)
+Bo2 out_2 0 V = IF(V(in_2) > 1.0, 0, 5)
+Bo3 out_3 0 V = IF(V(in_3) > 1.0, 0, 5)
+Bo4 out_4 0 V = IF(V(in_4) > 1.0, 0, 5)
+Bo5 out_5 0 V = IF(V(in_5) > 1.0, 0, 5)
+Bo6 out_6 0 V = IF(V(in_6) > 1.0, 0, 5)
+Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
+.ENDS ULN2003A

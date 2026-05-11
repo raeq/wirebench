@@ -73,6 +73,10 @@ class LED(FactorNode):
         return self._lit
 
     @property
+    def color(self) -> str:
+        return self._color
+
+    @property
     def refdes(self) -> str:
         return f"{self.REFDES_PREFIX}{self._refdes_number}"
 
