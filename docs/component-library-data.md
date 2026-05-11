@@ -395,13 +395,13 @@
 | 17 | PA7 | BIDIR |
 | 18 | PB0 | BIDIR |
 | 19 | PB1 | BIDIR |
-| 20 | VSS_1 | power_in |
-| 21 | VDD_1 | power_in |
+| 20 | VSS | power_in |
+| 21 | VDD | power_in |
 | 22 | PB2 / BOOT1 | BIDIR |
 | 23 | PB10 | BIDIR |
 | 24 | PB11 | BIDIR |
-| 25 | VSS_2 | power_in |
-| 26 | VDD_2 | power_in |
+| 25 | VSS | power_in |
+| 26 | VDD | power_in |
 | 27 | PB12 | BIDIR |
 | 28 | PB13 | BIDIR |
 | 29 | PB14 | BIDIR |
@@ -412,8 +412,8 @@
 | 34 | PA11 / USB D_NEG | BIDIR |
 | 35 | PA12 / USB D_POS | BIDIR |
 | 36 | PA13 / JTMS-SWDIO | BIDIR |
-| 37 | VSS_3 | power_in |
-| 38 | VDD_3 | power_in |
+| 37 | VSS | power_in |
+| 38 | VDD | power_in |
 | 39 | PA14 / JTCK-SWCLK | BIDIR |
 | 40 | PA15 / JTDI | BIDIR |
 | 41 | PB3 / JTDO | BIDIR |

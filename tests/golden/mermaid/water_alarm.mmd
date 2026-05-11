@@ -8,14 +8,14 @@ flowchart LR
     D2["D2<br/>green LED"]
     net_3(("net_3"))
     net_2(("net_2"))
-    net_4(("net_4"))
+    net_5(("net_5"))
     net_18(("net_18"))
     gnd(("gnd"))
-    net_5(("net_5"))
+    net_4(("net_4"))
     vcc(("vcc"))
     D1 ---|"anode"| net_3
     D2 ---|"anode"| net_2
-    U1 ---|"out_1"| net_4
+    U1 ---|"out_1"| net_5
     U1 ---|"out_2"| net_18
     U2 ---|"a_1"| net_18
     U2 ---|"a_2"| gnd
@@ -23,7 +23,7 @@ flowchart LR
     U2 ---|"a_4"| gnd
     U2 ---|"a_5"| gnd
     U2 ---|"a_6"| gnd
-    U2 ---|"y_1"| net_5
+    U2 ---|"y_1"| net_4
     U3 ---|"a_1"| net_3
     U3 ---|"a_2"| gnd
     U3 ---|"a_3"| gnd
@@ -33,11 +33,11 @@ flowchart LR
     U3 ---|"y_1"| net_2
     U4 ---|"oe"| vcc
     U4 ---|"q_1"| net_3
-    U4 ---|"r_1"| net_5
+    U4 ---|"r_1"| net_4
     U4 ---|"r_2"| gnd
     U4 ---|"r_3"| gnd
     U4 ---|"r_4"| gnd
-    U4 ---|"s_1"| net_4
+    U4 ---|"s_1"| net_5
     U4 ---|"s_2"| gnd
     U4 ---|"s_3"| gnd
     U4 ---|"s_4"| gnd

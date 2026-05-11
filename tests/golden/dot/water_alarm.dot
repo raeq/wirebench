@@ -14,7 +14,7 @@ digraph "WaterAlarm" {
   edge [arrowhead=none, fontname="monospace", fontsize=9];
   D1 -> net_3 [taillabel="anode"];
   D2 -> net_2 [taillabel="anode"];
-  U1 -> net_4 [taillabel="out_1"];
+  U1 -> net_5 [taillabel="out_1"];
   U1 -> net_18 [taillabel="out_2"];
   U2 -> net_18 [taillabel="a_1"];
   U2 -> gnd [taillabel="a_2"];
@@ -22,7 +22,7 @@ digraph "WaterAlarm" {
   U2 -> gnd [taillabel="a_4"];
   U2 -> gnd [taillabel="a_5"];
   U2 -> gnd [taillabel="a_6"];
-  U2 -> net_5 [taillabel="y_1"];
+  U2 -> net_4 [taillabel="y_1"];
   U3 -> net_3 [taillabel="a_1"];
   U3 -> gnd [taillabel="a_2"];
   U3 -> gnd [taillabel="a_3"];
@@ -32,11 +32,11 @@ digraph "WaterAlarm" {
   U3 -> net_2 [taillabel="y_1"];
   U4 -> vcc [taillabel="oe"];
   U4 -> net_3 [taillabel="q_1"];
-  U4 -> net_5 [taillabel="r_1"];
+  U4 -> net_4 [taillabel="r_1"];
   U4 -> gnd [taillabel="r_2"];
   U4 -> gnd [taillabel="r_3"];
   U4 -> gnd [taillabel="r_4"];
-  U4 -> net_4 [taillabel="s_1"];
+  U4 -> net_5 [taillabel="s_1"];
   U4 -> gnd [taillabel="s_2"];
   U4 -> gnd [taillabel="s_3"];
   U4 -> gnd [taillabel="s_4"];
