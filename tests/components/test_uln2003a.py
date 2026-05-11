@@ -1,3 +1,4 @@
+from pydantic import ValidationError
 import pytest
 from components.chips.uln2003a import ULN2003A
 
@@ -47,7 +48,7 @@ def test_all_seven_channels_conducting():
 
 def test_too_many_inputs_raises():
     uln = ULN2003A(refdes_number=1)
-    with pytest.raises(TypeError):
+    with pytest.raises((TypeError, ValidationError)):
         uln(5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0)
 
 

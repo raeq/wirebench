@@ -1,9 +1,11 @@
-from typing import ClassVar
+from typing import Annotated, ClassVar
+
+from pydantic import Field, validate_call
 
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
-from framework.refdes import validate_refdes
+from framework.refdes import RefdesNumber, validate_refdes
 from framework.signals import Analog
 from framework.units import Amps, Ohms, Volts
 from framework.registry import register
@@ -37,12 +39,13 @@ class Resistor(FactorNode):
 
     REFDES_PREFIX: ClassVar[str] = 'R'
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(
         self,
-        ohms: float | Ohms,
+        ohms: Annotated[float, Field(gt=0)] | Ohms,
         domain: GroundDomain = ELECTRICAL,
         *,
-        refdes_number: int,
+        refdes_number: RefdesNumber,
     ) -> None:
         validate_refdes(self.REFDES_PREFIX, refdes_number)
         self._refdes_number = refdes_number
@@ -80,6 +83,7 @@ class Resistor(FactorNode):
         # evaluation.  Use __call__ directly when the current is known.
         pass
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __call__(self, current: float | Amps) -> Volts:
         # Calculator, not actuator: returns Volts; does not touch ports.
         # Deliberately skips _assert_no_inputs_wired — there's no port

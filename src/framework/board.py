@@ -1,11 +1,13 @@
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import Annotated, ClassVar
+
+from pydantic import Field, validate_call
 
 from framework.circuit import Circuit
 from framework.connector import Connector
 from framework.factor import FactorNode
-from framework.refdes import validate_refdes
+from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 
 
@@ -29,20 +31,16 @@ class Board(Circuit):
 
     __slots__ = ('_name', '_revision', '_connectors', '_refdes_number')
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(
         self,
         *,
-        name: str,
-        revision: str,
+        name: Annotated[str, Field(min_length=1)],
+        revision: Annotated[str, Field(min_length=1)],
         components: list[FactorNode],
-        refdes_number: int,
+        refdes_number: RefdesNumber,
     ) -> None:
         validate_refdes(self.REFDES_PREFIX, refdes_number)
-        if not isinstance(name, str) or not name:
-            raise ValueError("Board name must be a non-empty string")
-        if not isinstance(revision, str) or not revision:
-            raise ValueError("Board revision must be a non-empty string")
-
         self._name          = name
         self._revision      = revision
         self._refdes_number = refdes_number

@@ -1,4 +1,5 @@
 import pytest
+from pydantic import ValidationError
 
 from framework.refdes import IEEE_315_PREFIXES, validate_refdes
 from components.passives.resistor import Resistor
@@ -39,7 +40,7 @@ def test_refdes_number_property_exposes_int():
 # --- Construction errors ---
 
 def test_missing_refdes_number_raises_type_error():
-    with pytest.raises(TypeError):
+    with pytest.raises((TypeError, ValidationError)):
         Resistor(330)        # missing required keyword arg
 
 
@@ -86,7 +87,7 @@ def test_cell_has_no_refdes_prefix_attribute(cell_cls):
     Inverter, NORLatch, TriStateBuffer, Comparator, DarlingtonChannel,
 ])
 def test_cell_constructor_rejects_refdes_number(cell_cls):
-    with pytest.raises(TypeError):
+    with pytest.raises((TypeError, ValidationError)):
         cell_cls(refdes_number=1)
 
 

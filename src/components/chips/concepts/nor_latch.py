@@ -1,3 +1,5 @@
+from pydantic import validate_call
+
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
@@ -25,6 +27,7 @@ class NORLatch(FactorNode):
 
     __slots__ = ('_q', '_ports')
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
         self._q: bool | None = None
         self._ports = {
@@ -52,6 +55,7 @@ class NORLatch(FactorNode):
         self._ports['q'].drive(self._q)
         self._ports['q_bar'].drive(None if self._q is None else not self._q)
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __call__(self, s: bool, r: bool) -> bool | None:
         self._assert_no_inputs_wired()
         self._ports['s'].drive(s)

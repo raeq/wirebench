@@ -4,6 +4,8 @@ import warnings
 
 import networkx as nx  # type: ignore[import-untyped]
 
+from pydantic import validate_call
+
 from framework.factor import FactorNode
 from framework.pin import Pin
 from framework.port import Direction, Port
@@ -25,6 +27,7 @@ class Circuit(FactorNode):
 
     __slots__ = ('_factor_nodes', '_ports', '_eval_order')
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(
         self,
         factor_nodes: list[FactorNode],

@@ -1,3 +1,5 @@
+from pydantic import validate_call
+
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
@@ -31,6 +33,7 @@ class DarlingtonChannel(FactorNode):
 
     V_THRESHOLD: float = 1.0   # V — base turn-on voltage
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
         self._ports = {
             'b':   Port('b',   Direction.IN,  domain, mandatory=False, signal_type=Analog),
@@ -49,6 +52,7 @@ class DarlingtonChannel(FactorNode):
         # open-collector: conducting → LOW, off → HIGH
         self._ports['out'].drive(float(Analog(v)) <= self.V_THRESHOLD)
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __call__(self, b: float | None) -> bool | None:
         self._assert_no_inputs_wired()
         self._ports['b'].drive(b)

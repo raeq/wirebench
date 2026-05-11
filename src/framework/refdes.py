@@ -17,7 +17,15 @@ its channel index.
 """
 from __future__ import annotations
 
-from typing import ClassVar, Protocol, runtime_checkable
+from typing import Annotated, ClassVar, Protocol, runtime_checkable
+
+from pydantic import Field
+
+
+# Strict positive int — rejects bool, float, str coercion. Used as the
+# refdes_number annotation on every refdes-bearing __init__ so that
+# pydantic catches type errors before they reach validate_refdes.
+RefdesNumber = Annotated[int, Field(gt=0, strict=True)]
 
 
 # Full IEEE 315 prefix set the codebase will recognise. Authors choose

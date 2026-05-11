@@ -1,3 +1,5 @@
+from pydantic import validate_call
+
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
@@ -19,6 +21,7 @@ class Rail(FactorNode):
 
     __slots__ = ('_level', '_ports')
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, level: bool, domain: GroundDomain = ELECTRICAL) -> None:
         self._level = bool(level)
         self._ports = {
@@ -32,6 +35,7 @@ class Rail(FactorNode):
     def evaluate(self) -> None:
         self._ports['out'].drive(self._level)
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __call__(self) -> bool:
         self.evaluate()
         return self._level

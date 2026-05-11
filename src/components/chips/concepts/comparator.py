@@ -1,3 +1,5 @@
+from pydantic import validate_call
+
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
@@ -17,6 +19,7 @@ class Comparator(FactorNode):
 
     __slots__ = ('_ports',)
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
         self._ports = {
             'v_plus':  Port('v_plus',  Direction.IN,  domain, mandatory=True,  signal_type=Analog),
@@ -36,6 +39,7 @@ class Comparator(FactorNode):
         else:
             self._ports['out'].drive(vp > vm)
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __call__(self, v_plus: float | None, v_minus: float | None) -> bool | None:
         self._assert_no_inputs_wired()
         self._ports['v_plus'].drive(v_plus)

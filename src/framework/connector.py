@@ -1,12 +1,19 @@
 from __future__ import annotations
 
-from typing import Any, ClassVar
+from typing import Annotated, Any, ClassVar
+
+from pydantic import Field, validate_call
+
+# Strict positive int/float — reject bool/str/cross-type coercion so
+# obvious caller bugs surface at construction time.
+_PositiveInt = Annotated[int, Field(gt=0, strict=True)]
+_PositiveFloat = Annotated[float, Field(gt=0, strict=True)]
 
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction, Port
-from framework.refdes import validate_refdes
+from framework.refdes import RefdesNumber, validate_refdes
 
 
 class Connector(FactorNode):
@@ -55,13 +62,14 @@ class Connector(FactorNode):
     #     (parameterised families).
     PINOUT: ClassVar[tuple[tuple[PinId, Direction, type], ...] | None] = None
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(
         self,
         *,
         domain: GroundDomain = ELECTRICAL,
-        refdes_number: int,
-        pin_count: int | None = None,
-        pitch_mm: float | None = None,
+        refdes_number: RefdesNumber,
+        pin_count: _PositiveInt | None = None,
+        pitch_mm: _PositiveFloat | None = None,
     ) -> None:
         validate_refdes(self.REFDES_PREFIX, refdes_number)
         self._refdes_number = refdes_number

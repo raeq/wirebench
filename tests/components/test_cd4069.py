@@ -1,3 +1,4 @@
+from pydantic import ValidationError
 import pytest
 from components.chips.cd4069 import CD4069
 
@@ -31,7 +32,7 @@ def test_all_six_channels():
 
 def test_too_many_inputs_raises():
     ic = CD4069(refdes_number=1)
-    with pytest.raises(TypeError):
+    with pytest.raises((TypeError, ValidationError)):
         ic(True, True, True, True, True, True, True)
 
 

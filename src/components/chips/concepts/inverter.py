@@ -1,3 +1,5 @@
+from pydantic import validate_call
+
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
@@ -15,6 +17,7 @@ class Inverter(FactorNode):
 
     __slots__ = ('_ports',)
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
         self._ports = {
             'a': Port('a', Direction.IN,  domain, mandatory=True,  signal_type=Digital),
@@ -29,6 +32,7 @@ class Inverter(FactorNode):
         v = self._ports['a'].value
         self._ports['y'].drive(None if v is None else not v)
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __call__(self, a: bool | None) -> bool | None:
         self._assert_no_inputs_wired()
         self._ports['a'].drive(a)

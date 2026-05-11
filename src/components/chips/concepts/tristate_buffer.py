@@ -1,3 +1,5 @@
+from pydantic import validate_call
+
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
@@ -19,6 +21,7 @@ class TriStateBuffer(FactorNode):
 
     __slots__ = ('_ports',)
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
         self._ports = {
             'a':  Port('a',  Direction.IN,  domain, mandatory=True,  signal_type=Digital),
@@ -38,6 +41,7 @@ class TriStateBuffer(FactorNode):
         a_val = self._ports['a'].value
         self._ports['y'].drive(None if a_val is None else bool(Digital(a_val)))
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __call__(self, a: bool | None, oe: bool) -> bool | None:
         self._assert_no_inputs_wired()
         self._ports['a'].drive(a)

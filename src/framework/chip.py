@@ -3,6 +3,8 @@ from __future__ import annotations
 from abc import abstractmethod
 from typing import Any, Sequence
 
+from pydantic import validate_call
+
 from framework.circuit import Circuit
 from framework.factor import FactorNode
 from framework.pin import Pin
@@ -30,6 +32,7 @@ class Chip(Circuit):
 
     __slots__ = ()
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, *, pins: Sequence[Pin], cells: Sequence[FactorNode]) -> None:
         ports = {pin.external.name: pin.external for pin in pins}
         super().__init__(

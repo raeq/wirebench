@@ -1,11 +1,13 @@
 from typing import ClassVar
 
+from pydantic import validate_call
+
 from framework.chip import Chip
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
-from framework.refdes import validate_refdes
+from framework.refdes import RefdesNumber, validate_refdes
 from framework.signals import Digital
 from framework.wire import wire
 from framework.registry import register
@@ -47,7 +49,8 @@ class CD4043(Chip):
     CHANNELS: int = 4
     REFDES_PREFIX: ClassVar[str] = 'U'
 
-    def __init__(self, domain: GroundDomain = ELECTRICAL, *, refdes_number: int) -> None:
+    @validate_call(config={'arbitrary_types_allowed': True})
+    def __init__(self, domain: GroundDomain = ELECTRICAL, *, refdes_number: RefdesNumber) -> None:
         validate_refdes(self.REFDES_PREFIX, refdes_number)
         self._refdes_number = refdes_number
         # --- Cells: the chip's private implementation ---
@@ -103,6 +106,7 @@ class CD4043(Chip):
     def refdes_number(self) -> int:
         return self._refdes_number
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __call__(
         self,
         s_1: bool = False, r_1: bool = False,

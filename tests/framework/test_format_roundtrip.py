@@ -82,6 +82,63 @@ def test_roundtrip_water_alarm_behaves_identically(tmp_path):
         assert s == a, f"({low}, {high}): original={s} loaded={a}"
 
 
+def _drive_and_snapshot(circuit, drives: dict) -> dict:
+    """Drive a set of surface ports and return a snapshot of all
+    surface-port values after evaluation. Used to compare original vs.
+    loaded models without needing subclass-specific accessors."""
+    for name, value in drives.items():
+        circuit._ports[name].drive(value)
+    circuit.evaluate()
+    return {name: port.value for name, port in circuit._ports.items()}
+
+
+def test_roundtrip_water_alarm_assembly_behaves_identically(tmp_path):
+    original = WaterAlarmAssembly()
+    p = tmp_path / "asm.circuitry"
+    _save_silently(original, p)
+    loaded = _load_silently(p)
+
+    VCC, GND = 5.0, 0.0
+    for low, high in [(GND, GND), (VCC, GND), (VCC, VCC), (VCC, GND), (GND, GND)]:
+        drives = {'low_probe': low, 'high_probe': high}
+        a = _drive_and_snapshot(original, drives)
+        b = _drive_and_snapshot(loaded,   drives)
+        assert a == b, f"({low}, {high}): original={a} loaded={b}"
+
+
+def test_roundtrip_sensor_board_behaves_identically(tmp_path):
+    # Standalone boards have BIDIR connector pins whose effective
+    # direction is set by toposort only when the connector is mated.
+    # Unmated, a second external drive vs. a stale internal value
+    # raises a contention error on the second cycle. Limit the test to
+    # a single drive cycle — enough to demonstrate that the loaded
+    # board behaves identically to the original under the same input.
+    original = SensorBoard(refdes_number=1)
+    p = tmp_path / "sensor.circuitry"
+    _save_silently(original, p)
+    loaded = _load_silently(p)
+
+    drives = {'J1.p3': 5.0, 'J1.p4': 0.0}
+    a = _drive_and_snapshot(original, drives)
+    b = _drive_and_snapshot(loaded,   drives)
+    assert a == b, f"original={a} loaded={b}"
+
+
+def test_roundtrip_controller_board_behaves_identically(tmp_path):
+    original = ControllerBoard(refdes_number=2)
+    p = tmp_path / "controller.circuitry"
+    _save_silently(original, p)
+    loaded = _load_silently(p)
+
+    # Single drive cycle (see SensorBoard note above for the reason).
+    # Use inputs that avoid latch S=R=1: p5=False, p6=False gives
+    # s_1=False, r_1=True (via the inverter) which is a clean reset.
+    drives = {'P1.p5': False, 'P1.p6': False}
+    a = _drive_and_snapshot(original, drives)
+    b = _drive_and_snapshot(loaded,   drives)
+    assert a == b, f"original={a} loaded={b}"
+
+
 def test_determinism_two_saves_byte_identical(tmp_path):
     asm = WaterAlarmAssembly()
     p1 = tmp_path / "1.circuitry"

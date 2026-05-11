@@ -1,9 +1,11 @@
-from typing import ClassVar
+from typing import Annotated, ClassVar
+
+from pydantic import Field, validate_call
 
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
-from framework.refdes import validate_refdes
+from framework.refdes import RefdesNumber, validate_refdes
 from framework.signals import Digital
 from framework.units import Ohms
 from framework.registry import register
@@ -42,12 +44,13 @@ class LED(FactorNode):
 
     REFDES_PREFIX: ClassVar[str] = 'D'   # LEDs are diodes; standard prefix is D, not LED.
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(
         self,
-        color: str,
+        color: Annotated[str, Field(min_length=1)],
         domain: GroundDomain = ELECTRICAL,
         *,
-        refdes_number: int,
+        refdes_number: RefdesNumber,
     ) -> None:
         validate_refdes(self.REFDES_PREFIX, refdes_number)
         self._refdes_number = refdes_number
@@ -102,6 +105,7 @@ class LED(FactorNode):
         i = i_target if i_target is not None else cls.I_F_TYP
         return Ohms((v_supply - cls.V_F) / i)
 
+    @validate_call(config={'arbitrary_types_allowed': True})
     def __call__(self, anode: bool | None) -> bool | None:
         self._assert_no_inputs_wired()
         self._ports['anode'].drive(anode)
