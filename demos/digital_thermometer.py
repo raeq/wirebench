@@ -1,0 +1,409 @@
+"""Digital thermometer — composite-circuit demo.
+
+Faithful recreation of the Arduino project at
+https://projecthub.arduino.cc/theoasve/from-sensor-to-screen-build-a-digital-thermometer-in-minutes-2f9736
+— an integer-Celsius thermometer reading a DHT11 sensor and showing the
+value on a 4-digit common-anode 7-segment display.
+
+Bill of materials (matches the source project verbatim):
+    U1  Uno_ThermometerSketch   ATmega328P running the digital-thermometer firmware
+    U2  DHT11                   single-bus humidity/temperature sensor
+    U3  Display5641AS           common-anode quad-digit 7-segment display
+    R1  Resistor                220 Ω current limiter on the digit-1 common
+
+Run directly to see a per-phase, per-temperature trace of which digit
+glyph is multiplexed onto the display:
+
+    python demos/digital_thermometer.py
+
+Firmware modelling note
+-----------------------
+The behaviour of an Arduino sketch (reading DHT11 frames, multiplexing
+the display) cannot be faithfully simulated by a steady-state voltage
+graph — both the DHT11 single-bus protocol and the digit scan are
+bit-banged over time.  We respect the chip surface (ATmega328P pins are
+identical to the real silicon's) and model the firmware as an internal
+`_ThermometerSketch` cell that drives the relevant pin inner faces from
+within the chip — exactly the position firmware occupies on real
+hardware.  The temperature reading is set as Python-level state on the
+sketch cell (an explicit escape hatch; the DHT11 wire still exists in
+the BOM but its 40-bit frames are not decoded).
+"""
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+# Make `src/` importable when this file is run as a script.
+_SRC = Path(__file__).resolve().parent.parent / 'src'
+if str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
+
+from pydantic import validate_call
+
+from framework.chip import Chip
+from framework.circuit import Circuit
+from framework.factor import FactorNode
+from framework.ground import GroundDomain, ELECTRICAL
+from framework.pin import Pin, PinId
+from framework.port import Direction, Port
+from framework.refdes import RefdesNumber, validate_refdes
+from framework.signals import Digital
+from framework.wire import wire
+
+from components.chips.atmega328p import ATmega328P
+from components.chips.dht11 import DHT11
+from components.chips.display5641as import Display5641AS
+from components.passives.rail import Rail
+from components.passives.resistor import Resistor
+
+
+# Segments lit for each character the firmware can display.  Common-
+# anode polarity is applied at drive time: a segment listed here is
+# driven LOW (cathode sinks current); the rest are driven HIGH (off).
+_CHAR_SEGMENTS: dict[str, frozenset[str]] = {
+    '0': frozenset({'a', 'b', 'c', 'd', 'e', 'f'}),
+    '1': frozenset({'b', 'c'}),
+    '2': frozenset({'a', 'b', 'd', 'e', 'g'}),
+    '3': frozenset({'a', 'b', 'c', 'd', 'g'}),
+    '4': frozenset({'b', 'c', 'f', 'g'}),
+    '5': frozenset({'a', 'c', 'd', 'f', 'g'}),
+    '6': frozenset({'a', 'c', 'd', 'e', 'f', 'g'}),
+    '7': frozenset({'a', 'b', 'c'}),
+    '8': frozenset({'a', 'b', 'c', 'd', 'e', 'f', 'g'}),
+    '9': frozenset({'a', 'b', 'c', 'd', 'f', 'g'}),
+    'C': frozenset({'a', 'd', 'e', 'f'}),
+    '-': frozenset({'g'}),
+    ' ': frozenset(),
+}
+
+_SEGMENT_NAMES = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'dp')
+
+
+def _format_temperature(temp_c: float) -> tuple[str, str, str]:
+    """Render temperature_c as three characters: tens, ones, 'C'.
+
+    Out-of-range (< 0 or > 99) renders as '-', '-', 'C'.  The DHT11's
+    nominal range is 0..50 °C, so 0..99 covers all realistic readings.
+    """
+    t = int(round(temp_c))
+    if not 0 <= t <= 99:
+        return ('-', '-', 'C')
+    tens_char = ' ' if t < 10 else str(t // 10)
+    ones_char = str(t % 10)
+    return (tens_char, ones_char, 'C')
+
+
+class _ThermometerSketch(FactorNode):
+    """Model of the Arduino sketch driving the multiplexed display.
+
+    Not a placeable part: there is no soldering iron that installs
+    firmware.  This cell exists to give the framework something whose
+    `evaluate()` translates the temperature reading into pin drives,
+    occupying the same logical position firmware does on real silicon.
+
+    State (`_temperature_c`, `_phase`) is Python-level — the demo's
+    `__call__` sets it before evaluation.  The 1-Wire frame decoding
+    on DHT11.DATA is acknowledged as out of scope; the temperature
+    value reaches this cell directly.
+    """
+
+    __slots__ = ('_ports', '_temperature_c', '_phase')
+
+    DIGITS_DISPLAYED: int = 3   # only 3 of the display's 4 digits used
+
+    @validate_call(config={'arbitrary_types_allowed': True})
+    def __init__(self, domain: GroundDomain = ELECTRICAL) -> None:
+        out_names = (
+            'dig_1', 'dig_2', 'dig_3',
+            'seg_a', 'seg_b', 'seg_c', 'seg_d',
+            'seg_e', 'seg_f', 'seg_g', 'seg_dp',
+        )
+        self._ports = {
+            name: Port(name, Direction.OUT, domain,
+                       mandatory=False, signal_type=Digital)
+            for name in out_names
+        }
+        self._temperature_c: float = 0.0
+        self._phase: int = 0
+
+    @property
+    def ports(self) -> dict[str, Port]:
+        return self._ports
+
+    @property
+    def temperature_c(self) -> float:
+        return self._temperature_c
+
+    @property
+    def phase(self) -> int:
+        return self._phase
+
+    def evaluate(self) -> None:
+        chars = _format_temperature(self._temperature_c)
+        p = self._phase % self.DIGITS_DISPLAYED
+        char = chars[p]
+        lit = _CHAR_SEGMENTS.get(char, frozenset({'g'}))   # unknown → '-'
+
+        for i in range(1, self.DIGITS_DISPLAYED + 1):
+            self._ports[f'dig_{i}'].drive(i == p + 1)
+
+        # Common-anode: LOW = lit (cathode sinks), HIGH = off.
+        for seg in _SEGMENT_NAMES:
+            self._ports[f'seg_{seg}'].drive(seg not in lit)
+
+    def __repr__(self) -> str:
+        return (f"_ThermometerSketch(temp_c={self._temperature_c!r}, "
+                f"phase={self._phase!r})")
+
+
+class Uno_ThermometerSketch(ATmega328P):
+    """ATmega328P loaded with the digital-thermometer firmware.
+
+    Same silicon, same 28-pin DIP surface as a bare ATmega328P — the
+    only difference is that internal cells embody what the sketch does.
+    Pin mapping (Arduino digital pin -> ATmega328P pin name):
+
+        D3  -> PD3   digit 1 select  (through R1)
+        D4  -> PD4   digit 2 select
+        D5  -> PD5   digit 3 select
+        D6  -> PD6   segment a
+        D7  -> PD7   segment b
+        D8  -> PB0   segment c
+        D9  -> PB1   segment d
+        D10 -> PB2   segment e
+        D11 -> PB3   segment f
+        D12 -> PB4   segment g
+        D13 -> PB5   segment dp
+
+    Pin PD2 (Arduino D2) is wired to DHT11.DATA at the composite level;
+    its single-bus frames are not modelled.
+    """
+
+    __slots__ = ('_sketch',)
+
+    _ARDUINO_PIN_TO_MCU_PIN: dict[str, str] = {
+        # sketch port name -> ATmega328P pin name
+        'dig_1':  'PD3',
+        'dig_2':  'PD4',
+        'dig_3':  'PD5',
+        'seg_a':  'PD6',
+        'seg_b':  'PD7',
+        'seg_c':  'PB0',
+        'seg_d':  'PB1',
+        'seg_e':  'PB2',
+        'seg_f':  'PB3',
+        'seg_g':  'PB4',
+        'seg_dp': 'PB5',
+    }
+
+    @validate_call(config={'arbitrary_types_allowed': True})
+    def __init__(self, domain: GroundDomain = ELECTRICAL, *,
+                 refdes_number: RefdesNumber) -> None:
+        # Intentionally do NOT call super().__init__: ATmega328P
+        # finalises Chip with cells=[], and we need to inject the
+        # sketch.  Replicate ATmega328P's setup, then add cells.
+        validate_refdes(self.REFDES_PREFIX, refdes_number)
+        self._refdes_number = refdes_number
+        self._sketch = _ThermometerSketch(domain)
+
+        pins = [
+            Pin(PinId(number, name), direction, domain,
+                mandatory=False, signal_type=signal_type)
+            for number, name, direction, signal_type in self._PIN_TABLE
+        ]
+        by_name = {p.id.name: p for p in pins}
+
+        # Sketch outputs drive the relevant pin internal faces.  For each
+        # such pin we fix the effective role to OUT: real silicon pins
+        # are BIDIR, but in this firmware configuration the chip drives
+        # them outward only — Pin.evaluate's BIDIR contention check
+        # otherwise trips on repeated calls when the external face
+        # retains the previous slot's value while the internal face
+        # holds the new one.  This is what `_effective_role` exists to
+        # express; the topological sort assigns it automatically only
+        # for mated-connector cases (multiple BIDIRs on one net), so we
+        # set it directly here for the firmware-driven case.
+        for sketch_port, mcu_pin in self._ARDUINO_PIN_TO_MCU_PIN.items():
+            pin = by_name[mcu_pin]
+            wire(self._sketch.ports[sketch_port], pin.internal)
+            pin._effective_role = Direction.OUT
+
+        Chip.__init__(self, pins=pins, cells=[self._sketch])
+
+    @property
+    def sketch(self) -> _ThermometerSketch:
+        """The firmware-model cell.  Composite circuits set its
+        `_temperature_c` and `_phase` before evaluating."""
+        return self._sketch
+
+    @validate_call(config={'arbitrary_types_allowed': True})
+    def __call__(self, temperature_c: float, phase: int) -> None:
+        """Standalone-test invocation: load firmware state and run the
+        chip's internal evaluation.  Refuses if any pin is wired into a
+        parent — the parent must drive sketch state directly via the
+        `sketch` property and call its own `evaluate()`."""
+        self._assert_no_inputs_wired()
+        self._sketch._temperature_c = float(temperature_c)
+        self._sketch._phase = int(phase)
+        self.evaluate()
+        return None
+
+    def __repr__(self) -> str:
+        return (f"Uno_ThermometerSketch(refdes={self.refdes!r}, "
+                f"temp_c={self._sketch._temperature_c!r}, "
+                f"phase={self._sketch._phase!r})")
+
+
+class DigitalThermometer(Circuit):
+    """Single-board digital thermometer.
+
+    BOM:
+        U1  Uno_ThermometerSketch   the Arduino with firmware loaded
+        U2  DHT11                   sensor on D2
+        U3  Display5641AS           4-digit common-anode display
+        R1  Resistor (220 Ω)        current limiter on digit-1 common
+
+    Wiring follows the project verbatim:
+        D2  <-> DHT11.DATA          (single-bus; protocol unmodelled)
+        D3  -> R1 -> Display.DIG_1  (R1 modelled as a 0-Ω pass-through
+                                     so the simulator can propagate
+                                     through it; its 220 Ω documents
+                                     the real part's current-limiting
+                                     role)
+        D4  -> Display.DIG_2
+        D5  -> Display.DIG_3
+        D6..D13 -> Display.SEG_A..SEG_DP
+
+    The 4th display digit (DIG_4) is tied to GND so digit 4 is always
+    dark.  Power pins (VCC/AVCC/AREF/GND on the Arduino, VDD/GND on the
+    DHT11) are documented as off-graph supply — the framework's Rail is
+    Digital-typed and cannot drive Analog supply pins.
+    """
+
+    __slots__ = ('_arduino', '_dht11', '_display', '_r1', '_vcc', '_gnd')
+
+    @validate_call(config={'arbitrary_types_allowed': True})
+    def __init__(self) -> None:
+        arduino = Uno_ThermometerSketch(refdes_number=1)
+        dht11   = DHT11(refdes_number=2)
+        display = Display5641AS(refdes_number=3)
+        r1      = Resistor(220, refdes_number=1)
+        vcc     = Rail(True)    # GND tie for unused 4th-digit anode
+        gnd     = Rail(False)   # GND tie for unused 4th-digit anode
+
+        # DHT11 single-bus on Arduino D2 (ATmega PD2).
+        wire(dht11.ports['DATA'], arduino.ports['PD2'])
+
+        # Digit 1 common via the 220 Ω current limiter.  Both R1
+        # terminals share the node with the source and sink — R1 is in
+        # the BOM and on the wire-list but the simulator treats it as a
+        # 0-Ω pass-through (a voltage-only solver can't propagate IxR).
+        wire(arduino.ports['PD3'],
+             r1.ports['t1'], r1.ports['t2'],
+             display.ports['DIG_1'])
+
+        # Remaining digit selects and all eight segment lines.
+        wire(arduino.ports['PD4'], display.ports['DIG_2'])
+        wire(arduino.ports['PD5'], display.ports['DIG_3'])
+        wire(arduino.ports['PD6'], display.ports['SEG_A'])
+        wire(arduino.ports['PD7'], display.ports['SEG_B'])
+        wire(arduino.ports['PB0'], display.ports['SEG_C'])
+        wire(arduino.ports['PB1'], display.ports['SEG_D'])
+        wire(arduino.ports['PB2'], display.ports['SEG_E'])
+        wire(arduino.ports['PB3'], display.ports['SEG_F'])
+        wire(arduino.ports['PB4'], display.ports['SEG_G'])
+        wire(arduino.ports['PB5'], display.ports['SEG_DP'])
+
+        # The fourth display digit is unused — its anode is tied LOW so
+        # the digit stays dark regardless of segment drive.
+        wire(gnd.ports['out'], display.ports['DIG_4'])
+
+        super().__init__(
+            factor_nodes=[arduino, dht11, display, r1, vcc, gnd],
+            ports={
+                # No port-level inputs: temperature is firmware-model state.
+                # Expose the display's DIG_1 as a visible-state port for
+                # debugging.
+                'display_dig_1': display.ports['DIG_1'],
+            },
+        )
+
+        self._arduino = arduino
+        self._dht11   = dht11
+        self._display = display
+        self._r1      = r1
+        self._vcc     = vcc
+        self._gnd     = gnd
+
+    @property
+    def arduino(self) -> Uno_ThermometerSketch:
+        return self._arduino
+
+    @property
+    def dht11(self) -> DHT11:
+        return self._dht11
+
+    @property
+    def display(self) -> Display5641AS:
+        return self._display
+
+    @validate_call(config={'arbitrary_types_allowed': True})
+    def __call__(self, temperature_c: float, phase: int) -> tuple[str, str, str, str]:
+        """Run the circuit for one multiplexing slot.
+
+        Sets the firmware-model state (temperature and current multiplex
+        phase 0..2) directly on the sketch cell, then propagates signals
+        through the whole circuit.  Returns the four-digit display
+        snapshot — exactly one character is lit per call (or none, if
+        the phase value selects no driven digit).
+        """
+        self._arduino.sketch._temperature_c = float(temperature_c)
+        self._arduino.sketch._phase         = int(phase)
+        self.evaluate()
+        return self._display.glyphs
+
+    def __repr__(self) -> str:
+        return f"DigitalThermometer(glyphs={self._display.glyphs!r})"
+
+
+def _level(v: bool | None) -> str:
+    return 'H' if v else 'L' if v is False else '?'
+
+
+def _main() -> None:
+    """Walk through a multiplex cycle at several temperatures and print
+    a per-pin / per-digit trace."""
+    from framework.refdes import RefdesBearing
+
+    dt = DigitalThermometer()
+
+    print("Bill of materials:")
+    parts = [fn for fn in dt._factor_nodes if isinstance(fn, RefdesBearing)]
+    for fn in parts:
+        print(f"  {fn.refdes:5s} {type(fn).__name__}")
+    print()
+
+    scenarios: list[tuple[str, float]] = [
+        ("ambient = 5 °C",  5.0),
+        ("ambient = 23 °C", 23.0),
+        ("ambient = 40 °C", 40.0),
+    ]
+
+    print(f"{'event':22s} | phase | dig1 dig2 dig3 | "
+          f"seg(abcdefg.) | glyphs")
+    print('-' * 80)
+    for label, temp_c in scenarios:
+        for phase in range(3):
+            glyphs = dt(temp_c, phase)
+            arduino_ports = dt.arduino.ports
+            d = ''.join(_level(arduino_ports[p].value) for p in ('PD3', 'PD4', 'PD5'))
+            s_pins = ('PD6', 'PD7', 'PB0', 'PB1', 'PB2', 'PB3', 'PB4', 'PB5')
+            s = ''.join(_level(arduino_ports[p].value) for p in s_pins)
+            print(f"{label:22s} |  {phase}    | "
+                  f"  {d[0]}    {d[1]}    {d[2]}  | "
+                  f"{s} | {glyphs!r}")
+
+
+if __name__ == '__main__':
+    _main()

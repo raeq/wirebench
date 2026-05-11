@@ -54,17 +54,19 @@ from .ams1117_50 import AMS1117_50
 from .lp2950     import LP2950
 
 # Specialty ICs.
-from .ne555   import NE555
-from .lm386   import LM386
-from .ds18b20 import DS18B20
-from .ds1307  import DS1307
-from .max7219 import MAX7219
+from .ne555         import NE555
+from .lm386         import LM386
+from .ds18b20       import DS18B20
+from .ds1307        import DS1307
+from .max7219       import MAX7219
+from .display5641as import Display5641AS
 
 # Sensors.
 from .tmp36   import TMP36
 from .bmp280  import BMP280
 from .mpu6050 import MPU6050
 from .hcsr04  import HCSR04
+from .dht11   import DHT11
 
 # Power / interface.
 from .moc3021      import MOC3021
@@ -100,9 +102,9 @@ __all__ = [
     'LM7805', 'LM7812', 'LM7905', 'LM317', 'LM337',
     'AMS1117_33', 'AMS1117_50', 'LP2950',
     # Specialty
-    'NE555', 'LM386', 'DS18B20', 'DS1307', 'MAX7219',
+    'NE555', 'LM386', 'DS18B20', 'DS1307', 'MAX7219', 'Display5641AS',
     # Sensors
-    'TMP36', 'BMP280', 'MPU6050', 'HCSR04',
+    'TMP36', 'BMP280', 'MPU6050', 'HCSR04', 'DHT11',
     # Power/interface
     'MOC3021', 'OPTO_4N25', 'OPTO_TLP521', 'TLC5940', 'MAX232',
     # MCUs

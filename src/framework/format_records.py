@@ -118,17 +118,19 @@ class AMS1117_50Record(_ChipRecord): type: Literal['AMS1117_50'] = 'AMS1117_50'
 class LP2950Record(_ChipRecord):     type: Literal['LP2950']     = 'LP2950'
 
 # Specialty ICs.
-class NE555Record(_ChipRecord):    type: Literal['NE555']   = 'NE555'
-class LM386Record(_ChipRecord):    type: Literal['LM386']   = 'LM386'
-class DS18B20Record(_ChipRecord):  type: Literal['DS18B20'] = 'DS18B20'
-class DS1307Record(_ChipRecord):   type: Literal['DS1307']  = 'DS1307'
-class MAX7219Record(_ChipRecord):  type: Literal['MAX7219'] = 'MAX7219'
+class NE555Record(_ChipRecord):         type: Literal['NE555']         = 'NE555'
+class LM386Record(_ChipRecord):         type: Literal['LM386']         = 'LM386'
+class DS18B20Record(_ChipRecord):       type: Literal['DS18B20']       = 'DS18B20'
+class DS1307Record(_ChipRecord):        type: Literal['DS1307']        = 'DS1307'
+class MAX7219Record(_ChipRecord):       type: Literal['MAX7219']       = 'MAX7219'
+class Display5641ASRecord(_ChipRecord): type: Literal['Display5641AS'] = 'Display5641AS'
 
 # Sensors.
 class TMP36Record(_ChipRecord):    type: Literal['TMP36']   = 'TMP36'
 class BMP280Record(_ChipRecord):   type: Literal['BMP280']  = 'BMP280'
 class MPU6050Record(_ChipRecord):  type: Literal['MPU6050'] = 'MPU6050'
 class HCSR04Record(_ChipRecord):   type: Literal['HCSR04']  = 'HCSR04'
+class DHT11Record(_ChipRecord):    type: Literal['DHT11']   = 'DHT11'
 
 # Power / interface.
 class MOC3021Record(_ChipRecord):     type: Literal['MOC3021']     = 'MOC3021'
@@ -353,8 +355,9 @@ ComponentRecord = Annotated[
         AMS1117_33Record, AMS1117_50Record, LP2950Record,
         # Specialty ICs
         NE555Record, LM386Record, DS18B20Record, DS1307Record, MAX7219Record,
+        Display5641ASRecord,
         # Sensors
-        TMP36Record, BMP280Record, MPU6050Record, HCSR04Record,
+        TMP36Record, BMP280Record, MPU6050Record, HCSR04Record, DHT11Record,
         # Power / interface
         MOC3021Record, OPTO_4N25Record, OPTO_TLP521Record, TLC5940Record,
         MAX232Record,
