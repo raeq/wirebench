@@ -3,7 +3,7 @@ from framework.port import Direction
 
 
 EXPECTED_PINS = (
-    (  1, 'GND_1',        Direction.IN),
+    (  1, 'GND',        Direction.IN),
     (  2, '3V3',          Direction.IN),
     (  3, 'EN',           Direction.IN),
     (  4, 'SENSOR_VP',    Direction.IN),
@@ -17,7 +17,7 @@ EXPECTED_PINS = (
     ( 12, 'GPIO27',       Direction.BIDIR),
     ( 13, 'GPIO14',       Direction.BIDIR),
     ( 14, 'GPIO12',       Direction.BIDIR),
-    ( 15, 'GND_2',        Direction.IN),
+    ( 15, 'GND',        Direction.IN),
     ( 16, 'GPIO13',       Direction.BIDIR),
     ( 17, 'SD2',          Direction.BIDIR),
     ( 18, 'SD3',          Direction.BIDIR),
@@ -39,7 +39,7 @@ EXPECTED_PINS = (
     ( 35, 'TXD0',         Direction.BIDIR),
     ( 36, 'GPIO22',       Direction.BIDIR),
     ( 37, 'GPIO23',       Direction.BIDIR),
-    ( 38, 'GND_3',        Direction.IN),
+    ( 38, 'GND',        Direction.IN),
 )
 
 

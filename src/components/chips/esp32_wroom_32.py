@@ -26,7 +26,7 @@ class ESP32_WROOM_32(Chip):
     FOOTPRINT: ClassVar[str | None] = 'RF_Module:ESP32-WROOM-32'
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
-        (  1, 'GND_1',        Direction.IN,     Analog),
+        (  1, 'GND',        Direction.IN,     Analog),
         (  2, '3V3',          Direction.IN,     Analog),
         (  3, 'EN',           Direction.IN,     Digital),
         (  4, 'SENSOR_VP',    Direction.IN,     Analog),
@@ -40,7 +40,7 @@ class ESP32_WROOM_32(Chip):
         ( 12, 'GPIO27',       Direction.BIDIR,  Digital),
         ( 13, 'GPIO14',       Direction.BIDIR,  Digital),
         ( 14, 'GPIO12',       Direction.BIDIR,  Digital),
-        ( 15, 'GND_2',        Direction.IN,     Analog),
+        ( 15, 'GND',        Direction.IN,     Analog),
         ( 16, 'GPIO13',       Direction.BIDIR,  Digital),
         ( 17, 'SD2',          Direction.BIDIR,  Digital),
         ( 18, 'SD3',          Direction.BIDIR,  Digital),
@@ -62,7 +62,7 @@ class ESP32_WROOM_32(Chip):
         ( 35, 'TXD0',         Direction.BIDIR,  Digital),
         ( 36, 'GPIO22',       Direction.BIDIR,  Digital),
         ( 37, 'GPIO23',       Direction.BIDIR,  Digital),
-        ( 38, 'GND_3',        Direction.IN,     Analog),
+        ( 38, 'GND',        Direction.IN,     Analog),
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

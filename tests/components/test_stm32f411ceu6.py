@@ -25,8 +25,8 @@ EXPECTED_PINS = (
     ( 20, 'PB2',          Direction.BIDIR),
     ( 21, 'PB10',         Direction.BIDIR),
     ( 22, 'VCAP_1',       Direction.IN),
-    ( 23, 'VSS_1',        Direction.IN),
-    ( 24, 'VDD_1',        Direction.IN),
+    ( 23, 'VSS',        Direction.IN),
+    ( 24, 'VDD',        Direction.IN),
     ( 25, 'PB12',         Direction.BIDIR),
     ( 26, 'PB13',         Direction.BIDIR),
     ( 27, 'PB14',         Direction.BIDIR),
@@ -37,8 +37,8 @@ EXPECTED_PINS = (
     ( 32, 'PA11',         Direction.BIDIR),
     ( 33, 'PA12',         Direction.BIDIR),
     ( 34, 'PA13',         Direction.BIDIR),
-    ( 35, 'VSS_2',        Direction.IN),
-    ( 36, 'VDD_2',        Direction.IN),
+    ( 35, 'VSS',        Direction.IN),
+    ( 36, 'VDD',        Direction.IN),
     ( 37, 'PA14',         Direction.BIDIR),
     ( 38, 'PA15',         Direction.BIDIR),
     ( 39, 'PB3',          Direction.BIDIR),
@@ -49,8 +49,8 @@ EXPECTED_PINS = (
     ( 44, 'BOOT0',        Direction.IN),
     ( 45, 'PB8',          Direction.BIDIR),
     ( 46, 'PB9',          Direction.BIDIR),
-    ( 47, 'VSS_3',        Direction.IN),
-    ( 48, 'VDD_3',        Direction.IN),
+    ( 47, 'VSS',        Direction.IN),
+    ( 48, 'VDD',        Direction.IN),
 )
 
 

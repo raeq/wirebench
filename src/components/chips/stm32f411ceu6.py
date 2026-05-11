@@ -48,8 +48,8 @@ class STM32F411CEU6(Chip):
         ( 20, 'PB2',          Direction.BIDIR,  Digital),
         ( 21, 'PB10',         Direction.BIDIR,  Digital),
         ( 22, 'VCAP_1',       Direction.IN,     Analog),
-        ( 23, 'VSS_1',        Direction.IN,     Analog),
-        ( 24, 'VDD_1',        Direction.IN,     Analog),
+        ( 23, 'VSS',        Direction.IN,     Analog),
+        ( 24, 'VDD',        Direction.IN,     Analog),
         ( 25, 'PB12',         Direction.BIDIR,  Digital),
         ( 26, 'PB13',         Direction.BIDIR,  Digital),
         ( 27, 'PB14',         Direction.BIDIR,  Digital),
@@ -60,8 +60,8 @@ class STM32F411CEU6(Chip):
         ( 32, 'PA11',         Direction.BIDIR,  Analog),
         ( 33, 'PA12',         Direction.BIDIR,  Analog),
         ( 34, 'PA13',         Direction.BIDIR,  Digital),
-        ( 35, 'VSS_2',        Direction.IN,     Analog),
-        ( 36, 'VDD_2',        Direction.IN,     Analog),
+        ( 35, 'VSS',        Direction.IN,     Analog),
+        ( 36, 'VDD',        Direction.IN,     Analog),
         ( 37, 'PA14',         Direction.BIDIR,  Digital),
         ( 38, 'PA15',         Direction.BIDIR,  Digital),
         ( 39, 'PB3',          Direction.BIDIR,  Digital),
@@ -72,8 +72,8 @@ class STM32F411CEU6(Chip):
         ( 44, 'BOOT0',        Direction.IN,     Digital),
         ( 45, 'PB8',          Direction.BIDIR,  Digital),
         ( 46, 'PB9',          Direction.BIDIR,  Digital),
-        ( 47, 'VSS_3',        Direction.IN,     Analog),
-        ( 48, 'VDD_3',        Direction.IN,     Analog),
+        ( 47, 'VSS',        Direction.IN,     Analog),
+        ( 48, 'VDD',        Direction.IN,     Analog),
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

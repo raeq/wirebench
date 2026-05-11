@@ -64,118 +64,112 @@ Bo6 out_6 0 V = IF(V(in_6) > 1.0, 0, 5)
 Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 .ENDS ULN2003A
 
+
 * === 74HC logic family ===
 
 * -----------------------------------------------------------------
-* SN74HC02 — Four independent 2-input NOR gates. Output is HIGH only when both inputs are LOW. (placeholder)
+* SN74HC00 — placeholder (no behavioural model).
+* Pin order matches the exporter's pin-number sort.
+.SUBCKT SN74HC00 1A 1B 1Y 2A 2B 2Y GND 3Y 3A 3B 4Y 4A 4B VCC
+* Replace with vendor SPICE model for accurate simulation.
+.ENDS SN74HC00
+
+* -----------------------------------------------------------------
+* SN74HC02 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
 .SUBCKT SN74HC02 1Y 1A 1B 2Y 2A 2B GND 3A 3B 3Y 4A 4B 4Y VCC
-* Placeholder — no behavioural model. Replace with vendor SPICE
-* model for accurate simulation.
+* Replace with vendor SPICE model for accurate simulation.
 .ENDS SN74HC02
 
 * -----------------------------------------------------------------
-* SN74HC08 — Four independent 2-input AND gates. Output is HIGH only when both inputs are HIGH. (placeholder)
+* SN74HC08 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
 .SUBCKT SN74HC08 1A 1B 1Y 2A 2B 2Y GND 3Y 3A 3B 4Y 4A 4B VCC
-* Placeholder — no behavioural model. Replace with vendor SPICE
-* model for accurate simulation.
+* Replace with vendor SPICE model for accurate simulation.
 .ENDS SN74HC08
 
 * -----------------------------------------------------------------
-* SN74HC32 — Four independent 2-input OR gates. Output is HIGH when either input is HIGH. (placeholder)
+* SN74HC32 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
 .SUBCKT SN74HC32 1A 1B 1Y 2A 2B 2Y GND 3Y 3A 3B 4Y 4A 4B VCC
-* Placeholder — no behavioural model. Replace with vendor SPICE
-* model for accurate simulation.
+* Replace with vendor SPICE model for accurate simulation.
 .ENDS SN74HC32
 
 * -----------------------------------------------------------------
-* SN74HC74 — Two positive-edge-triggered D flip-flops with asynchronous active-LOW preset and clear inputs. (placeholder)
+* SN74HC74 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
 .SUBCKT SN74HC74 1CLR 1D 1CLK 1PRE 1Q 1Q_BAR GND 2Q_BAR 2Q 2PRE 2CLK 2D 2CLR VCC
-* Placeholder — no behavioural model. Replace with vendor SPICE
-* model for accurate simulation.
+* Replace with vendor SPICE model for accurate simulation.
 .ENDS SN74HC74
 
 * -----------------------------------------------------------------
-* SN74HC86 — Four independent 2-input exclusive-OR gates. Output is HIGH when inputs differ. (placeholder)
+* SN74HC86 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
 .SUBCKT SN74HC86 1A 1B 1Y 2A 2B 2Y GND 3Y 3A 3B 4Y 4A 4B VCC
-* Placeholder — no behavioural model. Replace with vendor SPICE
-* model for accurate simulation.
+* Replace with vendor SPICE model for accurate simulation.
 .ENDS SN74HC86
 
 * -----------------------------------------------------------------
-* SN74HC138 — 3-to-8 line decoder. Decodes a 3-bit address (A,B,C) to one of eight active-LOW outputs when enabled. (placeholder)
+* SN74HC138 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
 .SUBCKT SN74HC138 A B C G2A G2B G1 Y7 GND Y6 Y5 Y4 Y3 Y2 Y1 Y0 VCC
-* Placeholder — no behavioural model. Replace with vendor SPICE
-* model for accurate simulation.
+* Replace with vendor SPICE model for accurate simulation.
 .ENDS SN74HC138
 
 * -----------------------------------------------------------------
-* SN74HC139 — Two independent 2-to-4 line decoders, each with active-LOW enable. (placeholder)
+* SN74HC139 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
 .SUBCKT SN74HC139 1G 1A 1B 1Y0 1Y1 1Y2 1Y3 GND 2Y3 2Y2 2Y1 2Y0 2B 2A 2G VCC
-* Placeholder — no behavioural model. Replace with vendor SPICE
-* model for accurate simulation.
+* Replace with vendor SPICE model for accurate simulation.
 .ENDS SN74HC139
 
 * -----------------------------------------------------------------
-* SN74HC151 — 8-input multiplexer with complementary outputs. Y is selected, W is inverted. (placeholder)
+* SN74HC151 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
 .SUBCKT SN74HC151 D3 D2 D1 D0 Y W G GND C B A D7 D6 D5 D4 VCC
-* Placeholder — no behavioural model. Replace with vendor SPICE
-* model for accurate simulation.
+* Replace with vendor SPICE model for accurate simulation.
 .ENDS SN74HC151
 
 * -----------------------------------------------------------------
-* SN74HC157 — Four 2-input multiplexers with common select and active-LOW enable. Non-inverting (use HC158 for inverting). (placeholder)
+* SN74HC157 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
 .SUBCKT SN74HC157 A_B 1A 1B 1Y 2A 2B 2Y GND 3Y 3B 3A 4Y 4B 4A G VCC
-* Placeholder — no behavioural model. Replace with vendor SPICE
-* model for accurate simulation.
+* Replace with vendor SPICE model for accurate simulation.
 .ENDS SN74HC157
 
 * -----------------------------------------------------------------
-* SN74HC165 — 8-bit parallel-load shift register. SH_LD LOW loads A-H; HIGH shifts toward QH on each rising clock edge. (placeholder)
+* SN74HC165 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
 .SUBCKT SN74HC165 SH_LD CLK E F G H QH_BAR GND QH SER A B C D CLK_INH VCC
-* Placeholder — no behavioural model. Replace with vendor SPICE
-* model for accurate simulation.
+* Replace with vendor SPICE model for accurate simulation.
 .ENDS SN74HC165
 
 * -----------------------------------------------------------------
-* SN74HC174 — Six positive-edge-triggered D flip-flops with common clock and common asynchronous active-LOW clear. (placeholder)
+* SN74HC174 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
 .SUBCKT SN74HC174 CLR 1Q 1D 2D 2Q 3D 3Q GND CLK 4Q 4D 5Q 5D 6D 6Q VCC
-* Placeholder — no behavioural model. Replace with vendor SPICE
-* model for accurate simulation.
+* Replace with vendor SPICE model for accurate simulation.
 .ENDS SN74HC174
 
 * -----------------------------------------------------------------
-* SN74HC273 — Eight D flip-flops sharing common clock and async active-LOW clear. (placeholder)
+* SN74HC273 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
 .SUBCKT SN74HC273 CLR 1Q 1D 2D 2Q 3Q 3D 4D 4Q GND CLK 5Q 5D 6D 6Q 7Q 7D 8D 8Q VCC
-* Placeholder — no behavioural model. Replace with vendor SPICE
-* model for accurate simulation.
+* Replace with vendor SPICE model for accurate simulation.
 .ENDS SN74HC273
 
 * -----------------------------------------------------------------
-* SN74HC541 — Octal non-inverting buffer with 3-state outputs. Drives Y=A when both active-LOW OEs are asserted; otherwise Hi-Z. (placeholder)
+* SN74HC541 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
 .SUBCKT SN74HC541 OE1 A1 A2 A3 A4 A5 A6 A7 A8 GND Y8 Y7 Y6 Y5 Y4 Y3 Y2 Y1 OE2 VCC
-* Placeholder — no behavioural model. Replace with vendor SPICE
-* model for accurate simulation.
+* Replace with vendor SPICE model for accurate simulation.
 .ENDS SN74HC541
 
 * -----------------------------------------------------------------
-* SN74HC595 — 8-bit serial-in shift register feeding an 8-bit storage register with 3-state parallel outputs. Daisy-chainable via QH'. (placeholder)
+* SN74HC595 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
 .SUBCKT SN74HC595 QB QC QD QE QF QG QH GND QH_PRIME SRCLR SRCLK RCLK OE SER QA VCC
-* Placeholder — no behavioural model. Replace with vendor SPICE
-* model for accurate simulation.
+* Replace with vendor SPICE model for accurate simulation.
 .ENDS SN74HC595
 
 * === op-amps ===
@@ -329,7 +323,7 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * LM386 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LM386 GAIN INPUT_NEG INPUT_POS GND VOUT VS BYPASS GAIN
+.SUBCKT LM386 GAIN_1 INPUT_NEG INPUT_POS GND VOUT VS BYPASS GAIN_8
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LM386
 
@@ -350,7 +344,7 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * MAX7219 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT MAX7219 DIN DIG_0 DIG_4 GND DIG_6 DIG_2 DIG_3 DIG_7 GND DIG_5 DIG_1 LOAD CLK SEG_A SEG_F SEG_B SEG_G ISET V_POS SEG_C SEG_E SEG_DP SEG_D DOUT
+.SUBCKT MAX7219 DIN DIG_0 DIG_4 GND_4 DIG_6 DIG_2 DIG_3 DIG_7 GND_9 DIG_5 DIG_1 LOAD CLK SEG_A SEG_F SEG_B SEG_G ISET V_POS SEG_C SEG_E SEG_DP SEG_D DOUT
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS MAX7219
 
@@ -366,7 +360,7 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * BMP280 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT BMP280 GND CSB SDI_SDA SCK_SCL SDO_ADDR VDDIO GND VDD
+.SUBCKT BMP280 GND_1 CSB SDI_SDA SCK_SCL SDO_ADDR VDDIO GND_7 VDD
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS BMP280
 
@@ -426,21 +420,21 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * ATmega328P — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT ATmega328P PC6 PD0 PD1 PD2 PD3 PD4 VCC GND_1 PB6 PB7 PD5 PD6 PD7 PB0 PB1 PB2 PB3 PB4 PB5 AVCC AREF GND_2 PC0 PC1 PC2 PC3 PC4 PC5
+.SUBCKT ATmega328P PC6 PD0 PD1 PD2 PD3 PD4 VCC GND_8 PB6 PB7 PD5 PD6 PD7 PB0 PB1 PB2 PB3 PB4 PB5 AVCC AREF GND_22 PC0 PC1 PC2 PC3 PC4 PC5
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS ATmega328P
 
 * -----------------------------------------------------------------
 * ATmega2560 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT ATmega2560 PG5 PE0 PE1 PE2 PE3 PE4 PE5 PE6 PE7 VCC_1 GND_1 PH0 PH1 PH2 PH3 PH4 PH5 PH6 PB0 PB1 PB2 PB3 PB4 PB5 PB6 PB7 PH7 PG3 PG4 RESET VCC_2 GND_2 XTAL2 XTAL1 PL0 PL1 PL2 PL3 PL4 PL5 PL6 PL7 PD0 PD1 PD2 PD3 PD4 PD5 PD6 PD7 PG0 PG1 PC0 PC1 PC2 PC3 PC4 PC5 PC6 PC7 VCC_3 GND_3 PJ0 PJ1 PJ2 PJ3 PJ4 PJ5 PJ6 PG2 PA7 PA6 PA5 PA4 PA3 PA2 PA1 PA0 PJ7 VCC_4 GND_4 PK7 PK6 PK5 PK4 PK3 PK2 PK1 PK0 PF7 PF6 PF5 PF4 PF3 PF2 PF1 PF0 AREF GND_5 AVCC
+.SUBCKT ATmega2560 PG5 PE0 PE1 PE2 PE3 PE4 PE5 PE6 PE7 VCC_10 GND_11 PH0 PH1 PH2 PH3 PH4 PH5 PH6 PB0 PB1 PB2 PB3 PB4 PB5 PB6 PB7 PH7 PG3 PG4 RESET VCC_31 GND_32 XTAL2 XTAL1 PL0 PL1 PL2 PL3 PL4 PL5 PL6 PL7 PD0 PD1 PD2 PD3 PD4 PD5 PD6 PD7 PG0 PG1 PC0 PC1 PC2 PC3 PC4 PC5 PC6 PC7 VCC_61 GND_62 PJ0 PJ1 PJ2 PJ3 PJ4 PJ5 PJ6 PG2 PA7 PA6 PA5 PA4 PA3 PA2 PA1 PA0 PJ7 VCC_80 GND_81 PK7 PK6 PK5 PK4 PK3 PK2 PK1 PK0 PF7 PF6 PF5 PF4 PF3 PF2 PF1 PF0 AREF GND_99 AVCC
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS ATmega2560
 
 * -----------------------------------------------------------------
 * ATmega32U4 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT ATmega32U4 PE6 UVCC D- D+ UGND UCAP VBUS PB0 PB1 PB2 PB3 PB7 RESET VCC_1 GND_1 XTAL2 XTAL1 PD0 PD1 PD2 PD3 PD5 GND_2 VCC_2 PD4 PD6 PD7 PB4 PB5 PB6 PC6 PC7 PE2 VCC_3 GND_3 PF7 PF6 PF5 PF4 PF1 PF0 AREF GND_4 AVCC
+.SUBCKT ATmega32U4 PE6 UVCC D_NEG D_POS UGND UCAP VBUS PB0 PB1 PB2 PB3 PB7 RESET VCC_14 GND_15 XTAL2 XTAL1 PD0 PD1 PD2 PD3 PD5 GND_23 VCC_24 PD4 PD6 PD7 PB4 PB5 PB6 PC6 PC7 PE2 VCC_34 GND_35 PF7 PF6 PF5 PF4 PF1 PF0 AREF GND_43 AVCC
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS ATmega32U4
 
@@ -461,343 +455,28 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * STM32F103C8T6 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT STM32F103C8T6 VBAT PC13 PC14 PC15 PD0 PD1 NRST VSSA VDDA PA0 PA1 PA2 PA3 PA4 PA5 PA6 PA7 PB0 PB1 VSS_1 VDD_1 PB2 PB10 PB11 VSS_2 VDD_2 PB12 PB13 PB14 PB15 PA8 PA9 PA10 PA11 PA12 PA13 VSS_3 VDD_3 PA14 PA15 PB3 PB4 PB5 PB6 PB7 BOOT0 PB8 PB9
+.SUBCKT STM32F103C8T6 VBAT PC13 PC14 PC15 PD0 PD1 NRST VSSA VDDA PA0 PA1 PA2 PA3 PA4 PA5 PA6 PA7 PB0 PB1 VSS_20 VDD_21 PB2 PB10 PB11 VSS_25 VDD_26 PB12 PB13 PB14 PB15 PA8 PA9 PA10 PA11 PA12 PA13 VSS_37 VDD_38 PA14 PA15 PB3 PB4 PB5 PB6 PB7 BOOT0 PB8 PB9
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS STM32F103C8T6
 
 * -----------------------------------------------------------------
 * STM32F411CEU6 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT STM32F411CEU6 VBAT PC13 PC14 PC15 PH0 PH1 NRST VSSA VDDA PA0 PA1 PA2 PA3 PA4 PA5 PA6 PA7 PB0 PB1 PB2 PB10 VCAP_1 VSS_1 VDD_1 PB12 PB13 PB14 PB15 PA8 PA9 PA10 PA11 PA12 PA13 VSS_2 VDD_2 PA14 PA15 PB3 PB4 PB5 PB6 PB7 BOOT0 PB8 PB9 VSS_3 VDD_3
+.SUBCKT STM32F411CEU6 VBAT PC13 PC14 PC15 PH0 PH1 NRST VSSA VDDA PA0 PA1 PA2 PA3 PA4 PA5 PA6 PA7 PB0 PB1 PB2 PB10 VCAP_1 VSS_23 VDD_24 PB12 PB13 PB14 PB15 PA8 PA9 PA10 PA11 PA12 PA13 VSS_35 VDD_36 PA14 PA15 PB3 PB4 PB5 PB6 PB7 BOOT0 PB8 PB9 VSS_47 VDD_48
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS STM32F411CEU6
 
 * -----------------------------------------------------------------
 * RP2040 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT RP2040 IOVDD_1 GP0 GP1 GP2 GP3 GP4 GP5 GP6 GP7 IOVDD_2 GP8 GP9 GP10 GP11 GP12 GP13 GP14 GP15 TESTEN XIN XOUT IOVDD_3 DVDD_1 SWCLK SWDIO RUN GP16 GP17 GP18 GP19 GP20 GP21 IOVDD_4 GP22 GP23 GP24 GP25 GP26 GP27 GP28 GP29 IOVDD_5 ADC_AVDD VREG_VIN VREG_VOUT USB_DM USB_DP USB_VDD IOVDD_6 DVDD_2 QSPI_SD3 QSPI_SCLK QSPI_SD0 QSPI_SD2 QSPI_SD1 QSPI_SS_N
+.SUBCKT RP2040 IOVDD_1 GP0 GP1 GP2 GP3 GP4 GP5 GP6 GP7 IOVDD_10 GP8 GP9 GP10 GP11 GP12 GP13 GP14 GP15 TESTEN XIN XOUT IOVDD_22 DVDD_23 SWCLK SWDIO RUN GP16 GP17 GP18 GP19 GP20 GP21 IOVDD_33 GP22 GP23 GP24 GP25 GP26 GP27 GP28 GP29 IOVDD_42 ADC_AVDD VREG_VIN VREG_VOUT USB_DM USB_DP USB_VDD IOVDD_49 DVDD_50 QSPI_SD3 QSPI_SCLK QSPI_SD0 QSPI_SD2 QSPI_SD1 QSPI_SS_N
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS RP2040
 
 * -----------------------------------------------------------------
 * ESP32_WROOM_32 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT ESP32_WROOM_32 GND_1 3V3 EN SENSOR_VP SENSOR_VN GPIO34 GPIO35 GPIO32 GPIO33 GPIO25 GPIO26 GPIO27 GPIO14 GPIO12 GND_2 GPIO13 SD2 SD3 CMD CLK SD0 SD1 GPIO15 GPIO2 GPIO0 GPIO4 GPIO16 GPIO17 GPIO5 GPIO18 GPIO19 GPIO21 RXD0 TXD0 GPIO22 GPIO23 GND_3
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS ESP32_WROOM_32
-
-* -----------------------------------------------------------------
-* ESP8266_12F — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT ESP8266_12F RST ADC EN GPIO16 GPIO14 GPIO12 GPIO13 VCC CS0 MISO GPIO0 MOSI SCLK GND GPIO10 GPIO9 GPIO11 GPIO6 GPIO7 GPIO8 RXD TXD
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS ESP8266_12F
-
-* === op-amps ===
-
-* -----------------------------------------------------------------
-* LM358 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT LM358 OUT1 IN1_NEG IN1_POS V_GND IN2_POS IN2_NEG OUT2 V_POS
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS LM358
-
-* -----------------------------------------------------------------
-* LM324 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT LM324 OUT1 IN1_NEG IN1_POS V_POS IN2_POS IN2_NEG OUT2 OUT3 IN3_NEG IN3_POS V_GND IN4_POS IN4_NEG OUT4
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS LM324
-
-* -----------------------------------------------------------------
-* TL072 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT TL072 OUT1 IN1_NEG IN1_POS V_NEG IN2_POS IN2_NEG OUT2 V_POS
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS TL072
-
-* -----------------------------------------------------------------
-* TL074 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT TL074 OUT1 IN1_NEG IN1_POS V_POS IN2_POS IN2_NEG OUT2 OUT3 IN3_NEG IN3_POS V_NEG IN4_POS IN4_NEG OUT4
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS TL074
-
-* -----------------------------------------------------------------
-* LM741 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT LM741 OFFSET_N1 IN_NEG IN_POS V_NEG OFFSET_N2 OUT V_POS
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS LM741
-
-* -----------------------------------------------------------------
-* MCP6002 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT MCP6002 OUT1 IN1_NEG IN1_POS VSS IN2_POS IN2_NEG OUT2 VDD
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS MCP6002
-
-* -----------------------------------------------------------------
-* OPA2134 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT OPA2134 OUT1 IN1_NEG IN1_POS V_NEG IN2_POS IN2_NEG OUT2 V_POS
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS OPA2134
-
-* -----------------------------------------------------------------
-* LMV358 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT LMV358 OUT1 IN1_NEG IN1_POS V_GND IN2_POS IN2_NEG OUT2 V_POS
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS LMV358
-
-* === comparators ===
-
-* -----------------------------------------------------------------
-* LM339 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT LM339 OUT2 OUT1 VCC IN1_NEG IN1_POS IN2_NEG IN2_POS IN3_NEG IN3_POS IN4_NEG IN4_POS GND OUT4 OUT3
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS LM339
-
-* -----------------------------------------------------------------
-* TLV3401 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT TLV3401 OUT GND IN_POS IN_NEG VCC
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS TLV3401
-
-* -----------------------------------------------------------------
-* LM311 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT LM311 EMIT_OUT IN_POS IN_NEG VCC_NEG BALANCE BAL_STRB COL_OUT VCC_POS
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS LM311
-
-* === regulators ===
-
-* -----------------------------------------------------------------
-* LM7805 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT LM7805 INPUT GND OUTPUT
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS LM7805
-
-* -----------------------------------------------------------------
-* LM7812 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT LM7812 INPUT GND OUTPUT
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS LM7812
-
-* -----------------------------------------------------------------
-* LM7905 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT LM7905 GND INPUT OUTPUT
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS LM7905
-
-* -----------------------------------------------------------------
-* LM317 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT LM317 ADJ OUTPUT INPUT
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS LM317
-
-* -----------------------------------------------------------------
-* LM337 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT LM337 ADJ INPUT OUTPUT
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS LM337
-
-* -----------------------------------------------------------------
-* AMS1117_33 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT AMS1117_33 GND OUTPUT INPUT OUTPUT_TAB
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS AMS1117_33
-
-* -----------------------------------------------------------------
-* AMS1117_50 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT AMS1117_50 GND OUTPUT INPUT OUTPUT_TAB
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS AMS1117_50
-
-* -----------------------------------------------------------------
-* LP2950 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT LP2950 INPUT GND OUTPUT
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS LP2950
-
-* === specialty ICs ===
-
-* -----------------------------------------------------------------
-* NE555 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT NE555 GND TRIG OUT RESET CONT THRES DISCH VCC
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS NE555
-
-* -----------------------------------------------------------------
-* LM386 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT LM386 GAIN INPUT_NEG INPUT_POS GND VOUT VS BYPASS GAIN
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS LM386
-
-* -----------------------------------------------------------------
-* DS18B20 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT DS18B20 GND DQ VDD
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS DS18B20
-
-* -----------------------------------------------------------------
-* DS1307 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT DS1307 X1 X2 VBAT GND SDA SCL SQW_OUT VCC
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS DS1307
-
-* -----------------------------------------------------------------
-* MAX7219 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT MAX7219 DIN DIG_0 DIG_4 GND DIG_6 DIG_2 DIG_3 DIG_7 GND DIG_5 DIG_1 LOAD CLK SEG_A SEG_F SEG_B SEG_G ISET V_POS SEG_C SEG_E SEG_DP SEG_D DOUT
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS MAX7219
-
-* === sensors ===
-
-* -----------------------------------------------------------------
-* TMP36 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT TMP36 Vs_plus VOUT GND
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS TMP36
-
-* -----------------------------------------------------------------
-* BMP280 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT BMP280 GND CSB SDI_SDA SCK_SCL SDO_ADDR VDDIO GND VDD
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS BMP280
-
-* -----------------------------------------------------------------
-* MPU6050 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT MPU6050 CLKIN AUX_DA AUX_CL VLOGIC AD0 REGOUT FSYNC INT VDD GND CPOUT SCL SDA
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS MPU6050
-
-* -----------------------------------------------------------------
-* HCSR04 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT HCSR04 VCC TRIG ECHO GND
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS HCSR04
-
-* === power/interface ===
-
-* -----------------------------------------------------------------
-* MOC3021 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT MOC3021 ANODE CATHODE MT1 MT2
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS MOC3021
-
-* -----------------------------------------------------------------
-* OPTO_4N25 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT OPTO_4N25 ANODE CATHODE EMITTER COLLECTOR BASE
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS OPTO_4N25
-
-* -----------------------------------------------------------------
-* OPTO_TLP521 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT OPTO_TLP521 ANODE CATHODE EMITTER COLLECTOR
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS OPTO_TLP521
-
-* -----------------------------------------------------------------
-* TLC5940 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT TLC5940 OUT1 OUT0 VPRG SIN SCLK XLAT BLANK GND VCC IREF DCPRG GSCLK SOUT XERR OUT15 OUT14 OUT13 OUT12 OUT11 OUT10 OUT9 OUT8 OUT7 OUT6 OUT5 OUT4 OUT3 OUT2
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS TLC5940
-
-* -----------------------------------------------------------------
-* MAX232 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT MAX232 C1_POS V_POS C1_NEG C2_POS C2_NEG V_NEG T2OUT R2IN R2OUT T2IN T1IN R1OUT R1IN T1OUT GND VCC
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS MAX232
-
-* === microcontrollers ===
-
-* -----------------------------------------------------------------
-* ATmega328P — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT ATmega328P PC6 PD0 PD1 PD2 PD3 PD4 VCC GND_1 PB6 PB7 PD5 PD6 PD7 PB0 PB1 PB2 PB3 PB4 PB5 AVCC AREF GND_2 PC0 PC1 PC2 PC3 PC4 PC5
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS ATmega328P
-
-* -----------------------------------------------------------------
-* ATmega2560 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT ATmega2560 PG5 PE0 PE1 PE2 PE3 PE4 PE5 PE6 PE7 VCC_1 GND_1 PH0 PH1 PH2 PH3 PH4 PH5 PH6 PB0 PB1 PB2 PB3 PB4 PB5 PB6 PB7 PH7 PG3 PG4 RESET VCC_2 GND_2 XTAL2 XTAL1 PL0 PL1 PL2 PL3 PL4 PL5 PL6 PL7 PD0 PD1 PD2 PD3 PD4 PD5 PD6 PD7 PG0 PG1 PC0 PC1 PC2 PC3 PC4 PC5 PC6 PC7 VCC_3 GND_3 PJ0 PJ1 PJ2 PJ3 PJ4 PJ5 PJ6 PG2 PA7 PA6 PA5 PA4 PA3 PA2 PA1 PA0 PJ7 VCC_4 GND_4 PK7 PK6 PK5 PK4 PK3 PK2 PK1 PK0 PF7 PF6 PF5 PF4 PF3 PF2 PF1 PF0 AREF GND_5 AVCC
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS ATmega2560
-
-* -----------------------------------------------------------------
-* ATmega32U4 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT ATmega32U4 PE6 UVCC D- D+ UGND UCAP VBUS PB0 PB1 PB2 PB3 PB7 RESET VCC_1 GND_1 XTAL2 XTAL1 PD0 PD1 PD2 PD3 PD5 GND_2 VCC_2 PD4 PD6 PD7 PB4 PB5 PB6 PC6 PC7 PE2 VCC_3 GND_3 PF7 PF6 PF5 PF4 PF1 PF0 AREF GND_4 AVCC
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS ATmega32U4
-
-* -----------------------------------------------------------------
-* ATtiny85 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT ATtiny85 PB5 PB3 PB4 GND PB0 PB1 PB2 VCC
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS ATtiny85
-
-* -----------------------------------------------------------------
-* ATtiny84 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT ATtiny84 VCC PB0 PB1 PB3 PB2 PA7 PA6 PA5 PA4 PA3 PA2 PA1 PA0 GND
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS ATtiny84
-
-* -----------------------------------------------------------------
-* STM32F103C8T6 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT STM32F103C8T6 VBAT PC13 PC14 PC15 PD0 PD1 NRST VSSA VDDA PA0 PA1 PA2 PA3 PA4 PA5 PA6 PA7 PB0 PB1 VSS_1 VDD_1 PB2 PB10 PB11 VSS_2 VDD_2 PB12 PB13 PB14 PB15 PA8 PA9 PA10 PA11 PA12 PA13 VSS_3 VDD_3 PA14 PA15 PB3 PB4 PB5 PB6 PB7 BOOT0 PB8 PB9
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS STM32F103C8T6
-
-* -----------------------------------------------------------------
-* STM32F411CEU6 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT STM32F411CEU6 VBAT PC13 PC14 PC15 PH0 PH1 NRST VSSA VDDA PA0 PA1 PA2 PA3 PA4 PA5 PA6 PA7 PB0 PB1 PB2 PB10 VCAP_1 VSS_1 VDD_1 PB12 PB13 PB14 PB15 PA8 PA9 PA10 PA11 PA12 PA13 VSS_2 VDD_2 PA14 PA15 PB3 PB4 PB5 PB6 PB7 BOOT0 PB8 PB9 VSS_3 VDD_3
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS STM32F411CEU6
-
-* -----------------------------------------------------------------
-* RP2040 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT RP2040 IOVDD_1 GP0 GP1 GP2 GP3 GP4 GP5 GP6 GP7 IOVDD_2 GP8 GP9 GP10 GP11 GP12 GP13 GP14 GP15 TESTEN XIN XOUT IOVDD_3 DVDD_1 SWCLK SWDIO RUN GP16 GP17 GP18 GP19 GP20 GP21 IOVDD_4 GP22 GP23 GP24 GP25 GP26 GP27 GP28 GP29 IOVDD_5 ADC_AVDD VREG_VIN VREG_VOUT USB_DM USB_DP USB_VDD IOVDD_6 DVDD_2 QSPI_SD3 QSPI_SCLK QSPI_SD0 QSPI_SD2 QSPI_SD1 QSPI_SS_N
-* Replace with vendor SPICE model for accurate simulation.
-.ENDS RP2040
-
-* -----------------------------------------------------------------
-* ESP32_WROOM_32 — placeholder (no behavioural model).
-* Pin order matches the exporter's pin-number sort.
-.SUBCKT ESP32_WROOM_32 GND_1 3V3 EN SENSOR_VP SENSOR_VN GPIO34 GPIO35 GPIO32 GPIO33 GPIO25 GPIO26 GPIO27 GPIO14 GPIO12 GND_2 GPIO13 SD2 SD3 CMD CLK SD0 SD1 GPIO15 GPIO2 GPIO0 GPIO4 GPIO16 GPIO17 GPIO5 GPIO18 GPIO19 GPIO21 RXD0 TXD0 GPIO22 GPIO23 GND_3
+.SUBCKT ESP32_WROOM_32 GND_1 3V3 EN SENSOR_VP SENSOR_VN GPIO34 GPIO35 GPIO32 GPIO33 GPIO25 GPIO26 GPIO27 GPIO14 GPIO12 GND_15 GPIO13 SD2 SD3 CMD CLK SD0 SD1 GPIO15 GPIO2 GPIO0 GPIO4 GPIO16 GPIO17 GPIO5 GPIO18 GPIO19 GPIO21 RXD0 TXD0 GPIO22 GPIO23 GND_38
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS ESP32_WROOM_32
 
