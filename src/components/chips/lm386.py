@@ -28,8 +28,8 @@ class LM386(Chip):
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1, 'GAIN',   Direction.BIDIR, Analog),
-        (2, '-INPUT', Direction.IN,    Analog),
-        (3, '+INPUT', Direction.IN,    Analog),
+        (2, 'INPUT_NEG', Direction.IN,    Analog),
+        (3, 'INPUT_POS', Direction.IN,    Analog),
         (4, 'GND',    Direction.IN,    Analog),
         (5, 'VOUT',   Direction.OUT,   Analog),
         (6, 'VS',     Direction.IN,    Analog),

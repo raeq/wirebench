@@ -4,13 +4,13 @@ from framework.port import Direction
 
 EXPECTED_PINS = (
     (1, 'EMIT_OUT', Direction.OUT),
-    (2, 'IN+',      Direction.IN),
-    (3, 'IN-',      Direction.IN),
-    (4, 'VCC-',     Direction.IN),
+    (2, 'IN_POS',      Direction.IN),
+    (3, 'IN_NEG',      Direction.IN),
+    (4, 'VCC_NEG',     Direction.IN),
     (5, 'BALANCE',  Direction.IN),
     (6, 'BAL_STRB', Direction.IN),
     (7, 'COL_OUT',  Direction.OUT),
-    (8, 'VCC+',     Direction.IN),
+    (8, 'VCC_POS',     Direction.IN),
 )
 
 

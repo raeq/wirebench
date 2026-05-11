@@ -28,8 +28,8 @@ class ATmega32U4(Chip):
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (  1, 'PE6',          Direction.BIDIR,  Digital),
         (  2, 'UVCC',         Direction.IN,     Analog),
-        (  3, 'D-',           Direction.BIDIR,  Analog),
-        (  4, 'D+',           Direction.BIDIR,  Analog),
+        (  3, 'D_NEG',           Direction.BIDIR,  Analog),
+        (  4, 'D_POS',           Direction.BIDIR,  Analog),
         (  5, 'UGND',         Direction.IN,     Analog),
         (  6, 'UCAP',         Direction.IN,     Analog),
         (  7, 'VBUS',         Direction.IN,     Analog),

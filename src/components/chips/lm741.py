@@ -30,12 +30,12 @@ class LM741(Chip):
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1, 'OFFSET_N1', Direction.IN,  Analog),
-        (2, 'IN-',       Direction.IN,  Analog),
-        (3, 'IN+',       Direction.IN,  Analog),
-        (4, 'V-',        Direction.IN,  Analog),
+        (2, 'IN_NEG',       Direction.IN,  Analog),
+        (3, 'IN_POS',       Direction.IN,  Analog),
+        (4, 'V_NEG',        Direction.IN,  Analog),
         (5, 'OFFSET_N2', Direction.IN,  Analog),
         (6, 'OUT',       Direction.OUT, Analog),
-        (7, 'V+',        Direction.IN,  Analog),
+        (7, 'V_POS',        Direction.IN,  Analog),
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

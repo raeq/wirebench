@@ -261,8 +261,8 @@
 |----:|------|-----------|
 | 1 | PE6 | BIDIR |
 | 2 | UVCC | power_in |
-| 3 | D- | BIDIR |
-| 4 | D+ | BIDIR |
+| 3 | D_NEG | BIDIR |
+| 4 | D_POS | BIDIR |
 | 5 | UGND | power_in |
 | 6 | UCAP | power_in |
 | 7 | VBUS | power_in |
@@ -409,8 +409,8 @@
 | 31 | PA8 | BIDIR |
 | 32 | PA9 / USART1_TX | BIDIR |
 | 33 | PA10 / USART1_RX | BIDIR |
-| 34 | PA11 / USB D- | BIDIR |
-| 35 | PA12 / USB D+ | BIDIR |
+| 34 | PA11 / USB D_NEG | BIDIR |
+| 35 | PA12 / USB D_POS | BIDIR |
 | 36 | PA13 / JTMS-SWDIO | BIDIR |
 | 37 | VSS_3 | power_in |
 | 38 | VDD_3 | power_in |
@@ -1177,13 +1177,13 @@ _Centre exposed pad: connect to GND._
 | Pin | Name   | Direction |
 |-----|--------|-----------|
 | 1   | OUT1   | OUT       |
-| 2   | IN1-   | IN        |
-| 3   | IN1+   | IN        |
-| 4   | V-/GND | power_in  |
-| 5   | IN2+   | IN        |
-| 6   | IN2-   | IN        |
+| 2   | IN1_NEG   | IN        |
+| 3   | IN1_POS   | IN        |
+| 4   | V_NEG/GND | power_in  |
+| 5   | IN2_POS   | IN        |
+| 6   | IN2_NEG   | IN        |
 | 7   | OUT2   | OUT       |
-| 8   | V+     | power_in  |
+| 8   | V_POS     | power_in  |
 
 - **KiCad footprint**: `Package_DIP:DIP-8_W7.62mm`
 - **Description**: Dual bipolar op-amp for single-supply operation with inputs that include ground. GBW ~1.1 MHz, NOT rail-to-rail.
@@ -1202,18 +1202,18 @@ _Centre exposed pad: connect to GND._
 | Pin | Name | Direction |
 |-----|------|-----------|
 | 1   | OUT1 | OUT       |
-| 2   | IN1- | IN        |
-| 3   | IN1+ | IN        |
-| 4   | V+   | power_in  |
-| 5   | IN2+ | IN        |
-| 6   | IN2- | IN        |
+| 2   | IN1_NEG | IN        |
+| 3   | IN1_POS | IN        |
+| 4   | V_POS   | power_in  |
+| 5   | IN2_POS | IN        |
+| 6   | IN2_NEG | IN        |
 | 7   | OUT2 | OUT       |
 | 8   | OUT3 | OUT       |
-| 9   | IN3- | IN        |
-| 10  | IN3+ | IN        |
-| 11  | V-/GND | power_in |
-| 12  | IN4+ | IN        |
-| 13  | IN4- | IN        |
+| 9   | IN3_NEG | IN        |
+| 10  | IN3_POS | IN        |
+| 11  | V_NEG/GND | power_in |
+| 12  | IN4_POS | IN        |
+| 13  | IN4_NEG | IN        |
 | 14  | OUT4 | OUT       |
 
 - **KiCad footprint**: `Package_DIP:DIP-14_W7.62mm`
@@ -1233,13 +1233,13 @@ _Centre exposed pad: connect to GND._
 | Pin | Name | Direction |
 |-----|------|-----------|
 | 1   | OUT1 | OUT       |
-| 2   | IN1- | IN        |
-| 3   | IN1+ | IN        |
-| 4   | V-   | power_in  |
-| 5   | IN2+ | IN        |
-| 6   | IN2- | IN        |
+| 2   | IN1_NEG | IN        |
+| 3   | IN1_POS | IN        |
+| 4   | V_NEG   | power_in  |
+| 5   | IN2_POS | IN        |
+| 6   | IN2_NEG | IN        |
 | 7   | OUT2 | OUT       |
-| 8   | V+   | power_in  |
+| 8   | V_POS   | power_in  |
 
 - **KiCad footprint**: `Package_DIP:DIP-8_W7.62mm`
 - **Description**: Dual JFET-input op-amp, low noise, popular for audio. GBW ~3 MHz, slew rate 13 V/µs.
@@ -1258,18 +1258,18 @@ _Centre exposed pad: connect to GND._
 | Pin | Name | Direction |
 |-----|------|-----------|
 | 1   | OUT1 | OUT       |
-| 2   | IN1- | IN        |
-| 3   | IN1+ | IN        |
-| 4   | V+   | power_in  |
-| 5   | IN2+ | IN        |
-| 6   | IN2- | IN        |
+| 2   | IN1_NEG | IN        |
+| 3   | IN1_POS | IN        |
+| 4   | V_POS   | power_in  |
+| 5   | IN2_POS | IN        |
+| 6   | IN2_NEG | IN        |
 | 7   | OUT2 | OUT       |
 | 8   | OUT3 | OUT       |
-| 9   | IN3- | IN        |
-| 10  | IN3+ | IN        |
-| 11  | V-   | power_in  |
-| 12  | IN4+ | IN        |
-| 13  | IN4- | IN        |
+| 9   | IN3_NEG | IN        |
+| 10  | IN3_POS | IN        |
+| 11  | V_NEG   | power_in  |
+| 12  | IN4_POS | IN        |
+| 13  | IN4_NEG | IN        |
 | 14  | OUT4 | OUT       |
 
 - **KiCad footprint**: `Package_DIP:DIP-14_W7.62mm`
@@ -1289,12 +1289,12 @@ _Centre exposed pad: connect to GND._
 | Pin | Name        | Direction |
 |-----|-------------|-----------|
 | 1   | OFFSET_N1   | IN        |
-| 2   | IN-         | IN        |
-| 3   | IN+         | IN        |
-| 4   | V-          | power_in  |
+| 2   | IN_NEG         | IN        |
+| 3   | IN_POS         | IN        |
+| 4   | V_NEG          | power_in  |
 | 5   | OFFSET_N2   | IN        |
 | 6   | OUT         | OUT       |
-| 7   | V+          | power_in  |
+| 7   | V_POS          | power_in  |
 | 8   | NC          | —         |
 
 - **KiCad footprint**: `Package_DIP:DIP-8_W7.62mm`
@@ -1314,11 +1314,11 @@ _Centre exposed pad: connect to GND._
 | Pin | Name | Direction |
 |-----|------|-----------|
 | 1   | OUT1 | OUT       |
-| 2   | IN1- | IN        |
-| 3   | IN1+ | IN        |
+| 2   | IN1_NEG | IN        |
+| 3   | IN1_POS | IN        |
 | 4   | VSS  | power_in  |
-| 5   | IN2+ | IN        |
-| 6   | IN2- | IN        |
+| 5   | IN2_POS | IN        |
+| 6   | IN2_NEG | IN        |
 | 7   | OUT2 | OUT       |
 | 8   | VDD  | power_in  |
 
@@ -1339,13 +1339,13 @@ _Centre exposed pad: connect to GND._
 | Pin | Name | Direction |
 |-----|------|-----------|
 | 1   | OUT1 | OUT       |
-| 2   | IN1- | IN        |
-| 3   | IN1+ | IN        |
-| 4   | V-   | power_in  |
-| 5   | IN2+ | IN        |
-| 6   | IN2- | IN        |
+| 2   | IN1_NEG | IN        |
+| 3   | IN1_POS | IN        |
+| 4   | V_NEG   | power_in  |
+| 5   | IN2_POS | IN        |
+| 6   | IN2_NEG | IN        |
 | 7   | OUT2 | OUT       |
-| 8   | V+   | power_in  |
+| 8   | V_POS   | power_in  |
 
 - **KiCad footprint**: `Package_DIP:DIP-8_W7.62mm`
 - **Description**: Premium dual FET-input audio op-amp. GBW 8 MHz, slew 20 V/µs, THD+N 0.00008%.
@@ -1364,13 +1364,13 @@ _Centre exposed pad: connect to GND._
 | Pin | Name | Direction |
 |-----|------|-----------|
 | 1   | OUT1 | OUT       |
-| 2   | IN1- | IN        |
-| 3   | IN1+ | IN        |
-| 4   | V-/GND | power_in |
-| 5   | IN2+ | IN        |
-| 6   | IN2- | IN        |
+| 2   | IN1_NEG | IN        |
+| 3   | IN1_POS | IN        |
+| 4   | V_NEG/GND | power_in |
+| 5   | IN2_POS | IN        |
+| 6   | IN2_NEG | IN        |
 | 7   | OUT2 | OUT       |
-| 8   | V+   | power_in  |
+| 8   | V_POS   | power_in  |
 
 - **KiCad footprint**: `Package_SO:SOIC-8_3.9x4.9mm_P1.27mm` (VERIFY: no through-hole variant stocked by TI; DIP-8 footprint can be used with compatible second-source if needed)
 - **Description**: Low-voltage single-supply variant of LM358 family. GBW ~1 MHz.
@@ -1395,14 +1395,14 @@ _Centre exposed pad: connect to GND._
 | 1   | OUT2 | OUT       |
 | 2   | OUT1 | OUT       |
 | 3   | VCC  | power_in  |
-| 4   | IN1- | IN        |
-| 5   | IN1+ | IN        |
-| 6   | IN2- | IN        |
-| 7   | IN2+ | IN        |
-| 8   | IN3- | IN        |
-| 9   | IN3+ | IN        |
-| 10  | IN4- | IN        |
-| 11  | IN4+ | IN        |
+| 4   | IN1_NEG | IN        |
+| 5   | IN1_POS | IN        |
+| 6   | IN2_NEG | IN        |
+| 7   | IN2_POS | IN        |
+| 8   | IN3_NEG | IN        |
+| 9   | IN3_POS | IN        |
+| 10  | IN4_NEG | IN        |
+| 11  | IN4_POS | IN        |
 | 12  | GND  | power_in  |
 | 13  | OUT4 | OUT       |
 | 14  | OUT3 | OUT       |
@@ -1425,8 +1425,8 @@ _Centre exposed pad: connect to GND._
 |-----|------|-----------|
 | 1   | OUT  | OUT       |
 | 2   | GND  | power_in  |
-| 3   | IN+  | IN        |
-| 4   | IN-  | IN        |
+| 3   | IN_POS  | IN        |
+| 4   | IN_NEG  | IN        |
 | 5   | VCC  | power_in  |
 
 - **KiCad footprint**: `Package_TO_SOT_SMD:SOT-23-5`
@@ -1446,13 +1446,13 @@ _Centre exposed pad: connect to GND._
 | Pin | Name     | Direction |
 |-----|----------|-----------|
 | 1   | EMIT_OUT | OUT       |
-| 2   | IN+      | IN        |
-| 3   | IN-      | IN        |
-| 4   | VCC-     | power_in  |
+| 2   | IN_POS      | IN        |
+| 3   | IN_NEG      | IN        |
+| 4   | VCC_NEG     | power_in  |
 | 5   | BALANCE  | IN        |
 | 6   | BAL/STRB | IN        |
 | 7   | COL_OUT  | OUT       |
-| 8   | VCC+     | power_in  |
+| 8   | VCC_POS     | power_in  |
 
 - **KiCad footprint**: `Package_DIP:DIP-8_W7.62mm`
 - **Description**: Single high-speed (165 ns) differential comparator with independently accessible open-collector and emitter outputs, plus strobe.
@@ -1991,8 +1991,8 @@ _Centre exposed pad: connect to GND._
 | Pin | Name   | Direction |
 |-----|--------|-----------|
 | 1   | GAIN   | Passive   |
-| 2   | -INPUT | IN        |
-| 3   | +INPUT | IN        |
+| 2   | INPUT_NEG | IN        |
+| 3   | INPUT_POS | IN        |
 | 4   | GND    | power_in  |
 | 5   | VOUT   | OUT       |
 | 6   | VS     | power_in  |
@@ -2078,7 +2078,7 @@ _Centre exposed pad: connect to GND._
 | 16  | SEG B  | OUT       |
 | 17  | SEG G  | OUT       |
 | 18  | ISET   | IN        |
-| 19  | V+     | power_in  |
+| 19  | V_POS     | power_in  |
 | 20  | SEG C  | OUT       |
 | 21  | SEG E  | OUT       |
 | 22  | SEG DP | OUT       |
@@ -2319,12 +2319,12 @@ _Centre exposed pad: connect to GND._
 
 | Pin | Name   | Direction       |
 |-----|--------|-----------------|
-| 1   | C1+    | passive (cap)   |
-| 2   | V+     | OUT (≈ +10 V)   |
-| 3   | C1-    | passive (cap)   |
-| 4   | C2+    | passive (cap)   |
-| 5   | C2-    | passive (cap)   |
-| 6   | V-     | OUT (≈ -10 V)   |
+| 1   | C1_POS    | passive (cap)   |
+| 2   | V_POS     | OUT (≈ +10 V)   |
+| 3   | C1_NEG    | passive (cap)   |
+| 4   | C2_POS    | passive (cap)   |
+| 5   | C2_NEG    | passive (cap)   |
+| 6   | V_NEG     | OUT (≈ -10 V)   |
 | 7   | T2OUT  | OUT (RS-232)    |
 | 8   | R2IN   | IN (RS-232)     |
 | 9   | R2OUT  | OUT (TTL)       |

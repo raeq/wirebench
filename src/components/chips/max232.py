@@ -29,12 +29,12 @@ class MAX232(Chip):
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-16_W7.62mm"
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
-        (1,  'C1+',   Direction.IN,  Analog),
-        (2,  'V+',    Direction.OUT, Analog),
-        (3,  'C1-',   Direction.IN,  Analog),
-        (4,  'C2+',   Direction.IN,  Analog),
-        (5,  'C2-',   Direction.IN,  Analog),
-        (6,  'V-',    Direction.OUT, Analog),
+        (1,  'C1_POS',   Direction.IN,  Analog),
+        (2,  'V_POS',    Direction.OUT, Analog),
+        (3,  'C1_NEG',   Direction.IN,  Analog),
+        (4,  'C2_POS',   Direction.IN,  Analog),
+        (5,  'C2_NEG',   Direction.IN,  Analog),
+        (6,  'V_NEG',    Direction.OUT, Analog),
         (7,  'T2OUT', Direction.OUT, Analog),
         (8,  'R2IN',  Direction.IN,  Analog),
         (9,  'R2OUT', Direction.OUT, Digital),

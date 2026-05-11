@@ -46,7 +46,7 @@ class MAX7219(Chip):
         (16, 'SEG_B',  Direction.OUT, Digital),
         (17, 'SEG_G',  Direction.OUT, Digital),
         (18, 'ISET',   Direction.IN,  Analog),
-        (19, 'V+',     Direction.IN,  Analog),
+        (19, 'V_POS',     Direction.IN,  Analog),
         (20, 'SEG_C',  Direction.OUT, Digital),
         (21, 'SEG_E',  Direction.OUT, Digital),
         (22, 'SEG_DP', Direction.OUT, Digital),

@@ -4,8 +4,8 @@ from framework.port import Direction
 
 EXPECTED_PINS = (
     (1, 'GAIN',   Direction.BIDIR),
-    (2, '-INPUT', Direction.IN),
-    (3, '+INPUT', Direction.IN),
+    (2, 'INPUT_NEG', Direction.IN),
+    (3, 'INPUT_POS', Direction.IN),
     (4, 'GND',    Direction.IN),
     (5, 'VOUT',   Direction.OUT),
     (6, 'VS',     Direction.IN),

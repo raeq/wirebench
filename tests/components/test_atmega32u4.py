@@ -5,8 +5,8 @@ from framework.port import Direction
 EXPECTED_PINS = (
     (  1, 'PE6',          Direction.BIDIR),
     (  2, 'UVCC',         Direction.IN),
-    (  3, 'D-',           Direction.BIDIR),
-    (  4, 'D+',           Direction.BIDIR),
+    (  3, 'D_NEG',           Direction.BIDIR),
+    (  4, 'D_POS',           Direction.BIDIR),
     (  5, 'UGND',         Direction.IN),
     (  6, 'UCAP',         Direction.IN),
     (  7, 'VBUS',         Direction.IN),

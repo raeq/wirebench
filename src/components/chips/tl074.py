@@ -29,18 +29,18 @@ class TL074(Chip):
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1,  'OUT1', Direction.OUT, Analog),
-        (2,  'IN1-', Direction.IN,  Analog),
-        (3,  'IN1+', Direction.IN,  Analog),
-        (4,  'V+',   Direction.IN,  Analog),
-        (5,  'IN2+', Direction.IN,  Analog),
-        (6,  'IN2-', Direction.IN,  Analog),
+        (2,  'IN1_NEG', Direction.IN,  Analog),
+        (3,  'IN1_POS', Direction.IN,  Analog),
+        (4,  'V_POS',   Direction.IN,  Analog),
+        (5,  'IN2_POS', Direction.IN,  Analog),
+        (6,  'IN2_NEG', Direction.IN,  Analog),
         (7,  'OUT2', Direction.OUT, Analog),
         (8,  'OUT3', Direction.OUT, Analog),
-        (9,  'IN3-', Direction.IN,  Analog),
-        (10, 'IN3+', Direction.IN,  Analog),
-        (11, 'V-',   Direction.IN,  Analog),
-        (12, 'IN4+', Direction.IN,  Analog),
-        (13, 'IN4-', Direction.IN,  Analog),
+        (9,  'IN3_NEG', Direction.IN,  Analog),
+        (10, 'IN3_POS', Direction.IN,  Analog),
+        (11, 'V_NEG',   Direction.IN,  Analog),
+        (12, 'IN4_POS', Direction.IN,  Analog),
+        (13, 'IN4_NEG', Direction.IN,  Analog),
         (14, 'OUT4', Direction.OUT, Analog),
     )
 

@@ -21,7 +21,7 @@ EXPECTED_PINS = (
     (16, 'SEG_B',  Direction.OUT),
     (17, 'SEG_G',  Direction.OUT),
     (18, 'ISET',   Direction.IN),
-    (19, 'V+',     Direction.IN),
+    (19, 'V_POS',     Direction.IN),
     (20, 'SEG_C',  Direction.OUT),
     (21, 'SEG_E',  Direction.OUT),
     (22, 'SEG_DP', Direction.OUT),

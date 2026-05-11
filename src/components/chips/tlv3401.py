@@ -29,8 +29,8 @@ class TLV3401(Chip):
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1, 'OUT', Direction.OUT, Analog),
         (2, 'GND', Direction.IN,  Analog),
-        (3, 'IN+', Direction.IN,  Analog),
-        (4, 'IN-', Direction.IN,  Analog),
+        (3, 'IN_POS', Direction.IN,  Analog),
+        (4, 'IN_NEG', Direction.IN,  Analog),
         (5, 'VCC', Direction.IN,  Analog),
     )
 

@@ -4,12 +4,12 @@ from framework.port import Direction
 
 EXPECTED_PINS = (
     (1, 'OFFSET_N1', Direction.IN),
-    (2, 'IN-',       Direction.IN),
-    (3, 'IN+',       Direction.IN),
-    (4, 'V-',        Direction.IN),
+    (2, 'IN_NEG',       Direction.IN),
+    (3, 'IN_POS',       Direction.IN),
+    (4, 'V_NEG',        Direction.IN),
     (5, 'OFFSET_N2', Direction.IN),
     (6, 'OUT',       Direction.OUT),
-    (7, 'V+',        Direction.IN),
+    (7, 'V_POS',        Direction.IN),
 )
 
 

@@ -183,56 +183,56 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * LM358 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LM358 OUT1 IN1- IN1+ V_GND IN2+ IN2- OUT2 V+
+.SUBCKT LM358 OUT1 IN1_NEG IN1_POS V_GND IN2_POS IN2_NEG OUT2 V_POS
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LM358
 
 * -----------------------------------------------------------------
 * LM324 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LM324 OUT1 IN1- IN1+ V+ IN2+ IN2- OUT2 OUT3 IN3- IN3+ V_GND IN4+ IN4- OUT4
+.SUBCKT LM324 OUT1 IN1_NEG IN1_POS V_POS IN2_POS IN2_NEG OUT2 OUT3 IN3_NEG IN3_POS V_GND IN4_POS IN4_NEG OUT4
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LM324
 
 * -----------------------------------------------------------------
 * TL072 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT TL072 OUT1 IN1- IN1+ V- IN2+ IN2- OUT2 V+
+.SUBCKT TL072 OUT1 IN1_NEG IN1_POS V_NEG IN2_POS IN2_NEG OUT2 V_POS
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS TL072
 
 * -----------------------------------------------------------------
 * TL074 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT TL074 OUT1 IN1- IN1+ V+ IN2+ IN2- OUT2 OUT3 IN3- IN3+ V- IN4+ IN4- OUT4
+.SUBCKT TL074 OUT1 IN1_NEG IN1_POS V_POS IN2_POS IN2_NEG OUT2 OUT3 IN3_NEG IN3_POS V_NEG IN4_POS IN4_NEG OUT4
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS TL074
 
 * -----------------------------------------------------------------
 * LM741 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LM741 OFFSET_N1 IN- IN+ V- OFFSET_N2 OUT V+
+.SUBCKT LM741 OFFSET_N1 IN_NEG IN_POS V_NEG OFFSET_N2 OUT V_POS
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LM741
 
 * -----------------------------------------------------------------
 * MCP6002 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT MCP6002 OUT1 IN1- IN1+ VSS IN2+ IN2- OUT2 VDD
+.SUBCKT MCP6002 OUT1 IN1_NEG IN1_POS VSS IN2_POS IN2_NEG OUT2 VDD
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS MCP6002
 
 * -----------------------------------------------------------------
 * OPA2134 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT OPA2134 OUT1 IN1- IN1+ V- IN2+ IN2- OUT2 V+
+.SUBCKT OPA2134 OUT1 IN1_NEG IN1_POS V_NEG IN2_POS IN2_NEG OUT2 V_POS
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS OPA2134
 
 * -----------------------------------------------------------------
 * LMV358 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LMV358 OUT1 IN1- IN1+ V_GND IN2+ IN2- OUT2 V+
+.SUBCKT LMV358 OUT1 IN1_NEG IN1_POS V_GND IN2_POS IN2_NEG OUT2 V_POS
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LMV358
 
@@ -241,21 +241,21 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * LM339 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LM339 OUT2 OUT1 VCC IN1- IN1+ IN2- IN2+ IN3- IN3+ IN4- IN4+ GND OUT4 OUT3
+.SUBCKT LM339 OUT2 OUT1 VCC IN1_NEG IN1_POS IN2_NEG IN2_POS IN3_NEG IN3_POS IN4_NEG IN4_POS GND OUT4 OUT3
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LM339
 
 * -----------------------------------------------------------------
 * TLV3401 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT TLV3401 OUT GND IN+ IN- VCC
+.SUBCKT TLV3401 OUT GND IN_POS IN_NEG VCC
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS TLV3401
 
 * -----------------------------------------------------------------
 * LM311 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LM311 EMIT_OUT IN+ IN- VCC- BALANCE BAL_STRB COL_OUT VCC+
+.SUBCKT LM311 EMIT_OUT IN_POS IN_NEG VCC_NEG BALANCE BAL_STRB COL_OUT VCC_POS
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LM311
 
@@ -329,7 +329,7 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * LM386 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LM386 GAIN -INPUT +INPUT GND VOUT VS BYPASS GAIN
+.SUBCKT LM386 GAIN INPUT_NEG INPUT_POS GND VOUT VS BYPASS GAIN
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LM386
 
@@ -350,7 +350,7 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * MAX7219 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT MAX7219 DIN DIG_0 DIG_4 GND DIG_6 DIG_2 DIG_3 DIG_7 GND DIG_5 DIG_1 LOAD CLK SEG_A SEG_F SEG_B SEG_G ISET V+ SEG_C SEG_E SEG_DP SEG_D DOUT
+.SUBCKT MAX7219 DIN DIG_0 DIG_4 GND DIG_6 DIG_2 DIG_3 DIG_7 GND DIG_5 DIG_1 LOAD CLK SEG_A SEG_F SEG_B SEG_G ISET V_POS SEG_C SEG_E SEG_DP SEG_D DOUT
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS MAX7219
 
@@ -417,7 +417,7 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * MAX232 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT MAX232 C1+ V+ C1- C2+ C2- V- T2OUT R2IN R2OUT T2IN T1IN R1OUT R1IN T1OUT GND VCC
+.SUBCKT MAX232 C1_POS V_POS C1_NEG C2_POS C2_NEG V_NEG T2OUT R2IN R2OUT T2IN T1IN R1OUT R1IN T1OUT GND VCC
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS MAX232
 
@@ -498,56 +498,56 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * LM358 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LM358 OUT1 IN1- IN1+ V_GND IN2+ IN2- OUT2 V+
+.SUBCKT LM358 OUT1 IN1_NEG IN1_POS V_GND IN2_POS IN2_NEG OUT2 V_POS
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LM358
 
 * -----------------------------------------------------------------
 * LM324 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LM324 OUT1 IN1- IN1+ V+ IN2+ IN2- OUT2 OUT3 IN3- IN3+ V_GND IN4+ IN4- OUT4
+.SUBCKT LM324 OUT1 IN1_NEG IN1_POS V_POS IN2_POS IN2_NEG OUT2 OUT3 IN3_NEG IN3_POS V_GND IN4_POS IN4_NEG OUT4
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LM324
 
 * -----------------------------------------------------------------
 * TL072 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT TL072 OUT1 IN1- IN1+ V- IN2+ IN2- OUT2 V+
+.SUBCKT TL072 OUT1 IN1_NEG IN1_POS V_NEG IN2_POS IN2_NEG OUT2 V_POS
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS TL072
 
 * -----------------------------------------------------------------
 * TL074 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT TL074 OUT1 IN1- IN1+ V+ IN2+ IN2- OUT2 OUT3 IN3- IN3+ V- IN4+ IN4- OUT4
+.SUBCKT TL074 OUT1 IN1_NEG IN1_POS V_POS IN2_POS IN2_NEG OUT2 OUT3 IN3_NEG IN3_POS V_NEG IN4_POS IN4_NEG OUT4
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS TL074
 
 * -----------------------------------------------------------------
 * LM741 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LM741 OFFSET_N1 IN- IN+ V- OFFSET_N2 OUT V+
+.SUBCKT LM741 OFFSET_N1 IN_NEG IN_POS V_NEG OFFSET_N2 OUT V_POS
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LM741
 
 * -----------------------------------------------------------------
 * MCP6002 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT MCP6002 OUT1 IN1- IN1+ VSS IN2+ IN2- OUT2 VDD
+.SUBCKT MCP6002 OUT1 IN1_NEG IN1_POS VSS IN2_POS IN2_NEG OUT2 VDD
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS MCP6002
 
 * -----------------------------------------------------------------
 * OPA2134 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT OPA2134 OUT1 IN1- IN1+ V- IN2+ IN2- OUT2 V+
+.SUBCKT OPA2134 OUT1 IN1_NEG IN1_POS V_NEG IN2_POS IN2_NEG OUT2 V_POS
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS OPA2134
 
 * -----------------------------------------------------------------
 * LMV358 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LMV358 OUT1 IN1- IN1+ V_GND IN2+ IN2- OUT2 V+
+.SUBCKT LMV358 OUT1 IN1_NEG IN1_POS V_GND IN2_POS IN2_NEG OUT2 V_POS
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LMV358
 
@@ -556,21 +556,21 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * LM339 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LM339 OUT2 OUT1 VCC IN1- IN1+ IN2- IN2+ IN3- IN3+ IN4- IN4+ GND OUT4 OUT3
+.SUBCKT LM339 OUT2 OUT1 VCC IN1_NEG IN1_POS IN2_NEG IN2_POS IN3_NEG IN3_POS IN4_NEG IN4_POS GND OUT4 OUT3
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LM339
 
 * -----------------------------------------------------------------
 * TLV3401 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT TLV3401 OUT GND IN+ IN- VCC
+.SUBCKT TLV3401 OUT GND IN_POS IN_NEG VCC
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS TLV3401
 
 * -----------------------------------------------------------------
 * LM311 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LM311 EMIT_OUT IN+ IN- VCC- BALANCE BAL_STRB COL_OUT VCC+
+.SUBCKT LM311 EMIT_OUT IN_POS IN_NEG VCC_NEG BALANCE BAL_STRB COL_OUT VCC_POS
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LM311
 
@@ -644,7 +644,7 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * LM386 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT LM386 GAIN -INPUT +INPUT GND VOUT VS BYPASS GAIN
+.SUBCKT LM386 GAIN INPUT_NEG INPUT_POS GND VOUT VS BYPASS GAIN
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS LM386
 
@@ -665,7 +665,7 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * MAX7219 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT MAX7219 DIN DIG_0 DIG_4 GND DIG_6 DIG_2 DIG_3 DIG_7 GND DIG_5 DIG_1 LOAD CLK SEG_A SEG_F SEG_B SEG_G ISET V+ SEG_C SEG_E SEG_DP SEG_D DOUT
+.SUBCKT MAX7219 DIN DIG_0 DIG_4 GND DIG_6 DIG_2 DIG_3 DIG_7 GND DIG_5 DIG_1 LOAD CLK SEG_A SEG_F SEG_B SEG_G ISET V_POS SEG_C SEG_E SEG_DP SEG_D DOUT
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS MAX7219
 
@@ -732,7 +732,7 @@ Bo7 out_7 0 V = IF(V(in_7) > 1.0, 0, 5)
 * -----------------------------------------------------------------
 * MAX232 — placeholder (no behavioural model).
 * Pin order matches the exporter's pin-number sort.
-.SUBCKT MAX232 C1+ V+ C1- C2+ C2- V- T2OUT R2IN R2OUT T2IN T1IN R1OUT R1IN T1OUT GND VCC
+.SUBCKT MAX232 C1_POS V_POS C1_NEG C2_POS C2_NEG V_NEG T2OUT R2IN R2OUT T2IN T1IN R1OUT R1IN T1OUT GND VCC
 * Replace with vendor SPICE model for accurate simulation.
 .ENDS MAX232
 
