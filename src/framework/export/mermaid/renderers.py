@@ -4,6 +4,8 @@ from __future__ import annotations
 from framework.board import Board
 from framework.chip import Chip
 from framework.connector import Connector
+from framework.diode import Diode
+from framework.transistor import Transistor
 
 from framework.export.base import ExporterContext, register_renderer
 
@@ -52,3 +54,15 @@ def render_connector(j: Connector, ctx: ExporterContext) -> str:
     # Connectors are conductors and emit nothing in netlist-style
     # exports. Keep a stub for MRO coverage but return empty.
     return ""
+
+
+@register_renderer(Transistor, format='mermaid')
+def render_transistor(t: Transistor, ctx: ExporterContext) -> str:
+    label = f"{t.refdes}<br/>{type(t).__name__}"
+    return f'{t.refdes}["{_mm_label(label)}"]'
+
+
+@register_renderer(Diode, format='mermaid')
+def render_diode(d: Diode, ctx: ExporterContext) -> str:
+    label = f"{d.refdes}<br/>{type(d).__name__}"
+    return f'{d.refdes}["{_mm_label(label)}"]'

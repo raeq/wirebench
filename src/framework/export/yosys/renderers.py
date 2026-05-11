@@ -13,6 +13,8 @@ from __future__ import annotations
 from framework.board import Board
 from framework.chip import Chip
 from framework.connector import Connector
+from framework.diode import Diode
+from framework.transistor import Transistor
 
 from framework.export.base import ExporterContext, register_renderer
 
@@ -43,3 +45,11 @@ def render_connector(j, ctx: ExporterContext) -> str: return ""
 
 @register_renderer(Board, format='yosys')
 def render_board(b, ctx: ExporterContext) -> str: return ""
+
+
+@register_renderer(Transistor, format='yosys')
+def render_transistor(t, ctx: ExporterContext) -> str: return ""
+
+
+@register_renderer(Diode, format='yosys')
+def render_diode(d, ctx: ExporterContext) -> str: return ""

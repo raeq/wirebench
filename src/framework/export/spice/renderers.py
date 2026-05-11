@@ -13,17 +13,14 @@ from framework.board import Board
 from framework.chip import Chip
 from framework.circuit import Circuit
 from framework.connector import Connector
+from framework.diode import Diode
 from framework.factor import FactorNode
+from framework.transistor import Transistor
 
 from framework.export.base import (
     ExporterContext, SpiceExportConfig, lookup_renderer, register_renderer,
 )
 
-from components.chips.cd4043 import CD4043
-from components.chips.cd4069 import CD4069
-from components.chips.lm393 import LM393
-from components.chips.sn74hc04 import SN74HC04
-from components.chips.uln2003a import ULN2003A
 from components.passives.led import LED
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
@@ -63,12 +60,16 @@ def render_rail(r: Rail, ctx: ExporterContext) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Chips — each one emits an X-instance referencing a .SUBCKT in the lib.
-# Pins are listed in datasheet pin-number order; the model library must
-# declare its .SUBCKT with the same pin list in the same order.
+# Chips — one MRO-dispatched renderer at the Chip base class covers every
+# concrete subclass. Each emits an X-instance referencing a .SUBCKT in the
+# model library; pins are listed in datasheet pin-number order and the
+# .SUBCKT must declare the same pin list in the same order. The model name
+# is the chip's class name.
 # ---------------------------------------------------------------------------
 
-def _render_chip_xinstance(u, ctx: ExporterContext, model_name: str) -> str:
+@register_renderer(Chip, format='spice')
+def render_chip(u: Chip, ctx: ExporterContext) -> str:
+    model_name = type(u).__name__
     nets = [
         ctx.net_name(pin.external)
         for pin in sorted(u.pins, key=lambda p: p.id.number)
@@ -77,29 +78,27 @@ def _render_chip_xinstance(u, ctx: ExporterContext, model_name: str) -> str:
     return f"{u.refdes} {' '.join(nets)} {model_name}"
 
 
-@register_renderer(SN74HC04, format='spice')
-def render_sn74hc04(u: SN74HC04, ctx: ExporterContext) -> str:
-    return _render_chip_xinstance(u, ctx, 'SN74HC04')
+# ---------------------------------------------------------------------------
+# Discretes — transistors (BJT/MOSFET) and diodes.  One MRO-dispatched
+# renderer per family; SPICE element prefix and terminal order come from
+# the Transistor subclass attributes.  Model name = class name.
+# ---------------------------------------------------------------------------
+
+@register_renderer(Transistor, format='spice')
+def render_transistor(t: Transistor, ctx: ExporterContext) -> str:
+    model_name = type(t).__name__
+    nets = [ctx.net_name(t.ports[name]) for name in t._SPICE_PIN_ORDER]
+    ctx.register_model(model_name)
+    return f"{t._SPICE_PREFIX}{t.refdes_number} {' '.join(nets)} {model_name}"
 
 
-@register_renderer(CD4069, format='spice')
-def render_cd4069(u: CD4069, ctx: ExporterContext) -> str:
-    return _render_chip_xinstance(u, ctx, 'CD4069')
-
-
-@register_renderer(LM393, format='spice')
-def render_lm393(u: LM393, ctx: ExporterContext) -> str:
-    return _render_chip_xinstance(u, ctx, 'LM393')
-
-
-@register_renderer(CD4043, format='spice')
-def render_cd4043(u: CD4043, ctx: ExporterContext) -> str:
-    return _render_chip_xinstance(u, ctx, 'CD4043')
-
-
-@register_renderer(ULN2003A, format='spice')
-def render_uln2003a(u: ULN2003A, ctx: ExporterContext) -> str:
-    return _render_chip_xinstance(u, ctx, 'ULN2003A')
+@register_renderer(Diode, format='spice')
+def render_diode(d: Diode, ctx: ExporterContext) -> str:
+    model_name = type(d).__name__
+    anode = ctx.net_name(d.ports['anode'])
+    cathode = ctx.net_name(d.ports['cathode'])
+    ctx.register_model(model_name)
+    return f"{d.refdes} {anode} {cathode} {model_name}"
 
 
 # ---------------------------------------------------------------------------

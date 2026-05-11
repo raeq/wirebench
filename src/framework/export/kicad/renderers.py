@@ -12,6 +12,8 @@ from __future__ import annotations
 from framework.board import Board
 from framework.chip import Chip
 from framework.connector import Connector
+from framework.diode import Diode
+from framework.transistor import Transistor
 
 from framework.export.base import ExporterContext, register_renderer
 
@@ -106,5 +108,27 @@ def render_connector(j: Connector, ctx: ExporterContext, qrd: str,
     return _comp_block(
         qrd, value, _footprint_field(j),
         _libsource('Connector', cls, cls),
+        names, tstamps,
+    )
+
+
+@register_renderer(Transistor, format='kicad')
+def render_transistor(t: Transistor, ctx: ExporterContext, qrd: str,
+                      names: str, tstamps: str) -> str:
+    cls = type(t).__name__
+    return _comp_block(
+        qrd, cls, _footprint_field(t),
+        _libsource('Device', cls, cls),
+        names, tstamps,
+    )
+
+
+@register_renderer(Diode, format='kicad')
+def render_diode(d: Diode, ctx: ExporterContext, qrd: str,
+                 names: str, tstamps: str) -> str:
+    cls = type(d).__name__
+    return _comp_block(
+        qrd, cls, _footprint_field(d),
+        _libsource('Device', cls, cls),
         names, tstamps,
     )
