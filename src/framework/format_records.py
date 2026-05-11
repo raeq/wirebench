@@ -20,6 +20,7 @@ REFDES_J = r'^J\d+$'   # female / receptacle / chassis-side
 REFDES_P = r'^P\d+$'   # male / plug / cable-side
 REFDES_R = r'^R\d+$'   # resistors
 REFDES_D = r'^D\d+$'   # diodes (LEDs)
+REFDES_Q = r'^Q\d+$'   # transistors (BJT / MOSFET)
 REFDES_A = r'^A\d+$'   # assemblies / boards
 LOCAL_ID = r'^[A-Za-z][A-Za-z0-9_]*$'
 
@@ -72,6 +73,115 @@ class CD4043Record(_ChipRecord):
 
 class ULN2003ARecord(_ChipRecord):
     type: Literal['ULN2003A'] = 'ULN2003A'
+
+
+# 74HC logic family.
+class SN74HC00Record(_ChipRecord):  type: Literal['SN74HC00']  = 'SN74HC00'
+class SN74HC02Record(_ChipRecord):  type: Literal['SN74HC02']  = 'SN74HC02'
+class SN74HC08Record(_ChipRecord):  type: Literal['SN74HC08']  = 'SN74HC08'
+class SN74HC32Record(_ChipRecord):  type: Literal['SN74HC32']  = 'SN74HC32'
+class SN74HC74Record(_ChipRecord):  type: Literal['SN74HC74']  = 'SN74HC74'
+class SN74HC86Record(_ChipRecord):  type: Literal['SN74HC86']  = 'SN74HC86'
+class SN74HC138Record(_ChipRecord): type: Literal['SN74HC138'] = 'SN74HC138'
+class SN74HC139Record(_ChipRecord): type: Literal['SN74HC139'] = 'SN74HC139'
+class SN74HC151Record(_ChipRecord): type: Literal['SN74HC151'] = 'SN74HC151'
+class SN74HC157Record(_ChipRecord): type: Literal['SN74HC157'] = 'SN74HC157'
+class SN74HC165Record(_ChipRecord): type: Literal['SN74HC165'] = 'SN74HC165'
+class SN74HC174Record(_ChipRecord): type: Literal['SN74HC174'] = 'SN74HC174'
+class SN74HC273Record(_ChipRecord): type: Literal['SN74HC273'] = 'SN74HC273'
+class SN74HC541Record(_ChipRecord): type: Literal['SN74HC541'] = 'SN74HC541'
+class SN74HC595Record(_ChipRecord): type: Literal['SN74HC595'] = 'SN74HC595'
+
+# Op-amps.
+class LM358Record(_ChipRecord):    type: Literal['LM358']    = 'LM358'
+class LM324Record(_ChipRecord):    type: Literal['LM324']    = 'LM324'
+class TL072Record(_ChipRecord):    type: Literal['TL072']    = 'TL072'
+class TL074Record(_ChipRecord):    type: Literal['TL074']    = 'TL074'
+class LM741Record(_ChipRecord):    type: Literal['LM741']    = 'LM741'
+class MCP6002Record(_ChipRecord):  type: Literal['MCP6002']  = 'MCP6002'
+class OPA2134Record(_ChipRecord):  type: Literal['OPA2134']  = 'OPA2134'
+class LMV358Record(_ChipRecord):   type: Literal['LMV358']   = 'LMV358'
+
+# Comparators.
+class LM339Record(_ChipRecord):    type: Literal['LM339']    = 'LM339'
+class TLV3401Record(_ChipRecord):  type: Literal['TLV3401']  = 'TLV3401'
+class LM311Record(_ChipRecord):    type: Literal['LM311']    = 'LM311'
+
+# Regulators.
+class LM7805Record(_ChipRecord):     type: Literal['LM7805']     = 'LM7805'
+class LM7812Record(_ChipRecord):     type: Literal['LM7812']     = 'LM7812'
+class LM7905Record(_ChipRecord):     type: Literal['LM7905']     = 'LM7905'
+class LM317Record(_ChipRecord):      type: Literal['LM317']      = 'LM317'
+class LM337Record(_ChipRecord):      type: Literal['LM337']      = 'LM337'
+class AMS1117_33Record(_ChipRecord): type: Literal['AMS1117_33'] = 'AMS1117_33'
+class AMS1117_50Record(_ChipRecord): type: Literal['AMS1117_50'] = 'AMS1117_50'
+class LP2950Record(_ChipRecord):     type: Literal['LP2950']     = 'LP2950'
+
+# Specialty ICs.
+class NE555Record(_ChipRecord):    type: Literal['NE555']   = 'NE555'
+class LM386Record(_ChipRecord):    type: Literal['LM386']   = 'LM386'
+class DS18B20Record(_ChipRecord):  type: Literal['DS18B20'] = 'DS18B20'
+class DS1307Record(_ChipRecord):   type: Literal['DS1307']  = 'DS1307'
+class MAX7219Record(_ChipRecord):  type: Literal['MAX7219'] = 'MAX7219'
+
+# Sensors.
+class TMP36Record(_ChipRecord):    type: Literal['TMP36']   = 'TMP36'
+class BMP280Record(_ChipRecord):   type: Literal['BMP280']  = 'BMP280'
+class MPU6050Record(_ChipRecord):  type: Literal['MPU6050'] = 'MPU6050'
+class HCSR04Record(_ChipRecord):   type: Literal['HCSR04']  = 'HCSR04'
+
+# Power / interface.
+class MOC3021Record(_ChipRecord):     type: Literal['MOC3021']     = 'MOC3021'
+class OPTO_4N25Record(_ChipRecord):   type: Literal['OPTO_4N25']   = 'OPTO_4N25'
+class OPTO_TLP521Record(_ChipRecord): type: Literal['OPTO_TLP521'] = 'OPTO_TLP521'
+class TLC5940Record(_ChipRecord):     type: Literal['TLC5940']     = 'TLC5940'
+class MAX232Record(_ChipRecord):      type: Literal['MAX232']      = 'MAX232'
+
+# Microcontrollers.
+class ATmega328PRecord(_ChipRecord):    type: Literal['ATmega328P']     = 'ATmega328P'
+class ATmega2560Record(_ChipRecord):    type: Literal['ATmega2560']     = 'ATmega2560'
+class ATmega32U4Record(_ChipRecord):    type: Literal['ATmega32U4']     = 'ATmega32U4'
+class ATtiny85Record(_ChipRecord):      type: Literal['ATtiny85']       = 'ATtiny85'
+class ATtiny84Record(_ChipRecord):      type: Literal['ATtiny84']       = 'ATtiny84'
+class STM32F103C8T6Record(_ChipRecord): type: Literal['STM32F103C8T6']  = 'STM32F103C8T6'
+class STM32F411CEU6Record(_ChipRecord): type: Literal['STM32F411CEU6']  = 'STM32F411CEU6'
+class RP2040Record(_ChipRecord):        type: Literal['RP2040']         = 'RP2040'
+class ESP32_WROOM_32Record(_ChipRecord): type: Literal['ESP32_WROOM_32'] = 'ESP32_WROOM_32'
+class ESP8266_12FRecord(_ChipRecord):    type: Literal['ESP8266_12F']    = 'ESP8266_12F'
+
+
+# -------------------------------------------------------- transistors
+
+class _TransistorRecord(_Record):
+    """Discrete BJT or MOSFET: refdes-only (refdes prefix 'Q')."""
+    refdes: Annotated[str, Field(pattern=REFDES_Q)]
+
+
+class BC547Record(_TransistorRecord):    type: Literal['BC547']    = 'BC547'
+class BC557Record(_TransistorRecord):    type: Literal['BC557']    = 'BC557'
+class Q2N3904Record(_TransistorRecord):  type: Literal['Q2N3904']  = 'Q2N3904'
+class Q2N3906Record(_TransistorRecord):  type: Literal['Q2N3906']  = 'Q2N3906'
+class Q2N2222Record(_TransistorRecord):  type: Literal['Q2N2222']  = 'Q2N2222'
+class TIP120Record(_TransistorRecord):   type: Literal['TIP120']   = 'TIP120'
+class Q2N7000Record(_TransistorRecord):  type: Literal['Q2N7000']  = 'Q2N7000'
+class BS170Record(_TransistorRecord):    type: Literal['BS170']    = 'BS170'
+class IRLB8721Record(_TransistorRecord): type: Literal['IRLB8721'] = 'IRLB8721'
+class IRFZ44NRecord(_TransistorRecord):  type: Literal['IRFZ44N']  = 'IRFZ44N'
+
+
+# -------------------------------------------------------------- diodes
+
+class _DiodeRecord(_Record):
+    """Discrete rectifier / Zener / Schottky: refdes-only (prefix 'D')."""
+    refdes: Annotated[str, Field(pattern=REFDES_D)]
+
+
+class D1N4148Record(_DiodeRecord):  type: Literal['D1N4148']  = 'D1N4148'
+class D1N4001Record(_DiodeRecord):  type: Literal['D1N4001']  = 'D1N4001'
+class D1N4007Record(_DiodeRecord):  type: Literal['D1N4007']  = 'D1N4007'
+class D1N5817Record(_DiodeRecord):  type: Literal['D1N5817']  = 'D1N5817'
+class D1N4733ARecord(_DiodeRecord): type: Literal['D1N4733A'] = 'D1N4733A'
+class D1N4742ARecord(_DiodeRecord): type: Literal['D1N4742A'] = 'D1N4742A'
 
 
 # --------------------------- connectors: parameterised (pin_count + pitch)
@@ -228,6 +338,38 @@ ComponentRecord = Annotated[
     Union[
         ResistorRecord, LEDRecord, RailRecord,
         SN74HC04Record, CD4069Record, LM393Record, CD4043Record, ULN2003ARecord,
+        # 74HC logic
+        SN74HC00Record, SN74HC02Record, SN74HC08Record, SN74HC32Record,
+        SN74HC74Record, SN74HC86Record, SN74HC138Record, SN74HC139Record,
+        SN74HC151Record, SN74HC157Record, SN74HC165Record, SN74HC174Record,
+        SN74HC273Record, SN74HC541Record, SN74HC595Record,
+        # Op-amps
+        LM358Record, LM324Record, TL072Record, TL074Record, LM741Record,
+        MCP6002Record, OPA2134Record, LMV358Record,
+        # Comparators
+        LM339Record, TLV3401Record, LM311Record,
+        # Regulators
+        LM7805Record, LM7812Record, LM7905Record, LM317Record, LM337Record,
+        AMS1117_33Record, AMS1117_50Record, LP2950Record,
+        # Specialty ICs
+        NE555Record, LM386Record, DS18B20Record, DS1307Record, MAX7219Record,
+        # Sensors
+        TMP36Record, BMP280Record, MPU6050Record, HCSR04Record,
+        # Power / interface
+        MOC3021Record, OPTO_4N25Record, OPTO_TLP521Record, TLC5940Record,
+        MAX232Record,
+        # MCUs
+        ATmega328PRecord, ATmega2560Record, ATmega32U4Record,
+        ATtiny85Record, ATtiny84Record,
+        STM32F103C8T6Record, STM32F411CEU6Record, RP2040Record,
+        ESP32_WROOM_32Record, ESP8266_12FRecord,
+        # Transistors
+        BC547Record, BC557Record, Q2N3904Record, Q2N3906Record,
+        Q2N2222Record, TIP120Record,
+        Q2N7000Record, BS170Record, IRLB8721Record, IRFZ44NRecord,
+        # Diodes
+        D1N4148Record, D1N4001Record, D1N4007Record, D1N5817Record,
+        D1N4733ARecord, D1N4742ARecord,
         Header1xNMaleRecord, Header1xNFemaleRecord,
         Header2xNMaleRecord, Header2xNFemaleRecord,
         IDC2xNMaleRecord, IDC2xNSocketRecord,
