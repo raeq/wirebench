@@ -108,11 +108,11 @@ test additions.
 ## Property-based testing
 
 `hypothesis` 6.x runs alongside the rest of the suite.  Strategies
-live in `tests/framework/strategies.py` (15 named composites:
+live in `tests/framework/strategies.py` (16 named composites:
 `refdes_numbers`, `ohms`, `colors`, `levels`, `pin_counts_for_2xn`,
 `pitches_mm`, `random_pin_names`, `resistors`, `leds`, `rails`,
-`simple_chips`, `connectors`, `pin_id_sets`, …).  Property tests
-live in `tests/framework/test_properties.py`:
+`simple_chips`, `connectors`, `bjt_transistors`, `mosfets`, `diodes`,
+`pin_id_sets`).  Property tests live in `tests/framework/test_properties.py`:
 
 1. PortMap dispatch correctness (canonical names resolve uniquely,
    duplicates raise with disambiguated alternatives, every key
@@ -141,19 +141,36 @@ TOML config):
 
 When hypothesis finds a counterexample it's pickled to the database
 and replays on every subsequent run; the persisted example becomes a
-permanent regression test.  Two strategies caught real implementation
-contracts on first run:
+permanent regression test.
 
-- `test_refdes_validation_rules` initially used a hand-rolled "known
-  prefix" set; hypothesis surfaced `'B'` (motor) as a valid IEEE 315
-  prefix the test author had missed.  Fixed by importing
-  `IEEE_315_PREFIXES` directly.
-- `test_compute_logical_nets_is_deterministic` initially randomised
-  wiring topology; hypothesis surfaced the framework's
-  no-floating-BIDIRs ERC rule (series resistor chains without an
-  intermediate driver are rejected at `Circuit._validate`).  Fixed
-  by using parallel resistor topology — every net always has a
-  driver (the Rail).
+Two first-run findings worth documenting honestly — both are about
+the *tests*, not the implementation:
+
+- **Test 7 (refdes validation) — test-design correction, not a bug
+  catch.**  The first draft of the test compared inputs against a
+  hand-rolled "known prefix" set that omitted `'B'` (motor).
+  Hypothesis generated `'B'` and the assertion fired.  `'B'` was
+  already in the framework's `IEEE_315_PREFIXES` (and has been
+  since the original refdes module landed) — the test was drifting
+  from the canonical source.  The fix was importing
+  `IEEE_315_PREFIXES` directly so the property consults the live
+  source-of-truth instead of duplicating it.  Lesson: when a
+  property test enumerates a known-valid set, import it; never
+  hand-roll a subset.
+- **Test 5 (`compute_logical_nets` determinism) — test-shape
+  correction, not a bug catch.**  The first draft randomised wiring
+  topology; hypothesis found a series resistor chain whose
+  intermediate node had two passive BIDIRs and no driver, which the
+  framework's ERC rejects at `Circuit._validate` (the
+  no-floating-BIDIRs rule).  Switched the strategy to a parallel
+  topology where every net has a Rail driver — the determinism
+  property still holds across the entire valid input space; the
+  strategy was overstepping into invalid territory.
+
+In short: hypothesis confirmed both the refdes module and
+`compute_logical_nets` are working as intended.  The value here is
+that the tests are now aligned with the canonical contracts (refdes
+prefix set) and the framework's ERC rules (no floating BIDIRs).
 
 ## Mutation-testing follow-up
 

@@ -47,8 +47,15 @@ from components.connectors.headers import (
 from components.chips.sn74hc04 import SN74HC04
 
 from strategies import (
-    connectors, leds, pin_counts_for_2xn, pin_id_sets, pitches_mm,
-    rails, refdes_numbers, resistors, simple_chips,
+    bjt_transistors, connectors, diodes, leds, mosfets,
+    pin_counts_for_2xn, pin_id_sets, pitches_mm, rails,
+    refdes_numbers, resistors, simple_chips,
+)
+
+
+_any_component = st.one_of(
+    resistors(), leds(), rails(), simple_chips(), connectors(),
+    bjt_transistors(), mosfets(), diodes(),
 )
 
 
@@ -108,8 +115,7 @@ def test_portmap_dispatch_correctness(pins):
 # 2.  Round-trip identity for any component ---------------------------
 
 # Slower than the rest because of file I/O; cap at 50 examples.
-@given(component=st.one_of(resistors(), leds(), rails(),
-                           simple_chips(), connectors()))
+@given(component=_any_component)
 @settings(max_examples=50, deadline=None)
 def test_roundtrip_identity_for_any_component(component, tmp_path_factory):
     tmp = tmp_path_factory.mktemp('hyp_rt')
@@ -126,8 +132,7 @@ def test_roundtrip_identity_for_any_component(component, tmp_path_factory):
 
 # 3.  Save determinism ------------------------------------------------
 
-@given(component=st.one_of(resistors(), leds(), rails(),
-                           simple_chips(), connectors()))
+@given(component=_any_component)
 @settings(max_examples=50, deadline=None)
 def test_save_is_deterministic(component, tmp_path_factory):
     tmp = tmp_path_factory.mktemp('hyp_det')

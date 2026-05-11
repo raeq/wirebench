@@ -26,9 +26,16 @@ from components.chips.uln2003a import ULN2003A
 from components.connectors.headers import (
     Header1xNFemale, Header1xNMale, Header2xNFemale, Header2xNMale,
 )
+from components.diodes import (
+    D1N4001, D1N4007, D1N4148, D1N4733A, D1N4742A, D1N5817,
+)
 from components.passives.led import LED
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
+from components.transistors import (
+    BC547, BC557, BS170, IRFZ44N, IRLB8721, Q2N2222, Q2N3904,
+    Q2N3906, Q2N7000, TIP120,
+)
 
 
 # ----- primitive value strategies ------------------------------------
@@ -112,6 +119,31 @@ def connectors(draw):
         pin_count=draw(pin_counts_for_2xn()),
         pitch_mm=draw(pitches_mm()),
     )
+
+
+@st.composite
+def bjt_transistors(draw):
+    """A BJT discrete (NPN or PNP) built with a randomised refdes."""
+    cls = draw(st.sampled_from([
+        BC547, BC557, Q2N3904, Q2N3906, Q2N2222, TIP120,
+    ]))
+    return cls(refdes_number=draw(refdes_numbers()))
+
+
+@st.composite
+def mosfets(draw):
+    """An N-MOSFET discrete built with a randomised refdes."""
+    cls = draw(st.sampled_from([Q2N7000, BS170, IRLB8721, IRFZ44N]))
+    return cls(refdes_number=draw(refdes_numbers()))
+
+
+@st.composite
+def diodes(draw):
+    """A two-terminal diode (rectifier, Schottky, or Zener)."""
+    cls = draw(st.sampled_from([
+        D1N4148, D1N4001, D1N4007, D1N5817, D1N4733A, D1N4742A,
+    ]))
+    return cls(refdes_number=draw(refdes_numbers()))
 
 
 # ----- pin-id sequence strategy (for PortMap tests) -------------------
