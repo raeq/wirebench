@@ -43,6 +43,8 @@ class HDMITypeAReceptacle(Connector):
     PIN_COUNT     = 19
     PITCH_MM:     ClassVar[float] = 0.5
     PINOUT        = _HDMI_TYPE_A_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_Video:HDMI_A_Amphenol_10029449-001RLF_Horizontal"
+
 
 
 @register('HDMITypeAPlug')
@@ -54,6 +56,8 @@ class HDMITypeAPlug(Connector):
     PIN_COUNT     = 19
     PITCH_MM:     ClassVar[float] = 0.5
     PINOUT        = _HDMI_TYPE_A_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_Video:HDMI_A_Amphenol_10029449-001RLF_Horizontal"
+
 
 
 declare_mating_pair(HDMITypeAReceptacle, HDMITypeAPlug)

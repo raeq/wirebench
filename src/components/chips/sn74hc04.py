@@ -38,6 +38,7 @@ class SN74HC04(Chip):
 
     CHANNELS: int = 6
     REFDES_PREFIX: ClassVar[str] = 'U'
+    FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-14_W7.62mm"
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *, refdes_number: RefdesNumber) -> None:

@@ -12,6 +12,10 @@ from framework.signals import Analog
 from framework.registry import register
 
 
+def _idc_2x_footprint(pin_count: int, pitch_mm: float) -> str:
+    return f"Connector_IDC:IDC-Header_2x{pin_count // 2:02d}_P{pitch_mm}mm_Vertical"
+
+
 @register('IDC2xNMale')
 class IDC2xNMale(Connector):
     """2×N shrouded male IDC header, board-side."""
@@ -22,6 +26,10 @@ class IDC2xNMale(Connector):
     def _build_pinout(self) -> tuple[tuple[PinId, Direction, type], ...]:
         return tuple((PinId(i, f'p{i}'), Direction.BIDIR, Analog)
                      for i in range(1, self._pin_count + 1))
+
+    @property
+    def FOOTPRINT(self) -> str:
+        return _idc_2x_footprint(self._pin_count, self._pitch_mm)
 
 
 @register('IDC2xNSocket')
@@ -34,6 +42,10 @@ class IDC2xNSocket(Connector):
     def _build_pinout(self) -> tuple[tuple[PinId, Direction, type], ...]:
         return tuple((PinId(i, f'p{i}'), Direction.BIDIR, Analog)
                      for i in range(1, self._pin_count + 1))
+
+    @property
+    def FOOTPRINT(self) -> str:
+        return _idc_2x_footprint(self._pin_count, self._pitch_mm)
 
 
 declare_mating_pair(IDC2xNMale, IDC2xNSocket)

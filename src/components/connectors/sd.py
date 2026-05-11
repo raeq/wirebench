@@ -36,6 +36,8 @@ class MicroSDCardSlot(Connector):
     PIN_COUNT     = 8
     PITCH_MM:     ClassVar[float] = 1.1
     PINOUT        = _MICROSD_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_Card:microSD_HC_Hirose_DM3D-SF"
+
 
 
 @register('MicroSDCard')
@@ -49,6 +51,8 @@ class MicroSDCard(Connector):
     PIN_COUNT     = 8
     PITCH_MM:     ClassVar[float] = 1.1
     PINOUT        = _MICROSD_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = None
+
 
 
 declare_mating_pair(MicroSDCardSlot, MicroSDCard)
@@ -81,6 +85,8 @@ class SDCardSlot(Connector):
     PIN_COUNT     = 9
     PITCH_MM:     ClassVar[float] = 2.54
     PINOUT        = _SD_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_Card:SD_TE_2041021"
+
 
 
 @register('SDCard')
@@ -93,6 +99,8 @@ class SDCard(Connector):
     PIN_COUNT     = 9
     PITCH_MM:     ClassVar[float] = 2.54
     PINOUT        = _SD_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = None
+
 
 
 declare_mating_pair(SDCardSlot, SDCard)

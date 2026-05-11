@@ -1,0 +1,72 @@
+"""Per-component BOM CSV renderers.
+
+Each renderer returns a single CSV line:
+    Refdes,Value,Footprint,Quantity,Parent,Description
+
+Renderers take `(component, ctx, parent_refdes)` — the extra parent
+argument is BOM-specific (the spec adds a Parent column tying each row
+to its enclosing board).
+"""
+from __future__ import annotations
+
+import csv
+import io
+
+from framework.board import Board
+from framework.chip import Chip
+from framework.connector import Connector
+
+from framework.export.base import ExporterContext, register_renderer
+
+from components.passives.led import LED
+from components.passives.resistor import Resistor
+
+
+def _csv_row(*fields: str) -> str:
+    """CSV-escape `fields` and return one line. Handles commas, quotes,
+    newlines uniformly via the stdlib writer."""
+    buf = io.StringIO()
+    csv.writer(buf, lineterminator='').writerow(fields)
+    return buf.getvalue()
+
+
+def _footprint_of(comp) -> str:
+    fp = getattr(comp, 'FOOTPRINT', None)
+    return fp if fp is not None else ''
+
+
+@register_renderer(Resistor, format='bom')
+def render_resistor(r: Resistor, ctx: ExporterContext, parent: str = '') -> str:
+    value = f"{float(r.ohms):g}Ω"
+    return _csv_row(r.refdes, value, _footprint_of(r), '1', parent, 'Resistor')
+
+
+@register_renderer(LED, format='bom')
+def render_led(d: LED, ctx: ExporterContext, parent: str = '') -> str:
+    value = f"{d.color} LED"
+    return _csv_row(d.refdes, value, _footprint_of(d), '1', parent,
+                    'Light-emitting diode')
+
+
+@register_renderer(Chip, format='bom')
+def render_chip(u: Chip, ctx: ExporterContext, parent: str = '') -> str:
+    return _csv_row(u.refdes, type(u).__name__, _footprint_of(u), '1', parent,
+                    type(u).__name__)
+
+
+@register_renderer(Connector, format='bom')
+def render_connector(j: Connector, ctx: ExporterContext, parent: str = '') -> str:
+    # Connectors are real parts and belong on the BOM.
+    value = type(j).__name__
+    # Parameterised families: include pin_count for clarity.
+    pin_count = getattr(j, 'pin_count', None)
+    if pin_count is not None and 'Header' in value:
+        value = f"{value}_{pin_count}"
+    return _csv_row(j.refdes, value, _footprint_of(j), '1', parent,
+                    type(j).__name__)
+
+
+@register_renderer(Board, format='bom')
+def render_board(b: Board, ctx: ExporterContext, parent: str = '') -> str:
+    value = f"{b.name} Rev {b.revision}"
+    return _csv_row(b.refdes, value, '', '1', parent, 'Printed circuit board')

@@ -36,6 +36,8 @@ class Audio3p5mmTRSJack(Connector):
     PIN_COUNT     = 3
     PITCH_MM:     ClassVar[float] = 3.5  # tip-ring-sleeve separation, nominal
     PINOUT        = _TRS_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles"
+
 
 
 @register('Audio3p5mmTRSPlug')
@@ -47,6 +49,8 @@ class Audio3p5mmTRSPlug(Connector):
     PIN_COUNT     = 3
     PITCH_MM:     ClassVar[float] = 3.5
     PINOUT        = _TRS_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles"
+
 
 
 declare_mating_pair(Audio3p5mmTRSJack, Audio3p5mmTRSPlug)
@@ -70,6 +74,8 @@ class Audio3p5mmTRRSJack(Connector):
     PIN_COUNT     = 4
     PITCH_MM:     ClassVar[float] = 3.5
     PINOUT        = _TRRS_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_Audio:Jack_3.5mm_TRRS_QingPu_WQP-PJ398SM_Vertical"
+
 
 
 @register('Audio3p5mmTRRSPlug')
@@ -81,6 +87,8 @@ class Audio3p5mmTRRSPlug(Connector):
     PIN_COUNT     = 4
     PITCH_MM:     ClassVar[float] = 3.5
     PINOUT        = _TRRS_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_Audio:Jack_3.5mm_TRRS_QingPu_WQP-PJ398SM_Vertical"
+
 
 
 declare_mating_pair(Audio3p5mmTRRSJack, Audio3p5mmTRRSPlug)

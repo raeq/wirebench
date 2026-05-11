@@ -34,6 +34,8 @@ class USBAReceptacle(Connector):
     PIN_COUNT     = 4
     PITCH_MM:     ClassVar[float] = 2.5  # nominal contact pitch on Type-A
     PINOUT        = _USB_A_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_USB:USB_A_Stewart_SS-52100-001_Horizontal"
+
 
 
 @register('USBAPlug')
@@ -45,6 +47,8 @@ class USBAPlug(Connector):
     PIN_COUNT     = 4
     PITCH_MM:     ClassVar[float] = 2.5
     PINOUT        = _USB_A_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_USB:USB_A_Stewart_SS-52100-001_Horizontal"
+
 
 
 declare_mating_pair(USBAReceptacle, USBAPlug)
@@ -68,6 +72,8 @@ class USBBReceptacle(Connector):
     PIN_COUNT     = 4
     PITCH_MM:     ClassVar[float] = 2.0
     PINOUT        = _USB_B_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_USB:USB_B_Wuerth_61400826021_Horizontal"
+
 
 
 @register('USBBPlug')
@@ -79,6 +85,8 @@ class USBBPlug(Connector):
     PIN_COUNT     = 4
     PITCH_MM:     ClassVar[float] = 2.0
     PINOUT        = _USB_B_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_USB:USB_B_Wuerth_61400826021_Horizontal"
+
 
 
 declare_mating_pair(USBBReceptacle, USBBPlug)
@@ -103,6 +111,8 @@ class USBMicroBReceptacle(Connector):
     PIN_COUNT     = 5
     PITCH_MM:     ClassVar[float] = 0.65
     PINOUT        = _USB_MICRO_B_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_USB:USB_Micro-B_GCT_USB3076-30-A_Horizontal"
+
 
 
 @register('USBMicroBPlug')
@@ -114,6 +124,8 @@ class USBMicroBPlug(Connector):
     PIN_COUNT     = 5
     PITCH_MM:     ClassVar[float] = 0.65
     PINOUT        = _USB_MICRO_B_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_USB:USB_Micro-B_GCT_USB3076-30-A_Horizontal"
+
 
 
 declare_mating_pair(USBMicroBReceptacle, USBMicroBPlug)
@@ -160,6 +172,8 @@ class USBCReceptacle(Connector):
     PIN_COUNT     = 24
     PITCH_MM:     ClassVar[float] = 0.5
     PINOUT        = _USB_C_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_USB:USB_C_Receptacle_GCT_USB4105-GF-A_16P_TopMnt_Horizontal"
+
 
 
 @register('USBCPlug')
@@ -171,6 +185,8 @@ class USBCPlug(Connector):
     PIN_COUNT     = 24
     PITCH_MM:     ClassVar[float] = 0.5
     PINOUT        = _USB_C_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_USB:USB_C_Receptacle_GCT_USB4105-GF-A_16P_TopMnt_Horizontal"
+
 
 
 declare_mating_pair(USBCReceptacle, USBCPlug)

@@ -47,6 +47,7 @@ class ULN2003A(Chip):
     V_THRESHOLD: float = DarlingtonChannel.V_THRESHOLD   # mirror of cell's threshold
     I_OUT_MAX:   float = 0.500   # A — maximum sink current per channel
     REFDES_PREFIX: ClassVar[str] = 'U'
+    FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-16_W7.62mm"
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *, refdes_number: RefdesNumber) -> None:

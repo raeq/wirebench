@@ -24,6 +24,11 @@ class JSTSHBoardSide(Connector):
     def _build_pinout(self) -> tuple[tuple[PinId, Direction, type], ...]:
         return tuple((PinId(i, f'p{i}'), Direction.BIDIR, Analog)
                      for i in range(1, self._pin_count + 1))
+    @property
+    def FOOTPRINT(self) -> str:
+        n = self._pin_count
+        return f"Connector_JST:JST_SH_BM{n}B-SRSS-TB_1x{n:02d}-1MP_P1.00mm_Horizontal"
+
 
 
 @register('JSTSHCableHousing')
@@ -37,6 +42,11 @@ class JSTSHCableHousing(Connector):
     def _build_pinout(self) -> tuple[tuple[PinId, Direction, type], ...]:
         return tuple((PinId(i, f'p{i}'), Direction.BIDIR, Analog)
                      for i in range(1, self._pin_count + 1))
+    @property
+    def FOOTPRINT(self) -> str:
+        n = self._pin_count
+        return f"Connector_JST:JST_SH_BM{n}B-SRSS-TB_1x{n:02d}-1MP_P1.00mm_Horizontal"
+
 
 
 declare_mating_pair(JSTSHBoardSide, JSTSHCableHousing)

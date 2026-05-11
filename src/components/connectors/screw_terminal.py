@@ -25,3 +25,12 @@ class ScrewTerminalBlock(Connector):
     def _build_pinout(self) -> tuple[tuple[PinId, Direction, type], ...]:
         return tuple((PinId(i, f'p{i}'), Direction.BIDIR, Analog)
                      for i in range(1, self._pin_count + 1))
+
+    @property
+    def FOOTPRINT(self) -> str:
+        n = self._pin_count
+        pitch = self._pitch_mm
+        return (
+            f"TerminalBlock:TerminalBlock_Phoenix_MPT-{pitch}mm_"
+            f"1x{n:02d}_P{pitch}mm_Horizontal"
+        )

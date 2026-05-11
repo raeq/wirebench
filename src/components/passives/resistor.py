@@ -38,6 +38,8 @@ class Resistor(FactorNode):
     __slots__ = ('_ohms', '_ports', '_refdes_number')
 
     REFDES_PREFIX: ClassVar[str] = 'R'
+    FOOTPRINT: ClassVar[str | None] = "Resistor_SMD:R_0603_1608Metric"
+    PIN_NUMBERS: ClassVar[dict[str, int]] = {'t1': 1, 't2': 2}
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(

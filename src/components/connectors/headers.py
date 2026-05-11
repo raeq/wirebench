@@ -13,6 +13,20 @@ from framework.signals import Analog
 from framework.registry import register
 
 
+def _header_1x_footprint(pin_count: int, pitch_mm: float) -> str:
+    return (
+        f"Connector_PinHeader_{pitch_mm}mm:"
+        f"PinHeader_1x{pin_count:02d}_P{pitch_mm}mm_Vertical"
+    )
+
+
+def _header_2x_footprint(pin_count: int, pitch_mm: float) -> str:
+    return (
+        f"Connector_PinHeader_{pitch_mm}mm:"
+        f"PinHeader_2x{pin_count // 2:02d}_P{pitch_mm}mm_Vertical"
+    )
+
+
 @register('Header1xNMale')
 class Header1xNMale(Connector):
     """1×N pin header strip, snap-apart.  Common pitches: 2.54 mm (0.1"),
@@ -25,6 +39,10 @@ class Header1xNMale(Connector):
         return tuple((PinId(i, f'p{i}'), Direction.BIDIR, Analog)
                      for i in range(1, self._pin_count + 1))
 
+    @property
+    def FOOTPRINT(self) -> str:
+        return _header_1x_footprint(self._pin_count, self._pitch_mm)
+
 
 @register('Header1xNFemale')
 class Header1xNFemale(Connector):
@@ -36,6 +54,10 @@ class Header1xNFemale(Connector):
     def _build_pinout(self) -> tuple[tuple[PinId, Direction, type], ...]:
         return tuple((PinId(i, f'p{i}'), Direction.BIDIR, Analog)
                      for i in range(1, self._pin_count + 1))
+
+    @property
+    def FOOTPRINT(self) -> str:
+        return _header_1x_footprint(self._pin_count, self._pitch_mm)
 
 
 @register('Header2xNMale')
@@ -50,6 +72,10 @@ class Header2xNMale(Connector):
         return tuple((PinId(i, f'p{i}'), Direction.BIDIR, Analog)
                      for i in range(1, self._pin_count + 1))
 
+    @property
+    def FOOTPRINT(self) -> str:
+        return _header_2x_footprint(self._pin_count, self._pitch_mm)
+
 
 @register('Header2xNFemale')
 class Header2xNFemale(Connector):
@@ -61,6 +87,10 @@ class Header2xNFemale(Connector):
     def _build_pinout(self) -> tuple[tuple[PinId, Direction, type], ...]:
         return tuple((PinId(i, f'p{i}'), Direction.BIDIR, Analog)
                      for i in range(1, self._pin_count + 1))
+
+    @property
+    def FOOTPRINT(self) -> str:
+        return _header_2x_footprint(self._pin_count, self._pitch_mm)
 
 
 declare_mating_pair(Header1xNMale, Header1xNFemale)

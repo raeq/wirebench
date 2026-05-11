@@ -34,6 +34,7 @@ class LM393(Chip):
 
     CHANNELS: int = 2
     REFDES_PREFIX: ClassVar[str] = 'U'
+    FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-8_W7.62mm"
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *, refdes_number: RefdesNumber) -> None:

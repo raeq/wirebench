@@ -34,6 +34,8 @@ class RJ45Jack(Connector):
     PIN_COUNT     = 8
     PITCH_MM:     ClassVar[float] = 1.02
     PINOUT        = _RJ45_T568B_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_RJ:RJ45_Wuerth_7499010121A_Horizontal"
+
 
 
 @register('RJ45Plug')
@@ -45,6 +47,8 @@ class RJ45Plug(Connector):
     PIN_COUNT     = 8
     PITCH_MM:     ClassVar[float] = 1.02
     PINOUT        = _RJ45_T568B_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_RJ:RJ45_Wuerth_7499010121A_Horizontal"
+
 
 
 declare_mating_pair(RJ45Jack, RJ45Plug)

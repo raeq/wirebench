@@ -1,0 +1,11 @@
+Refdes,Value,Footprint,Quantity,Parent,Description
+A1,Sensor Board Rev A,,1,,Printed circuit board
+A2,Controller Board Rev A,,1,,Printed circuit board
+D1,red LED,LED_SMD:LED_0805,1,A2,Light-emitting diode
+D2,green LED,LED_SMD:LED_0805,1,A2,Light-emitting diode
+U1,ULN2003A,Package_DIP:DIP-16_W7.62mm,1,A1,ULN2003A
+U1,SN74HC04,Package_DIP:DIP-14_W7.62mm,1,A2,SN74HC04
+U2,CD4069,Package_DIP:DIP-14_W7.62mm,1,A2,CD4069
+U3,CD4043,Package_DIP:DIP-16_W7.62mm,1,A2,CD4043
+J1,Header2xNFemale_40,Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical,1,A1,Header2xNFemale
+P1,Header2xNMale_40,Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical,1,A2,Header2xNMale

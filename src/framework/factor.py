@@ -32,6 +32,21 @@ class FactorNode(metaclass=ABCMeta):
     # cells live within their own Circuit.evaluate.
     IS_TRANSPARENT: ClassVar[bool] = False
 
+    # Default footprint string for downstream exporters (KiCad, BOM,
+    # Yosys). None means "no footprint declared" — exporters that
+    # require one error out, exporters that don't simply omit the
+    # field. Subclasses override either as a ClassVar (fixed-geometry
+    # parts) or via @property (parameterised families that compute
+    # from instance state like pin_count/pitch).
+    FOOTPRINT: ClassVar[str | None] = None
+
+    # Pin numbers for passive terminals whose ports are not wrapped in
+    # Pin instances. Maps port name -> datasheet pin number. Chips and
+    # connectors carry numbers on each Pin.id; passives declare them
+    # here. See framework.export.base.pin_number_of for the unified
+    # lookup used by exporters.
+    PIN_NUMBERS: ClassVar[dict[str, int]] = {}
+
     def other_face(self, port: Port) -> Port:
         """Return the opposite face of this conductor, given one face.
 

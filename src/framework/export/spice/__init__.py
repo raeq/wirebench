@@ -9,16 +9,45 @@ Adapter entry point: `render(design, ctx)` — called by the top-level
 """
 from __future__ import annotations
 
-from datetime import datetime
-
 from framework.circuit import Circuit
 from framework.factor import FactorNode
 
 from framework.export.base import (
-    ExporterContext, SpiceExportConfig, lookup_renderer,
+    ExporterContext, SpiceExportConfig, lookup_renderer, register_net_namer,
 )
+from framework.export.nets import LogicalNet
 from framework.export.spice import renderers as _renderers  # noqa: F401
 from framework.export.spice.models import format_models_section
+
+
+# --- SPICE net naming ------------------------------------------------
+# Moved out of framework/export/base.py per §6.6. SPICE's conventions:
+#   - Rail(False) net → "0" (the SPICE ground convention)
+#   - Rail(True)  net → "vcc"
+#   - everything else → "net_<n>" (or styled per ExportConfig)
+def name_spice_net(net: LogicalNet, ctx: ExporterContext) -> str:
+    from components.passives.rail import Rail
+    has_gnd = any(
+        isinstance(o, Rail) and o.level is False for o, _ in net.ports
+    )
+    has_vcc = any(
+        isinstance(o, Rail) and o.level is True for o, _ in net.ports
+    )
+    if has_gnd:
+        return '0'
+    if has_vcc:
+        return 'vcc'
+    style = ctx.config.net_name_style
+    if style == 'qualified' and net.ports:
+        owner, port = net.ports[0]
+        refdes = getattr(owner, 'refdes', type(owner).__name__)
+        return f"{refdes}_{port.name}"
+    if style == 'short_hash':
+        return f"n{net.id:04x}"
+    return f"net_{net.id}"
+
+
+register_net_namer('spice', name_spice_net)
 
 
 def _spice_config(ctx: ExporterContext) -> SpiceExportConfig:
@@ -34,7 +63,10 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
     cfg = _spice_config(ctx)
 
     if cfg.include_header_comment:
-        ctx.emit(f"* Exported from circuitry — {datetime.now().isoformat(timespec='seconds')}")
+        # Per §6.7: deterministic content only — no wall-clock timestamp.
+        # Design name is stable; tools can correlate without a date.
+        title = getattr(design, 'name', None) or type(design).__name__
+        ctx.emit(f"* Exported from circuitry — {title}")
 
     name = getattr(design, 'name', None) or type(design).__name__
     ctx.emit(f".TITLE {name}")

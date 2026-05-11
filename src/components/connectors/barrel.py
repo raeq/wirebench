@@ -31,6 +31,8 @@ class BarrelJack5p5x2p1(Connector):
     PIN_COUNT     = 2
     PITCH_MM:     ClassVar[float] = 2.1
     PINOUT        = _BARREL_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_BarrelJack:BarrelJack_Horizontal"
+
 
 
 @register('BarrelPlug5p5x2p1')
@@ -42,6 +44,8 @@ class BarrelPlug5p5x2p1(Connector):
     PIN_COUNT     = 2
     PITCH_MM:     ClassVar[float] = 2.1
     PINOUT        = _BARREL_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_BarrelJack:BarrelJack_Horizontal"
+
 
 
 declare_mating_pair(BarrelJack5p5x2p1, BarrelPlug5p5x2p1)
@@ -58,6 +62,8 @@ class BarrelJack5p5x2p5(Connector):
     PIN_COUNT     = 2
     PITCH_MM:     ClassVar[float] = 2.5
     PINOUT        = _BARREL_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_BarrelJack:BarrelJack_2.5mm_Horizontal"
+
 
 
 @register('BarrelPlug5p5x2p5')
@@ -69,6 +75,8 @@ class BarrelPlug5p5x2p5(Connector):
     PIN_COUNT     = 2
     PITCH_MM:     ClassVar[float] = 2.5
     PINOUT        = _BARREL_PINOUT
+    FOOTPRINT:    ClassVar[str | None] = "Connector_BarrelJack:BarrelJack_2.5mm_Horizontal"
+
 
 
 declare_mating_pair(BarrelJack5p5x2p5, BarrelPlug5p5x2p5)

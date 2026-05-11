@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from pydantic import validate_call
 
 from framework.factor import FactorNode
@@ -20,6 +22,10 @@ class Rail(FactorNode):
     """
 
     __slots__ = ('_level', '_ports')
+
+    # Rail isn't a placeable part — it's a logical marker that tells
+    # exporters this net is power/ground. No footprint; not on the BOM.
+    PIN_NUMBERS: ClassVar[dict[str, int]] = {'out': 1}
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, level: bool, domain: GroundDomain = ELECTRICAL) -> None:

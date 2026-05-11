@@ -43,6 +43,8 @@ class LED(FactorNode):
     __slots__ = ('_color', '_lit', '_ports', '_refdes_number')
 
     REFDES_PREFIX: ClassVar[str] = 'D'   # LEDs are diodes; standard prefix is D, not LED.
+    FOOTPRINT: ClassVar[str | None] = "LED_SMD:LED_0805"
+    PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(

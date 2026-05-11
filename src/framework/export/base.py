@@ -79,12 +79,61 @@ def _registered_keys() -> list[tuple[type[FactorNode], str]]:
     return list(_RENDERERS.keys())
 
 
+# ---------------------------------------------------------------------------
+# Net-namer registry (per spec §6.6).  Each format adapter registers a
+# function that maps a LogicalNet to a format-specific net name.  The
+# framework's previous SPICE-hardcoded conventions live in the SPICE
+# adapter; the framework itself stays format-agnostic.
+# ---------------------------------------------------------------------------
+
+NetNamer = Callable[['LogicalNet', 'ExporterContext'], str]
+_NET_NAMERS: dict[str, NetNamer] = {}
+
+
+def register_net_namer(format: str, namer: NetNamer) -> None:
+    """Register a net-naming function for `format`. Called by each
+    adapter's package `__init__.py`. Re-registering raises."""
+    if format in _NET_NAMERS:
+        raise ValueError(
+            f"Net namer for format {format!r} already registered."
+        )
+    _NET_NAMERS[format] = namer
+
+
+def lookup_net_namer(format: str) -> NetNamer:
+    """Return the namer registered for `format`. Raises KeyError if
+    the adapter hasn't registered one."""
+    try:
+        return _NET_NAMERS[format]
+    except KeyError:
+        raise KeyError(
+            f"No net namer registered for format {format!r}. "
+            f"Available: {sorted(_NET_NAMERS)}"
+        )
+
+
+def pin_number_of(component: FactorNode, port_name: str) -> int | None:
+    """The datasheet pin number for `port_name` on `component`,
+    regardless of whether the component models its terminals as Pin
+    instances (chips, connectors) or as raw Ports with PIN_NUMBERS
+    metadata (passives). Returns None if the component declares no
+    number for the requested port — adapters decide whether that's an
+    error or a silently-omitted field."""
+    for pin in getattr(component, 'pins', ()):
+        if pin.id.name == port_name:
+            return pin.id.number
+    return getattr(type(component), 'PIN_NUMBERS', {}).get(port_name)
+
+
 class ExportConfig(BaseModel):
     """Common export configuration.  Adapters subclass this to add
-    format-specific fields (see `SpiceExportConfig`)."""
+    format-specific fields (see `SpiceExportConfig`, `KiCadExportConfig`, …)."""
     model_config = ConfigDict(extra='forbid', arbitrary_types_allowed=True)
 
-    include_header_comment: bool = True
+    # Per §6.7: default to False so golden-file tests run byte-stable
+    # on the unconfigured `export()` call. When True, the header
+    # carries deterministic content only (no wall-clock timestamps).
+    include_header_comment: bool = False
     net_name_style: Literal['numeric', 'qualified', 'short_hash'] = 'numeric'
     include_unused_pins: bool = False
 
@@ -103,7 +152,7 @@ class ExporterContext:
     __slots__ = (
         '_design', '_format', '_logical_nets', '_net_name_by_node',
         '_lines', '_config', '_models_used', '_synth_counter',
-        '_synth_names',
+        '_synth_names', '_namer',
     )
 
     def __init__(
@@ -120,6 +169,10 @@ class ExporterContext:
         self._models_used: set[str] = set()
         self._synth_counter: dict[str, int] = {}
         self._synth_names: dict[int, str] = {}
+        # Look up the per-format namer. Adapters register one in
+        # their package __init__; this is the framework's only
+        # remaining net-naming hook.
+        self._namer = lookup_net_namer(format)
         self._net_name_by_node = self._assign_net_names()
 
     @property
@@ -143,43 +196,15 @@ class ExporterContext:
         return frozenset(self._models_used)
 
     def _assign_net_names(self) -> dict[int, str]:
-        """Compute per-Node net names. Resolved here rather than in
-        adapters so that two ports on the same net always render to the
-        same name regardless of which adapter looks first."""
-        from components.passives.rail import Rail
-
+        """Compute per-Node net names by delegating to the
+        format-specific namer (per §6.6). Two ports on the same net
+        always resolve to the same name."""
         names: dict[int, str] = {}
         for net in self._logical_nets:
-            has_gnd = any(
-                isinstance(o, Rail) and o.level is False
-                for o, _ in net.ports
-            )
-            has_vcc = any(
-                isinstance(o, Rail) and o.level is True
-                for o, _ in net.ports
-            )
-            if has_gnd:
-                name = '0'
-            elif has_vcc:
-                name = 'vcc'
-            else:
-                name = self._stylise_net_name(net)
+            name = self._namer(net, self)
             for nid in net.nodes:
                 names[nid] = name
         return names
-
-    def _stylise_net_name(self, net: LogicalNet) -> str:
-        style = self._config.net_name_style
-        if style == 'numeric':
-            return f"net_{net.id}"
-        if style == 'qualified':
-            if net.ports:
-                owner, port = net.ports[0]
-                refdes = getattr(owner, 'refdes', type(owner).__name__)
-                return f"{refdes}_{port.name}"
-            return f"net_{net.id}"
-        # short_hash
-        return f"n{net.id:04x}"
 
     def net_name(self, port: Port) -> str:
         """Return the format-specific name for the net containing this
