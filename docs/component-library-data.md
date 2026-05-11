@@ -1179,7 +1179,7 @@ _Centre exposed pad: connect to GND._
 | 1   | OUT1   | OUT       |
 | 2   | IN1_NEG   | IN        |
 | 3   | IN1_POS   | IN        |
-| 4   | V_NEG/GND | power_in  |
+| 4   | V_GND | power_in  |
 | 5   | IN2_POS   | IN        |
 | 6   | IN2_NEG   | IN        |
 | 7   | OUT2   | OUT       |
@@ -1211,7 +1211,7 @@ _Centre exposed pad: connect to GND._
 | 8   | OUT3 | OUT       |
 | 9   | IN3_NEG | IN        |
 | 10  | IN3_POS | IN        |
-| 11  | V_NEG/GND | power_in |
+| 11  | V_GND | power_in |
 | 12  | IN4_POS | IN        |
 | 13  | IN4_NEG | IN        |
 | 14  | OUT4 | OUT       |
@@ -1366,7 +1366,7 @@ _Centre exposed pad: connect to GND._
 | 1   | OUT1 | OUT       |
 | 2   | IN1_NEG | IN        |
 | 3   | IN1_POS | IN        |
-| 4   | V_NEG/GND | power_in |
+| 4   | V_GND | power_in |
 | 5   | IN2_POS | IN        |
 | 6   | IN2_NEG | IN        |
 | 7   | OUT2 | OUT       |
