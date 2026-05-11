@@ -40,9 +40,10 @@ def _connector(name, **kwargs):
 
 
 _OVERRIDES = {
-    'Resistor': _passive('Resistor', ohms=330),
-    'LED':      _passive('LED',      color='red'),
-    'Rail':     lambda n: lookup('Rail')(level=True),
+    'Resistor':  _passive('Resistor',  ohms=330),
+    'Capacitor': _passive('Capacitor', farads=100e-9),
+    'LED':       _passive('LED',       color='red'),
+    'Rail':      lambda n: lookup('Rail')(level=True),
     # Pin-count-parameterised connector families.
     'Header1xNFemale':   _connector('Header1xNFemale',   pin_count=4, pitch_mm=2.54),
     'Header1xNMale':     _connector('Header1xNMale',     pin_count=4, pitch_mm=2.54),

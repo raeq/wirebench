@@ -20,6 +20,7 @@ from framework.transistor import Transistor
 
 from framework.export.base import ExporterContext, register_renderer
 
+from components.passives.capacitor import Capacitor
 from components.passives.led import LED
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
@@ -42,6 +43,12 @@ def _footprint_of(comp) -> str:
 def render_resistor(r: Resistor, ctx: ExporterContext, parent: str = '') -> str:
     value = f"{float(r.ohms):g}Ω"
     return _csv_row(r.refdes, value, _footprint_of(r), '1', parent, 'Resistor')
+
+
+@register_renderer(Capacitor, format='bom')
+def render_capacitor(c: Capacitor, ctx: ExporterContext, parent: str = '') -> str:
+    value = f"{float(c.farads):g}F"
+    return _csv_row(c.refdes, value, _footprint_of(c), '1', parent, 'Capacitor')
 
 
 @register_renderer(LED, format='bom')

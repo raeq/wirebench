@@ -13,6 +13,7 @@ from framework.transistor import Transistor
 
 from framework.export.base import ExporterContext, register_renderer
 
+from components.passives.capacitor import Capacitor
 from components.passives.led import LED
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
@@ -27,6 +28,12 @@ def _dot_label(text: str) -> str:
 def render_resistor(r: Resistor, ctx: ExporterContext) -> str:
     label = f"{r.refdes}\\n{float(r.ohms):g}Ω"
     return f'{r.refdes} [label="{_dot_label(label)}"];'
+
+
+@register_renderer(Capacitor, format='dot')
+def render_capacitor(c: Capacitor, ctx: ExporterContext) -> str:
+    label = f"{c.refdes}\\n{float(c.farads):g}F"
+    return f'{c.refdes} [label="{_dot_label(label)}"];'
 
 
 @register_renderer(LED, format='dot')

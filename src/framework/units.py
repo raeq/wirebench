@@ -89,3 +89,31 @@ class Kilohms(_Unit):
     _SCALE = 1e3
     def __str__(self) -> str:
         return f"{float(self) / self._SCALE:.3g} kΩ"
+
+
+class Farads(_Unit):
+    __slots__ = ()
+    _SCALE = 1.0
+    def __str__(self) -> str:
+        return f"{float(self) / self._SCALE:.3g} F"
+
+
+class Microfarads(_Unit):
+    __slots__ = ()
+    _SCALE = 1e-6
+    def __str__(self) -> str:
+        return f"{float(self) / self._SCALE:.3g} µF"
+
+
+class Nanofarads(_Unit):
+    __slots__ = ()
+    _SCALE = 1e-9
+    def __str__(self) -> str:
+        return f"{float(self) / self._SCALE:.3g} nF"
+
+
+class Picofarads(_Unit):
+    __slots__ = ()
+    _SCALE = 1e-12
+    def __str__(self) -> str:
+        return f"{float(self) / self._SCALE:.3g} pF"

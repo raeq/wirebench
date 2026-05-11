@@ -19,6 +19,7 @@ REFDES_U = r'^U\d+$'   # ICs
 REFDES_J = r'^J\d+$'   # female / receptacle / chassis-side
 REFDES_P = r'^P\d+$'   # male / plug / cable-side
 REFDES_R = r'^R\d+$'   # resistors
+REFDES_C = r'^C\d+$'   # capacitors
 REFDES_D = r'^D\d+$'   # diodes (LEDs)
 REFDES_Q = r'^Q\d+$'   # transistors (BJT / MOSFET)
 REFDES_A = r'^A\d+$'   # assemblies / boards
@@ -38,6 +39,12 @@ class ResistorRecord(_Record):
     type:   Literal['Resistor'] = 'Resistor'
     refdes: Annotated[str,   Field(pattern=REFDES_R)]
     ohms:   Annotated[float, Field(gt=0)]
+
+
+class CapacitorRecord(_Record):
+    type:   Literal['Capacitor'] = 'Capacitor'
+    refdes: Annotated[str,   Field(pattern=REFDES_C)]
+    farads: Annotated[float, Field(gt=0)]
 
 
 class LEDRecord(_Record):
@@ -61,6 +68,9 @@ class _ChipRecord(_Record):
 
 class SN74HC04Record(_ChipRecord):
     type: Literal['SN74HC04'] = 'SN74HC04'
+
+class CD4017Record(_ChipRecord):
+    type: Literal['CD4017'] = 'CD4017'
 
 class CD4069Record(_ChipRecord):
     type: Literal['CD4069'] = 'CD4069'
@@ -338,8 +348,9 @@ class SDCardRecord(_FixedMaleConnectorRecord):
 
 ComponentRecord = Annotated[
     Union[
-        ResistorRecord, LEDRecord, RailRecord,
-        SN74HC04Record, CD4069Record, LM393Record, CD4043Record, ULN2003ARecord,
+        ResistorRecord, CapacitorRecord, LEDRecord, RailRecord,
+        SN74HC04Record, CD4017Record, CD4069Record, LM393Record, CD4043Record,
+        ULN2003ARecord,
         # 74HC logic
         SN74HC00Record, SN74HC02Record, SN74HC08Record, SN74HC32Record,
         SN74HC74Record, SN74HC86Record, SN74HC138Record, SN74HC139Record,

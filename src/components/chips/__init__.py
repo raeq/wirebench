@@ -5,6 +5,7 @@ re-exported. Import them only from `components.chips.concepts.<name>`
 when you genuinely need to peek inside a chip — and that should be rare.
 """
 # Original library (decomposed chips with internal cells).
+from .cd4017   import CD4017
 from .cd4043   import CD4043
 from .cd4069   import CD4069
 from .lm393    import LM393
@@ -89,7 +90,7 @@ from .esp8266_12f    import ESP8266_12F
 
 __all__ = [
     # Original
-    'CD4043', 'CD4069', 'LM393', 'SN74HC04', 'ULN2003A',
+    'CD4017', 'CD4043', 'CD4069', 'LM393', 'SN74HC04', 'ULN2003A',
     # 74HC
     'SN74HC00', 'SN74HC02', 'SN74HC08', 'SN74HC32', 'SN74HC74', 'SN74HC86',
     'SN74HC138', 'SN74HC139', 'SN74HC151', 'SN74HC157', 'SN74HC165',

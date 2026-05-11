@@ -17,6 +17,7 @@ from framework.transistor import Transistor
 
 from framework.export.base import ExporterContext, register_renderer
 
+from components.passives.capacitor import Capacitor
 from components.passives.led import LED
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
@@ -57,6 +58,17 @@ def render_resistor(r: Resistor, ctx: ExporterContext, qrd: str,
     return _comp_block(
         qrd, value, _footprint_field(r),
         _libsource('Device', 'R', 'Resistor'),
+        names, tstamps,
+    )
+
+
+@register_renderer(Capacitor, format='kicad')
+def render_capacitor(c: Capacitor, ctx: ExporterContext, qrd: str,
+                     names: str, tstamps: str) -> str:
+    value = f"{float(c.farads):g}"
+    return _comp_block(
+        qrd, value, _footprint_field(c),
+        _libsource('Device', 'C', 'Capacitor'),
         names, tstamps,
     )
 

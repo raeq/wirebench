@@ -57,6 +57,11 @@ def _component_to_record(
             refdes=component.refdes,                 # type: ignore[attr-defined]
             ohms=float(component._ohms),             # type: ignore[attr-defined]
         ))
+    if cls_name == 'Capacitor':
+        return cast(ComponentRecord, _import('CapacitorRecord')(
+            refdes=component.refdes,                 # type: ignore[attr-defined]
+            farads=float(component._farads),         # type: ignore[attr-defined]
+        ))
     if cls_name == 'LED':
         return cast(ComponentRecord, _import('LEDRecord')(
             refdes=component.refdes,                 # type: ignore[attr-defined]
@@ -306,6 +311,8 @@ def _build_component(record: Any) -> FactorNode:
         kwargs['refdes_number'] = _refdes_number_from_refdes(record.refdes)
     if record.type == 'Resistor':
         kwargs['ohms'] = record.ohms
+    elif record.type == 'Capacitor':
+        kwargs['farads'] = record.farads
     elif record.type == 'LED':
         kwargs['color'] = record.color
     elif record.type == 'Rail':
