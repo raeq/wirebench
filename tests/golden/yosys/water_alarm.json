@@ -1,0 +1,358 @@
+{
+  "creator": "circuitry 0.x",
+  "modules": {
+    "WaterAlarm": {
+      "cells": {
+        "D1": {
+          "connections": {
+            "anode": [
+              5
+            ],
+            "cathode": [
+              63
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "color": "red"
+          },
+          "port_directions": {
+            "anode": "input",
+            "cathode": "input"
+          },
+          "type": "LED"
+        },
+        "D2": {
+          "connections": {
+            "anode": [
+              4
+            ],
+            "cathode": [
+              64
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "color": "green"
+          },
+          "port_directions": {
+            "anode": "input",
+            "cathode": "input"
+          },
+          "type": "LED"
+        },
+        "U1": {
+          "connections": {
+            "in_1": [
+              38
+            ],
+            "in_2": [
+              39
+            ],
+            "in_3": [
+              40
+            ],
+            "in_4": [
+              41
+            ],
+            "in_5": [
+              42
+            ],
+            "in_6": [
+              43
+            ],
+            "in_7": [
+              44
+            ],
+            "out_1": [
+              6
+            ],
+            "out_2": [
+              20
+            ],
+            "out_3": [
+              45
+            ],
+            "out_4": [
+              46
+            ],
+            "out_5": [
+              47
+            ],
+            "out_6": [
+              48
+            ],
+            "out_7": [
+              49
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "in_1": "input",
+            "in_2": "input",
+            "in_3": "input",
+            "in_4": "input",
+            "in_5": "input",
+            "in_6": "input",
+            "in_7": "input",
+            "out_1": "output",
+            "out_2": "output",
+            "out_3": "output",
+            "out_4": "output",
+            "out_5": "output",
+            "out_6": "output",
+            "out_7": "output"
+          },
+          "type": "ULN2003A"
+        },
+        "U2": {
+          "connections": {
+            "a_1": [
+              20
+            ],
+            "a_2": [
+              3
+            ],
+            "a_3": [
+              3
+            ],
+            "a_4": [
+              3
+            ],
+            "a_5": [
+              3
+            ],
+            "a_6": [
+              3
+            ],
+            "y_1": [
+              7
+            ],
+            "y_2": [
+              50
+            ],
+            "y_3": [
+              51
+            ],
+            "y_4": [
+              52
+            ],
+            "y_5": [
+              53
+            ],
+            "y_6": [
+              54
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "a_1": "input",
+            "a_2": "input",
+            "a_3": "input",
+            "a_4": "input",
+            "a_5": "input",
+            "a_6": "input",
+            "y_1": "output",
+            "y_2": "output",
+            "y_3": "output",
+            "y_4": "output",
+            "y_5": "output",
+            "y_6": "output"
+          },
+          "type": "SN74HC04"
+        },
+        "U3": {
+          "connections": {
+            "a_1": [
+              5
+            ],
+            "a_2": [
+              3
+            ],
+            "a_3": [
+              3
+            ],
+            "a_4": [
+              3
+            ],
+            "a_5": [
+              3
+            ],
+            "a_6": [
+              3
+            ],
+            "y_1": [
+              4
+            ],
+            "y_2": [
+              55
+            ],
+            "y_3": [
+              56
+            ],
+            "y_4": [
+              57
+            ],
+            "y_5": [
+              58
+            ],
+            "y_6": [
+              59
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "a_1": "input",
+            "a_2": "input",
+            "a_3": "input",
+            "a_4": "input",
+            "a_5": "input",
+            "a_6": "input",
+            "y_1": "output",
+            "y_2": "output",
+            "y_3": "output",
+            "y_4": "output",
+            "y_5": "output",
+            "y_6": "output"
+          },
+          "type": "CD4069"
+        },
+        "U4": {
+          "connections": {
+            "oe": [
+              2
+            ],
+            "q_1": [
+              5
+            ],
+            "q_2": [
+              60
+            ],
+            "q_3": [
+              61
+            ],
+            "q_4": [
+              62
+            ],
+            "r_1": [
+              7
+            ],
+            "r_2": [
+              3
+            ],
+            "r_3": [
+              3
+            ],
+            "r_4": [
+              3
+            ],
+            "s_1": [
+              6
+            ],
+            "s_2": [
+              3
+            ],
+            "s_3": [
+              3
+            ],
+            "s_4": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "oe": "input",
+            "q_1": "output",
+            "q_2": "output",
+            "q_3": "output",
+            "q_4": "output",
+            "r_1": "input",
+            "r_2": "input",
+            "r_3": "input",
+            "r_4": "input",
+            "s_1": "input",
+            "s_2": "input",
+            "s_3": "input",
+            "s_4": "input"
+          },
+          "type": "CD4043"
+        }
+      },
+      "netnames": {
+        "GND": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "net_18": {
+          "attributes": {},
+          "bits": [
+            20
+          ],
+          "hide_name": 0
+        },
+        "net_2": {
+          "attributes": {},
+          "bits": [
+            4
+          ],
+          "hide_name": 0
+        },
+        "net_3": {
+          "attributes": {},
+          "bits": [
+            5
+          ],
+          "hide_name": 0
+        },
+        "net_4": {
+          "attributes": {},
+          "bits": [
+            6
+          ],
+          "hide_name": 0
+        },
+        "net_5": {
+          "attributes": {},
+          "bits": [
+            7
+          ],
+          "hide_name": 0
+        },
+        "vcc": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {
+        "high_probe": {
+          "bits": [
+            39
+          ],
+          "direction": "input"
+        },
+        "low_probe": {
+          "bits": [
+            38
+          ],
+          "direction": "input"
+        },
+        "state": {
+          "bits": [
+            5
+          ],
+          "direction": "output"
+        }
+      }
+    }
+  }
+}

@@ -5,12 +5,14 @@ Edges are emitted at the net-walker level (see dot/__init__.py).
 """
 from __future__ import annotations
 
+from framework.board import Board
 from framework.chip import Chip
 from framework.connector import Connector
 
 from framework.export.base import ExporterContext, register_renderer
 
 from components.passives.led import LED
+from components.passives.rail import Rail
 from components.passives.resistor import Resistor
 
 
@@ -35,6 +37,18 @@ def render_led(d: LED, ctx: ExporterContext) -> str:
 def render_chip(u: Chip, ctx: ExporterContext) -> str:
     label = f"{u.refdes}\\n{type(u).__name__}"
     return f'{u.refdes} [label="{_dot_label(label)}"];'
+
+
+@register_renderer(Rail, format='dot')
+def render_rail(r: Rail, ctx: ExporterContext) -> str:
+    return ""   # rails inlined into vcc/gnd net names
+
+
+@register_renderer(Board, format='dot')
+def render_board(b: Board, ctx: ExporterContext) -> str:
+    # Boards become subgraph clusters at the adapter's top level
+    # (see dot/__init__.py). No node declaration here.
+    return ""
 
 
 @register_renderer(Connector, format='dot')

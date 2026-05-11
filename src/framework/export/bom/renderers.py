@@ -19,6 +19,7 @@ from framework.connector import Connector
 from framework.export.base import ExporterContext, register_renderer
 
 from components.passives.led import LED
+from components.passives.rail import Rail
 from components.passives.resistor import Resistor
 
 
@@ -70,3 +71,9 @@ def render_connector(j: Connector, ctx: ExporterContext, parent: str = '') -> st
 def render_board(b: Board, ctx: ExporterContext, parent: str = '') -> str:
     value = f"{b.name} Rev {b.revision}"
     return _csv_row(b.refdes, value, '', '1', parent, 'Printed circuit board')
+
+
+@register_renderer(Rail, format='bom')
+def render_rail(r: Rail, ctx: ExporterContext, parent: str = '') -> str:
+    # Rails are logical markers, not procurable parts — empty row.
+    return ""

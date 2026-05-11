@@ -9,12 +9,14 @@ passed in; renderers don't see the hierarchy.
 """
 from __future__ import annotations
 
+from framework.board import Board
 from framework.chip import Chip
 from framework.connector import Connector
 
 from framework.export.base import ExporterContext, register_renderer
 
 from components.passives.led import LED
+from components.passives.rail import Rail
 from components.passives.resistor import Resistor
 
 
@@ -76,6 +78,21 @@ def render_chip(u: Chip, ctx: ExporterContext, qrd: str,
         _libsource('IC', cls, cls),
         names, tstamps,
     )
+
+
+@register_renderer(Rail, format='kicad')
+def render_rail(r: Rail, ctx: ExporterContext, qrd: str = '',
+                names: str = '/', tstamps: str = '/') -> str:
+    # Rails are not parts; their nets are named directly. No comp.
+    return ""
+
+
+@register_renderer(Board, format='kicad')
+def render_board(b: Board, ctx: ExporterContext, qrd: str = '',
+                 names: str = '/', tstamps: str = '/') -> str:
+    # Boards contribute only the sheetpath segment that their
+    # children inherit; the adapter handles the walk directly.
+    return ""
 
 
 @register_renderer(Connector, format='kicad')
