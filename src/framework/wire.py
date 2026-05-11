@@ -1,7 +1,10 @@
+from pydantic import validate_call
+
 from framework.node import Node
 from framework.port import Port, Direction
 
 
+@validate_call(config={"arbitrary_types_allowed": True})
 def wire(*ports: Port) -> None:
     """Connect ports together, creating the junction node at their meeting point.
 

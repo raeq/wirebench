@@ -10,8 +10,10 @@ from framework.connector import Connector, declare_mating_pair
 from framework.pin import PinId
 from framework.port import Direction
 from framework.signals import Analog
+from framework.registry import register
 
 
+@register('Header1xNMale')
 class Header1xNMale(Connector):
     """1×N pin header strip, snap-apart.  Common pitches: 2.54 mm (0.1"),
     1.27 mm (0.05" — JTAG/SWD)."""
@@ -24,6 +26,7 @@ class Header1xNMale(Connector):
                      for i in range(1, self._pin_count + 1))
 
 
+@register('Header1xNFemale')
 class Header1xNFemale(Connector):
     """1×N socket header strip — female counterpart to Header1xNMale."""
     __slots__ = ()
@@ -35,6 +38,7 @@ class Header1xNFemale(Connector):
                      for i in range(1, self._pin_count + 1))
 
 
+@register('Header2xNMale')
 class Header2xNMale(Connector):
     """2×N dual-row pin header strip.  `pin_count` here is the *total* pin
     count (= 2 × pins_per_row), matching how these are sold and labelled."""
@@ -47,6 +51,7 @@ class Header2xNMale(Connector):
                      for i in range(1, self._pin_count + 1))
 
 
+@register('Header2xNFemale')
 class Header2xNFemale(Connector):
     """2×N dual-row socket header — female counterpart to Header2xNMale."""
     __slots__ = ()

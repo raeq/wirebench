@@ -10,8 +10,10 @@ from framework.connector import Connector
 from framework.pin import PinId
 from framework.port import Direction
 from framework.signals import Analog
+from framework.registry import register
 
 
+@register('ScrewTerminalBlock')
 class ScrewTerminalBlock(Connector):
     """PCB-mount screw terminal block."""
     __slots__ = ()

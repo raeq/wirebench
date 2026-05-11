@@ -68,7 +68,8 @@ def test_pin_other_face_rejects_stranger_port():
 
 def test_pin_rejects_bare_string():
     # First arg used to be a bare string; it must now be a PinId.
-    with pytest.raises(TypeError, match="PinId"):
+    from pydantic import ValidationError
+    with pytest.raises(ValidationError):
         Pin('a', Direction.IN, ELECTRICAL, signal_type=Digital)  # type: ignore[arg-type]
 
 

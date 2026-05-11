@@ -6,8 +6,10 @@ from framework.circuit import Circuit
 from framework.connector import Connector
 from framework.factor import FactorNode
 from framework.refdes import validate_refdes
+from framework.registry import register
 
 
+@register('Board')
 class Board(Circuit):
     """A printed circuit board: a populated PCB with name, revision,
     and a refdes (it is itself a part within a parent assembly).

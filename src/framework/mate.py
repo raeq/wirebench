@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+from pydantic import validate_call
+
 from framework.connector import Connector
 from framework.wire import wire
 
 
+@validate_call(config={"arbitrary_types_allowed": True})
 def mate(a: Connector, b: Connector) -> None:
     """Physically mate two connectors: wire each external pin of `a` to the
     same-position external pin of `b`.

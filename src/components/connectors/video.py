@@ -7,6 +7,7 @@ from framework.connector import Connector, declare_mating_pair
 from framework.pin import PinId
 from framework.port import Direction
 from framework.signals import Analog
+from framework.registry import register
 
 
 # HDMI 1.4 / 2.0 Type-A 19-pin pinout.
@@ -33,6 +34,7 @@ _HDMI_TYPE_A_PINOUT = (
 )
 
 
+@register('HDMITypeAReceptacle')
 class HDMITypeAReceptacle(Connector):
     """HDMI Type-A receptacle (board-side)."""
     __slots__ = ()
@@ -43,6 +45,7 @@ class HDMITypeAReceptacle(Connector):
     PINOUT        = _HDMI_TYPE_A_PINOUT
 
 
+@register('HDMITypeAPlug')
 class HDMITypeAPlug(Connector):
     """HDMI Type-A plug (cable-side)."""
     __slots__ = ()

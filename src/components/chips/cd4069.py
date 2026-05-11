@@ -7,9 +7,11 @@ from framework.port import Direction
 from framework.refdes import validate_refdes
 from framework.signals import Digital
 from framework.wire import wire
+from framework.registry import register
 from .concepts.inverter import Inverter
 
 
+@register('CD4069')
 class CD4069(Chip):
     """Texas Instruments CD4069UB — hex unbuffered inverter.
 

@@ -6,8 +6,10 @@ from framework.port import Port, Direction
 from framework.refdes import validate_refdes
 from framework.signals import Digital
 from framework.units import Ohms
+from framework.registry import register
 
 
+@register('LED')
 class LED(FactorNode):
     """Light-emitting diode.
 

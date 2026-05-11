@@ -7,9 +7,11 @@ from framework.port import Direction
 from framework.refdes import validate_refdes
 from framework.signals import Digital
 from framework.wire import wire
+from framework.registry import register
 from .concepts.inverter import Inverter
 
 
+@register('SN74HC04')
 class SN74HC04(Chip):
     """Texas Instruments SN74HC04 — hex inverting buffer.
 

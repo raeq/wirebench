@@ -6,8 +6,10 @@ from framework.port import Port, Direction
 from framework.refdes import validate_refdes
 from framework.signals import Analog
 from framework.units import Amps, Ohms, Volts
+from framework.registry import register
 
 
+@register('Resistor')
 class Resistor(FactorNode):
     """Ideal resistor. Ohm's law: V = I × R.
 

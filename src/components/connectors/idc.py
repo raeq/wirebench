@@ -9,8 +9,10 @@ from framework.connector import Connector, declare_mating_pair
 from framework.pin import PinId
 from framework.port import Direction
 from framework.signals import Analog
+from framework.registry import register
 
 
+@register('IDC2xNMale')
 class IDC2xNMale(Connector):
     """2×N shrouded male IDC header, board-side."""
     __slots__ = ()
@@ -22,6 +24,7 @@ class IDC2xNMale(Connector):
                      for i in range(1, self._pin_count + 1))
 
 
+@register('IDC2xNSocket')
 class IDC2xNSocket(Connector):
     """2×N female IDC ribbon-cable socket."""
     __slots__ = ()

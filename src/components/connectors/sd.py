@@ -9,6 +9,7 @@ from framework.connector import Connector, declare_mating_pair
 from framework.pin import PinId
 from framework.port import Direction
 from framework.signals import Analog
+from framework.registry import register
 
 
 # ------------------------------------------------------------- microSD
@@ -26,6 +27,7 @@ _MICROSD_PINOUT = (
 )
 
 
+@register('MicroSDCardSlot')
 class MicroSDCardSlot(Connector):
     """microSD card slot (board-side).  8 contacts."""
     __slots__ = ()
@@ -36,6 +38,7 @@ class MicroSDCardSlot(Connector):
     PINOUT        = _MICROSD_PINOUT
 
 
+@register('MicroSDCard')
 class MicroSDCard(Connector):
     """A microSD card — modelled as a connector because the gold
     contacts are its physical interface to the slot.  The card's
@@ -68,6 +71,7 @@ _SD_PINOUT = (
 )
 
 
+@register('SDCardSlot')
 class SDCardSlot(Connector):
     """Full-size SD card slot (board-side).  9 contacts including
     card-detect."""
@@ -79,6 +83,7 @@ class SDCardSlot(Connector):
     PINOUT        = _SD_PINOUT
 
 
+@register('SDCard')
 class SDCard(Connector):
     """A full-size SD card.  Modelled as a connector for the same
     reason as MicroSDCard."""

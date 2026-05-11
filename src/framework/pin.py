@@ -1,12 +1,14 @@
-from dataclasses import dataclass
-from typing import ClassVar
+from typing import Annotated, ClassVar
+
+from pydantic import Field, validate_call
+from pydantic.dataclasses import dataclass
 
 from framework.factor import FactorNode
 from framework.ground import GroundDomain
 from framework.port import Port, Direction
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True, slots=True, config={"arbitrary_types_allowed": False})
 class PinId:
     """The identity of a pin on a physical package: its 1-indexed pin
     number (its position on the package, as stamped on silkscreen and
@@ -20,17 +22,8 @@ class PinId:
     does not invent numbers — it copies them from the datasheet.
     """
 
-    number: int
-    name: str
-
-    def __post_init__(self) -> None:
-        # bool is a subclass of int in Python; reject explicitly.
-        if isinstance(self.number, bool) or not isinstance(self.number, int):
-            raise TypeError(f"PinId.number must be an int; got {type(self.number).__name__}")
-        if self.number < 1:
-            raise ValueError(f"PinId.number must be ≥ 1; got {self.number}")
-        if not isinstance(self.name, str) or not self.name:
-            raise ValueError(f"PinId.name must be a non-empty string; got {self.name!r}")
+    number: Annotated[int, Field(gt=0, strict=True)]
+    name:   Annotated[str, Field(min_length=1)]
 
     def __str__(self) -> str:
         # Human-readable: "pin 7 (GND)". Used in error messages and reprs.
@@ -76,6 +69,7 @@ class Pin(FactorNode):
 
     IS_CONDUCTOR: ClassVar[bool] = True
 
+    @validate_call(config={"arbitrary_types_allowed": True})
     def __init__(
         self,
         id_: PinId,
@@ -85,8 +79,6 @@ class Pin(FactorNode):
         mandatory: bool = True,
         signal_type: type,
     ) -> None:
-        if not isinstance(id_, PinId):
-            raise TypeError(f"Pin requires a PinId; got {type(id_).__name__}")
         self._id   = id_
         self._role = direction
         if direction is Direction.IN:
@@ -166,6 +158,7 @@ class Pin(FactorNode):
         return {self._external.name: self._external,
                 self._internal.name: self._internal}
 
+    @validate_call(config={"arbitrary_types_allowed": True})
     def other_face(self, port: Port) -> Port:
         """Return the opposite face of this conductor, given one face.
 

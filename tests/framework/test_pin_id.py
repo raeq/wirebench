@@ -1,5 +1,6 @@
 import pytest
 from dataclasses import FrozenInstanceError
+from pydantic import ValidationError
 
 from framework.pin import PinId
 
@@ -19,19 +20,20 @@ def test_equality_and_hash_by_value():
 
 def test_frozen():
     pid = PinId(1, 'X')
-    with pytest.raises(FrozenInstanceError):
+    with pytest.raises((FrozenInstanceError, ValidationError, AttributeError)):
         pid.number = 2  # type: ignore[misc]
 
 
 @pytest.mark.parametrize("bad", [0, -1, 1.0, True, '1', None])
 def test_number_must_be_positive_int(bad):
-    with pytest.raises((ValueError, TypeError)):
+    # pydantic raises ValidationError for both wrong type and bad value.
+    with pytest.raises(ValidationError):
         PinId(bad, 'X')  # type: ignore[arg-type]
 
 
 @pytest.mark.parametrize("bad", ['', None, 7])
 def test_name_must_be_non_empty_string(bad):
-    with pytest.raises((ValueError, TypeError)):
+    with pytest.raises(ValidationError):
         PinId(1, bad)  # type: ignore[arg-type]
 
 

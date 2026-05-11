@@ -7,9 +7,11 @@ from framework.port import Direction
 from framework.refdes import validate_refdes
 from framework.signals import Analog, Digital
 from framework.wire import wire
+from framework.registry import register
 from .concepts.darlington_channel import DarlingtonChannel
 
 
+@register('ULN2003A')
 class ULN2003A(Chip):
     """Seven-channel NPN Darlington transistor array (TI ULN2003A).
 

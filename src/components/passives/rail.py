@@ -2,8 +2,10 @@ from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Digital
+from framework.registry import register
 
 
+@register('Rail')
 class Rail(FactorNode):
     """Constant logic rail.  Drives `out` to a fixed level (HIGH or LOW).
 

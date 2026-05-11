@@ -11,6 +11,7 @@ from framework.connector import Connector, declare_mating_pair
 from framework.pin import PinId
 from framework.port import Direction
 from framework.signals import Analog
+from framework.registry import register
 
 
 _BARREL_PINOUT = (
@@ -21,6 +22,7 @@ _BARREL_PINOUT = (
 
 # 5.5 mm OD × 2.1 mm ID centre-positive DC
 
+@register('BarrelJack5p5x2p1')
 class BarrelJack5p5x2p1(Connector):
     """5.5 mm × 2.1 mm DC barrel jack (board-side)."""
     __slots__ = ()
@@ -31,6 +33,7 @@ class BarrelJack5p5x2p1(Connector):
     PINOUT        = _BARREL_PINOUT
 
 
+@register('BarrelPlug5p5x2p1')
 class BarrelPlug5p5x2p1(Connector):
     """5.5 mm × 2.1 mm DC barrel plug."""
     __slots__ = ()
@@ -46,6 +49,7 @@ declare_mating_pair(BarrelJack5p5x2p1, BarrelPlug5p5x2p1)
 
 # 5.5 mm OD × 2.5 mm ID — mechanically incompatible with the 2.1 mm pair
 
+@register('BarrelJack5p5x2p5')
 class BarrelJack5p5x2p5(Connector):
     """5.5 mm × 2.5 mm DC barrel jack (board-side)."""
     __slots__ = ()
@@ -56,6 +60,7 @@ class BarrelJack5p5x2p5(Connector):
     PINOUT        = _BARREL_PINOUT
 
 
+@register('BarrelPlug5p5x2p5')
 class BarrelPlug5p5x2p5(Connector):
     """5.5 mm × 2.5 mm DC barrel plug."""
     __slots__ = ()

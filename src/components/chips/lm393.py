@@ -7,9 +7,11 @@ from framework.port import Direction
 from framework.refdes import validate_refdes
 from framework.signals import Analog, Digital
 from framework.wire import wire
+from framework.registry import register
 from .concepts.comparator import Comparator
 
 
+@register('LM393')
 class LM393(Chip):
     """Texas Instruments LM393 — dual differential voltage comparator.
 

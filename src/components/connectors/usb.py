@@ -11,6 +11,7 @@ from framework.connector import Connector, declare_mating_pair
 from framework.pin import PinId
 from framework.port import Direction
 from framework.signals import Analog
+from framework.registry import register
 
 
 # ---------------------------------------------------------------- Type-A
@@ -24,6 +25,7 @@ _USB_A_PINOUT = (
 )
 
 
+@register('USBAReceptacle')
 class USBAReceptacle(Connector):
     """Standard USB-A receptacle (board-side)."""
     __slots__ = ()
@@ -34,6 +36,7 @@ class USBAReceptacle(Connector):
     PINOUT        = _USB_A_PINOUT
 
 
+@register('USBAPlug')
 class USBAPlug(Connector):
     """Standard USB-A plug (cable-side)."""
     __slots__ = ()
@@ -56,6 +59,7 @@ _USB_B_PINOUT = (
 )
 
 
+@register('USBBReceptacle')
 class USBBReceptacle(Connector):
     """USB Type-B receptacle (square printer-style)."""
     __slots__ = ()
@@ -66,6 +70,7 @@ class USBBReceptacle(Connector):
     PINOUT        = _USB_B_PINOUT
 
 
+@register('USBBPlug')
 class USBBPlug(Connector):
     """USB Type-B plug."""
     __slots__ = ()
@@ -89,6 +94,7 @@ _USB_MICRO_B_PINOUT = (
 )
 
 
+@register('USBMicroBReceptacle')
 class USBMicroBReceptacle(Connector):
     """USB Micro-B receptacle."""
     __slots__ = ()
@@ -99,6 +105,7 @@ class USBMicroBReceptacle(Connector):
     PINOUT        = _USB_MICRO_B_PINOUT
 
 
+@register('USBMicroBPlug')
 class USBMicroBPlug(Connector):
     """USB Micro-B plug."""
     __slots__ = ()
@@ -144,6 +151,7 @@ _USB_C_PINOUT = (
 )
 
 
+@register('USBCReceptacle')
 class USBCReceptacle(Connector):
     """USB Type-C receptacle (full 24-pin)."""
     __slots__ = ()
@@ -154,6 +162,7 @@ class USBCReceptacle(Connector):
     PINOUT        = _USB_C_PINOUT
 
 
+@register('USBCPlug')
 class USBCPlug(Connector):
     """USB Type-C plug (full 24-pin)."""
     __slots__ = ()

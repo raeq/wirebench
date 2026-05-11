@@ -8,10 +8,12 @@ from framework.port import Direction
 from framework.refdes import validate_refdes
 from framework.signals import Digital
 from framework.wire import wire
+from framework.registry import register
 from .concepts.nor_latch import NORLatch
 from .concepts.tristate_buffer import TriStateBuffer
 
 
+@register('CD4043')
 class CD4043(Chip):
     """Texas Instruments CD4043B — quad NOR-based RS latch with tri-state outputs.
 

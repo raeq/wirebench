@@ -12,8 +12,10 @@ from framework.connector import Connector, declare_mating_pair
 from framework.pin import PinId
 from framework.port import Direction
 from framework.signals import Analog
+from framework.registry import register
 
 
+@register('JSTPHBoardSide')
 class JSTPHBoardSide(Connector):
     """JST PH board-side male header (2.0 mm pitch)."""
     __slots__ = ()
@@ -26,6 +28,7 @@ class JSTPHBoardSide(Connector):
                      for i in range(1, self._pin_count + 1))
 
 
+@register('JSTPHCableHousing')
 class JSTPHCableHousing(Connector):
     """JST PH cable-side female crimp housing (2.0 mm pitch)."""
     __slots__ = ()

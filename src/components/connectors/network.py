@@ -7,6 +7,7 @@ from framework.connector import Connector, declare_mating_pair
 from framework.pin import PinId
 from framework.port import Direction
 from framework.signals import Analog
+from framework.registry import register
 
 
 # T568B pinout — by far the more common termination in modern installs.
@@ -24,6 +25,7 @@ _RJ45_T568B_PINOUT = (
 )
 
 
+@register('RJ45Jack')
 class RJ45Jack(Connector):
     """RJ45 / 8P8C modular jack, board-side.  T568B pin labels."""
     __slots__ = ()
@@ -34,6 +36,7 @@ class RJ45Jack(Connector):
     PINOUT        = _RJ45_T568B_PINOUT
 
 
+@register('RJ45Plug')
 class RJ45Plug(Connector):
     """RJ45 / 8P8C modular plug, cable-side."""
     __slots__ = ()

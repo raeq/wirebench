@@ -17,6 +17,7 @@ from framework.connector import Connector, declare_mating_pair
 from framework.pin import PinId
 from framework.port import Direction
 from framework.signals import Analog
+from framework.registry import register
 
 
 _TRS_PINOUT = (
@@ -26,6 +27,7 @@ _TRS_PINOUT = (
 )
 
 
+@register('Audio3p5mmTRSJack')
 class Audio3p5mmTRSJack(Connector):
     """3.5 mm TRS audio jack (board-side)."""
     __slots__ = ()
@@ -36,6 +38,7 @@ class Audio3p5mmTRSJack(Connector):
     PINOUT        = _TRS_PINOUT
 
 
+@register('Audio3p5mmTRSPlug')
 class Audio3p5mmTRSPlug(Connector):
     """3.5 mm TRS audio plug (cable-side)."""
     __slots__ = ()
@@ -57,6 +60,7 @@ _TRRS_PINOUT = (
 )
 
 
+@register('Audio3p5mmTRRSJack')
 class Audio3p5mmTRRSJack(Connector):
     """3.5 mm TRRS audio jack (4 contacts: tip/ring1/ring2/sleeve).
     Wiring convention (CTIA vs OMTP) is a consumer decision."""
@@ -68,6 +72,7 @@ class Audio3p5mmTRRSJack(Connector):
     PINOUT        = _TRRS_PINOUT
 
 
+@register('Audio3p5mmTRRSPlug')
 class Audio3p5mmTRRSPlug(Connector):
     """3.5 mm TRRS audio plug."""
     __slots__ = ()
