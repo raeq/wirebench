@@ -47,6 +47,7 @@ coverage.xml
 .mutmut-cache
 mutants/
 mutants.json
+.hypothesis/
 
 # Type checking
 .mypy_cache/

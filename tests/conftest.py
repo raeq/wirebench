@@ -6,6 +6,22 @@ sys.path.insert(0, os.path.join(_HERE, '..', 'demos'))
 
 import pytest
 
+# Hypothesis profile — counterexamples persist in .hypothesis/ for
+# replay across runs.  Hypothesis doesn't read TOML config; it reads
+# settings registered here.
+from hypothesis import Verbosity, settings
+
+settings.register_profile(
+    'default',
+    deadline=500,                # ms per example; flag slow strategies
+    max_examples=200,            # default budget; override per-test if needed
+    derandomize=False,           # randomised exploration; counterexamples
+                                 # persist via .hypothesis/examples
+    suppress_health_check=[],    # do not silence slow/imbalanced strategies
+    verbosity=Verbosity.normal,
+)
+settings.load_profile('default')
+
 from components.passives.resistor import Resistor
 from components.chips.concepts.comparator import Comparator
 from components.chips.concepts.nor_latch import NORLatch

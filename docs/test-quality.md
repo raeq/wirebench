@@ -105,8 +105,69 @@ test additions.
 | `tests/framework/export/spice/test_spice_config_paths.py` | Closed the `qualified` / `short_hash` net-name styles, header-comment emission, and inline-models emission branches in `spice/__init__.py` |
 | `tests/framework/test_units.py` (extended) | Added per-class `__str__` formatters and `__neg__`/`__abs__`/`__pos__`/`__radd__`/`__rsub__` coverage |
 
+## Property-based testing
+
+`hypothesis` 6.x runs alongside the rest of the suite.  Strategies
+live in `tests/framework/strategies.py` (15 named composites:
+`refdes_numbers`, `ohms`, `colors`, `levels`, `pin_counts_for_2xn`,
+`pitches_mm`, `random_pin_names`, `resistors`, `leds`, `rails`,
+`simple_chips`, `connectors`, `pin_id_sets`, …).  Property tests
+live in `tests/framework/test_properties.py`:
+
+1. PortMap dispatch correctness (canonical names resolve uniquely,
+   duplicates raise with disambiguated alternatives, every key
+   iterates once).
+2. Round-trip identity for any component via save/load.
+3. Save is deterministic (two saves byte-identical).
+4. `wire()` is symmetric about argument order.
+5. `compute_logical_nets` is deterministic.
+6. PortMap iteration order is pin-number-ascending.
+7. Refdes validation accepts every IEEE 315 prefix + positive number,
+   rejects everything else.
+8. Mated 2xN connectors preserve pin count (one logical net per
+   mated pair).
+9. Renderer determinism across all 6 formats.
+10. `@validate_call` rejects invalid `refdes_number` types.
+
+Settings configured in `tests/conftest.py` (hypothesis doesn't read
+TOML config):
+
+- `deadline = 500` ms
+- `max_examples = 200` (overridden to 50 for save/load and 6-format
+  renderer properties — file I/O / six-format passes are slow; the
+  overrides are commented in-test)
+- `derandomize = False` — randomised exploration; counterexamples
+  persist in `.hypothesis/examples` and replay automatically
+
+When hypothesis finds a counterexample it's pickled to the database
+and replays on every subsequent run; the persisted example becomes a
+permanent regression test.  Two strategies caught real implementation
+contracts on first run:
+
+- `test_refdes_validation_rules` initially used a hand-rolled "known
+  prefix" set; hypothesis surfaced `'B'` (motor) as a valid IEEE 315
+  prefix the test author had missed.  Fixed by importing
+  `IEEE_315_PREFIXES` directly.
+- `test_compute_logical_nets_is_deterministic` initially randomised
+  wiring topology; hypothesis surfaced the framework's
+  no-floating-BIDIRs ERC rule (series resistor chains without an
+  intermediate driver are rejected at `Circuit._validate`).  Fixed
+  by using parallel resistor topology — every net always has a
+  driver (the Rail).
+
+## Mutation-testing follow-up
+
+`docs/mutation-report.md` captures the queued full mutation run.
+Property tests are expected to substantially improve mutant-kill
+rate because they probe many points in the input space — running
+the full mutation sweep with the property tests in place is the
+recommended order of operations once the `pytest.main()` ↔
+`pytest-cov` interaction is unblocked.
+
 ## No softening
 
 Every test added in this pass asserts real content.  No `pytest.skip`,
-no `xfail`, no `# pragma: no cover` introduced beyond the documented
+no `xfail`, no `@settings(max_examples=1)` to effectively disable a
+property, no `@settings(suppress_health_check=...)` to hide slow
+strategies, no `# pragma: no cover` introduced beyond the documented
 defensible categories above.

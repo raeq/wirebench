@@ -16,13 +16,14 @@ dev = [
     "pytest-cov>=7.0",
     "coverage[toml]>=7.0",
     "mutmut>=3.0",
+    "hypothesis>=6.0",
 ]
 
 [project.scripts]
 circuitry = "cli.export:main"
 
 [tool.pytest.ini_options]
-pythonpath = ["src", "demos"]
+pythonpath = ["src", "demos", "tests/framework"]
 testpaths = ["tests"]
 # Coverage is NOT in addopts: pytest-cov + mutmut don't co-exist
 # (mutmut's in-process pytest.main() exits 4 silently when pytest-cov
