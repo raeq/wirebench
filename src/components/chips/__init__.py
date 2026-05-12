@@ -53,6 +53,11 @@ from .lm337      import LM337
 from .ams1117_33 import AMS1117_33
 from .ams1117_50 import AMS1117_50
 from .lp2950     import LP2950
+from .lm5002     import LM5002
+from .lm5160     import LM5160
+
+# Power-path protection / hot-swap.
+from .tps2660    import TPS2660
 
 # Specialty ICs.
 from .ne555         import NE555
@@ -102,6 +107,9 @@ __all__ = [
     # Regulators
     'LM7805', 'LM7812', 'LM7905', 'LM317', 'LM337',
     'AMS1117_33', 'AMS1117_50', 'LP2950',
+    'LM5002', 'LM5160',
+    # Power-path / hot-swap
+    'TPS2660',
     # Specialty
     'NE555', 'LM386', 'DS18B20', 'DS1307', 'MAX7219', 'Display5641AS',
     # Sensors

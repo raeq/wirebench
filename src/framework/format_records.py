@@ -140,6 +140,9 @@ class LM337Record(_ChipRecord):      type: Literal['LM337']      = 'LM337'
 class AMS1117_33Record(_ChipRecord): type: Literal['AMS1117_33'] = 'AMS1117_33'
 class AMS1117_50Record(_ChipRecord): type: Literal['AMS1117_50'] = 'AMS1117_50'
 class LP2950Record(_ChipRecord):     type: Literal['LP2950']     = 'LP2950'
+class LM5002Record(_ChipRecord):     type: Literal['LM5002']     = 'LM5002'
+class LM5160Record(_ChipRecord):     type: Literal['LM5160']     = 'LM5160'
+class TPS2660Record(_ChipRecord):    type: Literal['TPS2660']    = 'TPS2660'
 
 # Specialty ICs.
 class NE555Record(_ChipRecord):         type: Literal['NE555']         = 'NE555'
@@ -380,6 +383,7 @@ ComponentRecord = Annotated[
         # Regulators
         LM7805Record, LM7812Record, LM7905Record, LM317Record, LM337Record,
         AMS1117_33Record, AMS1117_50Record, LP2950Record,
+        LM5002Record, LM5160Record, TPS2660Record,
         # Specialty ICs
         NE555Record, LM386Record, DS18B20Record, DS1307Record, MAX7219Record,
         Display5641ASRecord,
