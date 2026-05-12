@@ -3,6 +3,7 @@ from typing import Annotated, ClassVar
 from pydantic import Field, validate_call
 from pydantic.dataclasses import dataclass
 
+from framework.errors import PortContentionError, UnknownPortError
 from framework.factor import FactorNode
 from framework.ground import GroundDomain
 from framework.port import Port, Direction
@@ -169,7 +170,7 @@ class Pin(FactorNode):
             return self._internal
         if port is self._internal:
             return self._external
-        raise ValueError(f"port {port!r} is not a face of pin {self!r}")
+        raise UnknownPortError(f"port {port!r} is not a face of pin {self!r}")
 
     def evaluate(self) -> None:
         role = self._effective_role if self._effective_role is not None else self._role
@@ -186,7 +187,7 @@ class Pin(FactorNode):
             elif intl is not None and ext is None:
                 self._external.drive(intl)
             elif ext != intl:
-                raise ValueError(
+                raise PortContentionError(
                     f"BIDIR pin '{self._external.name}' contention: "
                     f"external={ext!r}, internal={intl!r}"
                 )

@@ -29,52 +29,52 @@ from components.relays.spdt import Relay_SPDT
 
 
 @register_renderer(Resistor, format='yosys')
-def render_resistor(r, ctx: ExporterContext) -> str: return ""
+def render_resistor(r: Resistor, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(Capacitor, format='yosys')
-def render_capacitor(c, ctx: ExporterContext) -> str: return ""
+def render_capacitor(c: Capacitor, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(Inductor, format='yosys')
-def render_inductor(l, ctx: ExporterContext) -> str: return ""
+def render_inductor(l: Inductor, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(Relay_SPDT, format='yosys')
-def render_relay_spdt(k, ctx: ExporterContext) -> str: return ""
+def render_relay_spdt(k: Relay_SPDT, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(LED, format='yosys')
-def render_led(d, ctx: ExporterContext) -> str: return ""
+def render_led(d: LED, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(Rail, format='yosys')
-def render_rail(r, ctx: ExporterContext) -> str: return ""
+def render_rail(r: Rail, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(Cell, format='yosys')
-def render_cell(bt, ctx: ExporterContext) -> str: return ""
+def render_cell(bt: Cell, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(Chip, format='yosys')
-def render_chip(u, ctx: ExporterContext) -> str: return ""
+def render_chip(u: Chip, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(Connector, format='yosys')
-def render_connector(j, ctx: ExporterContext) -> str: return ""
+def render_connector(j: Connector, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(Board, format='yosys')
-def render_board(b, ctx: ExporterContext) -> str: return ""
+def render_board(b: Board, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(Transistor, format='yosys')
-def render_transistor(t, ctx: ExporterContext) -> str: return ""
+def render_transistor(t: Transistor, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(Diode, format='yosys')
-def render_diode(d, ctx: ExporterContext) -> str: return ""
+def render_diode(d: Diode, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(FactorNode, format='yosys')
-def render_factor_node(fn, ctx: ExporterContext) -> str: return ""
+def render_factor_node(fn: FactorNode, ctx: ExporterContext) -> str: return ""

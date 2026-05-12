@@ -1,4 +1,5 @@
 import pytest
+from framework.errors import PortContentionError, UnknownPortError
 from framework.ground import ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
@@ -44,7 +45,7 @@ def test_bidir_pin_contention_raises():
     p = Pin(PinId(1, 't'), Direction.BIDIR, ELECTRICAL, signal_type=Digital)
     p.external.drive(True)
     p.internal.drive(False)
-    with pytest.raises(ValueError, match="contention"):
+    with pytest.raises(PortContentionError, match="contention"):
         p.evaluate()
 
 
@@ -62,7 +63,7 @@ def test_pin_other_face_rejects_stranger_port():
     from framework.port import Port
     p = Pin(PinId(1, 'x'), Direction.IN, ELECTRICAL, signal_type=Digital)
     stranger = Port('stranger', Direction.IN, ELECTRICAL, signal_type=Digital)
-    with pytest.raises(ValueError):
+    with pytest.raises(UnknownPortError):
         p.other_face(stranger)
 
 

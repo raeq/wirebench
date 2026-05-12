@@ -65,7 +65,7 @@ if str(_SRC) not in sys.path:
 from pydantic import validate_call
 
 from circuitry import (
-    Chip, Circuit, Direction, Pin, PinId,
+    Chip, Circuit, Direction, FactorNode, Pin, PinId,
     GroundDomain, ELECTRICAL, RefdesNumber, validate_refdes,
     wire,
     BC548, Q2N3904, D1N4007, LED, Rail, Resistor, Capacitor, Relay_SPDT,
@@ -142,9 +142,12 @@ class NE555_Monostable(NE555):
 
         self._ports_by_number = {pin.id.number: pin.external for pin in pins}
         self._port_map = PortMap(self._ports_by_number)
+        ordered: list[FactorNode] = [
+            *in_pins, self._monostable, *out_pins, *other_pins,
+        ]
         Circuit.__init__(
             self,
-            factor_nodes=in_pins + [self._monostable] + out_pins + other_pins,
+            factor_nodes=ordered,
             ports=dict(self._port_map.items()),
         )
 
@@ -165,9 +168,14 @@ class NE555_Monostable(NE555):
         return self._monostable.running
 
     @validate_call(config={'arbitrary_types_allowed': True})
-    def __call__(self, trig: bool | None = True, reset: bool | None = True) -> bool:
+    def __call__(  # type: ignore[override]
+        self, trig: bool | None = True, reset: bool | None = True,
+    ) -> bool:
         """Standalone-test interface — drive TRIG / RESET, evaluate, return OUT.
-        Refuses if any package pin is wired into a parent circuit."""
+        Refuses if any package pin is wired into a parent circuit.
+
+        Override widens NE555.__call__()'s signature: this subclass
+        embeds a Monostable cell that needs the trigger/reset inputs."""
         self._assert_no_inputs_wired()
         self._ports['TRIG'].drive(trig)
         self._ports['RESET'].drive(reset)

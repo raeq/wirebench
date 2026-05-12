@@ -1,6 +1,7 @@
 import pytest
 
 from components.chips.concepts.fan_controller import FanController
+from framework.errors import PartParameterError
 from framework.port import Direction
 
 
@@ -68,9 +69,9 @@ def test_custom_trip_points():
 
 
 def test_rejects_inverted_trip_points():
-    with pytest.raises(ValueError):
+    with pytest.raises(PartParameterError):
         FanController(trip_high_c=50.0, trip_low_c=60.0)
-    with pytest.raises(ValueError):
+    with pytest.raises(PartParameterError):
         FanController(trip_high_c=60.0, trip_low_c=60.0)
 
 

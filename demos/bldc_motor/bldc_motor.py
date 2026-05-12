@@ -139,10 +139,15 @@ class Uno_BLDCCommutator(ATmega328P):
         return self._commutator.active_sector
 
     @validate_call(config={'arbitrary_types_allowed': True})
-    def __call__(self, ha: bool, hb: bool, hc: bool) -> int:
+    def __call__(  # type: ignore[override]
+        self, ha: bool, hb: bool, hc: bool,
+    ) -> int:
         """Standalone-test invocation: drive the three Hall input pins
         and return the resulting commutation sector (1..6, or 0 for
-        the fault / coast state)."""
+        the fault / coast state).
+
+        Override widens ATmega328P.__call__(): this subclass embeds
+        a Commutator cell that needs Hall-pattern inputs."""
         self._assert_no_inputs_wired()
         self._ports['PC0'].drive(ha)
         self._ports['PC1'].drive(hb)

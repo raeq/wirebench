@@ -1,5 +1,6 @@
 import pytest
 from components.chips.concepts.nor_latch import NORLatch
+from framework.errors import ForbiddenStateError, WiredChipCallError
 
 
 @pytest.fixture
@@ -43,7 +44,7 @@ def test_q_bar_port_complement_of_q(cell):
 
 
 def test_both_active_raises(cell):
-    with pytest.raises(ValueError):
+    with pytest.raises(ForbiddenStateError):
         cell(s=True, r=True)
 
 
@@ -59,5 +60,5 @@ def test_call_refuses_when_input_is_wired(cell):
     from framework.signals import Digital
     driver = Port('drv', Direction.OUT, cell.ports['s'].domain, signal_type=Digital)
     wire(driver, cell.ports['s'])
-    with pytest.raises(RuntimeError, match="wired by an enclosing circuit"):
+    with pytest.raises(WiredChipCallError, match="wired by an enclosing circuit"):
         cell(s=True, r=False)

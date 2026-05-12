@@ -1,5 +1,9 @@
 from pydantic import validate_call
 
+from framework.errors import (
+    DomainCrossingError, EmptyWireError, FloatingNetError, NodeMergeError,
+    ShortCircuitError, SignalTypeMismatchError,
+)
 from framework.node import Node
 from framework.port import Port, Direction
 
@@ -15,22 +19,26 @@ def wire(*ports: Port) -> None:
     - all ports carry the same signal_type
     """
     if not ports:
-        raise ValueError("wire() requires at least one port")
+        raise EmptyWireError("wire() requires at least one port")
 
     domains = {p.domain for p in ports}
     if len(domains) > 1:
         names = ', '.join(f"'{p.name}' ({p.domain.name})" for p in ports)
-        raise ValueError(f"Cannot wire ports across ground domains: {names}")
+        raise DomainCrossingError(
+            f"Cannot wire ports across ground domains: {names}"
+        )
 
     out_ports   = [p for p in ports if p.direction is Direction.OUT]
     bidir_ports = [p for p in ports if p.direction is Direction.BIDIR]
     if len(out_ports) == 0 and len(bidir_ports) == 0:
-        raise ValueError(
-            f"wire() has no driver: all ports are IN — nothing drives the node"
+        raise FloatingNetError(
+            "wire() has no driver: all ports are IN — nothing drives the node"
         )
     if len(out_ports) > 1:
         names = ', '.join(f"'{p.name}'" for p in out_ports)
-        raise ValueError(f"wire() has multiple drivers ({names}) — short circuit")
+        raise ShortCircuitError(
+            f"wire() has multiple drivers ({names}) — short circuit"
+        )
 
     from framework.signals import Analog, Digital
 
@@ -63,7 +71,9 @@ def wire(*ports: Port) -> None:
         specific = base_types - {Analog}
         if len(specific) > 1 or (Digital in specific and len(base_types) > 1):
             details = ', '.join(f"'{p.name}': {p.signal_type.__name__}" for p in ports)
-            raise ValueError(f"Signal type mismatch in wire(): {details}")
+            raise SignalTypeMismatchError(
+                f"Signal type mismatch in wire(): {details}"
+            )
 
     # If any port is already on a node, extend that node (Kirchhoff junction).
     # This is what makes a composite's already-wired boundary port joinable by
@@ -73,7 +83,7 @@ def wire(*ports: Port) -> None:
     existing = {id(p.node): p.node for p in ports if p.node is not None}
     if len(existing) > 1:
         names = ', '.join(f"'{p.name}' on {p.node.name}" for p in ports if p.node is not None)
-        raise ValueError(
+        raise NodeMergeError(
             f"wire() would merge two existing nodes — not supported: {names}"
         )
 

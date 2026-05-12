@@ -2,6 +2,7 @@
 import pytest
 
 from framework.board import Board
+from framework.errors import RefdesError
 from components.connectors.headers import Header2xNFemale
 
 
@@ -30,7 +31,7 @@ def test_two_connectors_same_refdes_rejected():
     c2 = Header2xNFemale(pin_count=4, pitch_mm=2.54, refdes_number=1)
     # The Board's own qualified-port collision check fires first; either
     # message indicates the conflict.
-    with pytest.raises(ValueError, match="Duplicate surface port|Duplicate refdes"):
+    with pytest.raises(RefdesError, match="Duplicate surface port|Duplicate refdes"):
         Board(name='Test', revision='A', components=[c1, c2], refdes_number=1)
 
 

@@ -108,7 +108,8 @@ class WaterAlarm(Circuit):
 
     @property
     def state(self) -> bool | None:
-        return self._ports['state'].value
+        v: bool | None = self._ports['state'].value
+        return v
 
     def __str__(self) -> str:
         return f"{self.red_led} | {self.green_led}"

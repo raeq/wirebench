@@ -20,6 +20,7 @@ from __future__ import annotations
 import importlib
 import pkgutil
 from pathlib import Path
+from typing import Any
 
 from pydantic import validate_call
 
@@ -38,7 +39,7 @@ __all__ = [
 ]
 
 
-def _load_adapter(format: str):
+def _load_adapter(format: str) -> Any:
     """Import the adapter sub-package, raising on unknown name. The
     import triggers @register_renderer side effects."""
     try:
@@ -71,7 +72,8 @@ def export_to_string(
     """Render `design` to a text string in the named `format`."""
     adapter = _load_adapter(format)
     ctx = ExporterContext(design, format, config=config)
-    return adapter.render(design, ctx)
+    result: str = adapter.render(design, ctx)
+    return result
 
 
 def list_formats() -> list[str]:

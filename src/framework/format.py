@@ -20,6 +20,7 @@ from framework.connector import Connector
 from framework.factor import FactorNode
 from framework.port import Port
 from framework.refdes import RefdesBearing
+from framework.errors import LoadError, SaveError
 from framework.registry import lookup
 from framework.wire import wire
 from framework.format_extension import deserialize_kwargs, serialize_kwargs
@@ -44,7 +45,7 @@ def _component_id(component: FactorNode, rail_ids: dict[int, str]) -> str:
         return component.refdes
     if id(component) in rail_ids:
         return rail_ids[id(component)]
-    raise ValueError(f"No id for component {component!r}")
+    raise SaveError(f"No id for component {component!r}")
 
 
 def _component_to_record(
@@ -55,39 +56,39 @@ def _component_to_record(
     cls_name = type(component).__name__
     if cls_name == 'Resistor':
         return cast(ComponentRecord, _import('ResistorRecord')(
-            refdes=component.refdes,                 # type: ignore[attr-defined]
-            ohms=float(component._ohms),             # type: ignore[attr-defined]
+            refdes=component.refdes,
+            ohms=float(component._ohms),
         ))
     if cls_name == 'Capacitor':
         return cast(ComponentRecord, _import('CapacitorRecord')(
-            refdes=component.refdes,                 # type: ignore[attr-defined]
-            farads=float(component._farads),         # type: ignore[attr-defined]
+            refdes=component.refdes,
+            farads=float(component._farads),
         ))
     if cls_name == 'Inductor':
         return cast(ComponentRecord, _import('InductorRecord')(
-            refdes=component.refdes,                 # type: ignore[attr-defined]
-            henries=float(component._henries),       # type: ignore[attr-defined]
+            refdes=component.refdes,
+            henries=float(component._henries),
         ))
     if cls_name == 'Relay_SPDT':
         return cast(ComponentRecord, _import('Relay_SPDTRecord')(
-            refdes=component.refdes,                 # type: ignore[attr-defined]
-            pickup_voltage=float(component._pickup), # type: ignore[attr-defined]
+            refdes=component.refdes,
+            pickup_voltage=float(component._pickup),
         ))
     if cls_name == 'LED':
         return cast(ComponentRecord, _import('LEDRecord')(
-            refdes=component.refdes,                 # type: ignore[attr-defined]
-            color=component._color,                  # type: ignore[attr-defined]
+            refdes=component.refdes,
+            color=component._color,
         ))
     if cls_name == 'Cell':
         return cast(ComponentRecord, _import('CellRecord')(
-            refdes=component.refdes,                            # type: ignore[attr-defined]
-            initial_state_of_charge=float(component._state_of_charge),  # type: ignore[attr-defined]
+            refdes=component.refdes,
+            initial_state_of_charge=float(component._state_of_charge),
         ))
     if cls_name == 'Rail':
-        rail_domain = component.ports['out'].domain   # type: ignore[attr-defined]
+        rail_domain = component.ports['out'].domain
         return cast(ComponentRecord, RailRecord(
             id=rail_ids[id(component)],
-            level=bool(component._level),            # type: ignore[attr-defined]
+            level=bool(component._level),
             domain=(
                 None if rail_domain.name == 'electrical'
                 else rail_domain.name
@@ -104,7 +105,7 @@ def _component_to_record(
         # unknown classes the same way the discriminator does for
         # dedicated records.
         return _component_to_extension_record(component, rail_ids, cls_name)
-    kwargs: dict[str, Any] = {'refdes': component.refdes}  # type: ignore[attr-defined]
+    kwargs: dict[str, Any] = {'refdes': component.refdes}
     if isinstance(component, Connector):
         # Always emit pin_count and pitch_mm for parameterised connectors;
         # for fixed-geometry ones the record class doesn't declare them
@@ -144,7 +145,7 @@ def _component_to_extension_record(
         refdes = None
         local_id = rail_ids.get(id(component))
         if local_id is None:
-            raise ValueError(
+            raise SaveError(
                 f"Cannot serialise non-refdes-bearing component "
                 f"{component!r} of class {cls_name!r}; no synthesised "
                 f"id was allocated for it (rail_ids does not include "
@@ -235,7 +236,7 @@ def _circuit_to_record(circuit: Circuit) -> CircuitRecord:
         # Find which factor_node owns this port.
         ref = _find_port_ref(port, circuit._factor_nodes, rail_ids)
         if ref is None:
-            raise ValueError(
+            raise SaveError(
                 f"Cannot resolve surface port {name!r} to a component"
             )
         surface_ports[name] = ref
@@ -263,7 +264,7 @@ def _assembly_to_record(circuit: Circuit) -> AssemblyRecord:
     MateRecords."""
     boards = [fn for fn in circuit._factor_nodes if isinstance(fn, Board)]
     if len(boards) != len(circuit._factor_nodes):
-        raise ValueError(
+        raise SaveError(
             "Assembly Circuit must contain only Boards; found other types"
         )
     board_records = [_board_to_record(b) for b in boards]
@@ -292,7 +293,7 @@ def _assembly_to_record(circuit: Circuit) -> AssemblyRecord:
     for name, port in circuit._ports.items():
         ref = _find_assembly_port_ref(port, boards)
         if ref is None:
-            raise ValueError(
+            raise SaveError(
                 f"Cannot resolve assembly surface port {name!r}"
             )
         surface_ports[name] = ref
@@ -348,7 +349,7 @@ def _to_record(root: FactorNode) -> AssemblyRecord | BoardRecord | CircuitRecord
         if _looks_like_assembly(root):
             return _assembly_to_record(root)
         return _circuit_to_record(root)
-    raise TypeError(
+    raise SaveError(
         f"save_circuitry root must be a Board, Assembly, or Circuit; "
         f"got {type(root).__name__}"
     )
@@ -377,7 +378,7 @@ def _refdes_number_from_refdes(refdes: str) -> int:
     import re
     m = re.match(r'^[A-Z]+(\d+)$', refdes)
     if m is None:
-        raise ValueError(f"Cannot parse refdes_number from {refdes!r}")
+        raise LoadError(f"Cannot parse refdes_number from {refdes!r}")
     return int(m.group(1))
 
 
@@ -428,9 +429,9 @@ def _build_extension_component(record: Any) -> FactorNode:
     constructor.
     """
     if not record.class_name:
-        raise ValueError("ExtensionRecord missing class_name")
+        raise LoadError("ExtensionRecord missing class_name")
     if record.refdes is None and record.id is None:
-        raise ValueError(
+        raise LoadError(
             f"ExtensionRecord for {record.class_name!r} has neither "
             f"`refdes` nor `id`; one is required"
         )
@@ -448,12 +449,12 @@ def _resolve_port(
     """Parse a port reference like 'U1.out_1' and return the live Port."""
     head, _, tail = ref.partition('.')
     if not tail:
-        raise ValueError(f"Malformed port reference {ref!r}; expected 'id.port'")
+        raise LoadError(f"Malformed port reference {ref!r}; expected 'id.port'")
     component = components_by_id.get(head)
     if component is None:
-        raise ValueError(f"Unknown component id {head!r} in port reference {ref!r}")
+        raise LoadError(f"Unknown component id {head!r} in port reference {ref!r}")
     if tail not in component.ports:
-        raise ValueError(
+        raise LoadError(
             f"Component {head!r} has no port {tail!r}; "
             f"known: {sorted(component.ports)}"
         )
@@ -478,12 +479,12 @@ def _rebuild_circuit_components(
         components.append(c)
         local_id = getattr(rec, 'refdes', None) or getattr(rec, 'id', None)
         if local_id is None:
-            raise ValueError(
+            raise LoadError(
                 f"Component record {type(rec).__name__} has neither "
                 f"refdes nor id; cannot be referenced by wires"
             )
         if local_id in by_id:
-            raise ValueError(f"Duplicate component id {local_id!r}")
+            raise LoadError(f"Duplicate component id {local_id!r}")
         by_id[local_id] = c
     return components, by_id
 
@@ -525,11 +526,11 @@ def _from_assembly_record(record: AssemblyRecord) -> Circuit:
         a_board = boards_by_refdes.get(a_board_refdes)
         b_board = boards_by_refdes.get(b_board_refdes)
         if a_board is None or b_board is None:
-            raise ValueError(f"Mate {m.a}↔{m.b} references unknown board")
+            raise LoadError(f"Mate {m.a}↔{m.b} references unknown board")
         a_conn = next((c for c in a_board.connectors if c.refdes == a_conn_refdes), None)
         b_conn = next((c for c in b_board.connectors if c.refdes == b_conn_refdes), None)
         if a_conn is None or b_conn is None:
-            raise ValueError(f"Mate {m.a}↔{m.b} references unknown connector")
+            raise LoadError(f"Mate {m.a}↔{m.b} references unknown connector")
         from framework.mate import mate as mate_fn
         mate_fn(a_conn, b_conn)
 
@@ -540,9 +541,9 @@ def _from_assembly_record(record: AssemblyRecord) -> Circuit:
         board_refdes, _, rest = ref.partition('.')
         board = boards_by_refdes.get(board_refdes)
         if board is None:
-            raise ValueError(f"Surface port {name!r} references unknown board {board_refdes!r}")
+            raise LoadError(f"Surface port {name!r} references unknown board {board_refdes!r}")
         if rest not in board._ports:
-            raise ValueError(
+            raise LoadError(
                 f"Surface port {name!r} -> {ref!r}: board {board_refdes!r} "
                 f"has no port {rest!r}"
             )
@@ -558,14 +559,14 @@ def _from_record(record: Any) -> FactorNode:
         return _from_board_record(record)
     if isinstance(record, CircuitRecord):
         return _from_circuit_record(record)
-    raise TypeError(f"Unknown record type {type(record).__name__}")
+    raise LoadError(f"Unknown record type {type(record).__name__}")
 
 
 def _check_format_version(version: str) -> None:
     major = int(version.split('.', 1)[0])
     expected_major = int(CURRENT_FORMAT_VERSION.split('.', 1)[0])
     if major != expected_major:
-        raise ValueError(
+        raise LoadError(
             f"Unsupported .circuitry format version {version!r}; "
             f"this loader supports {expected_major}.x.x "
             f"(current is {CURRENT_FORMAT_VERSION})"

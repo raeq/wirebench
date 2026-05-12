@@ -38,7 +38,7 @@ def _csv_row(*fields: str) -> str:
     return buf.getvalue()
 
 
-def _footprint_of(comp) -> str:
+def _footprint_of(comp: FactorNode) -> str:
     fp = getattr(comp, 'FOOTPRINT', None)
     return fp if fp is not None else ''
 

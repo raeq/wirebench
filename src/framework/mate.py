@@ -3,6 +3,10 @@ from __future__ import annotations
 from pydantic import validate_call
 
 from framework.connector import Connector
+from framework.errors import (
+    IncompatibleMateError, PinCountMismatchError, PitchMismatchError,
+    UnmateableError,
+)
 from framework.wire import wire
 
 
@@ -25,36 +29,40 @@ def mate(a: Connector, b: Connector) -> None:
          type, no driver conflicts.
 
     Raises:
-        TypeError  — class-level mismatch or `MATES_WITH` is None (a
-                     user-facing receptacle has no in-model mate).
-        ValueError — instance-level mismatch (pin count, pitch) or any
-                     wire()-level error per pin pair.
+        UnmateableError       — `MATES_WITH` is None (a user-facing
+                                receptacle has no in-model mate).
+        IncompatibleMateError — `b` is not the declared MATES_WITH
+                                class (e.g. USB-A receptacle paired
+                                with a TRRS audio jack).
+        PinCountMismatchError — pin counts differ.
+        PitchMismatchError    — pitches differ.
+        (and any wire()-level error per pin pair)
     """
     mates_with = type(a).MATES_WITH
     if mates_with is None:
-        raise TypeError(
+        raise UnmateableError(
             f"{type(a).__name__} has no in-model mate "
             f"(MATES_WITH is None — user-facing receptacle)"
         )
     if type(b) is not mates_with:
-        raise TypeError(
+        raise IncompatibleMateError(
             f"{type(a).__name__} mates with {mates_with.__name__}, "
             f"not {type(b).__name__}"
         )
     if a.pin_count != b.pin_count:
-        raise ValueError(
+        raise PinCountMismatchError(
             f"Pin count mismatch: {type(a).__name__} has {a.pin_count}, "
             f"{type(b).__name__} has {b.pin_count}"
         )
     if a.pitch_mm != b.pitch_mm:
-        raise ValueError(
+        raise PitchMismatchError(
             f"Pitch mismatch: {type(a).__name__} is {a.pitch_mm} mm, "
             f"{type(b).__name__} is {b.pitch_mm} mm"
         )
     # len(a.pins) == a.pin_count by construction; this guard catches a
     # subclass that overrode _build_pinout incorrectly.
     if len(a.pins) != len(b.pins):
-        raise ValueError(
+        raise PinCountMismatchError(
             f"Pin count mismatch after pinout construction: "
             f"{type(a).__name__} produced {len(a.pins)}, "
             f"{type(b).__name__} produced {len(b.pins)}"

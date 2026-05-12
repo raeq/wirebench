@@ -32,7 +32,7 @@ def _esc(s: str) -> str:
     return s.replace('\\', '\\\\').replace('"', '\\"')
 
 
-def _footprint_field(comp) -> str:
+def _footprint_field(comp: FactorNode) -> str:
     fp = getattr(comp, 'FOOTPRINT', None)
     if fp is None:
         return ''

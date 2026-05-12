@@ -2,6 +2,7 @@ from typing import Annotated, ClassVar
 
 from pydantic import Field, validate_call
 
+from framework.errors import PartParameterError
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
@@ -49,7 +50,7 @@ class FanController(FactorNode):
         domain: GroundDomain = ELECTRICAL,
     ) -> None:
         if trip_low_c >= trip_high_c:
-            raise ValueError(
+            raise PartParameterError(
                 f"trip_low_c ({trip_low_c}) must be below trip_high_c "
                 f"({trip_high_c}) so the hysteresis window has a real width"
             )

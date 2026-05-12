@@ -1,6 +1,7 @@
 import pytest
 
 from components.chips.concepts.isolated_channel import IsolatedChannel
+from framework.errors import PartConfigurationError
 from framework.ground import ELECTRICAL, GroundDomain
 from framework.port import Direction
 
@@ -51,7 +52,7 @@ def test_domain_properties(cell, iso_domain):
 def test_same_domain_on_both_sides_raises():
     """Both ports in one domain means there's no barrier — that's a
     Buffer, not an IsolatedChannel.  The cell must refuse."""
-    with pytest.raises(ValueError, match="distinct"):
+    with pytest.raises(PartConfigurationError, match="distinct"):
         IsolatedChannel(input_domain=ELECTRICAL, output_domain=ELECTRICAL)
 
 

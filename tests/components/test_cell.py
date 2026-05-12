@@ -1,6 +1,7 @@
 import pytest
 
 from components.passives.cell import Cell, soc_from_ocv
+from framework.errors import PartParameterError
 from framework.ground import ELECTRICAL
 from framework.port import Direction
 from framework.units import Volts
@@ -65,13 +66,13 @@ def test_state_of_charge_setter_accepts_valid_range():
 
 def test_state_of_charge_setter_rejects_negative():
     bt = Cell(refdes_number=1)
-    with pytest.raises(ValueError):
+    with pytest.raises(PartParameterError):
         bt.state_of_charge = -0.1
 
 
 def test_state_of_charge_setter_rejects_above_one():
     bt = Cell(refdes_number=1)
-    with pytest.raises(ValueError):
+    with pytest.raises(PartParameterError):
         bt.state_of_charge = 1.5
 
 

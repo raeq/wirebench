@@ -9,6 +9,7 @@ from pydantic import Field, validate_call
 _PositiveInt = Annotated[int, Field(gt=0, strict=True)]
 _PositiveFloat = Annotated[float, Field(gt=0, strict=True)]
 
+from framework.errors import PartConfigurationError
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
@@ -80,12 +81,12 @@ class Connector(FactorNode):
         resolved_pin_count = pin_count if pin_count is not None else self.PIN_COUNT
         resolved_pitch_mm  = pitch_mm  if pitch_mm  is not None else self.PITCH_MM
         if resolved_pin_count is None:
-            raise TypeError(
+            raise PartConfigurationError(
                 f"{type(self).__name__} requires pin_count "
                 f"(neither constructor arg nor PIN_COUNT class attribute set)"
             )
         if resolved_pitch_mm is None:
-            raise TypeError(
+            raise PartConfigurationError(
                 f"{type(self).__name__} requires pitch_mm "
                 f"(neither constructor arg nor PITCH_MM class attribute set)"
             )
@@ -106,7 +107,7 @@ class Connector(FactorNode):
         a generic BIDIR Analog pinout from pin_count.
         """
         if self.PINOUT is None:
-            raise TypeError(
+            raise PartConfigurationError(
                 f"{type(self).__name__} must either set PINOUT "
                 f"or override _build_pinout()"
             )

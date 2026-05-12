@@ -3,6 +3,10 @@ from __future__ import annotations
 
 import pytest
 
+from framework.errors import (
+    DomainCrossingError, IncompatibleMateError, NodeMergeError,
+    PinCountMismatchError, PitchMismatchError,
+)
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.mate import mate
 from framework.wire import wire
@@ -41,7 +45,7 @@ def test_mate_usbc_receptacle_plug():
 def test_mate_rejects_unrelated_families():
     a = JSTPHBoardSide  (pin_count=4, refdes_number=1)
     b = JSTXHCableHousing(pin_count=4, refdes_number=1)
-    with pytest.raises(TypeError, match="MATES_WITH|mates with"):
+    with pytest.raises(IncompatibleMateError, match="MATES_WITH|mates with"):
         mate(a, b)
 
 
@@ -50,7 +54,7 @@ def test_mate_rejects_unrelated_families():
 def test_mate_rejects_pin_count_mismatch():
     a = JSTPHBoardSide   (pin_count=4, refdes_number=1)
     b = JSTPHCableHousing(pin_count=5, refdes_number=1)
-    with pytest.raises(ValueError, match="Pin count mismatch"):
+    with pytest.raises(PinCountMismatchError, match="Pin count mismatch"):
         mate(a, b)
 
 
@@ -59,7 +63,7 @@ def test_mate_rejects_pin_count_mismatch():
 def test_mate_rejects_pitch_mismatch():
     a = Header2xNMale  (pin_count=10, pitch_mm=2.54, refdes_number=1)
     b = Header2xNFemale(pin_count=10, pitch_mm=1.27, refdes_number=1)
-    with pytest.raises(ValueError, match="Pitch mismatch"):
+    with pytest.raises(PitchMismatchError, match="Pitch mismatch"):
         mate(a, b)
 
 
@@ -69,7 +73,7 @@ def test_mate_rejects_domain_mismatch():
     thermal = GroundDomain('thermal')
     a = Header2xNFemale(pin_count=4, pitch_mm=2.54, refdes_number=1, domain=ELECTRICAL)
     b = Header2xNMale  (pin_count=4, pitch_mm=2.54, refdes_number=1, domain=thermal)
-    with pytest.raises(ValueError, match="domain"):
+    with pytest.raises(DomainCrossingError, match="domain"):
         mate(a, b)
 
 
@@ -88,7 +92,7 @@ def test_mate_cannot_remate_connector_three_way():
     mate(fem2, mal2)
     # Now fem.p1.external is on node A; mal2.p1.external is on node B
     # via fem2.  Mating fem and mal2 would have to merge A and B.
-    with pytest.raises(ValueError, match="would merge two existing nodes"):
+    with pytest.raises(NodeMergeError, match="would merge two existing nodes"):
         mate(fem, mal2)
 
 

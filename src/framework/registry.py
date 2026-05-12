@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from typing import Callable, TypeVar
 
+from framework.errors import DuplicateRegistrationError, UnknownPartError
 from framework.factor import FactorNode
 
 T = TypeVar('T', bound=FactorNode)
@@ -31,7 +32,7 @@ def register(name: str) -> Callable[[type[T]], type[T]]:
     """
     def decorator(cls: type[T]) -> type[T]:
         if name in _REGISTRY and _REGISTRY[name] is not cls:
-            raise ValueError(
+            raise DuplicateRegistrationError(
                 f"Component name {name!r} already registered to "
                 f"{_REGISTRY[name].__module__}.{_REGISTRY[name].__qualname__}"
             )
@@ -42,9 +43,10 @@ def register(name: str) -> Callable[[type[T]], type[T]]:
 
 def lookup(name: str) -> type[FactorNode]:
     """Look up a component class by registered name.  Used by the
-    `.circuitry` loader.  Raises KeyError if the name is unknown."""
+    `.circuitry` loader.  Raises UnknownPartError (a KeyError
+    subclass) if the name is unknown."""
     if name not in _REGISTRY:
-        raise KeyError(
+        raise UnknownPartError(
             f"Unknown component type {name!r}; not in the registry. "
             f"Known types: {sorted(_REGISTRY)}"
         )

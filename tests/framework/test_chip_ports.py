@@ -14,6 +14,8 @@ from collections.abc import Mapping
 
 import pytest
 
+from framework.errors import AmbiguousPinNameError
+
 from components.chips import ATmega2560, SN74HC00
 from framework.port_map import PortMap
 
@@ -48,7 +50,7 @@ def test_unique_name_lookup():
 
 def test_ambiguous_name_lookup_raises_clearly():
     mcu = ATmega2560(refdes_number=1)
-    with pytest.raises(KeyError) as excinfo:
+    with pytest.raises(AmbiguousPinNameError) as excinfo:
         _ = mcu.ports['VCC']
     msg = str(excinfo.value)
     assert 'Ambiguous' in msg

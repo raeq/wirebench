@@ -11,12 +11,16 @@ integer starting at 2 (Yosys reserves 0/1 for constants).
 from __future__ import annotations
 
 import json
+from typing import Any, Callable
 
 from framework.board import Board
 from framework.chip import Chip
 from framework.circuit import Circuit
+from framework.connector import Connector
+from framework.errors import RendererNotFoundError
 from framework.factor import FactorNode
-from framework.port import Direction
+from framework.node import Node
+from framework.port import Direction, Port
 
 from framework.export.base import (
     ExporterContext, pin_number_of, register_net_namer,
@@ -53,7 +57,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
 
     title = getattr(design, 'name', None) or type(design).__name__
 
-    modules: dict[str, dict] = {}
+    modules: dict[str, dict[str, Any]] = {}
 
     # Counter-based bit allocator: unconnected ports get sequential
     # IDs starting at a high base so they don't collide with the
@@ -65,7 +69,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
     )
     nc_alloc: dict[int, int] = {}
 
-    def bit_of(port) -> int:
+    def bit_of(port: Port) -> int:
         if port.node is None:
             key = id(port)
             if key not in nc_alloc:
@@ -77,8 +81,8 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
         return isinstance(n, (Pin, Rail))
 
     def build_module(name: str, owner: FactorNode,
-                     top_components: list[FactorNode]) -> dict:
-        module: dict = {
+                     top_components: list[FactorNode]) -> dict[str, Any]:
+        module: dict[str, Any] = {
             'ports': {},
             'cells': {},
             'netnames': {},
@@ -170,12 +174,12 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
 
 # --- Helpers ---------------------------------------------------------------
 
-def _node_to_net(ctx: ExporterContext, node) -> LogicalNet:
+def _node_to_net(ctx: ExporterContext, node: Node) -> LogicalNet:
     """Find the LogicalNet that includes the given Node object."""
     for net in ctx.logical_nets:
         if id(node) in net.nodes:
             return net
-    raise KeyError(f"Node {node!r} not in any LogicalNet")
+    raise RendererNotFoundError(f"Node {node!r} not in any LogicalNet")
 
 
 def _net_label(net: LogicalNet, ctx: ExporterContext) -> str:
@@ -189,7 +193,10 @@ def _net_label(net: LogicalNet, ctx: ExporterContext) -> str:
     return f"net_{net.id}"
 
 
-def _cell_record(comp: FactorNode, bit_of) -> dict | None:
+def _cell_record(
+    comp: FactorNode,
+    bit_of: Callable[[Port], int],
+) -> dict[str, Any] | None:
     """Build the per-cell JSON record for one component. Returns None
     for components that shouldn't be emitted as cells."""
     from framework.connector import Connector
@@ -228,10 +235,11 @@ def _cell_record(comp: FactorNode, bit_of) -> dict | None:
         }
     # Chip or passive — use registered renderer for parameter set, but
     # the bulk of the record is uniform.
-    record = {
+    parameters: dict[str, Any] = {}
+    record: dict[str, Any] = {
         'type': type(comp).__name__,
         'hide_name': 0,
-        'parameters': {},
+        'parameters': parameters,
         'port_directions': {
             name: _direction(p.direction) for name, p in comp.ports.items()
         },
@@ -242,7 +250,7 @@ def _cell_record(comp: FactorNode, bit_of) -> dict | None:
     from components.passives.led import LED
     from components.passives.resistor import Resistor
     if isinstance(comp, Resistor):
-        record['parameters']['ohms'] = f"{float(comp.ohms):g}"
+        parameters['ohms'] = f"{float(comp.ohms):g}"
     elif isinstance(comp, LED):
-        record['parameters']['color'] = comp.color
+        parameters['color'] = comp.color
     return record

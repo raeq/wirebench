@@ -17,6 +17,8 @@ import pytest
 from hypothesis import given, settings, strategies as st
 from pydantic import ValidationError
 
+from framework.errors import AmbiguousPinNameError
+
 import components.chips        # noqa: F401  (trigger registration)
 import components.connectors   # noqa: F401
 import components.passives     # noqa: F401
@@ -92,7 +94,7 @@ def test_portmap_dispatch_correctness(pins):
         if count == 1:
             assert pm[name].name == name
         else:
-            with pytest.raises(KeyError) as ei:
+            with pytest.raises(AmbiguousPinNameError) as ei:
                 _ = pm[name]
             msg = str(ei.value)
             # Disambiguated alternatives all appear in the message.

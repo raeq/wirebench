@@ -1,6 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
+from framework.errors import RefdesError
 from framework.refdes import IEEE_315_PREFIXES, validate_refdes
 from components.passives.resistor import Resistor
 from components.passives.led import LED
@@ -46,7 +47,11 @@ def test_missing_refdes_number_raises_type_error():
 
 @pytest.mark.parametrize("bad", [0, -1, 1.0, True, '1', None])
 def test_non_positive_int_refdes_number_rejected(bad):
-    with pytest.raises((ValueError, TypeError)):
+    # Pydantic's @validate_call catches non-int / wrong-type values
+    # with its own ValidationError; only when a plain integer slips
+    # past pydantic does our RefdesError fire.  Either is acceptable
+    # here.
+    with pytest.raises((RefdesError, ValidationError)):
         Resistor(330, refdes_number=bad)
 
 
@@ -55,17 +60,17 @@ def test_unknown_prefix_rejected_at_construction():
     # because validate_refdes runs before any other side effects.
     class _BadChip(Resistor):
         REFDES_PREFIX = 'XX'   # not in IEEE 315
-    with pytest.raises(ValueError, match="Unknown refdes prefix"):
+    with pytest.raises(RefdesError, match="Unknown refdes prefix"):
         _BadChip(330, refdes_number=1)
 
 
 def test_validate_refdes_helper_directly():
     validate_refdes('R', 1)         # OK
-    with pytest.raises(ValueError, match="Unknown refdes prefix"):
+    with pytest.raises(RefdesError, match="Unknown refdes prefix"):
         validate_refdes('XX', 1)
-    with pytest.raises(ValueError, match="positive int"):
+    with pytest.raises(RefdesError, match="positive int"):
         validate_refdes('R', 0)
-    with pytest.raises(ValueError, match="positive int"):
+    with pytest.raises(RefdesError, match="positive int"):
         validate_refdes('R', True)
 
 
@@ -105,7 +110,7 @@ def test_duplicate_refdes_within_composite_rejected():
     from framework.circuit import Circuit
     r1 = Resistor(330, refdes_number=1)
     r2 = Resistor(330, refdes_number=1)
-    with pytest.raises(ValueError, match="Duplicate refdes"):
+    with pytest.raises(RefdesError, match="Duplicate refdes"):
         Circuit(factor_nodes=[r1, r2], ports={})
 
 

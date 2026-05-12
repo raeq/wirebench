@@ -6,6 +6,7 @@ from pydantic import Field, validate_call
 
 from framework.circuit import Circuit
 from framework.connector import Connector
+from framework.errors import RefdesError
 from framework.factor import FactorNode
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
@@ -64,7 +65,7 @@ class Board(Circuit):
             for pin_name, port in connector.external_ports.items():
                 qualified = f"{connector.refdes}.{pin_name}"
                 if qualified in ports:
-                    raise ValueError(
+                    raise RefdesError(
                         f"Duplicate surface port '{qualified}' — "
                         f"two connectors share refdes {connector.refdes}?"
                     )

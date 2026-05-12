@@ -22,6 +22,28 @@ from framework.board import Board
 from framework.chip import Chip
 from framework.circuit import Circuit
 from framework.connector import Connector, declare_mating_pair
+from framework.errors import (
+    # Root.
+    CircuitryError,
+    # Circuit-domain errors.
+    CircuitError,
+    WiringError, ShortCircuitError, FloatingNetError, UnconnectedPinError,
+    NodeMergeError, EmptyWireError,
+    SignalError, SignalTypeMismatchError, DomainCrossingError,
+    PortContentionError,
+    PolarityError,
+    ForbiddenStateError,
+    PartError, RefdesError, DuplicateRegistrationError, UnknownPartError,
+    PartConfigurationError, PartParameterError,
+    MatingError, IncompatibleMateError, UnmateableError,
+    PinCountMismatchError, PitchMismatchError,
+    # Format / persistence errors.
+    FormatError, SaveError, LoadError,
+    RendererRegistryError, DuplicateRendererError, RendererNotFoundError,
+    # API-usage errors.
+    UsageError, WiredChipCallError, AmbiguousPinNameError,
+    CompositeShapeError, UnknownPortError,
+)
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.mate import mate
@@ -56,4 +78,21 @@ __all__ = [
     'RefdesBearing', 'RefdesNumber', 'validate_refdes',
     'declare_mating_pair', 'mate', 'wire',
     'print_bom', 'run_scenarios',
+    # Exception hierarchy.
+    'CircuitryError',
+    'CircuitError',
+    'WiringError', 'ShortCircuitError', 'FloatingNetError',
+    'UnconnectedPinError', 'NodeMergeError', 'EmptyWireError',
+    'SignalError', 'SignalTypeMismatchError', 'DomainCrossingError',
+    'PortContentionError',
+    'PolarityError',
+    'ForbiddenStateError',
+    'PartError', 'RefdesError', 'DuplicateRegistrationError',
+    'UnknownPartError', 'PartConfigurationError', 'PartParameterError',
+    'MatingError', 'IncompatibleMateError', 'UnmateableError',
+    'PinCountMismatchError', 'PitchMismatchError',
+    'FormatError', 'SaveError', 'LoadError',
+    'RendererRegistryError', 'DuplicateRendererError', 'RendererNotFoundError',
+    'UsageError', 'WiredChipCallError', 'AmbiguousPinNameError',
+    'CompositeShapeError', 'UnknownPortError',
 ]

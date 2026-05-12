@@ -11,6 +11,7 @@ import components.passives  # noqa: F401
 import components.connectors  # noqa: F401
 import framework.board      # noqa: F401
 
+from framework.errors import LoadError
 from framework.format import load_circuitry
 
 
@@ -25,7 +26,7 @@ def test_unsupported_major_version_rejected(tmp_path: Path):
         "format_version": "2.0.0",
         "root": {"type": "Circuit", "components": [], "wires": []},
     })
-    with pytest.raises(ValueError, match="Unsupported .circuitry format version"):
+    with pytest.raises(LoadError, match="Unsupported .circuitry format version"):
         load_circuitry(p)
 
 

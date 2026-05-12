@@ -1,5 +1,6 @@
 import pytest
 from framework.chip import Chip
+from framework.errors import WiredChipCallError
 from framework.ground import ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Port, Direction
@@ -65,7 +66,7 @@ def test_assert_no_inputs_wired_raises_when_input_is_connected():
     chip = _PassChip()
     driver = Port('drv', Direction.OUT, ELECTRICAL, signal_type=Digital)
     wire(driver, chip.ports['a'])
-    with pytest.raises(RuntimeError, match="wired by an enclosing circuit"):
+    with pytest.raises(WiredChipCallError, match="wired by an enclosing circuit"):
         chip(True)
 
 
@@ -107,5 +108,5 @@ def test_assert_no_inputs_wired_catches_bidir():
     dummy = _DummyBidir()
     other = Port('drv', Direction.OUT, ELECTRICAL, signal_type=Analog)
     wire(other, dummy.ports['t'])
-    with pytest.raises(RuntimeError, match="wired by an enclosing circuit"):
+    with pytest.raises(WiredChipCallError, match="wired by an enclosing circuit"):
         dummy()

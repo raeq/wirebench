@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from typing import Any, ClassVar, get_type_hints
 
+from framework.errors import SaveError
 from framework.factor import FactorNode
 from framework.ground import GroundDomain
 
@@ -105,7 +106,7 @@ def _read_kwarg(instance: FactorNode, name: str) -> Any:
     value = getattr(instance, name, sentinel)
     if value is not sentinel:
         return value
-    raise AttributeError(
+    raise SaveError(
         f"{type(instance).__name__} declares {name!r} as a "
         f"SERIALIZE_KWARGS but has no `_{name}`, `{name}`, or property "
         f"of that name to read it back from.  Either add the "
@@ -127,7 +128,7 @@ def _encode_value(value: Any, *, owner_class: type, kwarg_name: str) -> Any:
             return items
     if value is None:
         return None
-    raise TypeError(
+    raise SaveError(
         f"Cannot serialise {owner_class.__name__}.{kwarg_name} = "
         f"{value!r} (type {type(value).__name__}); supported types are "
         f"int, float, bool, str, GroundDomain, and list/tuple[str]"

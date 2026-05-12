@@ -166,13 +166,15 @@ class IsolatedRS232Board(Board):
         """RS-232 line transmit (J2.p1) — what the host-side TX bit
         looks like after crossing the isolator and the level
         translator.  Surface read for tests and traces."""
-        return self.j_iso.pins[0].external.value
+        v: bool | None = self.j_iso.pins[0].external.value
+        return v
 
     @property
     def host_rx(self) -> bool | None:
         """Logic-side receive (J1.p4) — the bit that came back across
         the isolator from whatever the cable side drove onto J2.p2."""
-        return self.j_logic.pins[3].external.value
+        v: bool | None = self.j_logic.pins[3].external.value
+        return v
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __call__(

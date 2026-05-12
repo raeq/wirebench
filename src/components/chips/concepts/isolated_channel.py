@@ -1,5 +1,6 @@
 from pydantic import validate_call
 
+from framework.errors import PartConfigurationError
 from framework.factor import FactorNode
 from framework.ground import GroundDomain
 from framework.port import Port, Direction
@@ -33,7 +34,7 @@ class IsolatedChannel(FactorNode):
         output_domain: GroundDomain,
     ) -> None:
         if input_domain is output_domain:
-            raise ValueError(
+            raise PartConfigurationError(
                 f"IsolatedChannel needs two *distinct* ground domains; "
                 f"both sides are in {input_domain.name!r} — use "
                 f"components.chips.concepts.buffer.Buffer for a "

@@ -22,6 +22,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Iterator
 
+from framework.errors import AmbiguousPinNameError
 from framework.port import Port
 
 
@@ -70,7 +71,7 @@ class PortMap(Mapping[str, Port]):
             alternatives = ', '.join(
                 f"{key}_{i+1} (pin {n})" for i, n in enumerate(pins)
             )
-            raise KeyError(
+            raise AmbiguousPinNameError(
                 f"Ambiguous pin name {key!r} — disambiguated names: "
                 f"{alternatives}. Use one of these or look up by "
                 f"number via ports_by_number[n]."

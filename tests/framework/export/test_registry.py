@@ -5,6 +5,7 @@ import pytest
 import framework.export.spice  # noqa: F401
 
 from framework.connector import Connector
+from framework.errors import DuplicateRendererError, RendererNotFoundError
 from framework.factor import FactorNode
 from framework.export.base import (
     lookup_renderer, register_renderer,
@@ -21,7 +22,7 @@ def test_lookup_renderer_returns_registered_function():
 
 
 def test_unknown_format_raises_with_hint():
-    with pytest.raises(KeyError, match='spice'):
+    with pytest.raises(RendererNotFoundError, match='spice'):
         lookup_renderer(Resistor, 'nonexistent-format')
 
 
@@ -36,7 +37,7 @@ def test_duplicate_registration_raises():
     @register_renderer(_Dummy, format='spice')
     def first(c, ctx): return ""
 
-    with pytest.raises(ValueError, match='already registered'):
+    with pytest.raises(DuplicateRendererError, match='already registered'):
         @register_renderer(_Dummy, format='spice')
         def second(c, ctx): return ""
 

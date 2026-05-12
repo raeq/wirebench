@@ -202,7 +202,8 @@ class BatteryPackBoard(Board):
         """SE pin level (J1's host can monitor this off-bus).  HIGH
         when the cell is healthy; LOW once SoC drops below the gauge's
         shutdown threshold."""
-        return self.u1.ports['SE'].value
+        v: bool | None = self.u1.ports['SE'].value
+        return v
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __call__(self, state_of_charge: float) -> dict[str, float | bool | None]:

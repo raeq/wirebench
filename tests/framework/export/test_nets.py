@@ -10,6 +10,7 @@ import components.connectors  # noqa: F401
 import framework.board      # noqa: F401
 
 from framework.circuit import Circuit
+from framework.errors import ShortCircuitError
 from framework.export.nets import LogicalNet, compute_logical_nets
 from framework.pin import Pin
 
@@ -104,5 +105,5 @@ def test_validate_still_catches_shorts_via_extracted_walker():
     pin = conn.pins[0]
     wire(vcc1.ports['out'], pin.external)
     wire(vcc2.ports['out'], pin.internal)
-    with pytest.raises(ValueError, match='Short circuit'):
+    with pytest.raises(ShortCircuitError, match='Short circuit'):
         Circuit(factor_nodes=[conn, vcc1, vcc2], ports={})

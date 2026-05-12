@@ -2,6 +2,7 @@ from typing import ClassVar, Sequence
 
 from pydantic import validate_call
 
+from framework.errors import PartParameterError
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
@@ -39,11 +40,13 @@ class DiodeOR(FactorNode):
         domain: GroundDomain = ELECTRICAL,
     ) -> None:
         if len(input_names) < 1:
-            raise ValueError("DiodeOR needs at least one input name")
+            raise PartParameterError("DiodeOR needs at least one input name")
         if len(set(input_names)) != len(input_names):
-            raise ValueError(f"DiodeOR input names must be unique: {list(input_names)!r}")
+            raise PartParameterError(
+                f"DiodeOR input names must be unique: {list(input_names)!r}"
+            )
         if 'out' in input_names:
-            raise ValueError("'out' is reserved for the output port")
+            raise PartParameterError("'out' is reserved for the output port")
         self._input_names = tuple(input_names)
         self._ports: dict[str, Port] = {
             name: Port(name, Direction.IN, domain,
@@ -73,7 +76,7 @@ class DiodeOR(FactorNode):
         self._assert_no_inputs_wired()
         unknown = set(kwargs) - set(self._input_names)
         if unknown:
-            raise ValueError(
+            raise PartParameterError(
                 f"DiodeOR.__call__ got unknown input(s) {sorted(unknown)!r}; "
                 f"expected one of {list(self._input_names)!r}"
             )

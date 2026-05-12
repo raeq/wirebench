@@ -1,20 +1,21 @@
 import pytest
 
 from components.chips.concepts.diode_or import DiodeOR
+from framework.errors import PartParameterError
 
 
 def test_construction_requires_at_least_one_input():
-    with pytest.raises(ValueError):
+    with pytest.raises(PartParameterError):
         DiodeOR(input_names=())
 
 
 def test_rejects_duplicate_input_names():
-    with pytest.raises(ValueError):
+    with pytest.raises(PartParameterError):
         DiodeOR(input_names=('a', 'a'))
 
 
 def test_reserved_output_name_rejected():
-    with pytest.raises(ValueError):
+    with pytest.raises(PartParameterError):
         DiodeOR(input_names=('out',))
 
 
@@ -49,7 +50,7 @@ def test_none_inputs_treated_as_low():
 
 def test_unknown_input_name_raises():
     or_ = DiodeOR(input_names=('a', 'b'))
-    with pytest.raises(ValueError):
+    with pytest.raises(PartParameterError):
         or_(a=True, c=True)
 
 

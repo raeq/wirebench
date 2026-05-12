@@ -6,6 +6,10 @@ import networkx as nx  # type: ignore[import-untyped]
 
 from pydantic import validate_call
 
+from framework.errors import (
+    CompositeShapeError, FloatingNetError, RefdesError,
+    ShortCircuitError, UnconnectedPinError,
+)
 from framework.factor import FactorNode
 from framework.pin import Pin
 from framework.port import Direction, Port
@@ -65,7 +69,7 @@ class Circuit(FactorNode):
         try:
             instance_dict = self.__dict__
         except AttributeError:
-            raise TypeError(
+            raise CompositeShapeError(
                 f"{type(self).__name__}.__init__: factor_nodes=None "
                 "requires an instance __dict__ — omit __slots__ on "
                 "composite Circuit subclasses, or pass factor_nodes "
@@ -109,7 +113,7 @@ class Circuit(FactorNode):
             if port.mandatory and not port.connected and id(port) not in boundary
         ]
         if unconnected:
-            raise ValueError(
+            raise UnconnectedPinError(
                 f"Unconnected mandatory port(s): {', '.join(unconnected)}"
             )
 
@@ -134,12 +138,12 @@ class Circuit(FactorNode):
                     f"'{type(o).__name__}.{p.name}'" for o, p in bidirs))
 
         if shorts:
-            raise ValueError(
+            raise ShortCircuitError(
                 "Short circuit on logical net — multiple drivers: "
                 + '; '.join(shorts)
             )
         if floats:
-            raise ValueError(
+            raise FloatingNetError(
                 "Floating logical net — multiple passive BIDIRs with no driver: "
                 + '; '.join(floats)
             )
@@ -159,7 +163,7 @@ class Circuit(FactorNode):
             else:
                 seen[key] = label
         if collisions:
-            raise ValueError(
+            raise RefdesError(
                 f"Duplicate refdes: {'; '.join(collisions)}"
             )
 

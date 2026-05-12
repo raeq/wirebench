@@ -6,6 +6,10 @@ import pytest
 from framework.board import Board
 from framework.circuit import Circuit
 from framework.connector import Connector
+from framework.errors import (
+    FloatingNetError, PartConfigurationError, PortContentionError,
+    ShortCircuitError, UnknownPortError, UnmateableError,
+)
 from framework.factor import FactorNode
 from framework.ground import ELECTRICAL
 from framework.pin import Pin, PinId
@@ -29,7 +33,7 @@ from components.passives.resistor import Resistor
 
 def test_connector_under_specified_part_raises():
     # Header1xNMale needs pin_count + pitch_mm at construction.
-    with pytest.raises(TypeError):
+    with pytest.raises(PartConfigurationError):
         Header1xNMale(refdes_number=1)
 
 
@@ -75,12 +79,12 @@ def test_refdes_prefix_by_gender(cls, prefix):
 # -- 13. Under-specified part rejects (also covered by 8) --
 
 def test_no_pin_count_rejects():
-    with pytest.raises(TypeError, match="pin_count"):
+    with pytest.raises(PartConfigurationError, match="pin_count"):
         Header1xNMale(pitch_mm=2.54, refdes_number=1)
 
 
 def test_no_pitch_rejects():
-    with pytest.raises(TypeError, match="pitch_mm"):
+    with pytest.raises(PartConfigurationError, match="pitch_mm"):
         Header1xNMale(pin_count=4, refdes_number=1)
 
 
@@ -110,7 +114,7 @@ def test_bidir_pin_contention_raises():
     p = Pin(PinId(1, 'x'), Direction.BIDIR, ELECTRICAL, signal_type=Digital)
     p.external.drive(True)
     p.internal.drive(False)
-    with pytest.raises(ValueError, match="contention"):
+    with pytest.raises(PortContentionError, match="contention"):
         p.evaluate()
 
 
@@ -136,7 +140,7 @@ def test_pin_other_face():
 def test_pin_other_face_rejects_stranger():
     p = Pin(PinId(1, 'x'), Direction.IN, ELECTRICAL, signal_type=Digital)
     stranger = Port('s', Direction.IN, ELECTRICAL, signal_type=Digital)
-    with pytest.raises(ValueError):
+    with pytest.raises(UnknownPortError):
         p.other_face(stranger)
 
 
@@ -160,7 +164,7 @@ def test_validate_rejects_cross_board_multi_out_via_mate():
     b2 = _board_with_rail(2, 'female')
     mate(b1.connectors[0], b2.connectors[0])
 
-    with pytest.raises(ValueError, match="Short circuit on logical net"):
+    with pytest.raises(ShortCircuitError, match="Short circuit on logical net"):
         Circuit(factor_nodes=[b1, b2], ports={})
 
 
@@ -173,7 +177,7 @@ def test_validate_still_rejects_two_resistors_no_driver():
     shared = Node('shared', ELECTRICAL)
     r1.ports['t1'].connect(shared)
     r2.ports['t1'].connect(shared)
-    with pytest.raises(ValueError, match="Floating logical net"):
+    with pytest.raises(FloatingNetError, match="Floating logical net"):
         Circuit(factor_nodes=[r1, r2],
                 ports={'a': r1.ports['t2'], 'b': r2.ports['t2']})
 
@@ -188,7 +192,7 @@ def test_mate_refuses_when_mates_with_is_none():
     from framework.mate import mate
     s = ScrewTerminalBlock(pin_count=3, pitch_mm=5.08, refdes_number=1)
     other = Header1xNMale(pin_count=3, pitch_mm=5.08, refdes_number=1)
-    with pytest.raises(TypeError, match="no in-model mate"):
+    with pytest.raises(UnmateableError, match="no in-model mate"):
         mate(s, other)
 
 

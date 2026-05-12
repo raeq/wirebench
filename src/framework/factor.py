@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from abc import ABCMeta, abstractmethod
-from typing import ClassVar
+from typing import Any, ClassVar
 
+from framework.errors import WiredChipCallError
 from framework.port import Direction, Port
 
 
@@ -37,8 +38,13 @@ class FactorNode(metaclass=ABCMeta):
     # require one error out, exporters that don't simply omit the
     # field. Subclasses override either as a ClassVar (fixed-geometry
     # parts) or via @property (parameterised families that compute
-    # from instance state like pin_count/pitch).
-    FOOTPRINT: ClassVar[str | None] = None
+    # from instance state like pin_count/pitch).  Declared as a
+    # property here (rather than `ClassVar[str | None] = None`) so
+    # that mypy permits the @property override in parameterised
+    # subclasses; a literal class-attribute override still works.
+    @property
+    def FOOTPRINT(self) -> str | None:
+        return None
 
     # Pin numbers for passive terminals whose ports are not wrapped in
     # Pin instances. Maps port name -> datasheet pin number. Chips and
@@ -82,13 +88,13 @@ class FactorNode(metaclass=ABCMeta):
         wired = [n for n, p in self.ports.items()
                  if p.direction in (Direction.IN, Direction.BIDIR) and p.connected]
         if wired:
-            raise RuntimeError(
+            raise WiredChipCallError(
                 f"{type(self).__name__}.__call__ refused: port(s) wired "
                 f"by an enclosing circuit ({', '.join(wired)}); drive via "
                 f"the parent's evaluate() instead."
             )
 
-    def __getattr__(self, name: str) -> Port:
+    def __getattr__(self, name: str) -> Any:
         """Proxy port lookup as attribute access.
 
         `chip.PD3` resolves to `chip.ports['PD3']` when `PD3` is a port
@@ -102,6 +108,13 @@ class FactorNode(metaclass=ABCMeta):
         so that pickle, copy, and pydantic introspection don't trip
         the proxy and so that a missing `_ports` during __init__
         doesn't recurse.
+
+        Return type is `Any` because the proxy is a fallback for any
+        attribute the static type-checker can't see — including
+        composite cells (`board.led`) and Python instance attributes
+        set in `__init__` of subclasses that don't declare them in
+        `__slots__`.  Annotating as `-> Port` would (incorrectly) tell
+        mypy that *every* unknown attribute is a Port.
         """
         if name.startswith('_') or name == 'ports':
             raise AttributeError(name)

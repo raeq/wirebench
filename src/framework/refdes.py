@@ -21,6 +21,8 @@ from typing import Annotated, ClassVar, Protocol, runtime_checkable
 
 from pydantic import Field
 
+from framework.errors import RefdesError
+
 
 # Strict positive int — rejects bool, float, str coercion. Used as the
 # refdes_number annotation on every refdes-bearing __init__ so that
@@ -98,7 +100,7 @@ def validate_refdes(prefix: str, number: int) -> None:
     effects, so an invalid refdes fails loudly at the construction site.
     """
     if prefix not in IEEE_315_PREFIXES:
-        raise ValueError(f"Unknown refdes prefix {prefix!r}; not in IEEE 315.")
+        raise RefdesError(f"Unknown refdes prefix {prefix!r}; not in IEEE 315.")
     # bool is an int subclass — reject it explicitly (True is not a refdes 1).
     if isinstance(number, bool) or not isinstance(number, int) or number < 1:
-        raise ValueError(f"refdes_number must be a positive int; got {number!r}.")
+        raise RefdesError(f"refdes_number must be a positive int; got {number!r}.")

@@ -16,6 +16,7 @@ from framework.chip import Chip
 from framework.circuit import Circuit
 from framework.connector import Connector
 from framework.factor import FactorNode
+from framework.port import Port
 
 from framework.export.base import (
     ExporterContext, lookup_renderer, pin_number_of, register_net_namer,
@@ -211,7 +212,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
     return ctx.output()
 
 
-def _kicad_pintype(owner: FactorNode, port) -> str:
+def _kicad_pintype(owner: FactorNode, port: Port) -> str:
     """Map a port's direction to a KiCad pintype string, per spec
     §5.1's table."""
     from framework.connector import Connector

@@ -7,6 +7,7 @@ import components.passives  # noqa: F401
 import components.connectors  # noqa: F401
 import framework.board  # noqa: F401
 
+from framework.errors import DuplicateRegistrationError, UnknownPartError
 from framework.factor import FactorNode
 from framework.registry import lookup, register, registered_names
 
@@ -18,7 +19,7 @@ def test_registered_components_looked_up():
 
 
 def test_unknown_name_raises_keyerror():
-    with pytest.raises(KeyError, match="Unknown component type"):
+    with pytest.raises(UnknownPartError, match="Unknown component type"):
         lookup("NonexistentChip")
 
 
@@ -31,7 +32,7 @@ def test_duplicate_registration_raises():
             pass
 
     register("DuplicateRegistrationTestDummy")(_Dummy)
-    with pytest.raises(ValueError, match="already registered"):
+    with pytest.raises(DuplicateRegistrationError, match="already registered"):
         # Different class with same name.
         class _AnotherDummy(FactorNode):
             @property

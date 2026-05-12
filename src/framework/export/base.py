@@ -14,6 +14,7 @@ from typing import Any, Callable, Literal, TypeVar
 
 from pydantic import BaseModel, ConfigDict, Field, PositiveFloat
 
+from framework.errors import DuplicateRendererError, RendererNotFoundError
 from framework.factor import FactorNode
 from framework.port import Port
 
@@ -21,14 +22,25 @@ from framework.export.nets import LogicalNet, compute_logical_nets
 
 
 T = TypeVar('T', bound=FactorNode)
-Renderer = Callable[[Any, 'ExporterContext'], str]
+# Renderers are typed as the most permissive Callable shape — different
+# format adapters take different extra positional arguments (`bom` adds
+# `parent_refdes`, `kicad` adds `qrd / names / tstamps`).  Using
+# `Callable[..., str]` lets the registry accept any of them without
+# fighting per-format signature variance.
+Renderer = Callable[..., str]
 
 
+# The registry's keys hold `type[FactorNode]` so callers can register
+# abstract bases (`Chip`, `Diode`, `Transistor`) whose subclasses inherit
+# the renderer via MRO.  `mypy --strict` would flag `type[Diode]` as
+# abstract; that's precisely the use-case we want, so the registry
+# function uses `type[FactorNode]` rather than a TypeVar bound to a
+# concrete subclass.
 _RENDERERS: dict[tuple[type[FactorNode], str], Renderer] = {}
 
 
 def register_renderer(
-    component_class: type[T],
+    component_class: type[Any],
     *,
     format: str,
 ) -> Callable[[Renderer], Renderer]:
@@ -36,12 +48,17 @@ def register_renderer(
     `component_class` in the given `format`.
 
     Lookup is MRO-aware: a renderer registered against a base class
-    handles every subclass that doesn't have its own renderer.
+    handles every subclass that doesn't have its own renderer.  Abstract
+    bases like `Chip`, `Diode`, and `Transistor` are intentionally
+    allowed here so a single renderer can cover every subclass — the
+    parameter is annotated as `type[Any]` rather than `type[FactorNode]`
+    because mypy's `[type-abstract]` check would otherwise reject an
+    abstract subclass even though that's exactly the use case.
     """
     def decorator(fn: Renderer) -> Renderer:
         key = (component_class, format)
         if key in _RENDERERS:
-            raise ValueError(
+            raise DuplicateRendererError(
                 f"Renderer for {component_class.__name__} in format "
                 f"{format!r} already registered."
             )
@@ -68,7 +85,7 @@ def lookup_renderer(
         f for (c, f) in _RENDERERS
         if c in component_class.__mro__
     })
-    raise KeyError(
+    raise RendererNotFoundError(
         f"No {format!r} renderer for {component_class.__name__}. "
         f"Available formats for this class: {available or '(none)'}."
     )
@@ -94,7 +111,7 @@ def register_net_namer(format: str, namer: NetNamer) -> None:
     """Register a net-naming function for `format`. Called by each
     adapter's package `__init__.py`. Re-registering raises."""
     if format in _NET_NAMERS:
-        raise ValueError(
+        raise DuplicateRendererError(
             f"Net namer for format {format!r} already registered."
         )
     _NET_NAMERS[format] = namer
@@ -106,7 +123,7 @@ def lookup_net_namer(format: str) -> NetNamer:
     try:
         return _NET_NAMERS[format]
     except KeyError:
-        raise KeyError(
+        raise RendererNotFoundError(
             f"No net namer registered for format {format!r}. "
             f"Available: {sorted(_NET_NAMERS)}"
         )
@@ -121,8 +138,9 @@ def pin_number_of(component: FactorNode, port_name: str) -> int | None:
     error or a silently-omitted field."""
     for pin in getattr(component, 'pins', ()):
         if pin.id.name == port_name:
-            return pin.id.number
-    return getattr(type(component), 'PIN_NUMBERS', {}).get(port_name)
+            return int(pin.id.number)
+    n = getattr(type(component), 'PIN_NUMBERS', {}).get(port_name)
+    return None if n is None else int(n)
 
 
 class ExportConfig(BaseModel):
@@ -226,7 +244,7 @@ class ExporterContext:
         synthesised id for those that don't carry one."""
         rd = getattr(component, 'refdes', None)
         if rd:
-            return rd
+            return str(rd)
         key = id(component)
         if key in self._synth_names:
             return self._synth_names[key]

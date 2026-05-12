@@ -1,5 +1,6 @@
 from pydantic import validate_call
 
+from framework.errors import ForbiddenStateError
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
@@ -45,7 +46,7 @@ class NORLatch(FactorNode):
         s = bool(Digital(self._ports['s'].value))
         r = bool(Digital(self._ports['r'].value))
         if s and r:
-            raise ValueError("Invalid: S and R both active")
+            raise ForbiddenStateError("Invalid: S and R both active")
         if s:
             self._q = True
         elif r:

@@ -2,6 +2,7 @@ from typing import Annotated, ClassVar
 
 from pydantic import Field, validate_call
 
+from framework.errors import PartParameterError
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
@@ -140,7 +141,7 @@ class Cell(FactorNode):
     @state_of_charge.setter
     def state_of_charge(self, value: float) -> None:
         if not 0.0 <= value <= 1.0:
-            raise ValueError(
+            raise PartParameterError(
                 f"state_of_charge must be in [0, 1]; got {value!r}"
             )
         self._state_of_charge = float(value)

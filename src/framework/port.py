@@ -3,6 +3,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Any
 
+from framework.errors import DomainCrossingError, SignalTypeMismatchError
 from framework.ground import GroundDomain
 from framework.node import Node
 
@@ -61,7 +62,7 @@ class Port:
 
     def connect(self, node: Node) -> None:
         if node.domain is not self.domain:
-            raise ValueError(
+            raise DomainCrossingError(
                 f"Ground domain mismatch: port '{self.name}' is in domain "
                 f"'{self.domain.name}', node '{node.name}' is in domain '{node.domain.name}'"
             )
@@ -82,7 +83,7 @@ class Port:
                 try:
                     value = self.signal_type(value)
                 except (TypeError, ValueError) as e:
-                    raise TypeError(
+                    raise SignalTypeMismatchError(
                         f"port '{self.name}' expects {self.signal_type.__name__}, "
                         f"got {type(value).__name__}: {e}"
                     ) from e

@@ -235,11 +235,16 @@ class Uno_ThermometerSketch(ATmega328P):
         return self._sketch
 
     @validate_call(config={'arbitrary_types_allowed': True})
-    def __call__(self, temperature_c: float, phase: int) -> None:
+    def __call__(  # type: ignore[override]
+        self, temperature_c: float, phase: int,
+    ) -> None:
         """Standalone-test invocation: load firmware state and run the
         chip's internal evaluation.  Refuses if any pin is wired into a
         parent — the parent must drive sketch state directly via the
-        `sketch` property and call its own `evaluate()`."""
+        `sketch` property and call its own `evaluate()`.
+
+        Override widens ATmega328P.__call__(): this subclass embeds a
+        sketch cell that needs temperature/phase inputs."""
         self._assert_no_inputs_wired()
         self._sketch._temperature_c = float(temperature_c)
         self._sketch._phase = int(phase)

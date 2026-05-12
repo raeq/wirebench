@@ -105,7 +105,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
         ctx.emit(f'    {net}(("{net}"))')
 
     # Edges.
-    for rd, port, net in triples:
-        ctx.emit(f'    {rd} ---|"{port}"| {net}')
+    for rd, port_name, net in triples:
+        ctx.emit(f'    {rd} ---|"{port_name}"| {net}')
 
     return ctx.output()

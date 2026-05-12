@@ -1,5 +1,6 @@
 import pytest
 from components.chips.cd4043 import CD4043
+from framework.errors import ForbiddenStateError, WiredChipCallError
 
 
 @pytest.fixture
@@ -43,7 +44,7 @@ def test_hold_after_set(chip):
 
 
 def test_both_active_raises(chip):
-    with pytest.raises(ValueError):
+    with pytest.raises(ForbiddenStateError):
         chip(s_1=True, r_1=True, oe=True)
 
 
@@ -83,5 +84,5 @@ def test_call_refuses_when_input_pin_is_wired(chip):
     from framework.signals import Digital
     driver = Port('drv', Direction.OUT, chip.ports['s_1'].domain, signal_type=Digital)
     wire(driver, chip.ports['s_1'])
-    with pytest.raises(RuntimeError, match="wired by an enclosing circuit"):
+    with pytest.raises(WiredChipCallError, match="wired by an enclosing circuit"):
         chip(s_1=True, r_1=False, oe=True)

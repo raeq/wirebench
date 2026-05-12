@@ -2,6 +2,7 @@ import pytest
 
 from components.chips.isow7841 import ISOW7841
 from components.chips.concepts.isolated_channel import IsolatedChannel
+from framework.errors import PartConfigurationError
 from framework.ground import ELECTRICAL, GroundDomain
 from framework.port import Direction
 from framework.signals import Analog, Digital
@@ -86,7 +87,7 @@ def test_ports_keyed_by_pin_name(chip):
 def test_construction_rejects_identical_domains():
     """Logic and iso must be distinct GroundDomain instances —
     otherwise the chip's whole reason for existing is meaningless."""
-    with pytest.raises(ValueError, match="distinct"):
+    with pytest.raises(PartConfigurationError, match="distinct"):
         ISOW7841(refdes_number=1,
                  logic_domain=ELECTRICAL,
                  iso_domain=ELECTRICAL)

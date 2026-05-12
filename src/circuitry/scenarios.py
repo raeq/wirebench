@@ -26,18 +26,18 @@ Example:
 """
 from __future__ import annotations
 
-from typing import Any, Callable, Iterable, Mapping, Sequence
+from typing import Any, Callable, Iterable, Mapping, Sequence, cast
 
 from framework.circuit import Circuit
 from framework.refdes import RefdesBearing
 
 
 # A scenario is either (label, args) or (label, args, kwargs).
-Scenario = tuple   # too noisy to spell as a TypeAlias for both shapes
+Scenario = tuple[Any, ...]   # too noisy to spell as a TypeAlias for both shapes
 
 # A column gets the live circuit and the args / kwargs the scenario
 # was invoked with, and returns whatever should appear in that cell.
-ColumnFn = Callable[[Circuit, tuple, Mapping[str, Any]], Any]
+ColumnFn = Callable[[Circuit, tuple[Any, ...], Mapping[str, Any]], Any]
 Column = tuple[str, ColumnFn]
 
 
@@ -102,9 +102,12 @@ def run_scenarios(
     rows: list[list[str]] = []
     for entry in scenarios:
         label = entry[0]
-        args: tuple = entry[1] if len(entry) > 1 else ()
+        args: tuple[Any, ...] = entry[1] if len(entry) > 1 else ()
         kwargs: Mapping[str, Any] = entry[2] if len(entry) > 2 else {}
-        circuit(*args, **kwargs)
+        # Circuit subclasses define __call__ with their own signature
+        # (the abstract base declares it abstract).  mypy can't see
+        # through the dynamic call, so we cast to Any for the dispatch.
+        cast(Any, circuit)(*args, **kwargs)
         row = [label] + [str(getter(circuit, args, kwargs)) for _, getter in columns]
         rows.append(row)
 
