@@ -37,13 +37,25 @@ class Board(Circuit):
         *,
         name: Annotated[str, Field(min_length=1)],
         revision: Annotated[str, Field(min_length=1)],
-        components: list[FactorNode],
+        components: list[FactorNode] | None = None,
         refdes_number: RefdesNumber,
     ) -> None:
+        # Board's own state (name / revision / refdes_number) lives in
+        # Board.__slots__, so these assignments never pollute the
+        # instance __dict__ that auto-collect will scan in a moment.
         validate_refdes(self.REFDES_PREFIX, refdes_number)
         self._name          = name
         self._revision      = revision
         self._refdes_number = refdes_number
+
+        # Auto-collect: if the subclass omits __slots__ and assigns
+        # parts as `self.x = Y(...)` before calling super().__init__(),
+        # `components=None` scans `self.__dict__` for FactorNode-typed
+        # values (one level of tuple/list/dict unpacking).  Same rules
+        # as Circuit's auto-collect.
+        if components is None:
+            components = self._auto_collect_factor_nodes()
+
         self._connectors    = tuple(c for c in components if isinstance(c, Connector))
 
         # Surface = external faces of every connector, qualified by refdes.

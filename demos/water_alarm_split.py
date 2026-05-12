@@ -49,20 +49,19 @@ class SensorBoard(Board):
     """
 
     def __init__(self, *, refdes_number: int) -> None:
-        sensor    = ULN2003A(refdes_number=1)
-        connector = Header2xNFemale(pin_count=40, pitch_mm=2.54, refdes_number=1)
+        self.sensor    = ULN2003A(refdes_number=1)
+        self.connector = Header2xNFemale(pin_count=40, pitch_mm=2.54, refdes_number=1)
 
         # Probe inputs come in on the connector and go to the ULN2003A;
         # ULN2003A outputs (open-collector) go back out on the connector.
-        wire(connector.pins[2].internal, sensor.in_1)            # J1.p3
-        wire(connector.pins[3].internal, sensor.in_2)            # J1.p4
-        wire(sensor.out_1, connector.pins[4].internal)           # J1.p5
-        wire(sensor.out_2, connector.pins[5].internal)           # J1.p6
+        wire(self.connector.pins[2].internal, self.sensor.in_1)   # J1.p3
+        wire(self.connector.pins[3].internal, self.sensor.in_2)   # J1.p4
+        wire(self.sensor.out_1, self.connector.pins[4].internal)  # J1.p5
+        wire(self.sensor.out_2, self.connector.pins[5].internal)  # J1.p6
 
         super().__init__(
             name='Sensor Board',
             revision='A',
-            components=[sensor, connector],
             refdes_number=refdes_number,
         )
 
@@ -71,58 +70,45 @@ class ControllerBoard(Board):
     """Reads conditioned sensor outputs over the GPIO header, drives
     the alarm latch and indicator LEDs."""
 
-    __slots__ = ('_red_led', '_green_led')
-
     def __init__(self, *, refdes_number: int) -> None:
-        sn74hc04  = SN74HC04(refdes_number=1)
-        cd4069    = CD4069  (refdes_number=2)
-        cd4043    = CD4043  (refdes_number=3)
-        red_led   = LED('red',   refdes_number=1)
-        green_led = LED('green', refdes_number=2)
-        gnd       = Rail(False)
-        vcc       = Rail(True)
-        connector = Header2xNMale(pin_count=40, pitch_mm=2.54, refdes_number=1)
+        self.sn74hc04  = SN74HC04(refdes_number=1)
+        self.cd4069    = CD4069  (refdes_number=2)
+        self.cd4043    = CD4043  (refdes_number=3)
+        self.red_led   = LED('red',   refdes_number=1)
+        self.green_led = LED('green', refdes_number=2)
+        self.gnd       = Rail(False)
+        self.vcc       = Rail(True)
+        self.connector = Header2xNMale(pin_count=40, pitch_mm=2.54, refdes_number=1)
 
         # Sensor outputs arrive on P1.p5 (conditioned low_probe) and
         # P1.p6 (conditioned high_probe).
-        wire(connector.pins[4].internal, cd4043.s_1)             # P1.p5
-        wire(connector.pins[5].internal, sn74hc04.a_1)           # P1.p6
-        wire(sn74hc04.y_1, cd4043.r_1)
+        wire(self.connector.pins[4].internal, self.cd4043.s_1)    # P1.p5
+        wire(self.connector.pins[5].internal, self.sn74hc04.a_1)  # P1.p6
+        wire(self.sn74hc04.y_1, self.cd4043.r_1)
 
         # Q drives red LED directly; /Q derived from Q via CD4069 gate 1.
-        wire(cd4043.q_1, red_led.anode)
-        wire(cd4043.q_1, cd4069.a_1)
-        wire(cd4069.y_1, green_led.anode)
+        wire(self.cd4043.q_1, self.red_led.anode)
+        wire(self.cd4043.q_1, self.cd4069.a_1)
+        wire(self.cd4069.y_1, self.green_led.anode)
 
         # CD4043 OE tied HIGH.
-        wire(vcc.out, cd4043.oe)
+        wire(self.vcc.out, self.cd4043.oe)
 
         # Tie off all unused CMOS inputs and unused latch S/R inputs.
-        wire(gnd.out,
-             sn74hc04.a_2, sn74hc04.a_3, sn74hc04.a_4,
-             sn74hc04.a_5, sn74hc04.a_6,
-             cd4069.a_2, cd4069.a_3, cd4069.a_4,
-             cd4069.a_5, cd4069.a_6,
-             cd4043.s_2, cd4043.r_2,
-             cd4043.s_3, cd4043.r_3,
-             cd4043.s_4, cd4043.r_4)
+        wire(self.gnd.out,
+             self.sn74hc04.a_2, self.sn74hc04.a_3, self.sn74hc04.a_4,
+             self.sn74hc04.a_5, self.sn74hc04.a_6,
+             self.cd4069.a_2, self.cd4069.a_3, self.cd4069.a_4,
+             self.cd4069.a_5, self.cd4069.a_6,
+             self.cd4043.s_2, self.cd4043.r_2,
+             self.cd4043.s_3, self.cd4043.r_3,
+             self.cd4043.s_4, self.cd4043.r_4)
 
         super().__init__(
             name='Controller Board',
             revision='A',
-            components=[sn74hc04, cd4069, cd4043, red_led, green_led, gnd, vcc, connector],
             refdes_number=refdes_number,
         )
-        self._red_led   = red_led
-        self._green_led = green_led
-
-    @property
-    def red_led(self) -> LED:
-        return self._red_led
-
-    @property
-    def green_led(self) -> LED:
-        return self._green_led
 
 
 class WaterAlarmAssembly(Circuit):
