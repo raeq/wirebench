@@ -44,6 +44,14 @@ _OVERRIDES = {
     'LED':        _passive('LED',       color='red'),
     'Relay_SPDT': lambda n: lookup('Relay_SPDT')(refdes_number=n),
     'Rail':       lambda n: lookup('Rail')(level=True),
+    'Cell':       lambda n: lookup('Cell')(
+        initial_state_of_charge=1.0, refdes_number=n,
+    ),
+    'ISOW7841':   lambda n: lookup('ISOW7841')(
+        refdes_number=n,
+        iso_domain=__import__('framework.ground', fromlist=['GroundDomain'])
+                       .GroundDomain('isolated_test'),
+    ),
     'Header1xNFemale':    lambda n: lookup('Header1xNFemale')(refdes_number=n, pin_count=4, pitch_mm=2.54),
     'Header1xNMale':      lambda n: lookup('Header1xNMale')(refdes_number=n, pin_count=4, pitch_mm=2.54),
     'Header2xNFemale':    lambda n: lookup('Header2xNFemale')(refdes_number=n, pin_count=4, pitch_mm=2.54),

@@ -25,6 +25,7 @@ REFDES_D = r'^D\d+$'   # diodes (LEDs)
 REFDES_Q = r'^Q\d+$'   # transistors (BJT / MOSFET)
 REFDES_K = r'^K\d+$'   # relays
 REFDES_A = r'^A\d+$'   # assemblies / boards
+REFDES_BT = r'^BT\d+$' # batteries / cells
 LOCAL_ID = r'^[A-Za-z][A-Za-z0-9_]*$'
 
 
@@ -71,6 +72,12 @@ class RailRecord(_Record):
     type:  Literal['Rail'] = 'Rail'
     id:    Annotated[str, Field(pattern=LOCAL_ID)]
     level: bool
+
+
+class CellRecord(_Record):
+    type:                    Literal['Cell'] = 'Cell'
+    refdes:                  Annotated[str,   Field(pattern=REFDES_BT)]
+    initial_state_of_charge: Annotated[float, Field(ge=0.0, le=1.0)]
 
 
 # --------------------------------------------------------------- chips
@@ -146,6 +153,9 @@ class TPS2660Record(_ChipRecord):    type: Literal['TPS2660']    = 'TPS2660'
 class TMP302Record(_ChipRecord):     type: Literal['TMP302']     = 'TMP302'
 class SN74AHC1G14Record(_ChipRecord): type: Literal['SN74AHC1G14'] = 'SN74AHC1G14'
 class DRV8313Record(_ChipRecord):    type: Literal['DRV8313']    = 'DRV8313'
+class ISOW7841Record(_ChipRecord):   type: Literal['ISOW7841']   = 'ISOW7841'
+class TRS3122ERecord(_ChipRecord):   type: Literal['TRS3122E']   = 'TRS3122E'
+class BQ27546G1Record(_ChipRecord):  type: Literal['BQ27546G1']  = 'BQ27546G1'
 
 # Specialty ICs.
 class NE555Record(_ChipRecord):         type: Literal['NE555']         = 'NE555'
@@ -371,7 +381,7 @@ class SDCardRecord(_FixedMaleConnectorRecord):
 ComponentRecord = Annotated[
     Union[
         ResistorRecord, CapacitorRecord, InductorRecord, Relay_SPDTRecord,
-        LEDRecord, RailRecord,
+        LEDRecord, RailRecord, CellRecord,
         SN74HC04Record, CD4017Record, CD4069Record, LM393Record, CD4043Record,
         ULN2003ARecord,
         # 74HC logic
@@ -389,6 +399,7 @@ ComponentRecord = Annotated[
         AMS1117_33Record, AMS1117_50Record, LP2950Record,
         LM5002Record, LM5160Record, TPS2660Record,
         TMP302Record, SN74AHC1G14Record, DRV8313Record,
+        ISOW7841Record, TRS3122ERecord, BQ27546G1Record,
         # Specialty ICs
         NE555Record, LM386Record, DS18B20Record, DS1307Record, MAX7219Record,
         Display5641ASRecord,

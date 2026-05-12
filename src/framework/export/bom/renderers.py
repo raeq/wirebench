@@ -21,6 +21,7 @@ from framework.transistor import Transistor
 from framework.export.base import ExporterContext, register_renderer
 
 from components.passives.capacitor import Capacitor
+from components.passives.cell import Cell
 from components.passives.inductor import Inductor
 from components.passives.led import LED
 from components.passives.rail import Rail
@@ -100,6 +101,13 @@ def render_board(b: Board, ctx: ExporterContext, parent: str = '') -> str:
 def render_rail(r: Rail, ctx: ExporterContext, parent: str = '') -> str:
     # Rails are logical markers, not procurable parts — empty row.
     return ""
+
+
+@register_renderer(Cell, format='bom')
+def render_cell(bt: Cell, ctx: ExporterContext, parent: str = '') -> str:
+    value = f"Li-Ion 1S @ {bt.state_of_charge * 100:.0f}% SoC"
+    return _csv_row(bt.refdes, value, _footprint_of(bt), '1', parent,
+                    'Battery cell')
 
 
 @register_renderer(Transistor, format='bom')

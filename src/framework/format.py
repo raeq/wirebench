@@ -77,6 +77,11 @@ def _component_to_record(
             refdes=component.refdes,                 # type: ignore[attr-defined]
             color=component._color,                  # type: ignore[attr-defined]
         ))
+    if cls_name == 'Cell':
+        return cast(ComponentRecord, _import('CellRecord')(
+            refdes=component.refdes,                            # type: ignore[attr-defined]
+            initial_state_of_charge=float(component._state_of_charge),  # type: ignore[attr-defined]
+        ))
     if cls_name == 'Rail':
         return cast(ComponentRecord, RailRecord(
             id=rail_ids[id(component)],
@@ -331,6 +336,8 @@ def _build_component(record: Any) -> FactorNode:
         kwargs['color'] = record.color
     elif record.type == 'Rail':
         kwargs = {'level': record.level}   # Rail takes no refdes_number
+    elif record.type == 'Cell':
+        kwargs['initial_state_of_charge'] = record.initial_state_of_charge
     if hasattr(record, 'pin_count') and record.pin_count is not None:
         kwargs['pin_count'] = record.pin_count
     if hasattr(record, 'pitch_mm') and record.pitch_mm is not None:

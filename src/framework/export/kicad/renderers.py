@@ -18,6 +18,7 @@ from framework.transistor import Transistor
 from framework.export.base import ExporterContext, register_renderer
 
 from components.passives.capacitor import Capacitor
+from components.passives.cell import Cell
 from components.passives.inductor import Inductor
 from components.passives.led import LED
 from components.passives.rail import Rail
@@ -123,6 +124,17 @@ def render_rail(r: Rail, ctx: ExporterContext, qrd: str = '',
                 names: str = '/', tstamps: str = '/') -> str:
     # Rails are not parts; their nets are named directly. No comp.
     return ""
+
+
+@register_renderer(Cell, format='kicad')
+def render_cell(bt: Cell, ctx: ExporterContext, qrd: str,
+                names: str, tstamps: str) -> str:
+    value = "Li-Ion 1S"
+    return _comp_block(
+        qrd, value, _footprint_field(bt),
+        _libsource('Device', 'Battery_Cell', 'Single cell battery'),
+        names, tstamps,
+    )
 
 
 @register_renderer(Board, format='kicad')

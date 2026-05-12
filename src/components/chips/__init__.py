@@ -62,6 +62,13 @@ from .tps2660    import TPS2660
 # Motor drivers.
 from .drv8313    import DRV8313
 
+# Digital isolators with integrated power, RS-232 transceivers.
+from .isow7841   import ISOW7841
+from .trs3122e   import TRS3122E
+
+# Battery management.
+from .bq27546g1  import BQ27546G1
+
 # Specialty ICs.
 from .ne555         import NE555
 from .lm386         import LM386
@@ -119,6 +126,10 @@ __all__ = [
     'TPS2660',
     # Motor drivers
     'DRV8313',
+    # Digital isolators & RS-232 transceivers
+    'ISOW7841', 'TRS3122E',
+    # Battery management
+    'BQ27546G1',
     # Specialty
     'NE555', 'LM386', 'DS18B20', 'DS1307', 'MAX7219', 'Display5641AS',
     # Sensors

@@ -10,6 +10,7 @@ from framework.transistor import Transistor
 from framework.export.base import ExporterContext, register_renderer
 
 from components.passives.capacitor import Capacitor
+from components.passives.cell import Cell
 from components.passives.inductor import Inductor
 from components.passives.led import LED
 from components.passives.rail import Rail
@@ -61,6 +62,12 @@ def render_chip(u: Chip, ctx: ExporterContext) -> str:
 @register_renderer(Rail, format='mermaid')
 def render_rail(r: Rail, ctx: ExporterContext) -> str:
     return ""   # rails inline into vcc/gnd net names
+
+
+@register_renderer(Cell, format='mermaid')
+def render_cell(bt: Cell, ctx: ExporterContext) -> str:
+    label = f"{bt.refdes}<br/>Li-Ion 1S"
+    return f'{bt.refdes}["{_mm_label(label)}"]'
 
 
 @register_renderer(Board, format='mermaid')

@@ -46,6 +46,14 @@ _OVERRIDES = {
     'LED':        _passive('LED',       color='red'),
     'Relay_SPDT': lambda n: lookup('Relay_SPDT')(refdes_number=n),
     'Rail':       lambda n: lookup('Rail')(level=True),
+    'Cell':       lambda n: lookup('Cell')(
+                              initial_state_of_charge=1.0, refdes_number=n,
+                          ),
+    'ISOW7841':   lambda n: lookup('ISOW7841')(
+        refdes_number=n,
+        iso_domain=__import__('framework.ground', fromlist=['GroundDomain'])
+                       .GroundDomain('isolated_roundtrip'),
+    ),
     # Pin-count-parameterised connector families.
     'Header1xNFemale':   _connector('Header1xNFemale',   pin_count=4, pitch_mm=2.54),
     'Header1xNMale':     _connector('Header1xNMale',     pin_count=4, pitch_mm=2.54),
@@ -66,6 +74,9 @@ _OVERRIDES = {
 
 _SKIP: dict[str, str] = {
     'Board': 'abstract base; concrete boards covered by their own round-trip tests',
+    'ISOW7841': ('multi-domain chip: __init__ requires a per-instance '
+                 'iso_domain that does not fit the generic sweep record; '
+                 'covered by test_isow7841.py'),
 }
 
 

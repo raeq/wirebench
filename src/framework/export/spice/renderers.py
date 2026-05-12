@@ -22,6 +22,7 @@ from framework.export.base import (
 )
 
 from components.passives.capacitor import Capacitor
+from components.passives.cell import Cell
 from components.passives.inductor import Inductor
 from components.passives.led import LED
 from components.passives.rail import Rail
@@ -88,6 +89,16 @@ def render_rail(r: Rail, ctx: ExporterContext) -> str:
     )
     net = ctx.net_name(r.ports['out'])
     return f"V_{ctx.refdes_of(r)} {net} 0 DC {volts}"
+
+
+@register_renderer(Cell, format='spice')
+def render_cell(bt: Cell, ctx: ExporterContext) -> str:
+    # Single-cell Li-Ion: ideal DC voltage source between pos and neg
+    # at the present open-circuit voltage.  No internal resistance —
+    # the voltage-only graph can't carry current anyway.
+    pos = ctx.net_name(bt.ports['pos'])
+    neg = ctx.net_name(bt.ports['neg'])
+    return f"V_{ctx.refdes_of(bt)} {pos} {neg} DC {float(bt.terminal_voltage)}"
 
 
 # ---------------------------------------------------------------------------

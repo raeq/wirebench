@@ -7,9 +7,10 @@ place on a board (a 330 Ω resistor, a red LED, a Vcc/GND rail tie), so
 they're re-exported here.
 """
 from .capacitor import Capacitor
+from .cell      import Cell
 from .inductor  import Inductor
 from .led       import LED
 from .rail      import Rail
 from .resistor  import Resistor
 
-__all__ = ['Capacitor', 'Inductor', 'LED', 'Rail', 'Resistor']
+__all__ = ['Capacitor', 'Cell', 'Inductor', 'LED', 'Rail', 'Resistor']

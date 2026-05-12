@@ -19,6 +19,7 @@ from framework.transistor import Transistor
 from framework.export.base import ExporterContext, register_renderer
 
 from components.passives.capacitor import Capacitor
+from components.passives.cell import Cell
 from components.passives.inductor import Inductor
 from components.passives.led import LED
 from components.passives.rail import Rail
@@ -48,6 +49,10 @@ def render_led(d, ctx: ExporterContext) -> str: return ""
 
 @register_renderer(Rail, format='yosys')
 def render_rail(r, ctx: ExporterContext) -> str: return ""
+
+
+@register_renderer(Cell, format='yosys')
+def render_cell(bt, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(Chip, format='yosys')
