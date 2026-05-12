@@ -1,0 +1,8 @@
+.TITLE DigitalThermometer
+U1 nc_0 nc_1 nc_2 net_12 net_1 net_9 nc_3 nc_4 nc_5 nc_6 net_8 net_11 net_7 net_5 net_3 net_2 net_10 net_6 net_4 nc_7 nc_8 nc_9 nc_10 nc_11 nc_12 nc_13 nc_14 nc_15 Uno_ThermometerSketch
+U2 nc_16 net_12 nc_17 nc_18 DHT11
+U3 net_2 net_3 net_4 net_5 net_6 0 net_7 net_8 net_9 net_10 net_11 net_1 Display5641AS
+R1 net_1 net_1 220.0
+V_Rail_0 nc_19 0 DC 5.0
+.LIB spice-models.lib
+.END

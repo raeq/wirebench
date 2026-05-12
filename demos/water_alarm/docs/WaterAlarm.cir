@@ -1,0 +1,10 @@
+.TITLE WaterAlarm
+U1 nc_0 nc_1 nc_2 nc_3 nc_4 nc_5 nc_6 nc_7 nc_8 nc_9 nc_10 nc_11 net_18 net_5 ULN2003A
+U2 net_18 net_4 0 nc_12 0 nc_13 nc_14 0 nc_15 0 nc_16 0 SN74HC04
+U3 net_3 net_2 0 nc_17 0 nc_18 nc_19 0 nc_20 0 nc_21 0 CD4069
+U4 net_3 net_4 net_5 nc_22 0 0 vcc 0 0 nc_23 0 0 nc_24 CD4043
+D1 net_3 nc_25 D_LED
+D2 net_2 nc_26 D_LED
+V_Rail_0 vcc 0 DC 5.0
+.LIB spice-models.lib
+.END

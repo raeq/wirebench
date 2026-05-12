@@ -1,0 +1,50 @@
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    subgraph A1["A1: Li-Ion 1S Battery Pack Rev A"]
+        U1["U1<br/>BQ27546G1"]
+        BT1["BT1<br/>Li-Ion 1S"]
+        R1["R1<br/>0.01Ω"]
+        R2["R2<br/>10000Ω"]
+        R3["R3<br/>10000Ω"]
+        R4["R4<br/>10000Ω"]
+        R5["R5<br/>10000Ω"]
+        C1["C1<br/>1e-07F"]
+        C2["C2<br/>1e-06F"]
+        C3["C3<br/>1e-07F"]
+    end
+    net_3(("net_3"))
+    net_4(("net_4"))
+    net_5(("net_5"))
+    net_6(("net_6"))
+    net_0(("net_0"))
+    net_1(("net_1"))
+    net_2(("net_2"))
+    BT1 ---|"neg"| net_3
+    BT1 ---|"pos"| net_4
+    C1 ---|"t1"| net_4
+    C1 ---|"t2"| net_3
+    C2 ---|"t1"| net_5
+    C2 ---|"t2"| net_3
+    C3 ---|"t1"| net_4
+    C3 ---|"t2"| net_3
+    R1 ---|"t1"| net_3
+    R1 ---|"t2"| net_3
+    R2 ---|"t1"| net_6
+    R2 ---|"t2"| net_3
+    R3 ---|"t1"| net_0
+    R3 ---|"t2"| net_5
+    R4 ---|"t1"| net_1
+    R4 ---|"t2"| net_5
+    R5 ---|"t1"| net_2
+    R5 ---|"t2"| net_5
+    U1 ---|"BAT"| net_4
+    U1 ---|"HDQ"| net_2
+    U1 ---|"REGIN"| net_4
+    U1 ---|"SCL"| net_1
+    U1 ---|"SDA"| net_0
+    U1 ---|"SRN"| net_3
+    U1 ---|"SRP"| net_3
+    U1 ---|"TS"| net_6
+    U1 ---|"VCC"| net_5
+    U1 ---|"VSS_1"| net_3
+    U1 ---|"VSS_2"| net_3

@@ -1,0 +1,4 @@
+Refdes,Value,Footprint,Quantity,Parent,Description
+A1,Sensor Board Rev A,,1,,Printed circuit board
+J1,Header2xNFemale_40,Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical,1,A1,Header2xNFemale
+U1,ULN2003A,Package_DIP:DIP-16_W7.62mm,1,A1,ULN2003A

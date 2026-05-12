@@ -1,0 +1,50 @@
+digraph "BLDCSystem" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  subgraph cluster_A1 {
+    label="A1: Power Source Rev A";
+    style=rounded;
+  }
+  subgraph cluster_A2 {
+    label="A2: BLDC Controller Rev A";
+    style=rounded;
+    U1 [label="U1\\nUno_BLDCCommutator"];
+    U2 [label="U2\\nDRV8313"];
+    C1 [label="C1\\n1e-08F"];
+    C2 [label="C2\\n1e-08F"];
+    C3 [label="C3\\n1e-08F"];
+    C4 [label="C4\\n1e-08F"];
+    C5 [label="C5\\n1e-07F"];
+    C6 [label="C6\\n1e-05F"];
+    R1 [label="R1\\n10000Ω"];
+  }
+  // Nets
+  node [shape=circle, label="", width=0.15, fixedsize=true];
+  net_0; net_1; net_10; net_11; net_12; net_13; net_14; net_15; net_16; net_2; net_3; net_4; net_5; net_8; net_9;
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+  U1 -> net_8 [taillabel="PB0"];
+  U1 -> net_11 [taillabel="PB1"];
+  U1 -> net_14 [taillabel="PB2"];
+  U1 -> net_3 [taillabel="PC0"];
+  U1 -> net_4 [taillabel="PC1"];
+  U1 -> net_5 [taillabel="PC2"];
+  U1 -> net_9 [taillabel="PD2"];
+  U1 -> net_10 [taillabel="PD3"];
+  U1 -> net_12 [taillabel="PD4"];
+  U1 -> net_13 [taillabel="PD5"];
+  U1 -> net_15 [taillabel="PD6"];
+  U1 -> net_16 [taillabel="PD7"];
+  U2 -> net_8 [taillabel="EN1"];
+  U2 -> net_11 [taillabel="EN2"];
+  U2 -> net_14 [taillabel="EN3"];
+  U2 -> net_9 [taillabel="IN1"];
+  U2 -> net_10 [taillabel="IN2"];
+  U2 -> net_12 [taillabel="IN3"];
+  U2 -> net_13 [taillabel="IN4"];
+  U2 -> net_15 [taillabel="IN5"];
+  U2 -> net_16 [taillabel="IN6"];
+  U2 -> net_0 [taillabel="OUT1"];
+  U2 -> net_1 [taillabel="OUT2"];
+  U2 -> net_2 [taillabel="OUT3"];
+}

@@ -1,0 +1,24 @@
+.TITLE DoorbellProtector
+V_Rail_0 vcc 0 DC 5.0
+U1 nc_0 nc_1 net_0 net_1 nc_2 nc_3 nc_4 nc_5 NE555_Monostable
+U2 nc_6 net_0 net_2 vcc nc_7 nc_8 nc_9 nc_10 NE555_Monostable
+Q1 nc_11 net_0 0 BC548
+Q2 net_1 net_2 0 Q2N3904
+D1 nc_12 vcc D1N4007
+D2 net_0 0 D_LED
+R1 net_0 net_0 1000.0
+R2 nc_13 nc_14 1000000.0
+R3 nc_15 nc_16 1000000.0
+R4 net_2 net_2 1000.0
+R5 net_1 net_1 10000.0
+R6 nc_17 nc_18 1000000.0
+R7 nc_19 nc_20 4700.0
+R8 nc_21 nc_22 47000.0
+C1 nc_23 nc_24 1e-07
+C2 nc_25 nc_26 4.7e-06
+C3 nc_27 nc_28 1e-07
+C4 net_0 net_0 1e-07
+C5 nc_29 nc_30 4.7e-05
+X1 net_0 nc_31 nc_32 nc_33 nc_34 Relay_SPDT
+.LIB spice-models.lib
+.END

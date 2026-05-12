@@ -1,0 +1,5 @@
+Refdes,Value,Footprint,Quantity,Parent,Description
+R1,220Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+U1,Uno_ThermometerSketch,Package_DIP:DIP-28_W7.62mm,1,,Uno_ThermometerSketch
+U2,DHT11,Package_TO_SOT_THT:DHT11,1,,DHT11
+U3,Display5641AS,Display_7Segment:Display_5641AS,1,,Display5641AS

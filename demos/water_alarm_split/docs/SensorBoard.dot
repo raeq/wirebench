@@ -1,0 +1,18 @@
+digraph "Sensor Board" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  subgraph cluster_A1 {
+    label="A1: Sensor Board Rev A";
+    style=rounded;
+    U1 [label="U1\\nULN2003A"];
+  }
+  // Nets
+  node [shape=circle, label="", width=0.15, fixedsize=true];
+  net_0; net_1; net_2; net_3;
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+  U1 -> net_0 [taillabel="in_1"];
+  U1 -> net_1 [taillabel="in_2"];
+  U1 -> net_2 [taillabel="out_1"];
+  U1 -> net_3 [taillabel="out_2"];
+}

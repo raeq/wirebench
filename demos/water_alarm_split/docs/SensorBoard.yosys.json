@@ -1,0 +1,515 @@
+{
+  "creator": "circuitry 0.x",
+  "modules": {
+    "Sensor Board": {
+      "cells": {
+        "J1": {
+          "connections": {
+            "p1": [
+              16
+            ],
+            "p10": [
+              25
+            ],
+            "p11": [
+              26
+            ],
+            "p12": [
+              27
+            ],
+            "p13": [
+              28
+            ],
+            "p14": [
+              29
+            ],
+            "p15": [
+              30
+            ],
+            "p16": [
+              31
+            ],
+            "p17": [
+              32
+            ],
+            "p18": [
+              33
+            ],
+            "p19": [
+              34
+            ],
+            "p2": [
+              17
+            ],
+            "p20": [
+              35
+            ],
+            "p21": [
+              36
+            ],
+            "p22": [
+              37
+            ],
+            "p23": [
+              38
+            ],
+            "p24": [
+              39
+            ],
+            "p25": [
+              40
+            ],
+            "p26": [
+              41
+            ],
+            "p27": [
+              42
+            ],
+            "p28": [
+              43
+            ],
+            "p29": [
+              44
+            ],
+            "p3": [
+              18
+            ],
+            "p30": [
+              45
+            ],
+            "p31": [
+              46
+            ],
+            "p32": [
+              47
+            ],
+            "p33": [
+              48
+            ],
+            "p34": [
+              49
+            ],
+            "p35": [
+              50
+            ],
+            "p36": [
+              51
+            ],
+            "p37": [
+              52
+            ],
+            "p38": [
+              53
+            ],
+            "p39": [
+              54
+            ],
+            "p4": [
+              19
+            ],
+            "p40": [
+              55
+            ],
+            "p5": [
+              20
+            ],
+            "p6": [
+              21
+            ],
+            "p7": [
+              22
+            ],
+            "p8": [
+              23
+            ],
+            "p9": [
+              24
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p10": "inout",
+            "p11": "inout",
+            "p12": "inout",
+            "p13": "inout",
+            "p14": "inout",
+            "p15": "inout",
+            "p16": "inout",
+            "p17": "inout",
+            "p18": "inout",
+            "p19": "inout",
+            "p2": "inout",
+            "p20": "inout",
+            "p21": "inout",
+            "p22": "inout",
+            "p23": "inout",
+            "p24": "inout",
+            "p25": "inout",
+            "p26": "inout",
+            "p27": "inout",
+            "p28": "inout",
+            "p29": "inout",
+            "p3": "inout",
+            "p30": "inout",
+            "p31": "inout",
+            "p32": "inout",
+            "p33": "inout",
+            "p34": "inout",
+            "p35": "inout",
+            "p36": "inout",
+            "p37": "inout",
+            "p38": "inout",
+            "p39": "inout",
+            "p4": "inout",
+            "p40": "inout",
+            "p5": "inout",
+            "p6": "inout",
+            "p7": "inout",
+            "p8": "inout",
+            "p9": "inout"
+          },
+          "type": "Header2xNFemale"
+        },
+        "U1": {
+          "connections": {
+            "in_1": [
+              2
+            ],
+            "in_2": [
+              3
+            ],
+            "in_3": [
+              56
+            ],
+            "in_4": [
+              57
+            ],
+            "in_5": [
+              58
+            ],
+            "in_6": [
+              59
+            ],
+            "in_7": [
+              60
+            ],
+            "out_1": [
+              4
+            ],
+            "out_2": [
+              5
+            ],
+            "out_3": [
+              65
+            ],
+            "out_4": [
+              64
+            ],
+            "out_5": [
+              63
+            ],
+            "out_6": [
+              62
+            ],
+            "out_7": [
+              61
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "in_1": "input",
+            "in_2": "input",
+            "in_3": "input",
+            "in_4": "input",
+            "in_5": "input",
+            "in_6": "input",
+            "in_7": "input",
+            "out_1": "output",
+            "out_2": "output",
+            "out_3": "output",
+            "out_4": "output",
+            "out_5": "output",
+            "out_6": "output",
+            "out_7": "output"
+          },
+          "type": "ULN2003A"
+        }
+      },
+      "netnames": {
+        "net_0": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        },
+        "net_1": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "net_2": {
+          "attributes": {},
+          "bits": [
+            4
+          ],
+          "hide_name": 0
+        },
+        "net_3": {
+          "attributes": {},
+          "bits": [
+            5
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {
+        "J1.p1": {
+          "bits": [
+            16
+          ],
+          "direction": "inout"
+        },
+        "J1.p10": {
+          "bits": [
+            25
+          ],
+          "direction": "inout"
+        },
+        "J1.p11": {
+          "bits": [
+            26
+          ],
+          "direction": "inout"
+        },
+        "J1.p12": {
+          "bits": [
+            27
+          ],
+          "direction": "inout"
+        },
+        "J1.p13": {
+          "bits": [
+            28
+          ],
+          "direction": "inout"
+        },
+        "J1.p14": {
+          "bits": [
+            29
+          ],
+          "direction": "inout"
+        },
+        "J1.p15": {
+          "bits": [
+            30
+          ],
+          "direction": "inout"
+        },
+        "J1.p16": {
+          "bits": [
+            31
+          ],
+          "direction": "inout"
+        },
+        "J1.p17": {
+          "bits": [
+            32
+          ],
+          "direction": "inout"
+        },
+        "J1.p18": {
+          "bits": [
+            33
+          ],
+          "direction": "inout"
+        },
+        "J1.p19": {
+          "bits": [
+            34
+          ],
+          "direction": "inout"
+        },
+        "J1.p2": {
+          "bits": [
+            17
+          ],
+          "direction": "inout"
+        },
+        "J1.p20": {
+          "bits": [
+            35
+          ],
+          "direction": "inout"
+        },
+        "J1.p21": {
+          "bits": [
+            36
+          ],
+          "direction": "inout"
+        },
+        "J1.p22": {
+          "bits": [
+            37
+          ],
+          "direction": "inout"
+        },
+        "J1.p23": {
+          "bits": [
+            38
+          ],
+          "direction": "inout"
+        },
+        "J1.p24": {
+          "bits": [
+            39
+          ],
+          "direction": "inout"
+        },
+        "J1.p25": {
+          "bits": [
+            40
+          ],
+          "direction": "inout"
+        },
+        "J1.p26": {
+          "bits": [
+            41
+          ],
+          "direction": "inout"
+        },
+        "J1.p27": {
+          "bits": [
+            42
+          ],
+          "direction": "inout"
+        },
+        "J1.p28": {
+          "bits": [
+            43
+          ],
+          "direction": "inout"
+        },
+        "J1.p29": {
+          "bits": [
+            44
+          ],
+          "direction": "inout"
+        },
+        "J1.p3": {
+          "bits": [
+            18
+          ],
+          "direction": "inout"
+        },
+        "J1.p30": {
+          "bits": [
+            45
+          ],
+          "direction": "inout"
+        },
+        "J1.p31": {
+          "bits": [
+            46
+          ],
+          "direction": "inout"
+        },
+        "J1.p32": {
+          "bits": [
+            47
+          ],
+          "direction": "inout"
+        },
+        "J1.p33": {
+          "bits": [
+            48
+          ],
+          "direction": "inout"
+        },
+        "J1.p34": {
+          "bits": [
+            49
+          ],
+          "direction": "inout"
+        },
+        "J1.p35": {
+          "bits": [
+            50
+          ],
+          "direction": "inout"
+        },
+        "J1.p36": {
+          "bits": [
+            51
+          ],
+          "direction": "inout"
+        },
+        "J1.p37": {
+          "bits": [
+            52
+          ],
+          "direction": "inout"
+        },
+        "J1.p38": {
+          "bits": [
+            53
+          ],
+          "direction": "inout"
+        },
+        "J1.p39": {
+          "bits": [
+            54
+          ],
+          "direction": "inout"
+        },
+        "J1.p4": {
+          "bits": [
+            19
+          ],
+          "direction": "inout"
+        },
+        "J1.p40": {
+          "bits": [
+            55
+          ],
+          "direction": "inout"
+        },
+        "J1.p5": {
+          "bits": [
+            20
+          ],
+          "direction": "inout"
+        },
+        "J1.p6": {
+          "bits": [
+            21
+          ],
+          "direction": "inout"
+        },
+        "J1.p7": {
+          "bits": [
+            22
+          ],
+          "direction": "inout"
+        },
+        "J1.p8": {
+          "bits": [
+            23
+          ],
+          "direction": "inout"
+        },
+        "J1.p9": {
+          "bits": [
+            24
+          ],
+          "direction": "inout"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+Refdes,Value,Footprint,Quantity,Parent,Description
+A1,Fan Cooling Module Rev A,,1,,Printed circuit board
+D1,D1N4728A,Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal,1,A1,D1N4728A
+J1,Header1xNFemale_2,Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical,1,A1,Header1xNFemale
+J2,Header1xNFemale_2,Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical,1,A1,Header1xNFemale
+Q1,Q2N7000,Package_TO_SOT_THT:TO-92_Inline,1,A1,Q2N7000
+R1,10000Ω,Resistor_SMD:R_0603_1608Metric,1,A1,Resistor
+R2,10000Ω,Resistor_SMD:R_0603_1608Metric,1,A1,Resistor
+R3,10000Ω,Resistor_SMD:R_0603_1608Metric,1,A1,Resistor
+U1,TMP302,Package_SO:SOT-563_1.6x1.6mm_P0.5mm,1,A1,TMP302
+U2,SN74AHC1G14,Package_TO_SOT_SMD:SOT-23-5,1,A1,SN74AHC1G14

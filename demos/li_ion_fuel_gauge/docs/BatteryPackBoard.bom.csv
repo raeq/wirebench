@@ -1,0 +1,13 @@
+Refdes,Value,Footprint,Quantity,Parent,Description
+A1,Li-Ion 1S Battery Pack Rev A,,1,,Printed circuit board
+BT1,Li-Ion 1S @ 100% SoC,Battery:BatteryHolder_Keystone_1042_1x18650,1,A1,Battery cell
+C1,1e-07F,Capacitor_SMD:C_0603_1608Metric,1,A1,Capacitor
+C2,1e-06F,Capacitor_SMD:C_0603_1608Metric,1,A1,Capacitor
+C3,1e-07F,Capacitor_SMD:C_0603_1608Metric,1,A1,Capacitor
+J1,Header1xNFemale_4,Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical,1,A1,Header1xNFemale
+R1,0.01Ω,Resistor_SMD:R_0603_1608Metric,1,A1,Resistor
+R2,10000Ω,Resistor_SMD:R_0603_1608Metric,1,A1,Resistor
+R3,10000Ω,Resistor_SMD:R_0603_1608Metric,1,A1,Resistor
+R4,10000Ω,Resistor_SMD:R_0603_1608Metric,1,A1,Resistor
+R5,10000Ω,Resistor_SMD:R_0603_1608Metric,1,A1,Resistor
+U1,BQ27546G1,Package_BGA:Texas_S-PVQFN-N15_2.61x1.96mm_DSBGA,1,A1,BQ27546G1

@@ -1,0 +1,51 @@
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    subgraph A1["A1: Sensor Board Rev A"]
+        U1["U1<br/>ULN2003A"]
+    end
+    subgraph A2["A2: Controller Board Rev A"]
+        U1["U1<br/>SN74HC04"]
+        U2["U2<br/>CD4069"]
+        U3["U3<br/>CD4043"]
+        D1["D1<br/>red LED"]
+        D2["D2<br/>green LED"]
+    end
+    net_43(("net_43"))
+    net_42(("net_42"))
+    net_5(("net_5"))
+    gnd(("gnd"))
+    net_2(("net_2"))
+    net_3(("net_3"))
+    net_4(("net_4"))
+    net_44(("net_44"))
+    vcc(("vcc"))
+    D1 ---|"anode"| net_43
+    D2 ---|"anode"| net_42
+    U1 ---|"a_1"| net_5
+    U1 ---|"a_2"| gnd
+    U1 ---|"a_3"| gnd
+    U1 ---|"a_4"| gnd
+    U1 ---|"a_5"| gnd
+    U1 ---|"a_6"| gnd
+    U1 ---|"in_1"| net_2
+    U1 ---|"in_2"| net_3
+    U1 ---|"out_1"| net_4
+    U1 ---|"out_2"| net_5
+    U1 ---|"y_1"| net_44
+    U2 ---|"a_1"| net_43
+    U2 ---|"a_2"| gnd
+    U2 ---|"a_3"| gnd
+    U2 ---|"a_4"| gnd
+    U2 ---|"a_5"| gnd
+    U2 ---|"a_6"| gnd
+    U2 ---|"y_1"| net_42
+    U3 ---|"oe"| vcc
+    U3 ---|"q_1"| net_43
+    U3 ---|"r_1"| net_44
+    U3 ---|"r_2"| gnd
+    U3 ---|"r_3"| gnd
+    U3 ---|"r_4"| gnd
+    U3 ---|"s_1"| net_4
+    U3 ---|"s_2"| gnd
+    U3 ---|"s_3"| gnd
+    U3 ---|"s_4"| gnd

@@ -1,0 +1,17 @@
+digraph "Fan Cooling Module" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  subgraph cluster_A1 {
+    label="A1: Fan Cooling Module Rev A";
+    style=rounded;
+    U1 [label="U1\\nTMP302"];
+    U2 [label="U2\\nSN74AHC1G14"];
+    Q1 [label="Q1\\nQ2N7000"];
+    D1 [label="D1\\nD1N4728A"];
+    R1 [label="R1\\n10000Ω"];
+    R2 [label="R2\\n10000Ω"];
+    R3 [label="R3\\n10000Ω"];
+  }
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+}

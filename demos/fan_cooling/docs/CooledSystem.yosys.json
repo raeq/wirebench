@@ -1,0 +1,363 @@
+{
+  "creator": "circuitry 0.x",
+  "modules": {
+    "CooledSystem": {
+      "cells": {
+        "A1": {
+          "connections": {
+            "P1.p1": [
+              2
+            ],
+            "P1.p2": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "P1.p1": "inout",
+            "P1.p2": "inout"
+          },
+          "type": "PowerSourceBoard"
+        },
+        "A2": {
+          "connections": {
+            "J1.p1": [
+              2
+            ],
+            "J1.p2": [
+              3
+            ],
+            "J2.p1": [
+              5
+            ],
+            "J2.p2": [
+              6
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "J1.p1": "inout",
+            "J1.p2": "inout",
+            "J2.p1": "inout",
+            "J2.p2": "inout"
+          },
+          "type": "FanCoolingBoard"
+        }
+      },
+      "netnames": {
+        "GND": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "vcc": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {}
+    },
+    "FanCoolingBoard_A2": {
+      "cells": {
+        "D1": {
+          "connections": {
+            "anode": [
+              21
+            ],
+            "cathode": [
+              22
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "anode": "inout",
+            "cathode": "inout"
+          },
+          "type": "D1N4728A"
+        },
+        "J1": {
+          "connections": {
+            "p1": [
+              2
+            ],
+            "p2": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p2": "inout"
+          },
+          "type": "Header1xNFemale"
+        },
+        "J2": {
+          "connections": {
+            "p1": [
+              5
+            ],
+            "p2": [
+              6
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p2": "inout"
+          },
+          "type": "Header1xNFemale"
+        },
+        "Q1": {
+          "connections": {
+            "d": [
+              18
+            ],
+            "g": [
+              19
+            ],
+            "s": [
+              20
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "d": "inout",
+            "g": "inout",
+            "s": "inout"
+          },
+          "type": "Q2N7000"
+        },
+        "R1": {
+          "connections": {
+            "t1": [
+              23
+            ],
+            "t2": [
+              24
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "10000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "R2": {
+          "connections": {
+            "t1": [
+              25
+            ],
+            "t2": [
+              26
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "10000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "R3": {
+          "connections": {
+            "t1": [
+              27
+            ],
+            "t2": [
+              28
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "10000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "U1": {
+          "connections": {
+            "GND": [
+              8
+            ],
+            "HysSet": [
+              10
+            ],
+            "OUT": [
+              9
+            ],
+            "TripSet0": [
+              7
+            ],
+            "TripSet1": [
+              12
+            ],
+            "VS": [
+              11
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "GND": "input",
+            "HysSet": "input",
+            "OUT": "output",
+            "TripSet0": "input",
+            "TripSet1": "input",
+            "VS": "input"
+          },
+          "type": "TMP302"
+        },
+        "U2": {
+          "connections": {
+            "A": [
+              13
+            ],
+            "GND": [
+              14
+            ],
+            "NC": [
+              16
+            ],
+            "VCC": [
+              17
+            ],
+            "Y": [
+              15
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "A": "input",
+            "GND": "input",
+            "NC": "input",
+            "VCC": "input",
+            "Y": "output"
+          },
+          "type": "SN74AHC1G14"
+        }
+      },
+      "netnames": {
+        "GND": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "net_2": {
+          "attributes": {},
+          "bits": [
+            4
+          ],
+          "hide_name": 0
+        },
+        "vcc": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {
+        "J1.p1": {
+          "bits": [
+            2
+          ],
+          "direction": "inout"
+        },
+        "J1.p2": {
+          "bits": [
+            3
+          ],
+          "direction": "inout"
+        },
+        "J2.p1": {
+          "bits": [
+            5
+          ],
+          "direction": "inout"
+        },
+        "J2.p2": {
+          "bits": [
+            6
+          ],
+          "direction": "inout"
+        }
+      }
+    },
+    "PowerSourceBoard_A1": {
+      "cells": {
+        "P1": {
+          "connections": {
+            "p1": [
+              2
+            ],
+            "p2": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p2": "inout"
+          },
+          "type": "Header1xNMale"
+        }
+      },
+      "netnames": {
+        "GND": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "vcc": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {
+        "P1.p1": {
+          "bits": [
+            2
+          ],
+          "direction": "inout"
+        },
+        "P1.p2": {
+          "bits": [
+            3
+          ],
+          "direction": "inout"
+        }
+      }
+    }
+  }
+}

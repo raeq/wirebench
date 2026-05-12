@@ -1,0 +1,52 @@
+digraph "Li-Ion 1S Battery Pack" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  subgraph cluster_A1 {
+    label="A1: Li-Ion 1S Battery Pack Rev A";
+    style=rounded;
+    U1 [label="U1\\nBQ27546G1"];
+    BT1 [label="BT1\\nLi-Ion 1S"];
+    R1 [label="R1\\n0.01Ω"];
+    R2 [label="R2\\n10000Ω"];
+    R3 [label="R3\\n10000Ω"];
+    R4 [label="R4\\n10000Ω"];
+    R5 [label="R5\\n10000Ω"];
+    C1 [label="C1\\n1e-07F"];
+    C2 [label="C2\\n1e-06F"];
+    C3 [label="C3\\n1e-07F"];
+  }
+  // Nets
+  node [shape=circle, label="", width=0.15, fixedsize=true];
+  net_0; net_1; net_2; net_3; net_4; net_5; net_6;
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+  BT1 -> net_3 [taillabel="neg"];
+  BT1 -> net_4 [taillabel="pos"];
+  C1 -> net_4 [taillabel="t1"];
+  C1 -> net_3 [taillabel="t2"];
+  C2 -> net_5 [taillabel="t1"];
+  C2 -> net_3 [taillabel="t2"];
+  C3 -> net_4 [taillabel="t1"];
+  C3 -> net_3 [taillabel="t2"];
+  R1 -> net_3 [taillabel="t1"];
+  R1 -> net_3 [taillabel="t2"];
+  R2 -> net_6 [taillabel="t1"];
+  R2 -> net_3 [taillabel="t2"];
+  R3 -> net_0 [taillabel="t1"];
+  R3 -> net_5 [taillabel="t2"];
+  R4 -> net_1 [taillabel="t1"];
+  R4 -> net_5 [taillabel="t2"];
+  R5 -> net_2 [taillabel="t1"];
+  R5 -> net_5 [taillabel="t2"];
+  U1 -> net_4 [taillabel="BAT"];
+  U1 -> net_2 [taillabel="HDQ"];
+  U1 -> net_4 [taillabel="REGIN"];
+  U1 -> net_1 [taillabel="SCL"];
+  U1 -> net_0 [taillabel="SDA"];
+  U1 -> net_3 [taillabel="SRN"];
+  U1 -> net_3 [taillabel="SRP"];
+  U1 -> net_6 [taillabel="TS"];
+  U1 -> net_5 [taillabel="VCC"];
+  U1 -> net_3 [taillabel="VSS_1"];
+  U1 -> net_3 [taillabel="VSS_2"];
+}

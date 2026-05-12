@@ -1,0 +1,9 @@
+.TITLE Controller Board
+U1 net_1 net_6 0 nc_0 0 nc_1 nc_2 0 nc_3 0 nc_4 0 SN74HC04
+U2 net_5 net_4 0 nc_5 0 nc_6 nc_7 0 nc_8 0 nc_9 0 CD4069
+U3 net_5 net_6 net_0 nc_10 0 0 vcc 0 0 nc_11 0 0 nc_12 CD4043
+D1 net_5 nc_13 D_LED
+D2 net_4 nc_14 D_LED
+V_Rail_0 vcc 0 DC 5.0
+.LIB spice-models.lib
+.END

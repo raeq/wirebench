@@ -1,0 +1,25 @@
+Refdes,Value,Footprint,Quantity,Parent,Description
+C1,1e-08F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+C2,1e-07F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+D1,D1N4148,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,1,,D1N4148
+D2,D1N4148,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,1,,D1N4148
+D3,D1N4148,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,1,,D1N4148
+D4,D1N4148,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,1,,D1N4148
+D5,D1N4148,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,1,,D1N4148
+D6,D1N4148,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,1,,D1N4148
+D7,red LED,LED_SMD:LED_0805,1,,Light-emitting diode
+D8,red LED,LED_SMD:LED_0805,1,,Light-emitting diode
+D9,red LED,LED_SMD:LED_0805,1,,Light-emitting diode
+D10,red LED,LED_SMD:LED_0805,1,,Light-emitting diode
+D11,red LED,LED_SMD:LED_0805,1,,Light-emitting diode
+D12,red LED,LED_SMD:LED_0805,1,,Light-emitting diode
+D13,red LED,LED_SMD:LED_0805,1,,Light-emitting diode
+R1,470Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R2,330Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R3,330Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R4,330Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R5,10000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R6,10000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R7,10000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+U1,NE555,Package_DIP:DIP-8_W7.62mm,1,,NE555
+U2,CD4017,Package_DIP:DIP-16_W7.62mm,1,,CD4017

@@ -1,0 +1,38 @@
+digraph "IsolatedRS232Link" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  subgraph cluster_A1 {
+    label="A1: Controller Plug Rev A";
+    style=rounded;
+  }
+  subgraph cluster_A2 {
+    label="A2: Isolated RS-232 Rev A";
+    style=rounded;
+    U1 [label="U1\\nISOW7841"];
+    U2 [label="U2\\nTRS3122E"];
+    C1 [label="C1\\n1e-07F"];
+    C2 [label="C2\\n1e-05F"];
+    C3 [label="C3\\n1e-07F"];
+    C4 [label="C4\\n1e-07F"];
+    C5 [label="C5\\n1e-07F"];
+    C6 [label="C6\\n1e-07F"];
+    C7 [label="C7\\n1e-07F"];
+  }
+  subgraph cluster_A3 {
+    label="A3: RS-232 Cable Rev A";
+    style=rounded;
+  }
+  // Nets
+  node [shape=circle, label="", width=0.15, fixedsize=true];
+  net_0; net_1; net_6; net_7; net_8; net_9;
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+  U1 -> net_6 [taillabel="INA"];
+  U1 -> net_9 [taillabel="IND"];
+  U1 -> net_8 [taillabel="OUTA"];
+  U1 -> net_7 [taillabel="OUTD"];
+  U2 -> net_1 [taillabel="RIN1"];
+  U2 -> net_9 [taillabel="ROUT1"];
+  U2 -> net_8 [taillabel="TIN1"];
+  U2 -> net_0 [taillabel="TOUT1"];
+}

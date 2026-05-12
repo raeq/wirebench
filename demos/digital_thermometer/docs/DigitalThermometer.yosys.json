@@ -1,0 +1,332 @@
+{
+  "creator": "circuitry 0.x",
+  "modules": {
+    "DigitalThermometer": {
+      "cells": {
+        "R1": {
+          "connections": {
+            "t1": [
+              3
+            ],
+            "t2": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "220"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "U1": {
+          "connections": {
+            "AREF": [
+              23
+            ],
+            "AVCC": [
+              22
+            ],
+            "GND_1": [
+              19
+            ],
+            "GND_2": [
+              24
+            ],
+            "PB0": [
+              7
+            ],
+            "PB1": [
+              5
+            ],
+            "PB2": [
+              4
+            ],
+            "PB3": [
+              12
+            ],
+            "PB4": [
+              8
+            ],
+            "PB5": [
+              6
+            ],
+            "PB6": [
+              20
+            ],
+            "PB7": [
+              21
+            ],
+            "PC0": [
+              25
+            ],
+            "PC1": [
+              26
+            ],
+            "PC2": [
+              27
+            ],
+            "PC3": [
+              28
+            ],
+            "PC4": [
+              29
+            ],
+            "PC5": [
+              30
+            ],
+            "PC6": [
+              15
+            ],
+            "PD0": [
+              16
+            ],
+            "PD1": [
+              17
+            ],
+            "PD2": [
+              14
+            ],
+            "PD3": [
+              3
+            ],
+            "PD4": [
+              11
+            ],
+            "PD5": [
+              10
+            ],
+            "PD6": [
+              13
+            ],
+            "PD7": [
+              9
+            ],
+            "VCC": [
+              18
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "AREF": "input",
+            "AVCC": "input",
+            "GND_1": "input",
+            "GND_2": "input",
+            "PB0": "inout",
+            "PB1": "inout",
+            "PB2": "inout",
+            "PB3": "inout",
+            "PB4": "inout",
+            "PB5": "inout",
+            "PB6": "inout",
+            "PB7": "inout",
+            "PC0": "inout",
+            "PC1": "inout",
+            "PC2": "inout",
+            "PC3": "inout",
+            "PC4": "inout",
+            "PC5": "inout",
+            "PC6": "inout",
+            "PD0": "inout",
+            "PD1": "inout",
+            "PD2": "inout",
+            "PD3": "inout",
+            "PD4": "inout",
+            "PD5": "inout",
+            "PD6": "inout",
+            "PD7": "inout",
+            "VCC": "input"
+          },
+          "type": "Uno_ThermometerSketch"
+        },
+        "U2": {
+          "connections": {
+            "DATA": [
+              14
+            ],
+            "GND": [
+              33
+            ],
+            "NC": [
+              32
+            ],
+            "VDD": [
+              31
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "DATA": "inout",
+            "GND": "input",
+            "NC": "input",
+            "VDD": "input"
+          },
+          "type": "DHT11"
+        },
+        "U3": {
+          "connections": {
+            "DIG_1": [
+              3
+            ],
+            "DIG_2": [
+              11
+            ],
+            "DIG_3": [
+              10
+            ],
+            "DIG_4": [
+              2
+            ],
+            "SEG_A": [
+              13
+            ],
+            "SEG_B": [
+              9
+            ],
+            "SEG_C": [
+              7
+            ],
+            "SEG_D": [
+              5
+            ],
+            "SEG_DP": [
+              6
+            ],
+            "SEG_E": [
+              4
+            ],
+            "SEG_F": [
+              12
+            ],
+            "SEG_G": [
+              8
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "DIG_1": "input",
+            "DIG_2": "input",
+            "DIG_3": "input",
+            "DIG_4": "input",
+            "SEG_A": "input",
+            "SEG_B": "input",
+            "SEG_C": "input",
+            "SEG_D": "input",
+            "SEG_DP": "input",
+            "SEG_E": "input",
+            "SEG_F": "input",
+            "SEG_G": "input"
+          },
+          "type": "Display5641AS"
+        }
+      },
+      "netnames": {
+        "GND": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        },
+        "net_1": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "net_10": {
+          "attributes": {},
+          "bits": [
+            12
+          ],
+          "hide_name": 0
+        },
+        "net_11": {
+          "attributes": {},
+          "bits": [
+            13
+          ],
+          "hide_name": 0
+        },
+        "net_12": {
+          "attributes": {},
+          "bits": [
+            14
+          ],
+          "hide_name": 0
+        },
+        "net_2": {
+          "attributes": {},
+          "bits": [
+            4
+          ],
+          "hide_name": 0
+        },
+        "net_3": {
+          "attributes": {},
+          "bits": [
+            5
+          ],
+          "hide_name": 0
+        },
+        "net_4": {
+          "attributes": {},
+          "bits": [
+            6
+          ],
+          "hide_name": 0
+        },
+        "net_5": {
+          "attributes": {},
+          "bits": [
+            7
+          ],
+          "hide_name": 0
+        },
+        "net_6": {
+          "attributes": {},
+          "bits": [
+            8
+          ],
+          "hide_name": 0
+        },
+        "net_7": {
+          "attributes": {},
+          "bits": [
+            9
+          ],
+          "hide_name": 0
+        },
+        "net_8": {
+          "attributes": {},
+          "bits": [
+            10
+          ],
+          "hide_name": 0
+        },
+        "net_9": {
+          "attributes": {},
+          "bits": [
+            11
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {
+        "display_dig_1": {
+          "bits": [
+            3
+          ],
+          "direction": "input"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+Refdes,Value,Footprint,Quantity,Parent,Description
+C1,1e-07F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+C2,4.7e-06F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+C3,1e-07F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+C4,1e-07F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+C5,4.7e-05F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+D1,D1N4007,Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal,1,,D1N4007
+D2,red LED,LED_SMD:LED_0805,1,,Light-emitting diode
+K1,SPDT @ 1V,Relay_THT:Relay_SPDT_Generic,1,,Relay (SPDT)
+Q1,BC548,Package_TO_SOT_THT:TO-92_Inline,1,,BC548
+Q2,Q2N3904,Package_TO_SOT_THT:TO-92_Inline,1,,Q2N3904
+R1,1000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R2,1e+06Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R3,1e+06Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R4,1000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R5,10000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R6,1e+06Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R7,4700Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R8,47000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+U1,NE555_Monostable,Package_DIP:DIP-8_W7.62mm,1,,NE555_Monostable
+U2,NE555_Monostable,Package_DIP:DIP-8_W7.62mm,1,,NE555_Monostable

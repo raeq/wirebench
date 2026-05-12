@@ -1,0 +1,49 @@
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    U1["U1<br/>NE555_Monostable"]
+    U2["U2<br/>NE555_Monostable"]
+    Q1["Q1<br/>BC548"]
+    Q2["Q2<br/>Q2N3904"]
+    D1["D1<br/>D1N4007"]
+    D2["D2<br/>red LED"]
+    R1["R1<br/>1000Ω"]
+    R2["R2<br/>1e+06Ω"]
+    R3["R3<br/>1e+06Ω"]
+    R4["R4<br/>1000Ω"]
+    R5["R5<br/>10000Ω"]
+    R6["R6<br/>1e+06Ω"]
+    R7["R7<br/>4700Ω"]
+    R8["R8<br/>47000Ω"]
+    C1["C1<br/>1e-07F"]
+    C2["C2<br/>4.7e-06F"]
+    C3["C3<br/>1e-07F"]
+    C4["C4<br/>1e-07F"]
+    C5["C5<br/>4.7e-05F"]
+    K1["K1<br/>Relay_SPDT"]
+    net_0(("net_0"))
+    vcc(("vcc"))
+    gnd(("gnd"))
+    net_2(("net_2"))
+    net_1(("net_1"))
+    C4 ---|"t1"| net_0
+    C4 ---|"t2"| net_0
+    D1 ---|"cathode"| vcc
+    D2 ---|"anode"| net_0
+    D2 ---|"cathode"| gnd
+    K1 ---|"coil_plus"| net_0
+    Q1 ---|"b"| net_0
+    Q1 ---|"e"| gnd
+    Q2 ---|"b"| net_2
+    Q2 ---|"c"| net_1
+    Q2 ---|"e"| gnd
+    R1 ---|"t1"| net_0
+    R1 ---|"t2"| net_0
+    R4 ---|"t1"| net_2
+    R4 ---|"t2"| net_2
+    R5 ---|"t1"| net_1
+    R5 ---|"t2"| net_1
+    U1 ---|"OUT"| net_0
+    U1 ---|"RESET"| net_1
+    U2 ---|"OUT"| net_2
+    U2 ---|"RESET"| vcc
+    U2 ---|"TRIG"| net_0

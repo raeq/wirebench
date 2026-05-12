@@ -1,0 +1,54 @@
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    subgraph A1["A1: Power Source Rev A"]
+    end
+    subgraph A2["A2: BLDC Controller Rev A"]
+        U1["U1<br/>Uno_BLDCCommutator"]
+        U2["U2<br/>DRV8313"]
+        C1["C1<br/>1e-08F"]
+        C2["C2<br/>1e-08F"]
+        C3["C3<br/>1e-08F"]
+        C4["C4<br/>1e-08F"]
+        C5["C5<br/>1e-07F"]
+        C6["C6<br/>1e-05F"]
+        R1["R1<br/>10000Ω"]
+    end
+    net_8(("net_8"))
+    net_11(("net_11"))
+    net_14(("net_14"))
+    net_3(("net_3"))
+    net_4(("net_4"))
+    net_5(("net_5"))
+    net_9(("net_9"))
+    net_10(("net_10"))
+    net_12(("net_12"))
+    net_13(("net_13"))
+    net_15(("net_15"))
+    net_16(("net_16"))
+    net_0(("net_0"))
+    net_1(("net_1"))
+    net_2(("net_2"))
+    U1 ---|"PB0"| net_8
+    U1 ---|"PB1"| net_11
+    U1 ---|"PB2"| net_14
+    U1 ---|"PC0"| net_3
+    U1 ---|"PC1"| net_4
+    U1 ---|"PC2"| net_5
+    U1 ---|"PD2"| net_9
+    U1 ---|"PD3"| net_10
+    U1 ---|"PD4"| net_12
+    U1 ---|"PD5"| net_13
+    U1 ---|"PD6"| net_15
+    U1 ---|"PD7"| net_16
+    U2 ---|"EN1"| net_8
+    U2 ---|"EN2"| net_11
+    U2 ---|"EN3"| net_14
+    U2 ---|"IN1"| net_9
+    U2 ---|"IN2"| net_10
+    U2 ---|"IN3"| net_12
+    U2 ---|"IN4"| net_13
+    U2 ---|"IN5"| net_15
+    U2 ---|"IN6"| net_16
+    U2 ---|"OUT1"| net_0
+    U2 ---|"OUT2"| net_1
+    U2 ---|"OUT3"| net_2

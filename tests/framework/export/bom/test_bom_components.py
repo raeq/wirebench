@@ -148,9 +148,10 @@ def test_bom_child_components_have_parent_column():
     assert set(u1_parents) == {'A1', 'A2'}
 
 
-def test_bom_rows_sorted_by_refdes_class():
-    """Refdes prefix order: A, R, C, L, D, Q, U, J, P, ... — boards
-    and passives first, then ICs, then connectors."""
+def test_bom_rows_sorted_alphabetically_by_refdes():
+    """Refdes prefixes are emitted in strict alphabetical order:
+    A < D < J < P < R < U ... — matches the canonical convention
+    industry CAD tools use when no custom ordering is specified."""
     asm = _silently(WaterAlarmAssembly)
     rows = _rows(export_to_string(asm, 'bom'))
     prefixes = []
@@ -158,10 +159,10 @@ def test_bom_rows_sorted_by_refdes_class():
         p = r['Refdes'].rstrip('0123456789')
         if not prefixes or prefixes[-1] != p:
             prefixes.append(p)
-    # Assemblies come before LEDs come before ICs come before connectors.
-    assert prefixes.index('A') < prefixes.index('D') < prefixes.index('U')
-    assert prefixes.index('U') < prefixes.index('J')
-    assert prefixes.index('J') < prefixes.index('P')
+    # Every prefix shows up in alphabetical order.
+    assert prefixes == sorted(prefixes), (
+        f"BOM prefixes are not in alphabetical order: {prefixes}"
+    )
 
 
 def test_bom_header_columns():

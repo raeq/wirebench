@@ -1,0 +1,434 @@
+{
+  "creator": "circuitry 0.x",
+  "modules": {
+    "Isolated RS-232": {
+      "cells": {
+        "C1": {
+          "connections": {
+            "t1": [
+              52
+            ],
+            "t2": [
+              53
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C2": {
+          "connections": {
+            "t1": [
+              54
+            ],
+            "t2": [
+              55
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C3": {
+          "connections": {
+            "t1": [
+              56
+            ],
+            "t2": [
+              57
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C4": {
+          "connections": {
+            "t1": [
+              58
+            ],
+            "t2": [
+              59
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C5": {
+          "connections": {
+            "t1": [
+              60
+            ],
+            "t2": [
+              61
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C6": {
+          "connections": {
+            "t1": [
+              62
+            ],
+            "t2": [
+              63
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C7": {
+          "connections": {
+            "t1": [
+              64
+            ],
+            "t2": [
+              65
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "J1": {
+          "connections": {
+            "p1": [
+              16
+            ],
+            "p2": [
+              17
+            ],
+            "p3": [
+              18
+            ],
+            "p4": [
+              19
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p2": "inout",
+            "p3": "inout",
+            "p4": "inout"
+          },
+          "type": "Header1xNFemale"
+        },
+        "J2": {
+          "connections": {
+            "p1": [
+              20
+            ],
+            "p2": [
+              21
+            ],
+            "p3": [
+              22
+            ],
+            "p4": [
+              23
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p2": "inout",
+            "p3": "inout",
+            "p4": "inout"
+          },
+          "type": "Header1xNFemale"
+        },
+        "U1": {
+          "connections": {
+            "EN1": [
+              29
+            ],
+            "EN2": [
+              30
+            ],
+            "GND1_1": [
+              25
+            ],
+            "GND1_2": [
+              28
+            ],
+            "GND2_1": [
+              31
+            ],
+            "GND2_2": [
+              34
+            ],
+            "INA": [
+              4
+            ],
+            "INB": [
+              26
+            ],
+            "INC": [
+              27
+            ],
+            "IND": [
+              7
+            ],
+            "OUTA": [
+              6
+            ],
+            "OUTB": [
+              33
+            ],
+            "OUTC": [
+              32
+            ],
+            "OUTD": [
+              5
+            ],
+            "VCC1": [
+              24
+            ],
+            "VISO": [
+              35
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "EN1": "input",
+            "EN2": "input",
+            "GND1_1": "input",
+            "GND1_2": "input",
+            "GND2_1": "input",
+            "GND2_2": "input",
+            "INA": "input",
+            "INB": "input",
+            "INC": "input",
+            "IND": "input",
+            "OUTA": "output",
+            "OUTB": "output",
+            "OUTC": "output",
+            "OUTD": "output",
+            "VCC1": "input",
+            "VISO": "output"
+          },
+          "type": "ISOW7841"
+        },
+        "U2": {
+          "connections": {
+            "C1+": [
+              39
+            ],
+            "C1-": [
+              41
+            ],
+            "C2+": [
+              42
+            ],
+            "C2-": [
+              43
+            ],
+            "GND_1": [
+              38
+            ],
+            "GND_2": [
+              49
+            ],
+            "INVALID": [
+              51
+            ],
+            "RIN1": [
+              3
+            ],
+            "RIN2": [
+              48
+            ],
+            "ROUT1": [
+              7
+            ],
+            "ROUT2": [
+              46
+            ],
+            "SHDN": [
+              50
+            ],
+            "TIN1": [
+              6
+            ],
+            "TIN2": [
+              45
+            ],
+            "TOUT1": [
+              2
+            ],
+            "TOUT2": [
+              47
+            ],
+            "V+": [
+              40
+            ],
+            "V-": [
+              44
+            ],
+            "VCC": [
+              37
+            ],
+            "VL": [
+              36
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "C1+": "input",
+            "C1-": "input",
+            "C2+": "input",
+            "C2-": "input",
+            "GND_1": "input",
+            "GND_2": "input",
+            "INVALID": "output",
+            "RIN1": "input",
+            "RIN2": "input",
+            "ROUT1": "output",
+            "ROUT2": "output",
+            "SHDN": "input",
+            "TIN1": "input",
+            "TIN2": "input",
+            "TOUT1": "output",
+            "TOUT2": "output",
+            "V+": "output",
+            "V-": "output",
+            "VCC": "input",
+            "VL": "input"
+          },
+          "type": "TRS3122E"
+        }
+      },
+      "netnames": {
+        "net_0": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        },
+        "net_1": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "net_2": {
+          "attributes": {},
+          "bits": [
+            4
+          ],
+          "hide_name": 0
+        },
+        "net_3": {
+          "attributes": {},
+          "bits": [
+            5
+          ],
+          "hide_name": 0
+        },
+        "net_4": {
+          "attributes": {},
+          "bits": [
+            6
+          ],
+          "hide_name": 0
+        },
+        "net_5": {
+          "attributes": {},
+          "bits": [
+            7
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {
+        "J1.p1": {
+          "bits": [
+            16
+          ],
+          "direction": "inout"
+        },
+        "J1.p2": {
+          "bits": [
+            17
+          ],
+          "direction": "inout"
+        },
+        "J1.p3": {
+          "bits": [
+            18
+          ],
+          "direction": "inout"
+        },
+        "J1.p4": {
+          "bits": [
+            19
+          ],
+          "direction": "inout"
+        },
+        "J2.p1": {
+          "bits": [
+            20
+          ],
+          "direction": "inout"
+        },
+        "J2.p2": {
+          "bits": [
+            21
+          ],
+          "direction": "inout"
+        },
+        "J2.p3": {
+          "bits": [
+            22
+          ],
+          "direction": "inout"
+        },
+        "J2.p4": {
+          "bits": [
+            23
+          ],
+          "direction": "inout"
+        }
+      }
+    }
+  }
+}

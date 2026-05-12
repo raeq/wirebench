@@ -1,0 +1,53 @@
+digraph "WaterAlarmAssembly" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  subgraph cluster_A1 {
+    label="A1: Sensor Board Rev A";
+    style=rounded;
+    U1 [label="U1\\nULN2003A"];
+  }
+  subgraph cluster_A2 {
+    label="A2: Controller Board Rev A";
+    style=rounded;
+    U1 [label="U1\\nSN74HC04"];
+    U2 [label="U2\\nCD4069"];
+    U3 [label="U3\\nCD4043"];
+    D1 [label="D1\\nred LED"];
+    D2 [label="D2\\ngreen LED"];
+  }
+  // Nets
+  node [shape=circle, label="", width=0.15, fixedsize=true];
+  gnd; net_2; net_3; net_4; net_42; net_43; net_44; net_5; vcc;
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+  D1 -> net_43 [taillabel="anode"];
+  D2 -> net_42 [taillabel="anode"];
+  U1 -> net_5 [taillabel="a_1"];
+  U1 -> gnd [taillabel="a_2"];
+  U1 -> gnd [taillabel="a_3"];
+  U1 -> gnd [taillabel="a_4"];
+  U1 -> gnd [taillabel="a_5"];
+  U1 -> gnd [taillabel="a_6"];
+  U1 -> net_2 [taillabel="in_1"];
+  U1 -> net_3 [taillabel="in_2"];
+  U1 -> net_4 [taillabel="out_1"];
+  U1 -> net_5 [taillabel="out_2"];
+  U1 -> net_44 [taillabel="y_1"];
+  U2 -> net_43 [taillabel="a_1"];
+  U2 -> gnd [taillabel="a_2"];
+  U2 -> gnd [taillabel="a_3"];
+  U2 -> gnd [taillabel="a_4"];
+  U2 -> gnd [taillabel="a_5"];
+  U2 -> gnd [taillabel="a_6"];
+  U2 -> net_42 [taillabel="y_1"];
+  U3 -> vcc [taillabel="oe"];
+  U3 -> net_43 [taillabel="q_1"];
+  U3 -> net_44 [taillabel="r_1"];
+  U3 -> gnd [taillabel="r_2"];
+  U3 -> gnd [taillabel="r_3"];
+  U3 -> gnd [taillabel="r_4"];
+  U3 -> net_4 [taillabel="s_1"];
+  U3 -> gnd [taillabel="s_2"];
+  U3 -> gnd [taillabel="s_3"];
+  U3 -> gnd [taillabel="s_4"];
+}

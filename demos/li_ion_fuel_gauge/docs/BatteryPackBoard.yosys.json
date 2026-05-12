@@ -1,0 +1,343 @@
+{
+  "creator": "circuitry 0.x",
+  "modules": {
+    "Li-Ion 1S Battery Pack": {
+      "cells": {
+        "BT1": {
+          "connections": {
+            "neg": [
+              5
+            ],
+            "pos": [
+              6
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "neg": "output",
+            "pos": "output"
+          },
+          "type": "Cell"
+        },
+        "C1": {
+          "connections": {
+            "t1": [
+              6
+            ],
+            "t2": [
+              5
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C2": {
+          "connections": {
+            "t1": [
+              7
+            ],
+            "t2": [
+              5
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C3": {
+          "connections": {
+            "t1": [
+              6
+            ],
+            "t2": [
+              5
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "J1": {
+          "connections": {
+            "p1": [
+              10
+            ],
+            "p2": [
+              11
+            ],
+            "p3": [
+              12
+            ],
+            "p4": [
+              13
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p2": "inout",
+            "p3": "inout",
+            "p4": "inout"
+          },
+          "type": "Header1xNFemale"
+        },
+        "R1": {
+          "connections": {
+            "t1": [
+              5
+            ],
+            "t2": [
+              5
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "0.01"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "R2": {
+          "connections": {
+            "t1": [
+              8
+            ],
+            "t2": [
+              5
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "10000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "R3": {
+          "connections": {
+            "t1": [
+              2
+            ],
+            "t2": [
+              7
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "10000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "R4": {
+          "connections": {
+            "t1": [
+              3
+            ],
+            "t2": [
+              7
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "10000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "R5": {
+          "connections": {
+            "t1": [
+              4
+            ],
+            "t2": [
+              7
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "10000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "U1": {
+          "connections": {
+            "BAT": [
+              6
+            ],
+            "CE": [
+              15
+            ],
+            "HDQ": [
+              4
+            ],
+            "NC1": [
+              16
+            ],
+            "NC2": [
+              17
+            ],
+            "REGIN": [
+              6
+            ],
+            "SCL": [
+              3
+            ],
+            "SDA": [
+              2
+            ],
+            "SE": [
+              14
+            ],
+            "SRN": [
+              5
+            ],
+            "SRP": [
+              5
+            ],
+            "TS": [
+              8
+            ],
+            "VCC": [
+              7
+            ],
+            "VSS_1": [
+              5
+            ],
+            "VSS_2": [
+              5
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "BAT": "input",
+            "CE": "input",
+            "HDQ": "inout",
+            "NC1": "input",
+            "NC2": "input",
+            "REGIN": "input",
+            "SCL": "input",
+            "SDA": "inout",
+            "SE": "output",
+            "SRN": "input",
+            "SRP": "input",
+            "TS": "input",
+            "VCC": "output",
+            "VSS_1": "input",
+            "VSS_2": "input"
+          },
+          "type": "BQ27546G1"
+        }
+      },
+      "netnames": {
+        "net_0": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        },
+        "net_1": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "net_2": {
+          "attributes": {},
+          "bits": [
+            4
+          ],
+          "hide_name": 0
+        },
+        "net_3": {
+          "attributes": {},
+          "bits": [
+            5
+          ],
+          "hide_name": 0
+        },
+        "net_4": {
+          "attributes": {},
+          "bits": [
+            6
+          ],
+          "hide_name": 0
+        },
+        "net_5": {
+          "attributes": {},
+          "bits": [
+            7
+          ],
+          "hide_name": 0
+        },
+        "net_6": {
+          "attributes": {},
+          "bits": [
+            8
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {
+        "J1.p1": {
+          "bits": [
+            10
+          ],
+          "direction": "inout"
+        },
+        "J1.p2": {
+          "bits": [
+            11
+          ],
+          "direction": "inout"
+        },
+        "J1.p3": {
+          "bits": [
+            12
+          ],
+          "direction": "inout"
+        },
+        "J1.p4": {
+          "bits": [
+            13
+          ],
+          "direction": "inout"
+        }
+      }
+    }
+  }
+}

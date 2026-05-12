@@ -1,0 +1,13 @@
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    subgraph A1["A1: Sensor Board Rev A"]
+        U1["U1<br/>ULN2003A"]
+    end
+    net_0(("net_0"))
+    net_1(("net_1"))
+    net_2(("net_2"))
+    net_3(("net_3"))
+    U1 ---|"in_1"| net_0
+    U1 ---|"in_2"| net_1
+    U1 ---|"out_1"| net_2
+    U1 ---|"out_2"| net_3

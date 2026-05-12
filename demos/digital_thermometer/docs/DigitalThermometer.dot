@@ -1,0 +1,40 @@
+digraph "DigitalThermometer" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  U1 [label="U1\\nUno_ThermometerSketch"];
+  U2 [label="U2\\nDHT11"];
+  U3 [label="U3\\nDisplay5641AS"];
+  R1 [label="R1\\n220Ω"];
+  // Nets
+  node [shape=circle, label="", width=0.15, fixedsize=true];
+  gnd; net_1; net_10; net_11; net_12; net_2; net_3; net_4; net_5; net_6; net_7; net_8; net_9;
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+  R1 -> net_1 [taillabel="t1"];
+  R1 -> net_1 [taillabel="t2"];
+  U1 -> net_5 [taillabel="PB0"];
+  U1 -> net_3 [taillabel="PB1"];
+  U1 -> net_2 [taillabel="PB2"];
+  U1 -> net_10 [taillabel="PB3"];
+  U1 -> net_6 [taillabel="PB4"];
+  U1 -> net_4 [taillabel="PB5"];
+  U1 -> net_12 [taillabel="PD2"];
+  U1 -> net_1 [taillabel="PD3"];
+  U1 -> net_9 [taillabel="PD4"];
+  U1 -> net_8 [taillabel="PD5"];
+  U1 -> net_11 [taillabel="PD6"];
+  U1 -> net_7 [taillabel="PD7"];
+  U2 -> net_12 [taillabel="DATA"];
+  U3 -> net_1 [taillabel="DIG_1"];
+  U3 -> net_9 [taillabel="DIG_2"];
+  U3 -> net_8 [taillabel="DIG_3"];
+  U3 -> gnd [taillabel="DIG_4"];
+  U3 -> net_11 [taillabel="SEG_A"];
+  U3 -> net_7 [taillabel="SEG_B"];
+  U3 -> net_5 [taillabel="SEG_C"];
+  U3 -> net_3 [taillabel="SEG_D"];
+  U3 -> net_4 [taillabel="SEG_DP"];
+  U3 -> net_2 [taillabel="SEG_E"];
+  U3 -> net_10 [taillabel="SEG_F"];
+  U3 -> net_6 [taillabel="SEG_G"];
+}

@@ -1,0 +1,31 @@
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    subgraph A1["A1: Controller Plug Rev A"]
+    end
+    subgraph A2["A2: Isolated RS-232 Rev A"]
+        U1["U1<br/>ISOW7841"]
+        U2["U2<br/>TRS3122E"]
+        C1["C1<br/>1e-07F"]
+        C2["C2<br/>1e-05F"]
+        C3["C3<br/>1e-07F"]
+        C4["C4<br/>1e-07F"]
+        C5["C5<br/>1e-07F"]
+        C6["C6<br/>1e-07F"]
+        C7["C7<br/>1e-07F"]
+    end
+    subgraph A3["A3: RS-232 Cable Rev A"]
+    end
+    net_6(("net_6"))
+    net_9(("net_9"))
+    net_8(("net_8"))
+    net_7(("net_7"))
+    net_1(("net_1"))
+    net_0(("net_0"))
+    U1 ---|"INA"| net_6
+    U1 ---|"IND"| net_9
+    U1 ---|"OUTA"| net_8
+    U1 ---|"OUTD"| net_7
+    U2 ---|"RIN1"| net_1
+    U2 ---|"ROUT1"| net_9
+    U2 ---|"TIN1"| net_8
+    U2 ---|"TOUT1"| net_0

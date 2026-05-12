@@ -1,8 +1,16 @@
+import glob
 import sys
 import os
 _HERE = os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(_HERE, '..', 'src'))
-sys.path.insert(0, os.path.join(_HERE, '..', 'demos'))
+# Each demo now lives in its own subdirectory under demos/ (so that
+# `demos/<name>/docs/` can hold the rendered export artefacts beside
+# the demo source).  Add every demo subdirectory to sys.path so the
+# existing `from <demo_name> import …` import style still works
+# unchanged from test code.
+for _demo_dir in sorted(glob.glob(os.path.join(_HERE, '..', 'demos', '*'))):
+    if os.path.isdir(_demo_dir):
+        sys.path.insert(0, _demo_dir)
 
 import pytest
 

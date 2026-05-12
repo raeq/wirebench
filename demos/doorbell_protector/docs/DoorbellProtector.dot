@@ -1,0 +1,51 @@
+digraph "DoorbellProtector" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  U1 [label="U1\\nNE555_Monostable"];
+  U2 [label="U2\\nNE555_Monostable"];
+  Q1 [label="Q1\\nBC548"];
+  Q2 [label="Q2\\nQ2N3904"];
+  D1 [label="D1\\nD1N4007"];
+  D2 [label="D2\\nred LED"];
+  R1 [label="R1\\n1000Ω"];
+  R2 [label="R2\\n1e+06Ω"];
+  R3 [label="R3\\n1e+06Ω"];
+  R4 [label="R4\\n1000Ω"];
+  R5 [label="R5\\n10000Ω"];
+  R6 [label="R6\\n1e+06Ω"];
+  R7 [label="R7\\n4700Ω"];
+  R8 [label="R8\\n47000Ω"];
+  C1 [label="C1\\n1e-07F"];
+  C2 [label="C2\\n4.7e-06F"];
+  C3 [label="C3\\n1e-07F"];
+  C4 [label="C4\\n1e-07F"];
+  C5 [label="C5\\n4.7e-05F"];
+  K1 [label="K1\\nRelay_SPDT"];
+  // Nets
+  node [shape=circle, label="", width=0.15, fixedsize=true];
+  gnd; net_0; net_1; net_2; vcc;
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+  C4 -> net_0 [taillabel="t1"];
+  C4 -> net_0 [taillabel="t2"];
+  D1 -> vcc [taillabel="cathode"];
+  D2 -> net_0 [taillabel="anode"];
+  D2 -> gnd [taillabel="cathode"];
+  K1 -> net_0 [taillabel="coil_plus"];
+  Q1 -> net_0 [taillabel="b"];
+  Q1 -> gnd [taillabel="e"];
+  Q2 -> net_2 [taillabel="b"];
+  Q2 -> net_1 [taillabel="c"];
+  Q2 -> gnd [taillabel="e"];
+  R1 -> net_0 [taillabel="t1"];
+  R1 -> net_0 [taillabel="t2"];
+  R4 -> net_2 [taillabel="t1"];
+  R4 -> net_2 [taillabel="t2"];
+  R5 -> net_1 [taillabel="t1"];
+  R5 -> net_1 [taillabel="t2"];
+  U1 -> net_0 [taillabel="OUT"];
+  U1 -> net_1 [taillabel="RESET"];
+  U2 -> net_2 [taillabel="OUT"];
+  U2 -> vcc [taillabel="RESET"];
+  U2 -> net_0 [taillabel="TRIG"];
+}

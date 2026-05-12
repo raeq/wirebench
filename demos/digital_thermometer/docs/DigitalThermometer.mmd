@@ -1,0 +1,46 @@
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    U1["U1<br/>Uno_ThermometerSketch"]
+    U2["U2<br/>DHT11"]
+    U3["U3<br/>Display5641AS"]
+    R1["R1<br/>220Ω"]
+    net_1(("net_1"))
+    net_5(("net_5"))
+    net_3(("net_3"))
+    net_2(("net_2"))
+    net_10(("net_10"))
+    net_6(("net_6"))
+    net_4(("net_4"))
+    net_12(("net_12"))
+    net_9(("net_9"))
+    net_8(("net_8"))
+    net_11(("net_11"))
+    net_7(("net_7"))
+    gnd(("gnd"))
+    R1 ---|"t1"| net_1
+    R1 ---|"t2"| net_1
+    U1 ---|"PB0"| net_5
+    U1 ---|"PB1"| net_3
+    U1 ---|"PB2"| net_2
+    U1 ---|"PB3"| net_10
+    U1 ---|"PB4"| net_6
+    U1 ---|"PB5"| net_4
+    U1 ---|"PD2"| net_12
+    U1 ---|"PD3"| net_1
+    U1 ---|"PD4"| net_9
+    U1 ---|"PD5"| net_8
+    U1 ---|"PD6"| net_11
+    U1 ---|"PD7"| net_7
+    U2 ---|"DATA"| net_12
+    U3 ---|"DIG_1"| net_1
+    U3 ---|"DIG_2"| net_9
+    U3 ---|"DIG_3"| net_8
+    U3 ---|"DIG_4"| gnd
+    U3 ---|"SEG_A"| net_11
+    U3 ---|"SEG_B"| net_7
+    U3 ---|"SEG_C"| net_5
+    U3 ---|"SEG_D"| net_3
+    U3 ---|"SEG_DP"| net_4
+    U3 ---|"SEG_E"| net_2
+    U3 ---|"SEG_F"| net_10
+    U3 ---|"SEG_G"| net_6

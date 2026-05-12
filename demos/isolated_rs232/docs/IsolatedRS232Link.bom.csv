@@ -1,0 +1,17 @@
+Refdes,Value,Footprint,Quantity,Parent,Description
+A1,Controller Plug Rev A,,1,,Printed circuit board
+A2,Isolated RS-232 Rev A,,1,,Printed circuit board
+A3,RS-232 Cable Rev A,,1,,Printed circuit board
+C1,1e-07F,Capacitor_SMD:C_0603_1608Metric,1,A2,Capacitor
+C2,1e-05F,Capacitor_SMD:C_0603_1608Metric,1,A2,Capacitor
+C3,1e-07F,Capacitor_SMD:C_0603_1608Metric,1,A2,Capacitor
+C4,1e-07F,Capacitor_SMD:C_0603_1608Metric,1,A2,Capacitor
+C5,1e-07F,Capacitor_SMD:C_0603_1608Metric,1,A2,Capacitor
+C6,1e-07F,Capacitor_SMD:C_0603_1608Metric,1,A2,Capacitor
+C7,1e-07F,Capacitor_SMD:C_0603_1608Metric,1,A2,Capacitor
+J1,Header1xNFemale_4,Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical,1,A2,Header1xNFemale
+J2,Header1xNFemale_4,Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical,1,A2,Header1xNFemale
+P1,Header1xNMale_4,Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical,1,A1,Header1xNMale
+P2,Header1xNMale_4,Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical,1,A3,Header1xNMale
+U1,ISOW7841,Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm,1,A2,ISOW7841
+U2,TRS3122E,Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm,1,A2,TRS3122E

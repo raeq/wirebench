@@ -1,0 +1,816 @@
+{
+  "creator": "circuitry 0.x",
+  "modules": {
+    "BLDCControllerBoard_A2": {
+      "cells": {
+        "C1": {
+          "connections": {
+            "t1": [
+              51
+            ],
+            "t2": [
+              52
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C2": {
+          "connections": {
+            "t1": [
+              53
+            ],
+            "t2": [
+              54
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C3": {
+          "connections": {
+            "t1": [
+              55
+            ],
+            "t2": [
+              56
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C4": {
+          "connections": {
+            "t1": [
+              57
+            ],
+            "t2": [
+              58
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C5": {
+          "connections": {
+            "t1": [
+              59
+            ],
+            "t2": [
+              60
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C6": {
+          "connections": {
+            "t1": [
+              61
+            ],
+            "t2": [
+              62
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "J1": {
+          "connections": {
+            "p1": [
+              8
+            ],
+            "p2": [
+              9
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p2": "inout"
+          },
+          "type": "Header1xNFemale"
+        },
+        "J2": {
+          "connections": {
+            "p1": [
+              2
+            ],
+            "p2": [
+              3
+            ],
+            "p3": [
+              4
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p2": "inout",
+            "p3": "inout"
+          },
+          "type": "Header1xNFemale"
+        },
+        "J3": {
+          "connections": {
+            "p1": [
+              5
+            ],
+            "p2": [
+              6
+            ],
+            "p3": [
+              7
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p2": "inout",
+            "p3": "inout"
+          },
+          "type": "Header1xNFemale"
+        },
+        "R1": {
+          "connections": {
+            "t1": [
+              63
+            ],
+            "t2": [
+              64
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "10000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "U1": {
+          "connections": {
+            "AREF": [
+              30
+            ],
+            "AVCC": [
+              29
+            ],
+            "GND_1": [
+              23
+            ],
+            "GND_2": [
+              31
+            ],
+            "PB0": [
+              10
+            ],
+            "PB1": [
+              13
+            ],
+            "PB2": [
+              16
+            ],
+            "PB3": [
+              26
+            ],
+            "PB4": [
+              27
+            ],
+            "PB5": [
+              28
+            ],
+            "PB6": [
+              24
+            ],
+            "PB7": [
+              25
+            ],
+            "PC0": [
+              5
+            ],
+            "PC1": [
+              6
+            ],
+            "PC2": [
+              7
+            ],
+            "PC3": [
+              32
+            ],
+            "PC4": [
+              33
+            ],
+            "PC5": [
+              34
+            ],
+            "PC6": [
+              19
+            ],
+            "PD0": [
+              20
+            ],
+            "PD1": [
+              21
+            ],
+            "PD2": [
+              11
+            ],
+            "PD3": [
+              12
+            ],
+            "PD4": [
+              14
+            ],
+            "PD5": [
+              15
+            ],
+            "PD6": [
+              17
+            ],
+            "PD7": [
+              18
+            ],
+            "VCC": [
+              22
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "AREF": "input",
+            "AVCC": "input",
+            "GND_1": "input",
+            "GND_2": "input",
+            "PB0": "inout",
+            "PB1": "inout",
+            "PB2": "inout",
+            "PB3": "inout",
+            "PB4": "inout",
+            "PB5": "inout",
+            "PB6": "inout",
+            "PB7": "inout",
+            "PC0": "inout",
+            "PC1": "inout",
+            "PC2": "inout",
+            "PC3": "inout",
+            "PC4": "inout",
+            "PC5": "inout",
+            "PC6": "inout",
+            "PD0": "inout",
+            "PD1": "inout",
+            "PD2": "inout",
+            "PD3": "inout",
+            "PD4": "inout",
+            "PD5": "inout",
+            "PD6": "inout",
+            "PD7": "inout",
+            "VCC": "input"
+          },
+          "type": "Uno_BLDCCommutator"
+        },
+        "U2": {
+          "connections": {
+            "BST1": [
+              45
+            ],
+            "BST2": [
+              46
+            ],
+            "BST3": [
+              47
+            ],
+            "CP1": [
+              37
+            ],
+            "CP2": [
+              38
+            ],
+            "EN1": [
+              10
+            ],
+            "EN2": [
+              13
+            ],
+            "EN3": [
+              16
+            ],
+            "GND": [
+              35
+            ],
+            "GVDD": [
+              40
+            ],
+            "IN1": [
+              11
+            ],
+            "IN2": [
+              12
+            ],
+            "IN3": [
+              14
+            ],
+            "IN4": [
+              15
+            ],
+            "IN5": [
+              17
+            ],
+            "IN6": [
+              18
+            ],
+            "OUT1": [
+              2
+            ],
+            "OUT2": [
+              3
+            ],
+            "OUT3": [
+              4
+            ],
+            "PGND_1": [
+              48
+            ],
+            "PGND_2": [
+              49
+            ],
+            "PPAD": [
+              50
+            ],
+            "V3P3OUT": [
+              41
+            ],
+            "VCP": [
+              39
+            ],
+            "VM": [
+              36
+            ],
+            "nFAULT": [
+              44
+            ],
+            "nRESET": [
+              43
+            ],
+            "nSLEEP": [
+              42
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "BST1": "input",
+            "BST2": "input",
+            "BST3": "input",
+            "CP1": "input",
+            "CP2": "input",
+            "EN1": "input",
+            "EN2": "input",
+            "EN3": "input",
+            "GND": "input",
+            "GVDD": "output",
+            "IN1": "input",
+            "IN2": "input",
+            "IN3": "input",
+            "IN4": "input",
+            "IN5": "input",
+            "IN6": "input",
+            "OUT1": "output",
+            "OUT2": "output",
+            "OUT3": "output",
+            "PGND_1": "input",
+            "PGND_2": "input",
+            "PPAD": "input",
+            "V3P3OUT": "output",
+            "VCP": "output",
+            "VM": "input",
+            "nFAULT": "output",
+            "nRESET": "input",
+            "nSLEEP": "input"
+          },
+          "type": "DRV8313"
+        }
+      },
+      "netnames": {
+        "GND": {
+          "attributes": {},
+          "bits": [
+            9
+          ],
+          "hide_name": 0
+        },
+        "net_0": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        },
+        "net_1": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "net_10": {
+          "attributes": {},
+          "bits": [
+            12
+          ],
+          "hide_name": 0
+        },
+        "net_11": {
+          "attributes": {},
+          "bits": [
+            13
+          ],
+          "hide_name": 0
+        },
+        "net_12": {
+          "attributes": {},
+          "bits": [
+            14
+          ],
+          "hide_name": 0
+        },
+        "net_13": {
+          "attributes": {},
+          "bits": [
+            15
+          ],
+          "hide_name": 0
+        },
+        "net_14": {
+          "attributes": {},
+          "bits": [
+            16
+          ],
+          "hide_name": 0
+        },
+        "net_15": {
+          "attributes": {},
+          "bits": [
+            17
+          ],
+          "hide_name": 0
+        },
+        "net_16": {
+          "attributes": {},
+          "bits": [
+            18
+          ],
+          "hide_name": 0
+        },
+        "net_2": {
+          "attributes": {},
+          "bits": [
+            4
+          ],
+          "hide_name": 0
+        },
+        "net_3": {
+          "attributes": {},
+          "bits": [
+            5
+          ],
+          "hide_name": 0
+        },
+        "net_4": {
+          "attributes": {},
+          "bits": [
+            6
+          ],
+          "hide_name": 0
+        },
+        "net_5": {
+          "attributes": {},
+          "bits": [
+            7
+          ],
+          "hide_name": 0
+        },
+        "net_8": {
+          "attributes": {},
+          "bits": [
+            10
+          ],
+          "hide_name": 0
+        },
+        "net_9": {
+          "attributes": {},
+          "bits": [
+            11
+          ],
+          "hide_name": 0
+        },
+        "vcc": {
+          "attributes": {},
+          "bits": [
+            8
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {
+        "J1.p1": {
+          "bits": [
+            8
+          ],
+          "direction": "inout"
+        },
+        "J1.p2": {
+          "bits": [
+            9
+          ],
+          "direction": "inout"
+        },
+        "J2.p1": {
+          "bits": [
+            2
+          ],
+          "direction": "inout"
+        },
+        "J2.p2": {
+          "bits": [
+            3
+          ],
+          "direction": "inout"
+        },
+        "J2.p3": {
+          "bits": [
+            4
+          ],
+          "direction": "inout"
+        },
+        "J3.p1": {
+          "bits": [
+            5
+          ],
+          "direction": "inout"
+        },
+        "J3.p2": {
+          "bits": [
+            6
+          ],
+          "direction": "inout"
+        },
+        "J3.p3": {
+          "bits": [
+            7
+          ],
+          "direction": "inout"
+        }
+      }
+    },
+    "BLDCSupplyBoard_A1": {
+      "cells": {
+        "P1": {
+          "connections": {
+            "p1": [
+              8
+            ],
+            "p2": [
+              9
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p2": "inout"
+          },
+          "type": "Header1xNMale"
+        }
+      },
+      "netnames": {
+        "GND": {
+          "attributes": {},
+          "bits": [
+            9
+          ],
+          "hide_name": 0
+        },
+        "vcc": {
+          "attributes": {},
+          "bits": [
+            8
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {
+        "P1.p1": {
+          "bits": [
+            8
+          ],
+          "direction": "inout"
+        },
+        "P1.p2": {
+          "bits": [
+            9
+          ],
+          "direction": "inout"
+        }
+      }
+    },
+    "BLDCSystem": {
+      "cells": {
+        "A1": {
+          "connections": {
+            "P1.p1": [
+              8
+            ],
+            "P1.p2": [
+              9
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "P1.p1": "inout",
+            "P1.p2": "inout"
+          },
+          "type": "BLDCSupplyBoard"
+        },
+        "A2": {
+          "connections": {
+            "J1.p1": [
+              8
+            ],
+            "J1.p2": [
+              9
+            ],
+            "J2.p1": [
+              2
+            ],
+            "J2.p2": [
+              3
+            ],
+            "J2.p3": [
+              4
+            ],
+            "J3.p1": [
+              5
+            ],
+            "J3.p2": [
+              6
+            ],
+            "J3.p3": [
+              7
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "J1.p1": "inout",
+            "J1.p2": "inout",
+            "J2.p1": "inout",
+            "J2.p2": "inout",
+            "J2.p3": "inout",
+            "J3.p1": "inout",
+            "J3.p2": "inout",
+            "J3.p3": "inout"
+          },
+          "type": "BLDCControllerBoard"
+        },
+        "P2": {
+          "connections": {
+            "p1": [
+              5
+            ],
+            "p2": [
+              6
+            ],
+            "p3": [
+              7
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p2": "inout",
+            "p3": "inout"
+          },
+          "type": "Header1xNMale"
+        },
+        "P3": {
+          "connections": {
+            "p1": [
+              2
+            ],
+            "p2": [
+              3
+            ],
+            "p3": [
+              4
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p2": "inout",
+            "p3": "inout"
+          },
+          "type": "Header1xNMale"
+        }
+      },
+      "netnames": {
+        "GND": {
+          "attributes": {},
+          "bits": [
+            9
+          ],
+          "hide_name": 0
+        },
+        "net_0": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        },
+        "net_1": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "net_2": {
+          "attributes": {},
+          "bits": [
+            4
+          ],
+          "hide_name": 0
+        },
+        "net_3": {
+          "attributes": {},
+          "bits": [
+            5
+          ],
+          "hide_name": 0
+        },
+        "net_4": {
+          "attributes": {},
+          "bits": [
+            6
+          ],
+          "hide_name": 0
+        },
+        "net_5": {
+          "attributes": {},
+          "bits": [
+            7
+          ],
+          "hide_name": 0
+        },
+        "vcc": {
+          "attributes": {},
+          "bits": [
+            8
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {}
+    }
+  }
+}

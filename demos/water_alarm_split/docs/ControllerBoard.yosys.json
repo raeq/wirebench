@@ -1,0 +1,684 @@
+{
+  "creator": "circuitry 0.x",
+  "modules": {
+    "Controller Board": {
+      "cells": {
+        "D1": {
+          "connections": {
+            "anode": [
+              7
+            ],
+            "cathode": [
+              79
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "color": "red"
+          },
+          "port_directions": {
+            "anode": "input",
+            "cathode": "input"
+          },
+          "type": "LED"
+        },
+        "D2": {
+          "connections": {
+            "anode": [
+              6
+            ],
+            "cathode": [
+              80
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "color": "green"
+          },
+          "port_directions": {
+            "anode": "input",
+            "cathode": "input"
+          },
+          "type": "LED"
+        },
+        "P1": {
+          "connections": {
+            "p1": [
+              26
+            ],
+            "p10": [
+              35
+            ],
+            "p11": [
+              36
+            ],
+            "p12": [
+              37
+            ],
+            "p13": [
+              38
+            ],
+            "p14": [
+              39
+            ],
+            "p15": [
+              40
+            ],
+            "p16": [
+              41
+            ],
+            "p17": [
+              42
+            ],
+            "p18": [
+              43
+            ],
+            "p19": [
+              44
+            ],
+            "p2": [
+              27
+            ],
+            "p20": [
+              45
+            ],
+            "p21": [
+              46
+            ],
+            "p22": [
+              47
+            ],
+            "p23": [
+              48
+            ],
+            "p24": [
+              49
+            ],
+            "p25": [
+              50
+            ],
+            "p26": [
+              51
+            ],
+            "p27": [
+              52
+            ],
+            "p28": [
+              53
+            ],
+            "p29": [
+              54
+            ],
+            "p3": [
+              28
+            ],
+            "p30": [
+              55
+            ],
+            "p31": [
+              56
+            ],
+            "p32": [
+              57
+            ],
+            "p33": [
+              58
+            ],
+            "p34": [
+              59
+            ],
+            "p35": [
+              60
+            ],
+            "p36": [
+              61
+            ],
+            "p37": [
+              62
+            ],
+            "p38": [
+              63
+            ],
+            "p39": [
+              64
+            ],
+            "p4": [
+              29
+            ],
+            "p40": [
+              65
+            ],
+            "p5": [
+              30
+            ],
+            "p6": [
+              31
+            ],
+            "p7": [
+              32
+            ],
+            "p8": [
+              33
+            ],
+            "p9": [
+              34
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p10": "inout",
+            "p11": "inout",
+            "p12": "inout",
+            "p13": "inout",
+            "p14": "inout",
+            "p15": "inout",
+            "p16": "inout",
+            "p17": "inout",
+            "p18": "inout",
+            "p19": "inout",
+            "p2": "inout",
+            "p20": "inout",
+            "p21": "inout",
+            "p22": "inout",
+            "p23": "inout",
+            "p24": "inout",
+            "p25": "inout",
+            "p26": "inout",
+            "p27": "inout",
+            "p28": "inout",
+            "p29": "inout",
+            "p3": "inout",
+            "p30": "inout",
+            "p31": "inout",
+            "p32": "inout",
+            "p33": "inout",
+            "p34": "inout",
+            "p35": "inout",
+            "p36": "inout",
+            "p37": "inout",
+            "p38": "inout",
+            "p39": "inout",
+            "p4": "inout",
+            "p40": "inout",
+            "p5": "inout",
+            "p6": "inout",
+            "p7": "inout",
+            "p8": "inout",
+            "p9": "inout"
+          },
+          "type": "Header2xNMale"
+        },
+        "U1": {
+          "connections": {
+            "a_1": [
+              3
+            ],
+            "a_2": [
+              5
+            ],
+            "a_3": [
+              5
+            ],
+            "a_4": [
+              5
+            ],
+            "a_5": [
+              5
+            ],
+            "a_6": [
+              5
+            ],
+            "y_1": [
+              8
+            ],
+            "y_2": [
+              66
+            ],
+            "y_3": [
+              67
+            ],
+            "y_4": [
+              68
+            ],
+            "y_5": [
+              69
+            ],
+            "y_6": [
+              70
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "a_1": "input",
+            "a_2": "input",
+            "a_3": "input",
+            "a_4": "input",
+            "a_5": "input",
+            "a_6": "input",
+            "y_1": "output",
+            "y_2": "output",
+            "y_3": "output",
+            "y_4": "output",
+            "y_5": "output",
+            "y_6": "output"
+          },
+          "type": "SN74HC04"
+        },
+        "U2": {
+          "connections": {
+            "a_1": [
+              7
+            ],
+            "a_2": [
+              5
+            ],
+            "a_3": [
+              5
+            ],
+            "a_4": [
+              5
+            ],
+            "a_5": [
+              5
+            ],
+            "a_6": [
+              5
+            ],
+            "y_1": [
+              6
+            ],
+            "y_2": [
+              71
+            ],
+            "y_3": [
+              72
+            ],
+            "y_4": [
+              73
+            ],
+            "y_5": [
+              74
+            ],
+            "y_6": [
+              75
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "a_1": "input",
+            "a_2": "input",
+            "a_3": "input",
+            "a_4": "input",
+            "a_5": "input",
+            "a_6": "input",
+            "y_1": "output",
+            "y_2": "output",
+            "y_3": "output",
+            "y_4": "output",
+            "y_5": "output",
+            "y_6": "output"
+          },
+          "type": "CD4069"
+        },
+        "U3": {
+          "connections": {
+            "oe": [
+              4
+            ],
+            "q_1": [
+              7
+            ],
+            "q_2": [
+              76
+            ],
+            "q_3": [
+              77
+            ],
+            "q_4": [
+              78
+            ],
+            "r_1": [
+              8
+            ],
+            "r_2": [
+              5
+            ],
+            "r_3": [
+              5
+            ],
+            "r_4": [
+              5
+            ],
+            "s_1": [
+              2
+            ],
+            "s_2": [
+              5
+            ],
+            "s_3": [
+              5
+            ],
+            "s_4": [
+              5
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "oe": "input",
+            "q_1": "output",
+            "q_2": "output",
+            "q_3": "output",
+            "q_4": "output",
+            "r_1": "input",
+            "r_2": "input",
+            "r_3": "input",
+            "r_4": "input",
+            "s_1": "input",
+            "s_2": "input",
+            "s_3": "input",
+            "s_4": "input"
+          },
+          "type": "CD4043"
+        }
+      },
+      "netnames": {
+        "GND": {
+          "attributes": {},
+          "bits": [
+            5
+          ],
+          "hide_name": 0
+        },
+        "net_0": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        },
+        "net_1": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "net_4": {
+          "attributes": {},
+          "bits": [
+            6
+          ],
+          "hide_name": 0
+        },
+        "net_5": {
+          "attributes": {},
+          "bits": [
+            7
+          ],
+          "hide_name": 0
+        },
+        "net_6": {
+          "attributes": {},
+          "bits": [
+            8
+          ],
+          "hide_name": 0
+        },
+        "vcc": {
+          "attributes": {},
+          "bits": [
+            4
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {
+        "P1.p1": {
+          "bits": [
+            26
+          ],
+          "direction": "inout"
+        },
+        "P1.p10": {
+          "bits": [
+            35
+          ],
+          "direction": "inout"
+        },
+        "P1.p11": {
+          "bits": [
+            36
+          ],
+          "direction": "inout"
+        },
+        "P1.p12": {
+          "bits": [
+            37
+          ],
+          "direction": "inout"
+        },
+        "P1.p13": {
+          "bits": [
+            38
+          ],
+          "direction": "inout"
+        },
+        "P1.p14": {
+          "bits": [
+            39
+          ],
+          "direction": "inout"
+        },
+        "P1.p15": {
+          "bits": [
+            40
+          ],
+          "direction": "inout"
+        },
+        "P1.p16": {
+          "bits": [
+            41
+          ],
+          "direction": "inout"
+        },
+        "P1.p17": {
+          "bits": [
+            42
+          ],
+          "direction": "inout"
+        },
+        "P1.p18": {
+          "bits": [
+            43
+          ],
+          "direction": "inout"
+        },
+        "P1.p19": {
+          "bits": [
+            44
+          ],
+          "direction": "inout"
+        },
+        "P1.p2": {
+          "bits": [
+            27
+          ],
+          "direction": "inout"
+        },
+        "P1.p20": {
+          "bits": [
+            45
+          ],
+          "direction": "inout"
+        },
+        "P1.p21": {
+          "bits": [
+            46
+          ],
+          "direction": "inout"
+        },
+        "P1.p22": {
+          "bits": [
+            47
+          ],
+          "direction": "inout"
+        },
+        "P1.p23": {
+          "bits": [
+            48
+          ],
+          "direction": "inout"
+        },
+        "P1.p24": {
+          "bits": [
+            49
+          ],
+          "direction": "inout"
+        },
+        "P1.p25": {
+          "bits": [
+            50
+          ],
+          "direction": "inout"
+        },
+        "P1.p26": {
+          "bits": [
+            51
+          ],
+          "direction": "inout"
+        },
+        "P1.p27": {
+          "bits": [
+            52
+          ],
+          "direction": "inout"
+        },
+        "P1.p28": {
+          "bits": [
+            53
+          ],
+          "direction": "inout"
+        },
+        "P1.p29": {
+          "bits": [
+            54
+          ],
+          "direction": "inout"
+        },
+        "P1.p3": {
+          "bits": [
+            28
+          ],
+          "direction": "inout"
+        },
+        "P1.p30": {
+          "bits": [
+            55
+          ],
+          "direction": "inout"
+        },
+        "P1.p31": {
+          "bits": [
+            56
+          ],
+          "direction": "inout"
+        },
+        "P1.p32": {
+          "bits": [
+            57
+          ],
+          "direction": "inout"
+        },
+        "P1.p33": {
+          "bits": [
+            58
+          ],
+          "direction": "inout"
+        },
+        "P1.p34": {
+          "bits": [
+            59
+          ],
+          "direction": "inout"
+        },
+        "P1.p35": {
+          "bits": [
+            60
+          ],
+          "direction": "inout"
+        },
+        "P1.p36": {
+          "bits": [
+            61
+          ],
+          "direction": "inout"
+        },
+        "P1.p37": {
+          "bits": [
+            62
+          ],
+          "direction": "inout"
+        },
+        "P1.p38": {
+          "bits": [
+            63
+          ],
+          "direction": "inout"
+        },
+        "P1.p39": {
+          "bits": [
+            64
+          ],
+          "direction": "inout"
+        },
+        "P1.p4": {
+          "bits": [
+            29
+          ],
+          "direction": "inout"
+        },
+        "P1.p40": {
+          "bits": [
+            65
+          ],
+          "direction": "inout"
+        },
+        "P1.p5": {
+          "bits": [
+            30
+          ],
+          "direction": "inout"
+        },
+        "P1.p6": {
+          "bits": [
+            31
+          ],
+          "direction": "inout"
+        },
+        "P1.p7": {
+          "bits": [
+            32
+          ],
+          "direction": "inout"
+        },
+        "P1.p8": {
+          "bits": [
+            33
+          ],
+          "direction": "inout"
+        },
+        "P1.p9": {
+          "bits": [
+            34
+          ],
+          "direction": "inout"
+        }
+      }
+    }
+  }
+}

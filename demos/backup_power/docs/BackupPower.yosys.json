@@ -1,0 +1,553 @@
+{
+  "creator": "circuitry 0.x",
+  "modules": {
+    "BackupPower": {
+      "cells": {
+        "C1": {
+          "connections": {
+            "t1": [
+              47
+            ],
+            "t2": [
+              48
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C10": {
+          "connections": {
+            "t1": [
+              45
+            ],
+            "t2": [
+              46
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C12": {
+          "connections": {
+            "t1": [
+              65
+            ],
+            "t2": [
+              66
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C13": {
+          "connections": {
+            "t1": [
+              67
+            ],
+            "t2": [
+              68
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C14": {
+          "connections": {
+            "t1": [
+              69
+            ],
+            "t2": [
+              70
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C15": {
+          "connections": {
+            "t1": [
+              71
+            ],
+            "t2": [
+              72
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C2": {
+          "connections": {
+            "t1": [
+              49
+            ],
+            "t2": [
+              50
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C3": {
+          "connections": {
+            "t1": [
+              51
+            ],
+            "t2": [
+              52
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C4": {
+          "connections": {
+            "t1": [
+              53
+            ],
+            "t2": [
+              54
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C5": {
+          "connections": {
+            "t1": [
+              55
+            ],
+            "t2": [
+              56
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C6": {
+          "connections": {
+            "t1": [
+              57
+            ],
+            "t2": [
+              58
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C7": {
+          "connections": {
+            "t1": [
+              59
+            ],
+            "t2": [
+              60
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C8": {
+          "connections": {
+            "t1": [
+              61
+            ],
+            "t2": [
+              62
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C9": {
+          "connections": {
+            "t1": [
+              63
+            ],
+            "t2": [
+              64
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "D1": {
+          "connections": {
+            "anode": [
+              43
+            ],
+            "cathode": [
+              44
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "anode": "inout",
+            "cathode": "inout"
+          },
+          "type": "D1N5817"
+        },
+        "L1": {
+          "connections": {
+            "t1": [
+              41
+            ],
+            "t2": [
+              42
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Inductor"
+        },
+        "R11": {
+          "connections": {
+            "t1": [
+              77
+            ],
+            "t2": [
+              78
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "40200"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "R16": {
+          "connections": {
+            "t1": [
+              79
+            ],
+            "t2": [
+              80
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "10000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "R6": {
+          "connections": {
+            "t1": [
+              73
+            ],
+            "t2": [
+              74
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "715000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "R7": {
+          "connections": {
+            "t1": [
+              75
+            ],
+            "t2": [
+              76
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "226000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "U1": {
+          "connections": {
+            "EN": [
+              12
+            ],
+            "FLT_B": [
+              13
+            ],
+            "GND": [
+              14
+            ],
+            "IMON": [
+              8
+            ],
+            "IN": [
+              16
+            ],
+            "OUT": [
+              15
+            ],
+            "OV": [
+              9
+            ],
+            "SETI": [
+              7
+            ],
+            "UV": [
+              10
+            ],
+            "dVdT": [
+              11
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "EN": "input",
+            "FLT_B": "output",
+            "GND": "input",
+            "IMON": "output",
+            "IN": "input",
+            "OUT": "output",
+            "OV": "input",
+            "SETI": "input",
+            "UV": "input",
+            "dVdT": "input"
+          },
+          "type": "TPS2660"
+        },
+        "U2": {
+          "connections": {
+            "COMP": [
+              21
+            ],
+            "FB": [
+              20
+            ],
+            "GND": [
+              23
+            ],
+            "ISEN": [
+              22
+            ],
+            "RT": [
+              18
+            ],
+            "SS": [
+              19
+            ],
+            "SW": [
+              24
+            ],
+            "VCC": [
+              17
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "COMP": "input",
+            "FB": "input",
+            "GND": "input",
+            "ISEN": "input",
+            "RT": "input",
+            "SS": "input",
+            "SW": "output",
+            "VCC": "input"
+          },
+          "type": "LM5002"
+        },
+        "U3": {
+          "connections": {
+            "AGND": [
+              28
+            ],
+            "BST": [
+              37
+            ],
+            "FB": [
+              26
+            ],
+            "FPWM": [
+              30
+            ],
+            "NC1": [
+              29
+            ],
+            "NC2": [
+              40
+            ],
+            "PGND_1": [
+              35
+            ],
+            "PGND_2": [
+              36
+            ],
+            "RT": [
+              25
+            ],
+            "SS": [
+              27
+            ],
+            "SW_1": [
+              33
+            ],
+            "SW_2": [
+              34
+            ],
+            "UVLO": [
+              31
+            ],
+            "VCC": [
+              32
+            ],
+            "VIN_1": [
+              38
+            ],
+            "VIN_2": [
+              39
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "AGND": "input",
+            "BST": "input",
+            "FB": "input",
+            "FPWM": "input",
+            "NC1": "input",
+            "NC2": "input",
+            "PGND_1": "input",
+            "PGND_2": "input",
+            "RT": "input",
+            "SS": "input",
+            "SW_1": "output",
+            "SW_2": "output",
+            "UVLO": "input",
+            "VCC": "output",
+            "VIN_1": "input",
+            "VIN_2": "input"
+          },
+          "type": "LM5160"
+        }
+      },
+      "netnames": {},
+      "ports": {
+        "backup_active": {
+          "bits": [
+            6
+          ],
+          "direction": "output"
+        },
+        "bulk_v": {
+          "bits": [
+            5
+          ],
+          "direction": "output"
+        },
+        "flt_b": {
+          "bits": [
+            3
+          ],
+          "direction": "output"
+        },
+        "vin_v": {
+          "bits": [
+            2
+          ],
+          "direction": "input"
+        },
+        "vout_v": {
+          "bits": [
+            4
+          ],
+          "direction": "output"
+        }
+      }
+    }
+  }
+}

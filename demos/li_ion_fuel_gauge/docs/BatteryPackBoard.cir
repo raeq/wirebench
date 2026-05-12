@@ -1,0 +1,13 @@
+.TITLE Li-Ion 1S Battery Pack
+U1 net_3 net_2 net_1 net_3 net_6 net_0 net_3 net_3 nc_0 net_5 nc_1 nc_2 net_4 net_4 nc_3 BQ27546G1
+V_BT1 net_4 net_3 DC 4.2
+R1 net_3 net_3 0.01
+R2 net_6 net_3 10000.0
+R3 net_0 net_5 10000.0
+R4 net_1 net_5 10000.0
+R5 net_2 net_5 10000.0
+C1 net_4 net_3 1e-07
+C2 net_5 net_3 1e-06
+C3 net_4 net_3 1e-07
+.LIB spice-models.lib
+.END

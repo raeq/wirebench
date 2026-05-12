@@ -28,20 +28,17 @@ def name_bom_net(net: LogicalNet, ctx: ExporterContext) -> str:
 register_net_namer('bom', name_bom_net)
 
 
-# Order of refdes prefixes for human-friendly BOM sorting. Common
-# parts come first; everything else falls to the tail in alphabetical
-# order.
-_PREFIX_ORDER = ('A', 'R', 'C', 'L', 'D', 'Q', 'U', 'J', 'P', 'X', 'Y')
+def _sort_key(refdes: str) -> tuple[str, int]:
+    """Natural sort: alphabetic prefix first, then numeric suffix.
 
-
-def _sort_key(refdes: str) -> tuple[int, str, int]:
+    `'C2'` sorts before `'C10'` (numerical within prefix), and `'C9'`
+    sorts before `'D1'` (alphabetical across prefixes).  This produces
+    the canonical BOM ordering seen in industry CAD tools: every C
+    grouped together, every D grouped together, etc., with the groups
+    appearing in alphabetical order."""
     prefix = refdes.rstrip('0123456789')
     number_part = refdes[len(prefix):]
-    try:
-        order = _PREFIX_ORDER.index(prefix)
-    except ValueError:
-        order = len(_PREFIX_ORDER)
-    return (order, prefix, int(number_part) if number_part else 0)
+    return (prefix, int(number_part) if number_part else 0)
 
 
 def render(design: FactorNode, ctx: ExporterContext) -> str:
