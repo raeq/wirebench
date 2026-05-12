@@ -274,74 +274,55 @@ class DigitalThermometer(Circuit):
     dark.  Power pins (VCC/AVCC/AREF/GND on the Arduino, VDD/GND on the
     DHT11) are documented as off-graph supply — the framework's Rail is
     Digital-typed and cannot drive Analog supply pins.
-    """
 
-    __slots__ = ('_arduino', '_dht11', '_display', '_r1', '_vcc', '_gnd')
+    Omits __slots__ so `Circuit.__init__` can auto-collect the parts
+    from `self.__dict__`.
+    """
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self) -> None:
-        arduino = Uno_ThermometerSketch(refdes_number=1)
-        dht11   = DHT11(refdes_number=2)
-        display = Display5641AS(refdes_number=3)
-        r1      = Resistor(220, refdes_number=1)
-        vcc     = Rail(True)    # GND tie for unused 4th-digit anode
-        gnd     = Rail(False)   # GND tie for unused 4th-digit anode
+        self.arduino = Uno_ThermometerSketch(refdes_number=1)
+        self.dht11   = DHT11(refdes_number=2)
+        self.display = Display5641AS(refdes_number=3)
+        self.r1      = Resistor(220, refdes_number=1)
+        self.vcc     = Rail(True)    # GND tie for unused 4th-digit anode
+        self.gnd     = Rail(False)   # GND tie for unused 4th-digit anode
 
         # DHT11 single-bus on Arduino D2 (ATmega PD2).
-        wire(dht11.DATA, arduino.PD2)
+        wire(self.dht11.DATA, self.arduino.PD2)
 
         # Digit 1 common via the 220 Ω current limiter.  Both R1
         # terminals share the node with the source and sink — R1 is in
         # the BOM and on the wire-list but the simulator treats it as a
         # 0-Ω pass-through (a voltage-only solver can't propagate IxR).
-        wire(arduino.PD3,
-             r1.t1, r1.t2,
-             display.DIG_1)
+        wire(self.arduino.PD3,
+             self.r1.t1, self.r1.t2,
+             self.display.DIG_1)
 
         # Remaining digit selects and all eight segment lines.
-        wire(arduino.PD4, display.DIG_2)
-        wire(arduino.PD5, display.DIG_3)
-        wire(arduino.PD6, display.SEG_A)
-        wire(arduino.PD7, display.SEG_B)
-        wire(arduino.PB0, display.SEG_C)
-        wire(arduino.PB1, display.SEG_D)
-        wire(arduino.PB2, display.SEG_E)
-        wire(arduino.PB3, display.SEG_F)
-        wire(arduino.PB4, display.SEG_G)
-        wire(arduino.PB5, display.SEG_DP)
+        wire(self.arduino.PD4, self.display.DIG_2)
+        wire(self.arduino.PD5, self.display.DIG_3)
+        wire(self.arduino.PD6, self.display.SEG_A)
+        wire(self.arduino.PD7, self.display.SEG_B)
+        wire(self.arduino.PB0, self.display.SEG_C)
+        wire(self.arduino.PB1, self.display.SEG_D)
+        wire(self.arduino.PB2, self.display.SEG_E)
+        wire(self.arduino.PB3, self.display.SEG_F)
+        wire(self.arduino.PB4, self.display.SEG_G)
+        wire(self.arduino.PB5, self.display.SEG_DP)
 
         # The fourth display digit is unused — its anode is tied LOW so
         # the digit stays dark regardless of segment drive.
-        wire(gnd.out, display.DIG_4)
+        wire(self.gnd.out, self.display.DIG_4)
 
         super().__init__(
-            factor_nodes=[arduino, dht11, display, r1, vcc, gnd],
             ports={
                 # No port-level inputs: temperature is firmware-model state.
                 # Expose the display's DIG_1 as a visible-state port for
                 # debugging.
-                'display_dig_1': display.DIG_1,
+                'display_dig_1': self.display.DIG_1,
             },
         )
-
-        self._arduino = arduino
-        self._dht11   = dht11
-        self._display = display
-        self._r1      = r1
-        self._vcc     = vcc
-        self._gnd     = gnd
-
-    @property
-    def arduino(self) -> Uno_ThermometerSketch:
-        return self._arduino
-
-    @property
-    def dht11(self) -> DHT11:
-        return self._dht11
-
-    @property
-    def display(self) -> Display5641AS:
-        return self._display
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __call__(self, temperature_c: float, phase: int) -> tuple[str, str, str, str]:
@@ -353,13 +334,13 @@ class DigitalThermometer(Circuit):
         snapshot — exactly one character is lit per call (or none, if
         the phase value selects no driven digit).
         """
-        self._arduino.sketch._temperature_c = float(temperature_c)
-        self._arduino.sketch._phase         = int(phase)
+        self.arduino.sketch._temperature_c = float(temperature_c)
+        self.arduino.sketch._phase         = int(phase)
         self.evaluate()
-        return self._display.glyphs
+        return self.display.glyphs
 
     def __repr__(self) -> str:
-        return f"DigitalThermometer(glyphs={self._display.glyphs!r})"
+        return f"DigitalThermometer(glyphs={self.display.glyphs!r})"
 
 
 def _main() -> None:

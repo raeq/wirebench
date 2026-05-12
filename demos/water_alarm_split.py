@@ -34,7 +34,7 @@ if str(_SRC) not in sys.path:
     sys.path.insert(0, str(_SRC))
 
 from circuitry import (
-    Board, Circuit, Port, mate, wire,
+    Board, Circuit, mate, wire,
     LED, Rail,
     CD4043, CD4069, SN74HC04, ULN2003A,
     run_scenarios,
@@ -129,26 +129,25 @@ class WaterAlarmAssembly(Circuit):
     """Stacked assembly: SensorBoard (A1) mated to ControllerBoard (A2)
     via a 40-pin GPIO header pair.  Surface inputs are the two probe
     voltages on the sensor board; the controller's LEDs are read via
-    component handles."""
+    component handles.
 
-    __slots__ = ('_sensor', '_controller')
+    Omits __slots__ so `Circuit.__init__` can auto-collect the two
+    boards from `self.__dict__`."""
 
     def __init__(self) -> None:
-        self._sensor     = SensorBoard    (refdes_number=1)
-        self._controller = ControllerBoard(refdes_number=2)
+        self.sensor     = SensorBoard    (refdes_number=1)
+        self.controller = ControllerBoard(refdes_number=2)
 
         # Mate the only connector on each board.
-        mate(self._sensor.connectors[0], self._controller.connectors[0])
+        mate(self.sensor.connectors[0], self.controller.connectors[0])
 
         # Board ports are dotted by connector refdes (e.g. 'J1.p3'),
         # so attribute access can't reach them — use the dict form.
-        ports: dict[str, Port] = {
-            'low_probe':  self._sensor.ports['J1.p3'],
-            'high_probe': self._sensor.ports['J1.p4'],
-        }
         super().__init__(
-            factor_nodes=[self._sensor, self._controller],
-            ports=ports,
+            ports={
+                'low_probe':  self.sensor.ports['J1.p3'],
+                'high_probe': self.sensor.ports['J1.p4'],
+            },
         )
 
     def __call__(self, low_probe: float, high_probe: float) -> bool | None:
@@ -156,19 +155,11 @@ class WaterAlarmAssembly(Circuit):
         self._ports['high_probe'].drive(high_probe)
         self.evaluate()
         # Latch state on the controller board.
-        result: bool | None = self._controller.red_led.lit
+        result: bool | None = self.controller.red_led.lit
         return result
 
-    @property
-    def sensor(self) -> SensorBoard:
-        return self._sensor
-
-    @property
-    def controller(self) -> ControllerBoard:
-        return self._controller
-
     def __str__(self) -> str:
-        return f"{self._controller.red_led} | {self._controller.green_led}"
+        return f"{self.controller.red_led} | {self.controller.green_led}"
 
     def __repr__(self) -> str:
         return "WaterAlarmAssembly()"

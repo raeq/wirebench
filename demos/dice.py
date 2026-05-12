@@ -108,72 +108,66 @@ class Dice(Circuit):
                 pressed (CE LOW → counter enabled).  LOW means
                 released (CE HIGH → counter frozen on its current
                 value).
-    """
 
-    __slots__ = (
-        '_ne555', '_cd4017',
-        '_diodes', '_or_a', '_or_c',
-        '_leds',
-        '_r_a', '_r_b', '_r_c', '_r_d',
-        '_r_555a', '_r_555b', '_r_pullup',
-        '_c_timing', '_c_decouple',
-        '_vcc', '_gnd',
-    )
+    Omits __slots__ so `Circuit.__init__` can auto-collect parts from
+    `self.__dict__`.  Attribute-assignment order is significant here:
+    the Q6→RST feedback wire creates a cycle that the topological
+    sort cannot break, so it falls back to declaration order.  Parts
+    are laid out in dataflow order (rails → 555 → counter → OR matrix
+    → opaque parts → LEDs) so each consumer evaluates after its
+    sources in the same pass.
+    """
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self) -> None:
-        ne555  = NE555(refdes_number=1)
-        cd4017 = CD4017(refdes_number=2)
+        # Rails first — supplies are upstream of every signal path.
+        self.gnd = Rail(False)
+        self.vcc = Rail(True)
+
+        # 555 black-box + 4017 counter.  We rename CD4017 to
+        # `self.counter` since it carries the dice face state.
+        self.timer   = NE555(refdes_number=1)
+        self.counter = CD4017(refdes_number=2)
+
+        # Behavioural cells for the diode matrix.  The physical
+        # 1N4148s sit on the same wires but are opaque; these cells
+        # propagate the OR'd signal to the LED drivers.
+        self.or_a = DiodeOR(input_names=('q1', 'q3', 'q5'))
+        self.or_c = DiodeOR(input_names=('q2', 'q3', 'q4'))
 
         # Six 1N4148s for the wired-OR matrix: D1..D3 → LED A,
         # D4..D6 → LED C.
-        d1 = D1N4148(refdes_number=1)   # Q1 → A
-        d2 = D1N4148(refdes_number=2)   # Q3 → A
-        d3 = D1N4148(refdes_number=3)   # Q5 → A
-        d4 = D1N4148(refdes_number=4)   # Q2 → C
-        d5 = D1N4148(refdes_number=5)   # Q3 → C
-        d6 = D1N4148(refdes_number=6)   # Q4 → C
-        diodes = (d1, d2, d3, d4, d5, d6)
-
-        # Seven LEDs — D7 (centre) plus three labelled pairs.
-        led_a  = LED('red', refdes_number=7)   # centre
-        led_b1 = LED('red', refdes_number=8)
-        led_b2 = LED('red', refdes_number=9)
-        led_c1 = LED('red', refdes_number=10)
-        led_c2 = LED('red', refdes_number=11)
-        led_d1 = LED('red', refdes_number=12)
-        led_d2 = LED('red', refdes_number=13)
-        leds = {
-            'A':  led_a,
-            'B1': led_b1, 'B2': led_b2,
-            'C1': led_c1, 'C2': led_c2,
-            'D1': led_d1, 'D2': led_d2,
-        }
+        self.d1 = D1N4148(refdes_number=1)   # Q1 → A
+        self.d2 = D1N4148(refdes_number=2)   # Q3 → A
+        self.d3 = D1N4148(refdes_number=3)   # Q5 → A
+        self.d4 = D1N4148(refdes_number=4)   # Q2 → C
+        self.d5 = D1N4148(refdes_number=5)   # Q3 → C
+        self.d6 = D1N4148(refdes_number=6)   # Q4 → C
 
         # LED current limiters.  The lone centre LED has a slightly
         # higher value so its brightness matches the paired groups.
-        r_a = Resistor(470, refdes_number=1)
-        r_b = Resistor(330, refdes_number=2)
-        r_c = Resistor(330, refdes_number=3)
-        r_d = Resistor(330, refdes_number=4)
+        self.r_a = Resistor(470, refdes_number=1)
+        self.r_b = Resistor(330, refdes_number=2)
+        self.r_c = Resistor(330, refdes_number=3)
+        self.r_d = Resistor(330, refdes_number=4)
 
         # 555 astable timing resistors (R5, R6) and CE pull-up (R7).
-        r_555a   = Resistor(10_000, refdes_number=5)
-        r_555b   = Resistor(10_000, refdes_number=6)
-        r_pullup = Resistor(10_000, refdes_number=7)
+        self.r_555a   = Resistor(10_000, refdes_number=5)
+        self.r_555b   = Resistor(10_000, refdes_number=6)
+        self.r_pullup = Resistor(10_000, refdes_number=7)
 
         # 555 timing cap (C1) and CTRL-pin decoupling cap (C2).
-        c_timing   = Capacitor(0.01e-6, refdes_number=1)
-        c_decouple = Capacitor(0.1e-6,  refdes_number=2)
+        self.c_timing   = Capacitor(0.01e-6, refdes_number=1)
+        self.c_decouple = Capacitor(0.1e-6,  refdes_number=2)
 
-        # Behavioural cells for the diode matrix.  The physical 1N4148s
-        # sit on the same wires but are opaque; these cells are what
-        # propagate the OR'd signal to the LED drivers.
-        or_a = DiodeOR(input_names=('q1', 'q3', 'q5'))
-        or_c = DiodeOR(input_names=('q2', 'q3', 'q4'))
-
-        gnd = Rail(False)
-        vcc = Rail(True)
+        # Seven LEDs — D7 (centre) plus three labelled pairs.
+        self.led_a  = LED('red', refdes_number=7)   # centre
+        self.led_b1 = LED('red', refdes_number=8)
+        self.led_b2 = LED('red', refdes_number=9)
+        self.led_c1 = LED('red', refdes_number=10)
+        self.led_c2 = LED('red', refdes_number=11)
+        self.led_d1 = LED('red', refdes_number=12)
+        self.led_d2 = LED('red', refdes_number=13)
 
         # --------------------------------------------------------------
         # Clock and reset chain
@@ -191,21 +185,18 @@ class Dice(Circuit):
         # (the cycle warning at construction is expected); the
         # DecadeCounter cell settles the Q-to-RST feedback inside a
         # single evaluate() pass.
-        wire(cd4017.Q6, cd4017.RST)
+        wire(self.counter.Q6, self.counter.RST)
 
         # --------------------------------------------------------------
         # Counter outputs feeding the diode-OR matrix
         # --------------------------------------------------------------
-        # Q1 → OR_A.q1 + D1 anode.
-        wire(cd4017.Q1, or_a.q1, d1.anode)
-        # Q2 → OR_C.q2 + D4 anode.
-        wire(cd4017.Q2, or_c.q2, d4.anode)
+        wire(self.counter.Q1, self.or_a.q1, self.d1.anode)
+        wire(self.counter.Q2, self.or_c.q2, self.d4.anode)
         # Q3 splits to both OR matrices (D2 → A, D5 → C).
-        wire(cd4017.Q3,
-             or_a.q3, or_c.q3,
-             d2.anode, d5.anode)
-        # Q5 → OR_A.q5 + D3 anode.
-        wire(cd4017.Q5, or_a.q5, d3.anode)
+        wire(self.counter.Q3,
+             self.or_a.q3, self.or_c.q3,
+             self.d2.anode, self.d5.anode)
+        wire(self.counter.Q5, self.or_a.q5, self.d3.anode)
 
         # --------------------------------------------------------------
         # Direct counter-to-LED drives
@@ -214,36 +205,36 @@ class Dice(Circuit):
         # for roll 6.  R_D is wired as a 0-Ω pass-through (both
         # terminals on the same node) so the simulator can propagate
         # while keeping the resistor in the BOM and on the wirelist.
-        wire(cd4017.Q4,
-             or_c.q4, d6.anode,
-             r_d.t1, r_d.t2,
-             led_d1.anode, led_d2.anode)
+        wire(self.counter.Q4,
+             self.or_c.q4, self.d6.anode,
+             self.r_d.t1, self.r_d.t2,
+             self.led_d1.anode, self.led_d2.anode)
         # CO drives the first diagonal pair (LED B) directly — its
         # active phase covers rolls 2..6, no diodes needed.
-        wire(cd4017.CO,
-             r_b.t1, r_b.t2,
-             led_b1.anode, led_b2.anode)
+        wire(self.counter.CO,
+             self.r_b.t1, self.r_b.t2,
+             self.led_b1.anode, self.led_b2.anode)
 
         # --------------------------------------------------------------
         # Diode-OR outputs to LEDs A and C through current limiters
         # --------------------------------------------------------------
-        wire(or_a.out,
-             d1.cathode, d2.cathode, d3.cathode,
-             r_a.t1, r_a.t2,
-             led_a.anode)
-        wire(or_c.out,
-             d4.cathode, d5.cathode, d6.cathode,
-             r_c.t1, r_c.t2,
-             led_c1.anode, led_c2.anode)
+        wire(self.or_a.out,
+             self.d1.cathode, self.d2.cathode, self.d3.cathode,
+             self.r_a.t1, self.r_a.t2,
+             self.led_a.anode)
+        wire(self.or_c.out,
+             self.d4.cathode, self.d5.cathode, self.d6.cathode,
+             self.r_c.t1, self.r_c.t2,
+             self.led_c1.anode, self.led_c2.anode)
 
         # --------------------------------------------------------------
         # LED cathodes to GND
         # --------------------------------------------------------------
-        wire(gnd.out,
-             led_a.cathode,
-             led_b1.cathode, led_b2.cathode,
-             led_c1.cathode, led_c2.cathode,
-             led_d1.cathode, led_d2.cathode)
+        wire(self.gnd.out,
+             self.led_a.cathode,
+             self.led_b1.cathode, self.led_b2.cathode,
+             self.led_c1.cathode, self.led_c2.cathode,
+             self.led_d1.cathode, self.led_d2.cathode)
 
         # --------------------------------------------------------------
         # Pull-up R7 sits between VCC and CD4017.CE in the hardware.
@@ -257,55 +248,19 @@ class Dice(Circuit):
         # pin) so the supply rail still has a real consumer in the
         # netlist — mirrors the hardware requirement that 555 RESET be
         # held HIGH for normal astable operation.
-        wire(vcc.out, ne555.RESET)
+        wire(self.vcc.out, self.timer.RESET)
 
-        # Factor-node order matters: the Q6→RST feedback wire creates a
-        # cycle that the topological sort cannot break, so it falls
-        # back to declaration order.  Lay them out in dataflow order
-        # (rails → 555 → counter → OR matrix → opaque parts → LEDs)
-        # so that each consumer's evaluate runs after its sources have
-        # driven their outputs in the same pass.
         super().__init__(
-            factor_nodes=[
-                vcc, gnd,
-                ne555, cd4017,
-                or_a, or_c,
-                d1, d2, d3, d4, d5, d6,
-                r_a, r_b, r_c, r_d, r_555a, r_555b, r_pullup,
-                c_timing, c_decouple,
-                led_a, led_b1, led_b2, led_c1, led_c2, led_d1, led_d2,
-            ],
             ports={
-                'tick':   cd4017.CLK,
-                'button': cd4017.CE,
-                'q':      cd4017.Q0,   # exposed for tracing
+                'tick':   self.counter.CLK,
+                'button': self.counter.CE,
+                'q':      self.counter.Q0,   # exposed for tracing
             },
         )
-
-        self._ne555       = ne555
-        self._cd4017      = cd4017
-        self._diodes      = diodes
-        self._or_a        = or_a
-        self._or_c        = or_c
-        self._leds        = leds
-        self._r_a, self._r_b, self._r_c, self._r_d = r_a, r_b, r_c, r_d
-        self._r_555a, self._r_555b = r_555a, r_555b
-        self._r_pullup    = r_pullup
-        self._c_timing    = c_timing
-        self._c_decouple  = c_decouple
-        self._vcc, self._gnd = vcc, gnd
 
     # ------------------------------------------------------------------
     # Public read accessors
     # ------------------------------------------------------------------
-
-    @property
-    def counter(self) -> CD4017:
-        return self._cd4017
-
-    @property
-    def leds(self) -> dict[str, LED]:
-        return self._leds
 
     @property
     def face(self) -> int | None:
@@ -313,14 +268,18 @@ class Dice(Circuit):
         output.  Returns None before any tick has been applied (no
         single Q output drives HIGH).  The Q-to-roll mapping is the
         "starts at 2" sequence the project uses to save diodes."""
-        count = self._cd4017.count
-        return _Q_TO_ROLL.get(count)
+        return _Q_TO_ROLL.get(self.counter.count)
 
     @property
     def lit_leds(self) -> tuple[str, ...]:
         """Names of LEDs currently lit, in canonical order."""
-        order = ('A', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2')
-        return tuple(name for name in order if self._leds[name].lit)
+        pairs = (
+            ('A',  self.led_a),
+            ('B1', self.led_b1), ('B2', self.led_b2),
+            ('C1', self.led_c1), ('C2', self.led_c2),
+            ('D1', self.led_d1), ('D2', self.led_d2),
+        )
+        return tuple(name for name, led in pairs if led.lit)
 
     # ------------------------------------------------------------------
     # Drive interface

@@ -51,50 +51,53 @@ class WaterAlarm(Circuit):
     the graph acyclic.
 
     Leave unused CMOS inputs tied to GND or Vcc — never floating.
+
+    Composite Circuits omit __slots__ so that `Circuit.__init__` can
+    auto-collect parts from `self.__dict__` (insertion order = the
+    order of dataflow-sensitive fallback evaluation, but this design
+    has no feedback cycle, so order is irrelevant).
     """
 
-    __slots__ = ('_red_led', '_green_led')
-
     def __init__(self) -> None:
-        sensor    = ULN2003A(refdes_number=1)
-        sn74hc04  = SN74HC04(refdes_number=2)
-        cd4069    = CD4069(refdes_number=3)
-        cd4043    = CD4043(refdes_number=4)
-        red_led   = LED('red',   refdes_number=1)
-        green_led = LED('green', refdes_number=2)
-        gnd       = Rail(False)   # GND tie for unused CMOS inputs and unused latch cells
-        vcc       = Rail(True)    # Vcc tie for the CD4043's OE pin
+        # Parts — assigning to `self.x` puts them in `__dict__` so the
+        # base Circuit will collect them when we call super().__init__()
+        # below.  Public names so consumers and tests can reach them
+        # directly (no `_foo` plus `@property def foo` boilerplate).
+        self.sensor    = ULN2003A(refdes_number=1)
+        self.sn74hc04  = SN74HC04(refdes_number=2)
+        self.cd4069    = CD4069(refdes_number=3)
+        self.cd4043    = CD4043(refdes_number=4)
+        self.red_led   = LED('red',   refdes_number=1)
+        self.green_led = LED('green', refdes_number=2)
+        self.gnd       = Rail(False)   # GND tie for unused CMOS inputs and unused latch cells
+        self.vcc       = Rail(True)    # Vcc tie for the CD4043's OE pin
 
-        wire(sensor.out_1,   cd4043.s_1)
-        wire(sensor.out_2,   sn74hc04.a_1)
-        wire(sn74hc04.y_1,   cd4043.r_1)
-        wire(cd4043.q_1,     red_led.anode)
+        wire(self.sensor.out_1,   self.cd4043.s_1)
+        wire(self.sensor.out_2,   self.sn74hc04.a_1)
+        wire(self.sn74hc04.y_1,   self.cd4043.r_1)
+        wire(self.cd4043.q_1,     self.red_led.anode)
         # /Q is not a CD4043 package pin — derive it via gate 1 of the CD4069.
-        wire(cd4043.q_1,     cd4069.a_1)
-        wire(cd4069.y_1,     green_led.anode)
+        wire(self.cd4043.q_1,     self.cd4069.a_1)
+        wire(self.cd4069.y_1,     self.green_led.anode)
         # CD4043 OE must be tied HIGH for outputs to be enabled.
-        wire(vcc.out,        cd4043.oe)
+        wire(self.vcc.out,        self.cd4043.oe)
         # CMOS inputs must never float — tie all unused inverter inputs
         # LOW (5 unused gates on the SN74HC04, 5 on the CD4069), and the
         # unused latch S/R inputs LOW (latches 2..4 sit in 'hold').
-        wire(gnd.out,
-             sn74hc04.a_2, sn74hc04.a_3, sn74hc04.a_4,
-             sn74hc04.a_5, sn74hc04.a_6,
-             cd4069.a_2, cd4069.a_3, cd4069.a_4,
-             cd4069.a_5, cd4069.a_6,
-             cd4043.s_2, cd4043.r_2,
-             cd4043.s_3, cd4043.r_3,
-             cd4043.s_4, cd4043.r_4)
+        wire(self.gnd.out,
+             self.sn74hc04.a_2, self.sn74hc04.a_3, self.sn74hc04.a_4,
+             self.sn74hc04.a_5, self.sn74hc04.a_6,
+             self.cd4069.a_2, self.cd4069.a_3, self.cd4069.a_4,
+             self.cd4069.a_5, self.cd4069.a_6,
+             self.cd4043.s_2, self.cd4043.r_2,
+             self.cd4043.s_3, self.cd4043.r_3,
+             self.cd4043.s_4, self.cd4043.r_4)
 
         super().__init__(
-            factor_nodes=[sensor, sn74hc04, cd4069, cd4043, red_led, green_led, gnd, vcc],
-            ports={'low_probe':  sensor.in_1,
-                   'high_probe': sensor.in_2,
-                   'state':      cd4043.q_1},
+            ports={'low_probe':  self.sensor.in_1,
+                   'high_probe': self.sensor.in_2,
+                   'state':      self.cd4043.q_1},
         )
-
-        self._red_led   = red_led
-        self._green_led = green_led
 
     def __call__(self, low_probe: float, high_probe: float) -> bool | None:
         self._ports['low_probe'].drive(low_probe)
@@ -104,19 +107,11 @@ class WaterAlarm(Circuit):
         return result
 
     @property
-    def red_led(self) -> LED:
-        return self._red_led
-
-    @property
-    def green_led(self) -> LED:
-        return self._green_led
-
-    @property
     def state(self) -> bool | None:
         return self._ports['state'].value
 
     def __str__(self) -> str:
-        return f"{self._red_led} | {self._green_led}"
+        return f"{self.red_led} | {self.green_led}"
 
     def __repr__(self) -> str:
         return "WaterAlarm()"

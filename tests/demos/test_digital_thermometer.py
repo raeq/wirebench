@@ -85,8 +85,8 @@ def test_arduino_pd3_node_includes_r1_and_display_dig_1(thermometer):
     """R1 is on the wire-list between PD3 and DIG_1 (BOM-faithful)."""
     pd3   = thermometer.arduino.ports['PD3']
     dig_1 = thermometer.display.ports['DIG_1']
-    t1    = thermometer._r1.ports['t1']
-    t2    = thermometer._r1.ports['t2']
+    t1    = thermometer.r1.ports['t1']
+    t2    = thermometer.r1.ports['t2']
     # All four share the same node.
     assert pd3.node is dig_1.node
     assert t1.node  is pd3.node

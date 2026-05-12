@@ -30,13 +30,67 @@ class Circuit(FactorNode):
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(
         self,
-        factor_nodes: list[FactorNode],
-        ports: dict[str, Port],
+        factor_nodes: list[FactorNode] | None = None,
+        ports: dict[str, Port] | None = None,
     ) -> None:
+        # Auto-collect: if the subclass omits __slots__ and just assigns
+        # parts to `self.x = Y(...)` in its __init__ before calling
+        # super().__init__(), `factor_nodes=None` scans `self.__dict__`
+        # for FactorNode-typed values (one level of tuple / list / dict
+        # unpacking, so a grouped `self.diodes = (d1, …, d6)` still
+        # works).  Insertion order in the dict becomes the order in
+        # `_factor_nodes`, which the topological-sort fallback relies
+        # on when a circuit has a feedback cycle — assign parts in
+        # dataflow order if you have one.
+        if factor_nodes is None:
+            factor_nodes = self._auto_collect_factor_nodes()
+        if ports is None:
+            ports = {}
         self._factor_nodes = factor_nodes
         self._ports        = ports
         self._validate(factor_nodes)
         self._eval_order   = self._topological_sort(factor_nodes)
+
+    def _auto_collect_factor_nodes(self) -> list[FactorNode]:
+        """Collect FactorNode-typed attributes from `self.__dict__`.
+
+        Subclasses that omit `__slots__` can rely on this to populate
+        `_factor_nodes` automatically.  Visits each instance attribute
+        in insertion order: a FactorNode value is added directly;
+        tuples, lists, and dicts have their elements (or values for
+        dicts) scanned one level deep so that grouped collections
+        still contribute their parts.  Duplicates (same `id`) are
+        kept only on first encounter.
+        """
+        try:
+            instance_dict = self.__dict__
+        except AttributeError:
+            raise TypeError(
+                f"{type(self).__name__}.__init__: factor_nodes=None "
+                "requires an instance __dict__ — omit __slots__ on "
+                "composite Circuit subclasses, or pass factor_nodes "
+                "explicitly."
+            )
+        collected: list[FactorNode] = []
+        seen: set[int] = set()
+
+        def _add(obj: object) -> None:
+            if isinstance(obj, FactorNode) and id(obj) not in seen:
+                seen.add(id(obj))
+                collected.append(obj)
+
+        for value in instance_dict.values():
+            if isinstance(value, FactorNode):
+                _add(value)
+            elif isinstance(value, (list, tuple)):
+                for item in value:
+                    _add(item)
+            elif isinstance(value, dict):
+                for item in value.values():
+                    _add(item)
+            # Anything else (strings, ints, etc.) is silently ignored —
+            # the type check is the filter.
+        return collected
 
     # -----------------------------------------------------------------
     # Validation
