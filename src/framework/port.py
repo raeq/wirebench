@@ -67,6 +67,9 @@ class Port:
                 f"'{self.domain.name}', node '{node.name}' is in domain '{node.domain.name}'"
             )
         self._node = node
+        # Register on the node so orphan-port detection can walk the
+        # wiring graph from any port to its node's full membership.
+        node._attach(self)
 
     def drive(self, value: Any) -> None:
         # None is preserved as the high-impedance / undriven sentinel.

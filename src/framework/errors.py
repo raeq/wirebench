@@ -256,3 +256,13 @@ class UnknownPortError(UsageError, ValueError):
     """An internal API was given a port that doesn't belong to the
     object it was passed to — e.g. `pin.other_face(stranger_port)`
     where `stranger_port` is not one of this pin's two faces."""
+
+
+class OrphanWireError(UsageError, ValueError):
+    """A wire crosses the boundary of the enclosing circuit — joining
+    one of the circuit's `factor_nodes` to a component that wasn't
+    included.  The orphan is either a local variable (auto-collect
+    couldn't see it because it wasn't stored as `self.<name>`) or an
+    explicit `factor_nodes=[...]` list that omitted it.  The
+    framework can validate or evaluate the orphan's contribution to
+    the circuit, so it refuses to build the composite."""

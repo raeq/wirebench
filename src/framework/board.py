@@ -6,7 +6,7 @@ from pydantic import Field, validate_call
 
 from framework.circuit import Circuit
 from framework.connector import Connector
-from framework.errors import RefdesError
+from framework.errors import CompositeShapeError, RefdesError
 from framework.factor import FactorNode
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
@@ -53,9 +53,14 @@ class Board(Circuit):
         # parts as `self.x = Y(...)` before calling super().__init__(),
         # `components=None` scans `self.__dict__` for FactorNode-typed
         # values (one level of tuple/list/dict unpacking).  Same rules
-        # as Circuit's auto-collect.
+        # as Circuit's auto-collect — including Rule 1 (empty auto-collect
+        # → teaching error).  Board fires Rule 1 itself because it
+        # passes the resolved list to Circuit explicitly, which would
+        # otherwise bypass Circuit's auto-collect path.
         if components is None:
             components = self._auto_collect_factor_nodes()
+            if not components:
+                raise CompositeShapeError(self._empty_circuit_message())
 
         self._connectors    = tuple(c for c in components if isinstance(c, Connector))
 

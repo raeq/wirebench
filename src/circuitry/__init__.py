@@ -42,7 +42,7 @@ from framework.errors import (
     RendererRegistryError, DuplicateRendererError, RendererNotFoundError,
     # API-usage errors.
     UsageError, WiredChipCallError, AmbiguousPinNameError,
-    CompositeShapeError, UnknownPortError,
+    CompositeShapeError, UnknownPortError, OrphanWireError,
 )
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
@@ -94,5 +94,5 @@ __all__ = [
     'FormatError', 'SaveError', 'LoadError',
     'RendererRegistryError', 'DuplicateRendererError', 'RendererNotFoundError',
     'UsageError', 'WiredChipCallError', 'AmbiguousPinNameError',
-    'CompositeShapeError', 'UnknownPortError',
+    'CompositeShapeError', 'UnknownPortError', 'OrphanWireError',
 ]

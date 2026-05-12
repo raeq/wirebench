@@ -95,4 +95,4 @@ def wire(*ports: Port) -> None:
         node = Node(name, domain)
     for p in ports:
         if p.node is None:
-            p.connect(node)
+            p.connect(node)   # connect() registers the port with the node

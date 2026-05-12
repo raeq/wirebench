@@ -7,7 +7,7 @@ import networkx as nx  # type: ignore[import-untyped]
 from pydantic import validate_call
 
 from framework.errors import (
-    CompositeShapeError, FloatingNetError, RefdesError,
+    CompositeShapeError, FloatingNetError, OrphanWireError, RefdesError,
     ShortCircuitError, UnconnectedPinError,
 )
 from framework.factor import FactorNode
@@ -46,14 +46,86 @@ class Circuit(FactorNode):
         # `_factor_nodes`, which the topological-sort fallback relies
         # on when a circuit has a feedback cycle — assign parts in
         # dataflow order if you have one.
+        # Distinguish "user asked for an empty circuit" (explicit []) from
+        # "auto-collect ran and found nothing" (None → []).  Only the
+        # second case triggers Rule 1; the first is a legitimate
+        # opt-out used in framework-level tests.
         if factor_nodes is None:
             factor_nodes = self._auto_collect_factor_nodes()
+            if not factor_nodes:
+                raise CompositeShapeError(self._empty_circuit_message())
         if ports is None:
             ports = {}
         self._factor_nodes = factor_nodes
         self._ports        = ports
         self._validate(factor_nodes)
+        # Rule 2 runs regardless of how factor_nodes was obtained: an
+        # incomplete explicit list is just as wrong as a silently-empty
+        # auto-collected one.
+        self._validate_no_orphan_ports(factor_nodes)
         self._eval_order   = self._topological_sort(factor_nodes)
+
+    def _empty_circuit_message(self) -> str:
+        """Teaching message for the empty-auto-collect (Rule 1) case."""
+        cls = type(self).__name__
+        return (
+            f"{cls} has no factor_nodes after auto-collection. "
+            f"Did you forget to store components as `self.<name>` "
+            f"attributes? The canonical pattern is:\n\n"
+            f"    class {cls}(Circuit):\n"
+            f"        def __init__(self) -> None:\n"
+            f"            self.r1 = Resistor(330, refdes_number=1)\n"
+            f"            # …\n"
+            f"            wire(self.r1.t1, …)\n"
+            f"            super().__init__()\n\n"
+            f"If you really wanted an empty circuit, pass "
+            f"`factor_nodes=[]` explicitly."
+        )
+
+    def _validate_no_orphan_ports(self, factor_nodes: list[FactorNode]) -> None:
+        """Rule 2: every port wired to a port we know about must itself
+        belong to a factor_node we know about.
+
+        Catches the case where the developer used `self.x` for some
+        components and local variables for others, leaving wires that
+        span the framework's awareness boundary.  Runs whether
+        `factor_nodes` was auto-collected or passed explicitly — an
+        explicit-but-incomplete list is just as broken as a
+        silently-incomplete auto-collected one.
+        """
+        # Collect every port the framework knows about, including each
+        # Pin's external and internal faces (Pins live inside chips and
+        # connectors, so a port we know about may belong to a Pin
+        # transitively).
+        known_ports: set[int] = set()
+        for fn in factor_nodes:
+            for port in fn.ports.values():
+                known_ports.add(id(port))
+            # Pin's external port is what user code sees; the internal
+            # face is wired inside the chip and we know about it too.
+            for pin in getattr(fn, 'pins', ()):
+                known_ports.add(id(pin.external))
+                known_ports.add(id(pin.internal))
+
+        for fn in factor_nodes:
+            for port_name, port in fn.ports.items():
+                if port.node is None:
+                    continue
+                for sibling in port.node.ports:
+                    if id(sibling) in known_ports:
+                        continue
+                    refdes = (getattr(fn, 'refdes', None)
+                              or type(fn).__name__)
+                    raise OrphanWireError(
+                        f"Port '{sibling.name}' is wired into this "
+                        f"{type(self).__name__} but its owning component "
+                        f"is not in factor_nodes.  The wire joins this "
+                        f"orphan to '{port_name}' on {refdes}.  Store "
+                        f"the orphan as `self.<name> = …` so the "
+                        f"framework auto-collects it, or pass "
+                        f"`factor_nodes=[…]` explicitly listing every "
+                        f"part."
+                    )
 
     def _auto_collect_factor_nodes(self) -> list[FactorNode]:
         """Collect FactorNode-typed attributes from `self.__dict__`.
