@@ -87,3 +87,29 @@ class FactorNode(metaclass=ABCMeta):
                 f"by an enclosing circuit ({', '.join(wired)}); drive via "
                 f"the parent's evaluate() instead."
             )
+
+    def __getattr__(self, name: str) -> Port:
+        """Proxy port lookup as attribute access.
+
+        `chip.PD3` resolves to `chip.ports['PD3']` when `PD3` is a port
+        name and no real attribute by that name exists.  Lets wire()
+        calls read as `wire(arduino.PD3, display.DIG_1)` instead of
+        `wire(arduino.ports['PD3'], display.ports['DIG_1'])`.
+
+        Only fires when normal attribute lookup misses, so slots,
+        properties, methods, and class attributes are untouched.
+        Private names (leading `_`) and `ports` itself short-circuit
+        so that pickle, copy, and pydantic introspection don't trip
+        the proxy and so that a missing `_ports` during __init__
+        doesn't recurse.
+        """
+        if name.startswith('_') or name == 'ports':
+            raise AttributeError(name)
+        try:
+            ports = self.ports
+        except Exception:
+            raise AttributeError(name)
+        try:
+            return ports[name]
+        except (KeyError, TypeError):
+            raise AttributeError(name)

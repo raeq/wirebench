@@ -18,14 +18,12 @@ _SRC = Path(__file__).resolve().parent.parent / 'src'
 if str(_SRC) not in sys.path:
     sys.path.insert(0, str(_SRC))
 
-from framework.circuit import Circuit
-from framework.wire import wire
-from components.chips.uln2003a import ULN2003A
-from components.chips.sn74hc04 import SN74HC04
-from components.chips.cd4069 import CD4069
-from components.chips.cd4043 import CD4043
-from components.passives.led import LED
-from components.passives.rail import Rail
+from circuitry import (
+    Circuit, wire,
+    LED, Rail,
+    ULN2003A, SN74HC04, CD4069, CD4043,
+    run_scenarios,
+)
 
 
 class WaterAlarm(Circuit):
@@ -67,32 +65,32 @@ class WaterAlarm(Circuit):
         gnd       = Rail(False)   # GND tie for unused CMOS inputs and unused latch cells
         vcc       = Rail(True)    # Vcc tie for the CD4043's OE pin
 
-        wire(sensor.ports['out_1'],  cd4043.ports['s_1'])
-        wire(sensor.ports['out_2'],  sn74hc04.ports['a_1'])
-        wire(sn74hc04.ports['y_1'],  cd4043.ports['r_1'])
-        wire(cd4043.ports['q_1'],    red_led.ports['anode'])
+        wire(sensor.out_1,   cd4043.s_1)
+        wire(sensor.out_2,   sn74hc04.a_1)
+        wire(sn74hc04.y_1,   cd4043.r_1)
+        wire(cd4043.q_1,     red_led.anode)
         # /Q is not a CD4043 package pin — derive it via gate 1 of the CD4069.
-        wire(cd4043.ports['q_1'],    cd4069.ports['a_1'])
-        wire(cd4069.ports['y_1'],    green_led.ports['anode'])
+        wire(cd4043.q_1,     cd4069.a_1)
+        wire(cd4069.y_1,     green_led.anode)
         # CD4043 OE must be tied HIGH for outputs to be enabled.
-        wire(vcc.ports['out'], cd4043.ports['oe'])
+        wire(vcc.out,        cd4043.oe)
         # CMOS inputs must never float — tie all unused inverter inputs
         # LOW (5 unused gates on the SN74HC04, 5 on the CD4069), and the
         # unused latch S/R inputs LOW (latches 2..4 sit in 'hold').
-        wire(gnd.ports['out'],
-             sn74hc04.ports['a_2'], sn74hc04.ports['a_3'], sn74hc04.ports['a_4'],
-             sn74hc04.ports['a_5'], sn74hc04.ports['a_6'],
-             cd4069.ports['a_2'], cd4069.ports['a_3'], cd4069.ports['a_4'],
-             cd4069.ports['a_5'], cd4069.ports['a_6'],
-             cd4043.ports['s_2'], cd4043.ports['r_2'],
-             cd4043.ports['s_3'], cd4043.ports['r_3'],
-             cd4043.ports['s_4'], cd4043.ports['r_4'])
+        wire(gnd.out,
+             sn74hc04.a_2, sn74hc04.a_3, sn74hc04.a_4,
+             sn74hc04.a_5, sn74hc04.a_6,
+             cd4069.a_2, cd4069.a_3, cd4069.a_4,
+             cd4069.a_5, cd4069.a_6,
+             cd4043.s_2, cd4043.r_2,
+             cd4043.s_3, cd4043.r_3,
+             cd4043.s_4, cd4043.r_4)
 
         super().__init__(
             factor_nodes=[sensor, sn74hc04, cd4069, cd4043, red_led, green_led, gnd, vcc],
-            ports={'low_probe':  sensor.ports['in_1'],
-                   'high_probe': sensor.ports['in_2'],
-                   'state':      cd4043.ports['q_1']},
+            ports={'low_probe':  sensor.in_1,
+                   'high_probe': sensor.in_2,
+                   'state':      cd4043.q_1},
         )
 
         self._red_led   = red_led
@@ -113,6 +111,10 @@ class WaterAlarm(Circuit):
     def green_led(self) -> LED:
         return self._green_led
 
+    @property
+    def state(self) -> bool | None:
+        return self._ports['state'].value
+
     def __str__(self) -> str:
         return f"{self._red_led} | {self._green_led}"
 
@@ -120,52 +122,29 @@ class WaterAlarm(Circuit):
         return "WaterAlarm()"
 
 
-def _main() -> None:
-    """Run a five-step level scenario and print a per-chip signal trace."""
-    from framework.refdes import RefdesBearing
-
-    VCC, GND = 5.0, 0.0
-    wa = WaterAlarm()
-
-    print("Bill of materials:")
-    chips = [fn for fn in wa._factor_nodes if isinstance(fn, RefdesBearing)]
-    for fn in chips:
-        print(f"  {fn.refdes:5s} {type(fn).__name__}")
-    print()
-
-    scenarios = [
-        ("initial — tank empty",                GND, GND),
-        ("water touches low probe (held set)",  VCC, GND),
-        ("water reaches high probe (reset)",    VCC, VCC),
-        ("water recedes below high (held clr)", VCC, GND),
-        ("water gone again (set)",              GND, GND),
-    ]
-
-    def chip_state(fn: object) -> str:
-        cls = type(fn).__name__
-        if cls == 'ULN2003A':
-            outs = fn.output_levels  # type: ignore[attr-defined]
-            return _level(outs[0])
-        if cls in ('SN74HC04', 'CD4069'):
-            return _level(fn.ports['y_1'].value)  # type: ignore[attr-defined]
-        if cls == 'CD4043':
-            return _level(fn.ports['q_1'].value)  # type: ignore[attr-defined]
-        if cls == 'LED':
-            lit = fn.lit  # type: ignore[attr-defined]
-            return 'on ' if lit else 'off' if lit is False else ' ? '
-        return '?'
-
-    hdr = '  '.join(f'{c.refdes:>4s}' for c in chips)
-    print(f'{"event":40s} | low | high | {hdr} | state')
-    print('-' * (40 + 14 + 4 * len(chips) + 6 + 9))
-    for label, low, high in scenarios:
-        state = wa(low, high)
-        cells = '  '.join(f'{chip_state(c):>4s}' for c in chips)
-        print(f'{label:40s} | {low:>3.1f} | {high:>4.1f} | {cells} | {state}')
-
-
 def _level(v: bool | None) -> str:
     return 'H' if v else 'L' if v is False else '?'
+
+
+def _main() -> None:
+    VCC, GND = 5.0, 0.0
+    run_scenarios(
+        WaterAlarm(),
+        scenarios=[
+            ("initial — tank empty",                  (GND, GND)),
+            ("water touches low probe (held set)",    (VCC, GND)),
+            ("water reaches high probe (reset)",      (VCC, VCC)),
+            ("water recedes below high (held clr)",   (VCC, GND)),
+            ("water gone again (set)",                (GND, GND)),
+        ],
+        columns=[
+            ("low",   lambda c, a, k: f"{a[0]:.1f}"),
+            ("high",  lambda c, a, k: f"{a[1]:.1f}"),
+            ("red",   lambda c, a, k: 'on'  if c.red_led.lit  else 'off' if c.red_led.lit  is False else '?'),
+            ("green", lambda c, a, k: 'on'  if c.green_led.lit else 'off' if c.green_led.lit is False else '?'),
+            ("state", lambda c, a, k: _level(c.state)),
+        ],
+    )
 
 
 if __name__ == '__main__':

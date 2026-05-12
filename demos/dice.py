@@ -78,17 +78,15 @@ if str(_SRC) not in sys.path:
 
 from pydantic import validate_call
 
-from framework.circuit import Circuit
-from framework.wire import wire
-
-from components.chips.ne555 import NE555
-from components.chips.cd4017 import CD4017
+from circuitry import (
+    Circuit, wire,
+    NE555, CD4017, D1N4148,
+    Capacitor, LED, Rail, Resistor,
+    run_scenarios,
+)
+# DiodeOR is a chip-internal concept cell, not part of the consumer-
+# facing surface.  Import via its full path to flag the boundary cross.
 from components.chips.concepts.diode_or import DiodeOR
-from components.diodes.d1n4148 import D1N4148
-from components.passives.capacitor import Capacitor
-from components.passives.led import LED
-from components.passives.rail import Rail
-from components.passives.resistor import Resistor
 
 
 # Map from active CD4017 output to dice face value, encoding the
@@ -193,21 +191,21 @@ class Dice(Circuit):
         # (the cycle warning at construction is expected); the
         # DecadeCounter cell settles the Q-to-RST feedback inside a
         # single evaluate() pass.
-        wire(cd4017.ports['Q6'], cd4017.ports['RST'])
+        wire(cd4017.Q6, cd4017.RST)
 
         # --------------------------------------------------------------
         # Counter outputs feeding the diode-OR matrix
         # --------------------------------------------------------------
         # Q1 → OR_A.q1 + D1 anode.
-        wire(cd4017.ports['Q1'], or_a.ports['q1'], d1.ports['anode'])
+        wire(cd4017.Q1, or_a.q1, d1.anode)
         # Q2 → OR_C.q2 + D4 anode.
-        wire(cd4017.ports['Q2'], or_c.ports['q2'], d4.ports['anode'])
+        wire(cd4017.Q2, or_c.q2, d4.anode)
         # Q3 splits to both OR matrices (D2 → A, D5 → C).
-        wire(cd4017.ports['Q3'],
-             or_a.ports['q3'], or_c.ports['q3'],
-             d2.ports['anode'], d5.ports['anode'])
+        wire(cd4017.Q3,
+             or_a.q3, or_c.q3,
+             d2.anode, d5.anode)
         # Q5 → OR_A.q5 + D3 anode.
-        wire(cd4017.ports['Q5'], or_a.ports['q5'], d3.ports['anode'])
+        wire(cd4017.Q5, or_a.q5, d3.anode)
 
         # --------------------------------------------------------------
         # Direct counter-to-LED drives
@@ -216,36 +214,36 @@ class Dice(Circuit):
         # for roll 6.  R_D is wired as a 0-Ω pass-through (both
         # terminals on the same node) so the simulator can propagate
         # while keeping the resistor in the BOM and on the wirelist.
-        wire(cd4017.ports['Q4'],
-             or_c.ports['q4'], d6.ports['anode'],
-             r_d.ports['t1'], r_d.ports['t2'],
-             led_d1.ports['anode'], led_d2.ports['anode'])
+        wire(cd4017.Q4,
+             or_c.q4, d6.anode,
+             r_d.t1, r_d.t2,
+             led_d1.anode, led_d2.anode)
         # CO drives the first diagonal pair (LED B) directly — its
         # active phase covers rolls 2..6, no diodes needed.
-        wire(cd4017.ports['CO'],
-             r_b.ports['t1'], r_b.ports['t2'],
-             led_b1.ports['anode'], led_b2.ports['anode'])
+        wire(cd4017.CO,
+             r_b.t1, r_b.t2,
+             led_b1.anode, led_b2.anode)
 
         # --------------------------------------------------------------
         # Diode-OR outputs to LEDs A and C through current limiters
         # --------------------------------------------------------------
-        wire(or_a.ports['out'],
-             d1.ports['cathode'], d2.ports['cathode'], d3.ports['cathode'],
-             r_a.ports['t1'], r_a.ports['t2'],
-             led_a.ports['anode'])
-        wire(or_c.ports['out'],
-             d4.ports['cathode'], d5.ports['cathode'], d6.ports['cathode'],
-             r_c.ports['t1'], r_c.ports['t2'],
-             led_c1.ports['anode'], led_c2.ports['anode'])
+        wire(or_a.out,
+             d1.cathode, d2.cathode, d3.cathode,
+             r_a.t1, r_a.t2,
+             led_a.anode)
+        wire(or_c.out,
+             d4.cathode, d5.cathode, d6.cathode,
+             r_c.t1, r_c.t2,
+             led_c1.anode, led_c2.anode)
 
         # --------------------------------------------------------------
         # LED cathodes to GND
         # --------------------------------------------------------------
-        wire(gnd.ports['out'],
-             led_a.ports['cathode'],
-             led_b1.ports['cathode'], led_b2.ports['cathode'],
-             led_c1.ports['cathode'], led_c2.ports['cathode'],
-             led_d1.ports['cathode'], led_d2.ports['cathode'])
+        wire(gnd.out,
+             led_a.cathode,
+             led_b1.cathode, led_b2.cathode,
+             led_c1.cathode, led_c2.cathode,
+             led_d1.cathode, led_d2.cathode)
 
         # --------------------------------------------------------------
         # Pull-up R7 sits between VCC and CD4017.CE in the hardware.
@@ -259,7 +257,7 @@ class Dice(Circuit):
         # pin) so the supply rail still has a real consumer in the
         # netlist — mirrors the hardware requirement that 555 RESET be
         # held HIGH for normal astable operation.
-        wire(vcc.ports['out'], ne555.ports['RESET'])
+        wire(vcc.out, ne555.RESET)
 
         # Factor-node order matters: the Q6→RST feedback wire creates a
         # cycle that the topological sort cannot break, so it falls
@@ -278,9 +276,9 @@ class Dice(Circuit):
                 led_a, led_b1, led_b2, led_c1, led_c2, led_d1, led_d2,
             ],
             ports={
-                'tick':   cd4017.ports['CLK'],
-                'button': cd4017.ports['CE'],
-                'q':      cd4017.ports['Q0'],   # exposed for tracing
+                'tick':   cd4017.CLK,
+                'button': cd4017.CE,
+                'q':      cd4017.Q0,   # exposed for tracing
             },
         )
 
@@ -372,47 +370,27 @@ class Dice(Circuit):
 def _main() -> None:
     """Walk through a few button-press scenarios and print the dice
     face and a trace of which LEDs are lit at each step."""
-    from framework.refdes import RefdesBearing
-
     dice = Dice()
-
-    print("Bill of materials:")
-    parts = [fn for fn in dice._factor_nodes if isinstance(fn, RefdesBearing)]
-    for fn in parts:
-        kind = type(fn).__name__
-        extra = ''
-        # Show value annotations on passives so the BOM reads naturally.
-        if kind == 'Resistor':
-            extra = f"  ({float(fn.ohms):.0f} Ω)"        # type: ignore[attr-defined]
-        elif kind == 'Capacitor':
-            extra = f"  ({float(fn.farads):.3g} F)"     # type: ignore[attr-defined]
-        elif kind == 'LED':
-            extra = f"  ({fn.color})"                    # type: ignore[attr-defined]
-        print(f"  {fn.refdes:5s} {kind}{extra}")
-    print()
-
-    scenarios: list[tuple[str, bool, int]] = [
-        ('release button (initial)',  False, 0),
-        ('press and roll 1 tick',     True,  1),
-        ('keep pressed, roll 4 more', True,  4),
-        ('hold for one more tick',    True,  1),
-        ('release — freeze',          False, 1),
-        ('button up, more ticks (no advance)', False, 5),
-        ('press again, roll 3',       True,  3),
-        ('release on roll',           False, 1),
-    ]
-
-    print(f"{'event':40s} | btn | ticks | count | face | LEDs lit")
-    print('-' * 95)
-    for label, pressed, ticks in scenarios:
-        face = dice(pressed, ticks)
-        print(f"{label:40s} | "
-              f"{'on ' if pressed else 'off'} | "
-              f"{ticks:>5d} | "
-              f"{dice.counter.count:>5d} | "
-              f"{face if face is not None else ' ?':>4} | "
-              f"{','.join(dice.lit_leds)}")
-
+    run_scenarios(
+        dice,
+        scenarios=[
+            ("release button (initial)",            (False, 0)),
+            ("press and roll 1 tick",               (True,  1)),
+            ("keep pressed, roll 4 more",           (True,  4)),
+            ("hold for one more tick",              (True,  1)),
+            ("release — freeze",                    (False, 1)),
+            ("button up, more ticks (no advance)",  (False, 5)),
+            ("press again, roll 3",                 (True,  3)),
+            ("release on roll",                     (False, 1)),
+        ],
+        columns=[
+            ("btn",   lambda c, a, k: 'on' if a[0] else 'off'),
+            ("ticks", lambda c, a, k: a[1]),
+            ("count", lambda c, a, k: c.counter.count),
+            ("face",  lambda c, a, k: c.face if c.face is not None else '?'),
+            ("LEDs",  lambda c, a, k: ','.join(c.lit_leds)),
+        ],
+    )
     print()
     print("Final dice face:")
     print(dice.render())

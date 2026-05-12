@@ -41,21 +41,15 @@ if str(_SRC) not in sys.path:
 
 from pydantic import validate_call
 
-from framework.chip import Chip
-from framework.circuit import Circuit
-from framework.factor import FactorNode
-from framework.ground import GroundDomain, ELECTRICAL
-from framework.pin import Pin, PinId
-from framework.port import Direction, Port
-from framework.refdes import RefdesNumber, validate_refdes
-from framework.signals import Digital
-from framework.wire import wire
-
-from components.chips.atmega328p import ATmega328P
-from components.chips.dht11 import DHT11
-from components.chips.display5641as import Display5641AS
-from components.passives.rail import Rail
-from components.passives.resistor import Resistor
+from circuitry import (
+    Chip, Circuit, FactorNode,
+    Direction, Port, Pin, PinId,
+    GroundDomain, ELECTRICAL,
+    RefdesNumber, validate_refdes,
+    Digital, wire,
+    ATmega328P, DHT11, Display5641AS, Resistor, Rail,
+    run_scenarios,
+)
 
 
 # Segments lit for each character the firmware can display.  Common-
@@ -226,6 +220,7 @@ class Uno_ThermometerSketch(ATmega328P):
         # set it directly here for the firmware-driven case.
         for sketch_port, mcu_pin in self._ARDUINO_PIN_TO_MCU_PIN.items():
             pin = by_name[mcu_pin]
+            # sketch_port is a dynamic name → use ports[...] indexing.
             wire(self._sketch.ports[sketch_port], pin.internal)
             pin._effective_role = Direction.OUT
 
@@ -293,31 +288,31 @@ class DigitalThermometer(Circuit):
         gnd     = Rail(False)   # GND tie for unused 4th-digit anode
 
         # DHT11 single-bus on Arduino D2 (ATmega PD2).
-        wire(dht11.ports['DATA'], arduino.ports['PD2'])
+        wire(dht11.DATA, arduino.PD2)
 
         # Digit 1 common via the 220 Ω current limiter.  Both R1
         # terminals share the node with the source and sink — R1 is in
         # the BOM and on the wire-list but the simulator treats it as a
         # 0-Ω pass-through (a voltage-only solver can't propagate IxR).
-        wire(arduino.ports['PD3'],
-             r1.ports['t1'], r1.ports['t2'],
-             display.ports['DIG_1'])
+        wire(arduino.PD3,
+             r1.t1, r1.t2,
+             display.DIG_1)
 
         # Remaining digit selects and all eight segment lines.
-        wire(arduino.ports['PD4'], display.ports['DIG_2'])
-        wire(arduino.ports['PD5'], display.ports['DIG_3'])
-        wire(arduino.ports['PD6'], display.ports['SEG_A'])
-        wire(arduino.ports['PD7'], display.ports['SEG_B'])
-        wire(arduino.ports['PB0'], display.ports['SEG_C'])
-        wire(arduino.ports['PB1'], display.ports['SEG_D'])
-        wire(arduino.ports['PB2'], display.ports['SEG_E'])
-        wire(arduino.ports['PB3'], display.ports['SEG_F'])
-        wire(arduino.ports['PB4'], display.ports['SEG_G'])
-        wire(arduino.ports['PB5'], display.ports['SEG_DP'])
+        wire(arduino.PD4, display.DIG_2)
+        wire(arduino.PD5, display.DIG_3)
+        wire(arduino.PD6, display.SEG_A)
+        wire(arduino.PD7, display.SEG_B)
+        wire(arduino.PB0, display.SEG_C)
+        wire(arduino.PB1, display.SEG_D)
+        wire(arduino.PB2, display.SEG_E)
+        wire(arduino.PB3, display.SEG_F)
+        wire(arduino.PB4, display.SEG_G)
+        wire(arduino.PB5, display.SEG_DP)
 
         # The fourth display digit is unused — its anode is tied LOW so
         # the digit stays dark regardless of segment drive.
-        wire(gnd.ports['out'], display.ports['DIG_4'])
+        wire(gnd.out, display.DIG_4)
 
         super().__init__(
             factor_nodes=[arduino, dht11, display, r1, vcc, gnd],
@@ -325,7 +320,7 @@ class DigitalThermometer(Circuit):
                 # No port-level inputs: temperature is firmware-model state.
                 # Expose the display's DIG_1 as a visible-state port for
                 # debugging.
-                'display_dig_1': display.ports['DIG_1'],
+                'display_dig_1': display.DIG_1,
             },
         )
 
@@ -367,42 +362,22 @@ class DigitalThermometer(Circuit):
         return f"DigitalThermometer(glyphs={self._display.glyphs!r})"
 
 
-def _level(v: bool | None) -> str:
-    return 'H' if v else 'L' if v is False else '?'
-
-
 def _main() -> None:
     """Walk through a multiplex cycle at several temperatures and print
     a per-pin / per-digit trace."""
-    from framework.refdes import RefdesBearing
-
-    dt = DigitalThermometer()
-
-    print("Bill of materials:")
-    parts = [fn for fn in dt._factor_nodes if isinstance(fn, RefdesBearing)]
-    for fn in parts:
-        print(f"  {fn.refdes:5s} {type(fn).__name__}")
-    print()
-
-    scenarios: list[tuple[str, float]] = [
-        ("ambient = 5 °C",  5.0),
-        ("ambient = 23 °C", 23.0),
-        ("ambient = 40 °C", 40.0),
-    ]
-
-    print(f"{'event':22s} | phase | dig1 dig2 dig3 | "
-          f"seg(abcdefg.) | glyphs")
-    print('-' * 80)
-    for label, temp_c in scenarios:
-        for phase in range(3):
-            glyphs = dt(temp_c, phase)
-            arduino_ports = dt.arduino.ports
-            d = ''.join(_level(arduino_ports[p].value) for p in ('PD3', 'PD4', 'PD5'))
-            s_pins = ('PD6', 'PD7', 'PB0', 'PB1', 'PB2', 'PB3', 'PB4', 'PB5')
-            s = ''.join(_level(arduino_ports[p].value) for p in s_pins)
-            print(f"{label:22s} |  {phase}    | "
-                  f"  {d[0]}    {d[1]}    {d[2]}  | "
-                  f"{s} | {glyphs!r}")
+    run_scenarios(
+        DigitalThermometer(),
+        scenarios=[
+            (f"ambient = {t:>2.0f} °C, phase {p}", (t, p))
+            for t in (5.0, 23.0, 40.0)
+            for p in range(3)
+        ],
+        columns=[
+            ("temp",   lambda c, a, k: f"{a[0]:>4.1f}"),
+            ("phase",  lambda c, a, k: a[1]),
+            ("glyphs", lambda c, a, k: ''.join(c.display.glyphs)),
+        ],
+    )
 
 
 if __name__ == '__main__':
