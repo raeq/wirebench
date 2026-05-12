@@ -19,6 +19,7 @@ from framework.transistor import Transistor
 from framework.export.base import ExporterContext, register_renderer
 
 from components.passives.capacitor import Capacitor
+from components.passives.inductor import Inductor
 from components.passives.led import LED
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
@@ -30,6 +31,10 @@ def render_resistor(r, ctx: ExporterContext) -> str: return ""
 
 @register_renderer(Capacitor, format='yosys')
 def render_capacitor(c, ctx: ExporterContext) -> str: return ""
+
+
+@register_renderer(Inductor, format='yosys')
+def render_inductor(l, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(LED, format='yosys')

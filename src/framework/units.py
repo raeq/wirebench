@@ -117,3 +117,31 @@ class Picofarads(_Unit):
     _SCALE = 1e-12
     def __str__(self) -> str:
         return f"{float(self) / self._SCALE:.3g} pF"
+
+
+class Henries(_Unit):
+    __slots__ = ()
+    _SCALE = 1.0
+    def __str__(self) -> str:
+        return f"{float(self) / self._SCALE:.3g} H"
+
+
+class Millihenries(_Unit):
+    __slots__ = ()
+    _SCALE = 1e-3
+    def __str__(self) -> str:
+        return f"{float(self) / self._SCALE:.3g} mH"
+
+
+class Microhenries(_Unit):
+    __slots__ = ()
+    _SCALE = 1e-6
+    def __str__(self) -> str:
+        return f"{float(self) / self._SCALE:.3g} µH"
+
+
+class Nanohenries(_Unit):
+    __slots__ = ()
+    _SCALE = 1e-9
+    def __str__(self) -> str:
+        return f"{float(self) / self._SCALE:.3g} nH"

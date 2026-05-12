@@ -40,6 +40,7 @@ def _passive(name, **kw):
 _OVERRIDES = {
     'Resistor':  _passive('Resistor',  ohms=330),
     'Capacitor': _passive('Capacitor', farads=100e-9),
+    'Inductor':  _passive('Inductor',  henries=100e-6),
     'LED':       _passive('LED',       color='red'),
     'Rail':      lambda n: lookup('Rail')(level=True),
     'Header1xNFemale':    lambda n: lookup('Header1xNFemale')(refdes_number=n, pin_count=4, pitch_mm=2.54),

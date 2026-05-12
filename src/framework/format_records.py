@@ -20,6 +20,7 @@ REFDES_J = r'^J\d+$'   # female / receptacle / chassis-side
 REFDES_P = r'^P\d+$'   # male / plug / cable-side
 REFDES_R = r'^R\d+$'   # resistors
 REFDES_C = r'^C\d+$'   # capacitors
+REFDES_L = r'^L\d+$'   # inductors
 REFDES_D = r'^D\d+$'   # diodes (LEDs)
 REFDES_Q = r'^Q\d+$'   # transistors (BJT / MOSFET)
 REFDES_A = r'^A\d+$'   # assemblies / boards
@@ -45,6 +46,12 @@ class CapacitorRecord(_Record):
     type:   Literal['Capacitor'] = 'Capacitor'
     refdes: Annotated[str,   Field(pattern=REFDES_C)]
     farads: Annotated[float, Field(gt=0)]
+
+
+class InductorRecord(_Record):
+    type:    Literal['Inductor'] = 'Inductor'
+    refdes:  Annotated[str,   Field(pattern=REFDES_L)]
+    henries: Annotated[float, Field(gt=0)]
 
 
 class LEDRecord(_Record):
@@ -348,7 +355,7 @@ class SDCardRecord(_FixedMaleConnectorRecord):
 
 ComponentRecord = Annotated[
     Union[
-        ResistorRecord, CapacitorRecord, LEDRecord, RailRecord,
+        ResistorRecord, CapacitorRecord, InductorRecord, LEDRecord, RailRecord,
         SN74HC04Record, CD4017Record, CD4069Record, LM393Record, CD4043Record,
         ULN2003ARecord,
         # 74HC logic

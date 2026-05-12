@@ -21,6 +21,7 @@ from framework.transistor import Transistor
 from framework.export.base import ExporterContext, register_renderer
 
 from components.passives.capacitor import Capacitor
+from components.passives.inductor import Inductor
 from components.passives.led import LED
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
@@ -49,6 +50,12 @@ def render_resistor(r: Resistor, ctx: ExporterContext, parent: str = '') -> str:
 def render_capacitor(c: Capacitor, ctx: ExporterContext, parent: str = '') -> str:
     value = f"{float(c.farads):g}F"
     return _csv_row(c.refdes, value, _footprint_of(c), '1', parent, 'Capacitor')
+
+
+@register_renderer(Inductor, format='bom')
+def render_inductor(l: Inductor, ctx: ExporterContext, parent: str = '') -> str:
+    value = f"{float(l.henries):g}H"
+    return _csv_row(l.refdes, value, _footprint_of(l), '1', parent, 'Inductor')
 
 
 @register_renderer(LED, format='bom')

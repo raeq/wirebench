@@ -22,6 +22,7 @@ from framework.export.base import (
 )
 
 from components.passives.capacitor import Capacitor
+from components.passives.inductor import Inductor
 from components.passives.led import LED
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
@@ -43,6 +44,13 @@ def render_capacitor(c: Capacitor, ctx: ExporterContext) -> str:
     n1 = ctx.net_name(c.ports['t1'])
     n2 = ctx.net_name(c.ports['t2'])
     return f"{c.refdes} {n1} {n2} {float(c.farads)}"
+
+
+@register_renderer(Inductor, format='spice')
+def render_inductor(l: Inductor, ctx: ExporterContext) -> str:
+    n1 = ctx.net_name(l.ports['t1'])
+    n2 = ctx.net_name(l.ports['t2'])
+    return f"{l.refdes} {n1} {n2} {float(l.henries)}"
 
 
 @register_renderer(LED, format='spice')

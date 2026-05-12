@@ -10,6 +10,7 @@ from framework.transistor import Transistor
 from framework.export.base import ExporterContext, register_renderer
 
 from components.passives.capacitor import Capacitor
+from components.passives.inductor import Inductor
 from components.passives.led import LED
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
@@ -30,6 +31,12 @@ def render_resistor(r: Resistor, ctx: ExporterContext) -> str:
 def render_capacitor(c: Capacitor, ctx: ExporterContext) -> str:
     label = f"{c.refdes}<br/>{float(c.farads):g}F"
     return f'{c.refdes}["{_mm_label(label)}"]'
+
+
+@register_renderer(Inductor, format='mermaid')
+def render_inductor(l: Inductor, ctx: ExporterContext) -> str:
+    label = f"{l.refdes}<br/>{float(l.henries):g}H"
+    return f'{l.refdes}["{_mm_label(label)}"]'
 
 
 @register_renderer(LED, format='mermaid')
