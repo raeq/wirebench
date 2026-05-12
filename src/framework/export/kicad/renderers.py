@@ -22,6 +22,7 @@ from components.passives.inductor import Inductor
 from components.passives.led import LED
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
+from components.relays.spdt import Relay_SPDT
 
 
 def _esc(s: str) -> str:
@@ -81,6 +82,17 @@ def render_inductor(l: Inductor, ctx: ExporterContext, qrd: str,
     return _comp_block(
         qrd, value, _footprint_field(l),
         _libsource('Device', 'L', 'Inductor'),
+        names, tstamps,
+    )
+
+
+@register_renderer(Relay_SPDT, format='kicad')
+def render_relay_spdt(k: Relay_SPDT, ctx: ExporterContext, qrd: str,
+                      names: str, tstamps: str) -> str:
+    value = f"SPDT@{float(k.pickup_voltage):g}V"
+    return _comp_block(
+        qrd, value, _footprint_field(k),
+        _libsource('Relay', 'Relay_SPDT', 'SPDT relay'),
         names, tstamps,
     )
 

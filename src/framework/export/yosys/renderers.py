@@ -23,6 +23,7 @@ from components.passives.inductor import Inductor
 from components.passives.led import LED
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
+from components.relays.spdt import Relay_SPDT
 
 
 @register_renderer(Resistor, format='yosys')
@@ -35,6 +36,10 @@ def render_capacitor(c, ctx: ExporterContext) -> str: return ""
 
 @register_renderer(Inductor, format='yosys')
 def render_inductor(l, ctx: ExporterContext) -> str: return ""
+
+
+@register_renderer(Relay_SPDT, format='yosys')
+def render_relay_spdt(k, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(LED, format='yosys')

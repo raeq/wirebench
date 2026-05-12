@@ -14,6 +14,7 @@ from components.passives.inductor import Inductor
 from components.passives.led import LED
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
+from components.relays.spdt import Relay_SPDT
 
 
 def _mm_label(text: str) -> str:
@@ -37,6 +38,12 @@ def render_capacitor(c: Capacitor, ctx: ExporterContext) -> str:
 def render_inductor(l: Inductor, ctx: ExporterContext) -> str:
     label = f"{l.refdes}<br/>{float(l.henries):g}H"
     return f'{l.refdes}["{_mm_label(label)}"]'
+
+
+@register_renderer(Relay_SPDT, format='mermaid')
+def render_relay_spdt(k: Relay_SPDT, ctx: ExporterContext) -> str:
+    label = f"{k.refdes}<br/>Relay_SPDT"
+    return f'{k.refdes}["{_mm_label(label)}"]'
 
 
 @register_renderer(LED, format='mermaid')

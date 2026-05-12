@@ -26,6 +26,7 @@ from components.passives.inductor import Inductor
 from components.passives.led import LED
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
+from components.relays.spdt import Relay_SPDT
 
 
 # ---------------------------------------------------------------------------
@@ -51,6 +52,20 @@ def render_inductor(l: Inductor, ctx: ExporterContext) -> str:
     n1 = ctx.net_name(l.ports['t1'])
     n2 = ctx.net_name(l.ports['t2'])
     return f"{l.refdes} {n1} {n2} {float(l.henries)}"
+
+
+@register_renderer(Relay_SPDT, format='spice')
+def render_relay_spdt(k: Relay_SPDT, ctx: ExporterContext) -> str:
+    # SPICE has no first-class electromechanical relay primitive; the
+    # convention is to emit an X-instance referencing a behavioural
+    # subcircuit named after the class.  Pin order matches the
+    # Relay_SPDT.PIN_NUMBERS mapping (coil_plus, coil_minus, com, no, nc).
+    nets = [
+        ctx.net_name(k.ports[n])
+        for n in ('coil_plus', 'coil_minus', 'com', 'no', 'nc')
+    ]
+    ctx.register_model('Relay_SPDT')
+    return f"X{k.refdes_number} {' '.join(nets)} Relay_SPDT"
 
 
 @register_renderer(LED, format='spice')

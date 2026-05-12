@@ -25,6 +25,7 @@ from components.passives.inductor import Inductor
 from components.passives.led import LED
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
+from components.relays.spdt import Relay_SPDT
 
 
 def _csv_row(*fields: str) -> str:
@@ -56,6 +57,12 @@ def render_capacitor(c: Capacitor, ctx: ExporterContext, parent: str = '') -> st
 def render_inductor(l: Inductor, ctx: ExporterContext, parent: str = '') -> str:
     value = f"{float(l.henries):g}H"
     return _csv_row(l.refdes, value, _footprint_of(l), '1', parent, 'Inductor')
+
+
+@register_renderer(Relay_SPDT, format='bom')
+def render_relay_spdt(k: Relay_SPDT, ctx: ExporterContext, parent: str = '') -> str:
+    value = f"SPDT @ {float(k.pickup_voltage):g}V"
+    return _csv_row(k.refdes, value, _footprint_of(k), '1', parent, 'Relay (SPDT)')
 
 
 @register_renderer(LED, format='bom')

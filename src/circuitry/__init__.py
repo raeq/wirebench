@@ -37,6 +37,7 @@ from framework.wire import wire
 from components.chips       import *     # noqa: F401, F403
 from components.diodes      import *     # noqa: F401, F403
 from components.passives    import *     # noqa: F401, F403
+from components.relays      import *     # noqa: F401, F403
 from components.transistors import *     # noqa: F401, F403
 
 # Scenario runner — shared boilerplate for the demos' `_main()`.

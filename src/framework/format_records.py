@@ -23,6 +23,7 @@ REFDES_C = r'^C\d+$'   # capacitors
 REFDES_L = r'^L\d+$'   # inductors
 REFDES_D = r'^D\d+$'   # diodes (LEDs)
 REFDES_Q = r'^Q\d+$'   # transistors (BJT / MOSFET)
+REFDES_K = r'^K\d+$'   # relays
 REFDES_A = r'^A\d+$'   # assemblies / boards
 LOCAL_ID = r'^[A-Za-z][A-Za-z0-9_]*$'
 
@@ -52,6 +53,12 @@ class InductorRecord(_Record):
     type:    Literal['Inductor'] = 'Inductor'
     refdes:  Annotated[str,   Field(pattern=REFDES_L)]
     henries: Annotated[float, Field(gt=0)]
+
+
+class Relay_SPDTRecord(_Record):
+    type:           Literal['Relay_SPDT'] = 'Relay_SPDT'
+    refdes:         Annotated[str,   Field(pattern=REFDES_K)]
+    pickup_voltage: Annotated[float, Field(gt=0)]
 
 
 class LEDRecord(_Record):
@@ -177,6 +184,7 @@ class _TransistorRecord(_Record):
 
 
 class BC547Record(_TransistorRecord):    type: Literal['BC547']    = 'BC547'
+class BC548Record(_TransistorRecord):    type: Literal['BC548']    = 'BC548'
 class BC557Record(_TransistorRecord):    type: Literal['BC557']    = 'BC557'
 class Q2N3904Record(_TransistorRecord):  type: Literal['Q2N3904']  = 'Q2N3904'
 class Q2N3906Record(_TransistorRecord):  type: Literal['Q2N3906']  = 'Q2N3906'
@@ -355,7 +363,8 @@ class SDCardRecord(_FixedMaleConnectorRecord):
 
 ComponentRecord = Annotated[
     Union[
-        ResistorRecord, CapacitorRecord, InductorRecord, LEDRecord, RailRecord,
+        ResistorRecord, CapacitorRecord, InductorRecord, Relay_SPDTRecord,
+        LEDRecord, RailRecord,
         SN74HC04Record, CD4017Record, CD4069Record, LM393Record, CD4043Record,
         ULN2003ARecord,
         # 74HC logic
@@ -385,7 +394,7 @@ ComponentRecord = Annotated[
         STM32F103C8T6Record, STM32F411CEU6Record, RP2040Record,
         ESP32_WROOM_32Record, ESP8266_12FRecord,
         # Transistors
-        BC547Record, BC557Record, Q2N3904Record, Q2N3906Record,
+        BC547Record, BC548Record, BC557Record, Q2N3904Record, Q2N3906Record,
         Q2N2222Record, TIP120Record,
         Q2N7000Record, BS170Record, IRLB8721Record, IRFZ44NRecord,
         # Diodes
