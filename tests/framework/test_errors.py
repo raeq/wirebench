@@ -28,7 +28,7 @@ from circuitry import (
     PartConfigurationError, PartParameterError,
     MatingError, IncompatibleMateError, UnmateableError,
     PinCountMismatchError, PitchMismatchError,
-    FormatError, SaveError, LoadError,
+    FormatError, SaveError, LoadError, UnknownFormatError,
     RendererRegistryError, DuplicateRendererError, RendererNotFoundError,
     UsageError, WiredChipCallError, AmbiguousPinNameError,
     CompositeShapeError, UnknownPortError,
@@ -69,6 +69,7 @@ MRO_TABLE: list[tuple[type, tuple[type, ...]]] = [
     # --- Format family ---
     (SaveError,               (FormatError, ValueError)),
     (LoadError,               (FormatError, ValueError)),
+    (UnknownFormatError,      (FormatError, ValueError)),
     (DuplicateRendererError,  (RendererRegistryError, FormatError, ValueError)),
     (RendererNotFoundError,   (RendererRegistryError, FormatError, KeyError)),
     # --- Usage family ---
@@ -268,6 +269,15 @@ def test_part_configuration_error_for_same_isolation_domain() -> None:
     from framework.ground import ELECTRICAL
     with pytest.raises(PartConfigurationError):
         IsolatedChannel(input_domain=ELECTRICAL, output_domain=ELECTRICAL)
+
+
+def test_unknown_format_error() -> None:
+    """`export_to_string` with a typo'd format name raises the leaf,
+    not a bare ValueError."""
+    from framework.export import export_to_string
+    from water_alarm import WaterAlarm
+    with pytest.raises(UnknownFormatError, match='spcie'):
+        export_to_string(WaterAlarm(), 'spcie')   # typo of 'spice'
 
 
 def test_wired_chip_call_error() -> None:

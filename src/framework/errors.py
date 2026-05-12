@@ -205,6 +205,14 @@ class LoadError(FormatError, ValueError):
     duplicate id, unknown class, missing required field."""
 
 
+class UnknownFormatError(FormatError, ValueError):
+    """`export()` / `export_to_string()` was asked for a format name
+    that doesn't correspond to a known adapter sub-package under
+    `framework.export.`.  Typically a typo (`spcie` for `spice`)
+    or a name the caller carried over from before the adapter was
+    renamed."""
+
+
 class RendererRegistryError(FormatError):
     """Anything wrong with the export-adapter renderer / net-namer
     registry.  Abstract; concrete subclasses pick the right built-in

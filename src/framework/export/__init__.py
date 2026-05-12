@@ -24,6 +24,7 @@ from typing import Any
 
 from pydantic import validate_call
 
+from framework.errors import UnknownFormatError
 from framework.factor import FactorNode
 
 from framework.export.base import ExportConfig, ExporterContext
@@ -45,7 +46,7 @@ def _load_adapter(format: str) -> Any:
     try:
         return importlib.import_module(f'framework.export.{format}')
     except ImportError as e:
-        raise ValueError(
+        raise UnknownFormatError(
             f"Unknown export format {format!r}. "
             f"Available: {list_formats()}"
         ) from e
