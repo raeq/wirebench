@@ -57,6 +57,7 @@ from circuitry import (
 )
 from components.connectors.headers import Header1xNFemale, Header1xNMale
 from components.chips.concepts.fan_controller import FanController
+from framework.registry import register
 
 
 # --------------------------------------------------------------------------
@@ -196,6 +197,7 @@ class FanCoolingBoard(Board):
 # Example composition: power-supply board mated to the fan-cooling board.
 # --------------------------------------------------------------------------
 
+@register('PowerSourceBoard')
 class PowerSourceBoard(Board):
     """Bench-style 24-V supply on a mating-side connector.
 

@@ -14,6 +14,7 @@ from framework.board import Board
 from framework.chip import Chip
 from framework.connector import Connector
 from framework.diode import Diode
+from framework.factor import FactorNode
 from framework.transistor import Transistor
 
 from framework.export.base import ExporterContext, register_renderer
@@ -73,3 +74,7 @@ def render_transistor(t, ctx: ExporterContext) -> str: return ""
 
 @register_renderer(Diode, format='yosys')
 def render_diode(d, ctx: ExporterContext) -> str: return ""
+
+
+@register_renderer(FactorNode, format='yosys')
+def render_factor_node(fn, ctx: ExporterContext) -> str: return ""

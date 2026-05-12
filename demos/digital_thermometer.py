@@ -50,6 +50,7 @@ from circuitry import (
     ATmega328P, DHT11, Display5641AS, Resistor, Rail,
     run_scenarios,
 )
+from framework.registry import register
 
 
 # Segments lit for each character the firmware can display.  Common-
@@ -151,6 +152,7 @@ class _ThermometerSketch(FactorNode):
                 f"phase={self._phase!r})")
 
 
+@register('Uno_ThermometerSketch')
 class Uno_ThermometerSketch(ATmega328P):
     """ATmega328P loaded with the digital-thermometer firmware.
 

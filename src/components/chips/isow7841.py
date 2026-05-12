@@ -51,6 +51,13 @@ class ISOW7841(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm"
 
+    # Serialise both domain kwargs so `.circuitry` files survive a
+    # round-trip even though the constructor needs per-instance ground
+    # domains the generic record can't represent.  GroundDomain is
+    # interned by name, so storing the names is enough to reconstruct
+    # equivalent instances.
+    SERIALIZE_KWARGS: ClassVar[tuple[str, ...]] = ('logic_domain', 'iso_domain')
+
     # Pin table: (number, name, direction, signal_type, 'logic' | 'iso').
     # Pins 1-8 = logic / primary side, pins 9-16 = isolated / secondary
     # side.  Within the logic side, channels A / B / C take their data

@@ -22,9 +22,10 @@ from framework.port import Port
 from framework.refdes import RefdesBearing
 from framework.registry import lookup
 from framework.wire import wire
+from framework.format_extension import deserialize_kwargs, serialize_kwargs
 from framework.format_records import (
     AssemblyRecord, BoardRecord, CircuitRecord, CircuitryFile,
-    ComponentRecord, MateRecord, RailRecord, WireRecord,
+    ComponentRecord, ExtensionRecord, MateRecord, RailRecord, WireRecord,
 )
 
 
@@ -83,12 +84,26 @@ def _component_to_record(
             initial_state_of_charge=float(component._state_of_charge),  # type: ignore[attr-defined]
         ))
     if cls_name == 'Rail':
+        rail_domain = component.ports['out'].domain   # type: ignore[attr-defined]
         return cast(ComponentRecord, RailRecord(
             id=rail_ids[id(component)],
             level=bool(component._level),            # type: ignore[attr-defined]
+            domain=(
+                None if rail_domain.name == 'electrical'
+                else rail_domain.name
+            ),
         ))
     # Refdes-bearing chip / connector — class-specific args follow.
-    record_cls = _import(f'{cls_name}Record')
+    try:
+        record_cls = _import(f'{cls_name}Record')
+    except AttributeError:
+        # No dedicated record for this class.  Fall back to the generic
+        # ExtensionRecord, which carries the class name plus any
+        # SERIALIZE_KWARGS values the class declared.  Allowed for any
+        # class that is in the registry — the loader will reject
+        # unknown classes the same way the discriminator does for
+        # dedicated records.
+        return _component_to_extension_record(component, rail_ids, cls_name)
     kwargs: dict[str, Any] = {'refdes': component.refdes}  # type: ignore[attr-defined]
     if isinstance(component, Connector):
         # Always emit pin_count and pitch_mm for parameterised connectors;
@@ -100,7 +115,48 @@ def _component_to_record(
             kwargs['pin_count'] = component.pin_count
         if 'pitch_mm' in fields:
             kwargs['pitch_mm'] = component.pitch_mm
+    # ExtensionRecord lets a class with a dedicated record opt-in to
+    # passing additional serialised kwargs (e.g. ISOW7841 wants its
+    # iso_domain serialised but otherwise needs no record changes).
+    # Detection: a class declares SERIALIZE_KWARGS explicitly and at
+    # least one of those kwargs holds a non-default value worth
+    # capturing.  For now we route every SERIALIZE_KWARGS-declaring
+    # class through ExtensionRecord regardless — keeps the encoding
+    # path uniform and avoids per-class branching in the loader.
+    if getattr(type(component), 'SERIALIZE_KWARGS', ()):
+        return _component_to_extension_record(component, rail_ids, cls_name)
     return cast(ComponentRecord, record_cls(**kwargs))
+
+
+def _component_to_extension_record(
+    component: FactorNode,
+    rail_ids: dict[int, str],
+    cls_name: str,
+) -> ComponentRecord:
+    """Build an ExtensionRecord for a registered class that has no
+    dedicated per-type record (or wants to pass extra construction
+    kwargs alongside the standard refdes_number).
+    """
+    if isinstance(component, RefdesBearing):
+        refdes  = component.refdes
+        local_id = None
+    else:
+        refdes = None
+        local_id = rail_ids.get(id(component))
+        if local_id is None:
+            raise ValueError(
+                f"Cannot serialise non-refdes-bearing component "
+                f"{component!r} of class {cls_name!r}; no synthesised "
+                f"id was allocated for it (rail_ids does not include "
+                f"it).  Top-level concept cells must be added to "
+                f"rail_ids by the wrapping circuit-collection routine."
+            )
+    return cast(ComponentRecord, ExtensionRecord(
+        class_name=cls_name,
+        refdes=refdes,
+        id=local_id,
+        kwargs=serialize_kwargs(component),
+    ))
 
 
 def _import(name: str) -> Any:
@@ -146,14 +202,21 @@ def _circuit_components_and_wires(
     circuit: Circuit,
 ) -> tuple[list[ComponentRecord], list[WireRecord], dict[int, str]]:
     """Build component records + wire records for a Circuit's direct
-    factor_nodes.  Rails are given synthesised IDs assigned in encounter
-    order."""
+    factor_nodes.  Components without a refdes (Rails, and any concept
+    cell wired at the top level) are given synthesised local IDs
+    assigned in encounter order — `Rail_0`, `Rail_1`, …, then
+    `DiodeOR_0`, `FanController_0`, etc., keyed by class name so each
+    class has its own counter and the ids remain readable in the
+    saved JSON."""
     rail_ids: dict[int, str] = {}
-    rail_counter = 0
+    counters: dict[str, int] = {}
     for component in circuit._factor_nodes:
-        if type(component).__name__ == 'Rail':
-            rail_ids[id(component)] = f'Rail_{rail_counter}'
-            rail_counter += 1
+        if isinstance(component, RefdesBearing):
+            continue
+        cls_name = type(component).__name__
+        n = counters.get(cls_name, 0)
+        rail_ids[id(component)] = f'{cls_name}_{n}'
+        counters[cls_name] = n + 1
     component_records = [
         _component_to_record(c, rail_ids) for c in circuit._factor_nodes
     ]
@@ -320,6 +383,8 @@ def _refdes_number_from_refdes(refdes: str) -> int:
 
 def _build_component(record: Any) -> FactorNode:
     """Instantiate a live FactorNode from a record."""
+    if record.type == 'Extension':
+        return _build_extension_component(record)
     cls = lookup(record.type)
     kwargs: dict[str, Any] = {}
     if hasattr(record, 'refdes'):
@@ -335,13 +400,44 @@ def _build_component(record: Any) -> FactorNode:
     elif record.type == 'LED':
         kwargs['color'] = record.color
     elif record.type == 'Rail':
-        kwargs = {'level': record.level}   # Rail takes no refdes_number
+        # Rail takes no refdes_number.  Domain is optional; absent means
+        # ELECTRICAL (compatible with older files that have no domain).
+        kwargs = {'level': record.level}
+        if getattr(record, 'domain', None) is not None:
+            from framework.ground import GroundDomain
+            kwargs['domain'] = GroundDomain(record.domain)
     elif record.type == 'Cell':
         kwargs['initial_state_of_charge'] = record.initial_state_of_charge
     if hasattr(record, 'pin_count') and record.pin_count is not None:
         kwargs['pin_count'] = record.pin_count
     if hasattr(record, 'pitch_mm') and record.pitch_mm is not None:
         kwargs['pitch_mm'] = record.pitch_mm
+    return cls(**kwargs)
+
+
+def _build_extension_component(record: Any) -> FactorNode:
+    """Instantiate a FactorNode from a generic ExtensionRecord.
+
+    Class lookup goes through the registry the same way dedicated
+    records do — the registry is still the security boundary.  Kwargs
+    are decoded based on the constructor's type annotations
+    (GroundDomain names re-interned, etc.) before being passed
+    through.  Refdes-bearing classes get their `refdes_number`
+    parsed from `record.refdes`; non-refdes-bearing classes use their
+    declared `id` for port references but pass nothing to the
+    constructor.
+    """
+    if not record.class_name:
+        raise ValueError("ExtensionRecord missing class_name")
+    if record.refdes is None and record.id is None:
+        raise ValueError(
+            f"ExtensionRecord for {record.class_name!r} has neither "
+            f"`refdes` nor `id`; one is required"
+        )
+    cls = lookup(record.class_name)
+    kwargs = deserialize_kwargs(cls, dict(record.kwargs))
+    if record.refdes is not None:
+        kwargs.setdefault('refdes_number', _refdes_number_from_refdes(record.refdes))
     return cls(**kwargs)
 
 
@@ -367,13 +463,25 @@ def _resolve_port(
 def _rebuild_circuit_components(
     component_records: list[Any],
 ) -> tuple[list[FactorNode], dict[str, FactorNode]]:
-    """Build components from records; return (ordered list, id→component map)."""
+    """Build components from records; return (ordered list, id→component map).
+
+    Records may carry a `refdes` (for RefdesBearing classes), an `id`
+    (for Rails and any extension component without a refdes), or both
+    fields with one null (e.g. ExtensionRecord declares both as
+    optional and uses whichever applies).  Try refdes first, fall
+    through to id; reject if neither is set.
+    """
     components: list[FactorNode] = []
     by_id: dict[str, FactorNode] = {}
     for rec in component_records:
         c = _build_component(rec)
         components.append(c)
-        local_id = rec.refdes if hasattr(rec, 'refdes') else rec.id
+        local_id = getattr(rec, 'refdes', None) or getattr(rec, 'id', None)
+        if local_id is None:
+            raise ValueError(
+                f"Component record {type(rec).__name__} has neither "
+                f"refdes nor id; cannot be referenced by wires"
+            )
         if local_id in by_id:
             raise ValueError(f"Duplicate component id {local_id!r}")
         by_id[local_id] = c

@@ -6,6 +6,8 @@ parameters because the strips are field-cut.
 """
 from __future__ import annotations
 
+from typing import ClassVar
+
 from framework.connector import Connector, declare_mating_pair
 from framework.pin import PinId
 from framework.port import Direction
@@ -35,6 +37,11 @@ class Header1xNMale(Connector):
     REFDES_PREFIX = 'P'
     GENDER        = 'male'
 
+    # Parametric connectors need to round-trip pin count, pitch, and
+    # ground domain so isolated-side instances reconstruct in their
+    # own domain rather than collapsing to ELECTRICAL on load.
+    SERIALIZE_KWARGS: ClassVar[tuple[str, ...]] = ('domain', 'pin_count', 'pitch_mm')
+
     def _build_pinout(self) -> tuple[tuple[PinId, Direction, type], ...]:
         return tuple((PinId(i, f'p{i}'), Direction.BIDIR, Analog)
                      for i in range(1, self._pin_count + 1))
@@ -50,6 +57,8 @@ class Header1xNFemale(Connector):
     __slots__ = ()
     REFDES_PREFIX = 'J'
     GENDER        = 'female'
+
+    SERIALIZE_KWARGS: ClassVar[tuple[str, ...]] = ('domain', 'pin_count', 'pitch_mm')
 
     def _build_pinout(self) -> tuple[tuple[PinId, Direction, type], ...]:
         return tuple((PinId(i, f'p{i}'), Direction.BIDIR, Analog)

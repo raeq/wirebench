@@ -40,10 +40,16 @@ class TRS3122E(Chip):
     isolator's iso-side domain when constructing it.
     """
 
-    __slots__ = ('_tx1', '_tx2', '_rx1', '_rx2', '_refdes_number')
+    __slots__ = ('_tx1', '_tx2', '_rx1', '_rx2', '_refdes_number', '_domain')
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm"
+
+    # The TRS3122E lives entirely on one side of an isolation barrier
+    # (see the iso-RS-232 demo); serialise the chosen ground domain
+    # so loaded designs reconstruct in the right one rather than
+    # always defaulting to ELECTRICAL.
+    SERIALIZE_KWARGS: ClassVar[tuple[str, ...]] = ('domain',)
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         ( 1, 'VL',       Direction.IN,  Analog),    # logic-side supply
@@ -81,6 +87,7 @@ class TRS3122E(Chip):
                  refdes_number: RefdesNumber) -> None:
         validate_refdes(self.REFDES_PREFIX, refdes_number)
         self._refdes_number = refdes_number
+        self._domain        = domain
 
         pins = [
             Pin(PinId(number, name), direction, domain,

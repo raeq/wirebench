@@ -65,6 +65,7 @@ from circuitry import (
     run_scenarios,
 )
 from components.connectors.headers import Header1xNFemale, Header1xNMale
+from framework.registry import register
 
 
 # Distinct ground domain for the isolated secondary side.  Created
@@ -78,6 +79,7 @@ ISOLATED = GroundDomain('isolated_rs232')
 # Composable isolated-RS-232 module
 # ---------------------------------------------------------------------------
 
+@register('IsolatedRS232Board')
 class IsolatedRS232Board(Board):
     """Reinforced isolated RS-232 module.
 
@@ -202,6 +204,7 @@ class IsolatedRS232Board(Board):
 # cable stand-in mated to J2.
 # ---------------------------------------------------------------------------
 
+@register('ControllerSourceBoard')
 class ControllerSourceBoard(Board):
     """Bench-style host plug — Header1xNMale with VCC1 + GND1 +
     TXD-driver + RXD-monitor; mates into J1.  All four pins live in
@@ -228,6 +231,7 @@ class ControllerSourceBoard(Board):
         )
 
 
+@register('RS232CableBoard')
 class RS232CableBoard(Board):
     """RS-232 cable stand-in — Header1xNMale plug mating into J2 on
     the isolated side of the link.  All pins in `ISOLATED`.  The

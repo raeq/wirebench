@@ -13,6 +13,7 @@ from framework.board import Board
 from framework.chip import Chip
 from framework.connector import Connector
 from framework.diode import Diode
+from framework.factor import FactorNode
 from framework.transistor import Transistor
 
 from framework.export.base import ExporterContext, register_renderer
@@ -180,3 +181,12 @@ def render_diode(d: Diode, ctx: ExporterContext, qrd: str,
         _libsource('Device', cls, cls),
         names, tstamps,
     )
+
+
+@register_renderer(FactorNode, format='kicad')
+def render_factor_node(fn: FactorNode, ctx: ExporterContext, qrd: str = '',
+                       names: str = '/', tstamps: str = '/') -> str:
+    # Concept cells aren't BOM parts and don't appear on a schematic
+    # — they model firmware / system behaviour internal to a chip
+    # or board.  Empty stub keeps lookup_renderer happy.
+    return ""

@@ -1,13 +1,15 @@
-from typing import Sequence
+from typing import ClassVar, Sequence
 
 from pydantic import validate_call
 
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
+from framework.registry import register
 from framework.signals import Digital
 
 
+@register('DiodeOR')
 class DiodeOR(FactorNode):
     """Diode-OR matrix cell: out HIGH whenever any of its inputs is HIGH.
 
@@ -27,6 +29,8 @@ class DiodeOR(FactorNode):
     """
 
     __slots__ = ('_ports', '_input_names')
+
+    SERIALIZE_KWARGS: ClassVar[tuple[str, ...]] = ('input_names',)
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(

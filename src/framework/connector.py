@@ -40,7 +40,7 @@ class Connector(FactorNode):
 
     IS_TRANSPARENT: ClassVar[bool] = True
 
-    __slots__ = ('_pins', '_refdes_number', '_pin_count', '_pitch_mm')
+    __slots__ = ('_pins', '_refdes_number', '_pin_count', '_pitch_mm', '_domain')
 
     REFDES_PREFIX:  ClassVar[str]                       # 'J' (female) or 'P' (male)
     GENDER:         ClassVar[str]                       # 'female' | 'male'
@@ -91,6 +91,7 @@ class Connector(FactorNode):
             )
         self._pin_count = resolved_pin_count
         self._pitch_mm  = resolved_pitch_mm
+        self._domain    = domain
 
         self._pins = tuple(
             Pin(pin_id, direction, domain, mandatory=False, signal_type=sigtype)
@@ -114,6 +115,11 @@ class Connector(FactorNode):
     @property
     def pins(self) -> tuple[Pin, ...]:
         return self._pins
+
+    @property
+    def domain(self) -> GroundDomain:
+        """The ground domain every pin on this connector lives in."""
+        return self._domain
 
     @property
     def external_ports(self) -> dict[str, Port]:

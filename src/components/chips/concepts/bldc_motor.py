@@ -1,10 +1,11 @@
-from typing import Annotated
+from typing import Annotated, ClassVar
 
 from pydantic import Field, validate_call
 
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
+from framework.registry import register
 from framework.signals import Digital
 
 
@@ -27,6 +28,7 @@ _SECTOR_HALL_PATTERN: tuple[tuple[bool, bool, bool], ...] = (
 )
 
 
+@register('BLDCMotor')
 class BLDCMotor(FactorNode):
     """Behavioural model of a 3-phase BLDC motor's Hall-sensor face.
 
@@ -56,6 +58,11 @@ class BLDCMotor(FactorNode):
     """
 
     __slots__ = ('_ports', '_rotor_angle_deg')
+
+    SERIALIZE_KWARGS: ClassVar[tuple[str, ...]] = ('initial_angle_deg',)
+    _SERIALIZE_ATTRS: ClassVar[dict[str, str]] = {
+        'initial_angle_deg': '_rotor_angle_deg',
+    }
 
     SECTOR_COUNT: int = 6
 

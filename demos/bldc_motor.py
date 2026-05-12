@@ -19,7 +19,7 @@ surfaces:
     J3 (Header1xNFemale, 3-pin) — Hall sensors  (HA, HB, HC)
 
 A larger assembly mates the boards' connectors together.  `BLDCSystem`
-at the bottom of this file shows the pattern: a `PowerSourceBoard`
+at the bottom of this file shows the pattern: a `BLDCSupplyBoard`
 plug mates into J1 and a `BLDCMotor` cell sits in the parent circuit
 with its Hall outputs wired into J3 and the controller's J2 winding
 outputs flowing back into the motor's winding-input pins for BOM
@@ -57,6 +57,7 @@ from circuitry import (
     run_scenarios,
 )
 from framework.port_map import PortMap
+from framework.registry import register
 from components.connectors.headers import Header1xNFemale, Header1xNMale
 from components.chips.concepts.commutator import Commutator
 from components.chips.concepts.bldc_motor import BLDCMotor
@@ -66,6 +67,7 @@ from components.chips.concepts.bldc_motor import BLDCMotor
 # ATmega328P loaded with the BLDC commutation firmware.
 # ---------------------------------------------------------------------------
 
+@register('Uno_BLDCCommutator')
 class Uno_BLDCCommutator(ATmega328P):
     """ATmega328P running the Hall-driven six-step commutation loop.
 
@@ -157,6 +159,7 @@ class Uno_BLDCCommutator(ATmega328P):
 # Composable controller board.
 # ---------------------------------------------------------------------------
 
+@register('BLDCControllerBoard')
 class BLDCControllerBoard(Board):
     """Three-phase BLDC motor controller — composable.
 
@@ -305,10 +308,12 @@ class BLDCControllerBoard(Board):
 # Example composition: power supply + motor + controller board.
 # ---------------------------------------------------------------------------
 
-class PowerSourceBoard(Board):
+@register('BLDCSupplyBoard')
+class BLDCSupplyBoard(Board):
     """Bench-style supply on a mating-side connector — 24 V on a
     Header1xNMale, plugs into a BLDCControllerBoard's J1 receptacle.
-    Symmetric to `fan_cooling.PowerSourceBoard`."""
+    Symmetric to `fan_cooling.PowerSourceBoard` (renamed here to avoid
+    a registry name-collision with the fan-cooling demo's class)."""
 
     def __init__(self, *, refdes_number: int) -> None:
         self.vcc = Rail(True)
@@ -338,7 +343,7 @@ class BLDCSystem(Circuit):
     so you can see which two phases are driving each step."""
 
     def __init__(self) -> None:
-        self.supply     = PowerSourceBoard   (refdes_number=1)
+        self.supply     = BLDCSupplyBoard   (refdes_number=1)
         self.controller = BLDCControllerBoard(refdes_number=2)
 
         # The motor stand-in — a behavioural BLDCMotor cell whose

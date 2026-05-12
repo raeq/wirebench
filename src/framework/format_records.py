@@ -9,7 +9,7 @@ validates records and reconstructs live components via the registry.
 """
 from __future__ import annotations
 
-from typing import Annotated, Literal, Union
+from typing import Annotated, Any, Literal, Union
 
 from pydantic import BaseModel, ConfigDict, Discriminator, Field
 
@@ -26,6 +26,7 @@ REFDES_Q = r'^Q\d+$'   # transistors (BJT / MOSFET)
 REFDES_K = r'^K\d+$'   # relays
 REFDES_A = r'^A\d+$'   # assemblies / boards
 REFDES_BT = r'^BT\d+$' # batteries / cells
+REFDES_ANY = r'^[A-Z]+\d+$'   # any refdes (used by the generic Extension record)
 LOCAL_ID = r'^[A-Za-z][A-Za-z0-9_]*$'
 
 
@@ -69,9 +70,14 @@ class LEDRecord(_Record):
 
 
 class RailRecord(_Record):
-    type:  Literal['Rail'] = 'Rail'
-    id:    Annotated[str, Field(pattern=LOCAL_ID)]
-    level: bool
+    type:   Literal['Rail'] = 'Rail'
+    id:     Annotated[str, Field(pattern=LOCAL_ID)]
+    level:  bool
+    # Rails carry their ground-domain name so a Rail in a non-default
+    # domain (the iso-side of an isolation barrier, say) reconstructs
+    # in the same domain it was saved from.  Defaults to None, which
+    # the loader interprets as ELECTRICAL — keeps old files loading.
+    domain: str | None = None
 
 
 class CellRecord(_Record):
@@ -376,6 +382,32 @@ class SDCardRecord(_FixedMaleConnectorRecord):
     type: Literal['SDCard'] = 'SDCard'
 
 
+# --------------------------------------------------------- generic fallback
+
+class ExtensionRecord(_Record):
+    """Generic record for any registered FactorNode without a dedicated
+    record class.
+
+    Captures the bare class name plus a `kwargs` dict carrying the
+    constructor arguments the class declared serialisable through its
+    `SERIALIZE_KWARGS` classvar.  Used for demo-local subclasses,
+    parametric chips that take per-instance arguments (e.g.
+    `iso_domain` on the ISOW7841), and concept cells wired at the top
+    level rather than embedded inside a Chip.
+
+    `refdes` is optional — non-refdes-bearing components (concept
+    cells, Circuits without an assembly refdes) use `id` instead, the
+    same way `RailRecord` does.  Exactly one of the two is required at
+    load time, enforced by the loader rather than the schema so that
+    pydantic can still validate `kwargs` as `dict[str, Any]`.
+    """
+    type:       Literal['Extension'] = 'Extension'
+    class_name: Annotated[str, Field(min_length=1)]
+    refdes:     str | None = None
+    id:         str | None = None
+    kwargs:     dict[str, Any] = Field(default_factory=dict)
+
+
 # --------------------------------------------------------- component union
 
 ComponentRecord = Annotated[
@@ -440,6 +472,7 @@ ComponentRecord = Annotated[
         BarrelJack5p5x2p5Record,   BarrelPlug5p5x2p5Record,
         MicroSDCardSlotRecord,     MicroSDCardRecord,
         SDCardSlotRecord,          SDCardRecord,
+        ExtensionRecord,
     ],
     Discriminator('type'),
 ]

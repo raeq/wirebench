@@ -54,8 +54,10 @@ from circuitry import (
     run_scenarios,
 )
 from components.connectors.headers import Header1xNFemale
+from framework.registry import register
 
 
+@register('BatteryPackBoard')
 class BatteryPackBoard(Board):
     """Single-cell Li-Ion pack with integrated BQ27546-G1 fuel gauge.
 

@@ -55,6 +55,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from typing import ClassVar
 
 # Make `src/` importable when this file is run as a script.
 _SRC = Path(__file__).resolve().parent.parent / 'src'
@@ -72,6 +73,7 @@ from circuitry import (
     run_scenarios,
 )
 from framework.port_map import PortMap
+from framework.registry import register
 from components.chips.concepts.inverter   import Inverter
 from components.chips.concepts.monostable import Monostable
 
@@ -80,6 +82,7 @@ from components.chips.concepts.monostable import Monostable
 # NE555 wired as a monostable with a fixed pulse duration.
 # ---------------------------------------------------------------------------
 
+@register('NE555_Monostable')
 class NE555_Monostable(NE555):
     """NE555 with an internal Monostable cell of fixed duration.
 
@@ -95,6 +98,8 @@ class NE555_Monostable(NE555):
     """
 
     __slots__ = ('_monostable',)
+
+    SERIALIZE_KWARGS: ClassVar[tuple[str, ...]] = ('duration_ms',)
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(

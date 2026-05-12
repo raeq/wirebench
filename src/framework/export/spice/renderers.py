@@ -21,6 +21,8 @@ from framework.export.base import (
     ExporterContext, SpiceExportConfig, lookup_renderer, register_renderer,
 )
 
+from framework.factor import FactorNode
+
 from components.passives.capacitor import Capacitor
 from components.passives.cell import Cell
 from components.passives.inductor import Inductor
@@ -141,6 +143,15 @@ def render_diode(d: Diode, ctx: ExporterContext) -> str:
     cathode = ctx.net_name(d.ports['cathode'])
     ctx.register_model(model_name)
     return f"{d.refdes} {anode} {cathode} {model_name}"
+
+
+@register_renderer(FactorNode, format='spice')
+def render_factor_node(fn: FactorNode, ctx: ExporterContext) -> str:
+    # Concept cells (DiodeOR, FanController, etc.) hold Python-level
+    # state without a SPICE primitive equivalent.  Catch-all on
+    # FactorNode keeps the netlist clean; specific renderers above
+    # always win via MRO.
+    return ""
 
 
 # ---------------------------------------------------------------------------

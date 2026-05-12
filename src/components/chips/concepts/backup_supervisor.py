@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, ClassVar
 from math import exp
 
 from pydantic import Field, validate_call
@@ -6,9 +6,11 @@ from pydantic import Field, validate_call
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
+from framework.registry import register
 from framework.signals import Analog, Digital
 
 
+@register('BackupSupervisor')
 class BackupSupervisor(FactorNode):
     """System-level supervisor that models the TIDA-03031 power path.
 
@@ -55,6 +57,16 @@ class BackupSupervisor(FactorNode):
         '_load_w_normal', '_load_w_backup',
         '_buck_efficiency',
     )
+
+    SERIALIZE_KWARGS: ClassVar[tuple[str, ...]] = (
+        'bulk_capacitance_uf', 'v_boost_target', 'v_buck_reg',
+        'v_buck_uvlo', 'v_uv_threshold', 'v_ov_threshold',
+        'charge_time_constant_ms', 'load_w_normal', 'load_w_backup',
+        'buck_efficiency',
+    )
+    _SERIALIZE_ATTRS: ClassVar[dict[str, str]] = {
+        'bulk_capacitance_uf': '_bulk_uf',
+    }
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(

@@ -1,13 +1,15 @@
-from typing import Annotated
+from typing import Annotated, ClassVar
 
 from pydantic import Field, validate_call
 
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
+from framework.registry import register
 from framework.signals import Digital
 
 
+@register('Monostable')
 class Monostable(FactorNode):
     """LM555-style monostable-timer cell.
 
@@ -31,6 +33,8 @@ class Monostable(FactorNode):
     """
 
     __slots__ = ('_ports', '_duration_ms', '_remaining_ms', '_prev_trig')
+
+    SERIALIZE_KWARGS: ClassVar[tuple[str, ...]] = ('duration_ms',)
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(

@@ -16,6 +16,7 @@ from framework.board import Board
 from framework.chip import Chip
 from framework.connector import Connector
 from framework.diode import Diode
+from framework.factor import FactorNode
 from framework.transistor import Transistor
 
 from framework.export.base import ExporterContext, register_renderer
@@ -120,3 +121,11 @@ def render_transistor(t: Transistor, ctx: ExporterContext, parent: str = '') -> 
 def render_diode(d: Diode, ctx: ExporterContext, parent: str = '') -> str:
     cls = type(d).__name__
     return _csv_row(d.refdes, cls, _footprint_of(d), '1', parent, cls)
+
+
+@register_renderer(FactorNode, format='bom')
+def render_factor_node(fn: FactorNode, ctx: ExporterContext, parent: str = '') -> str:
+    # Catch-all for concept cells / firmware-stand-in cells that are
+    # registered for save/load but don't correspond to a placeable
+    # part.  More-specific renderers above always win via MRO.
+    return ""

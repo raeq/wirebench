@@ -1,13 +1,15 @@
-from typing import Annotated
+from typing import Annotated, ClassVar
 
 from pydantic import Field, validate_call
 
 from framework.factor import FactorNode
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
+from framework.registry import register
 from framework.signals import Analog, Digital
 
 
+@register('FanController')
 class FanController(FactorNode):
     """Hysteretic temperature-switch + fan-driver cell.
 
@@ -35,6 +37,8 @@ class FanController(FactorNode):
 
     __slots__ = ('_ports', '_trip_high_c', '_trip_low_c',
                  '_temperature_c', '_fan_on')
+
+    SERIALIZE_KWARGS: ClassVar[tuple[str, ...]] = ('trip_high_c', 'trip_low_c')
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(

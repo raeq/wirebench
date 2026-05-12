@@ -52,6 +52,16 @@ _OVERRIDES = {
         iso_domain=__import__('framework.ground', fromlist=['GroundDomain'])
                        .GroundDomain('isolated_test'),
     ),
+    # Concept cells: no refdes, idiosyncratic kwargs.
+    'Inverter':         lambda n: lookup('Inverter')(),
+    'Monostable':       lambda n: lookup('Monostable')(duration_ms=120.0),
+    'DiodeOR':          lambda n: lookup('DiodeOR')(input_names=('a', 'b')),
+    'FanController':    lambda n: lookup('FanController')(),
+    'BackupSupervisor': lambda n: lookup('BackupSupervisor')(),
+    'BLDCMotor':        lambda n: lookup('BLDCMotor')(),
+    'NE555_Monostable': lambda n: lookup('NE555_Monostable')(
+                              duration_ms=120.0, refdes_number=n,
+                          ),
     'Header1xNFemale':    lambda n: lookup('Header1xNFemale')(refdes_number=n, pin_count=4, pitch_mm=2.54),
     'Header1xNMale':      lambda n: lookup('Header1xNMale')(refdes_number=n, pin_count=4, pitch_mm=2.54),
     'Header2xNFemale':    lambda n: lookup('Header2xNFemale')(refdes_number=n, pin_count=4, pitch_mm=2.54),

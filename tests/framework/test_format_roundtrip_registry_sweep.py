@@ -54,6 +54,17 @@ _OVERRIDES = {
         iso_domain=__import__('framework.ground', fromlist=['GroundDomain'])
                        .GroundDomain('isolated_roundtrip'),
     ),
+    # Concept cells — internal to chips / boards but registered for
+    # extension-record save/load.  None of them are refdes-bearing.
+    'Inverter':         lambda n: lookup('Inverter')(),
+    'Monostable':       lambda n: lookup('Monostable')(duration_ms=120.0),
+    'DiodeOR':          lambda n: lookup('DiodeOR')(input_names=('a', 'b')),
+    'FanController':    lambda n: lookup('FanController')(),
+    'BackupSupervisor': lambda n: lookup('BackupSupervisor')(),
+    'BLDCMotor':        lambda n: lookup('BLDCMotor')(),
+    'NE555_Monostable': lambda n: lookup('NE555_Monostable')(
+                              duration_ms=120.0, refdes_number=n,
+                          ),
     # Pin-count-parameterised connector families.
     'Header1xNFemale':   _connector('Header1xNFemale',   pin_count=4, pitch_mm=2.54),
     'Header1xNMale':     _connector('Header1xNMale',     pin_count=4, pitch_mm=2.54),
@@ -74,6 +85,18 @@ _OVERRIDES = {
 
 _SKIP: dict[str, str] = {
     'Board': 'abstract base; concrete boards covered by their own round-trip tests',
+    # Concrete demo boards are exercised by tests/demos/test_all_demos_roundtrip.py
+    # — the generic sweep here just constructs each class with
+    # refdes_number=1, which conflicts with the specific refdes
+    # assignments and wiring topology those boards expect.
+    'BLDCControllerBoard':   'demo-local; covered by tests/demos/test_all_demos_roundtrip.py',
+    'BLDCSupplyBoard':       'demo-local; covered by tests/demos/test_all_demos_roundtrip.py',
+    'BatteryPackBoard':      'demo-local; covered by tests/demos/test_all_demos_roundtrip.py',
+    'ControllerSourceBoard': 'demo-local; covered by tests/demos/test_all_demos_roundtrip.py',
+    'IsolatedRS232Board':    'demo-local; covered by tests/demos/test_all_demos_roundtrip.py',
+    'PowerSourceBoard':      'demo-local; covered by tests/demos/test_all_demos_roundtrip.py',
+    'RS232CableBoard':       'demo-local; covered by tests/demos/test_all_demos_roundtrip.py',
+    'FanCoolingBoard':       'demo-local; covered by tests/demos/test_all_demos_roundtrip.py',
     'ISOW7841': ('multi-domain chip: __init__ requires a per-instance '
                  'iso_domain that does not fit the generic sweep record; '
                  'covered by test_isow7841.py'),
