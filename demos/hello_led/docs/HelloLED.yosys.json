@@ -1,0 +1,78 @@
+{
+  "creator": "circuitry 0.x",
+  "modules": {
+    "HelloLED": {
+      "cells": {
+        "D1": {
+          "connections": {
+            "anode": [
+              2
+            ],
+            "cathode": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "color": "red"
+          },
+          "port_directions": {
+            "anode": "input",
+            "cathode": "input"
+          },
+          "type": "LED"
+        },
+        "R1": {
+          "connections": {
+            "t1": [
+              4
+            ],
+            "t2": [
+              2
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "330"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        }
+      },
+      "netnames": {
+        "GND": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "net_0": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        },
+        "vcc": {
+          "attributes": {},
+          "bits": [
+            4
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {
+        "lit": {
+          "bits": [
+            2
+          ],
+          "direction": "input"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+.TITLE HelloLED
+V_Rail_0 vcc 0 DC 5.0
+R1 vcc net_0 330.0
+D1 net_0 0 D_LED
+.LIB spice-models.lib
+.END

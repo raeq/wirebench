@@ -1,0 +1,15 @@
+digraph "HelloLED" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  R1 [label="R1\\n330Ω"];
+  D1 [label="D1\\nred LED"];
+  // Nets
+  node [shape=circle, label="", width=0.15, fixedsize=true];
+  gnd; net_0; vcc;
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+  D1 -> net_0 [taillabel="anode"];
+  D1 -> gnd [taillabel="cathode"];
+  R1 -> vcc [taillabel="t1"];
+  R1 -> net_0 [taillabel="t2"];
+}

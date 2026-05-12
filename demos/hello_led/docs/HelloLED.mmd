@@ -1,0 +1,11 @@
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    R1["R1<br/>330Ω"]
+    D1["D1<br/>red LED"]
+    net_0(("net_0"))
+    gnd(("gnd"))
+    vcc(("vcc"))
+    D1 ---|"anode"| net_0
+    D1 ---|"cathode"| gnd
+    R1 ---|"t1"| vcc
+    R1 ---|"t2"| net_0
