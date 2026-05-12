@@ -1,4 +1,4 @@
-from typing import Annotated, ClassVar
+from typing import Annotated, Any, ClassVar
 
 from pydantic import Field, validate_call
 
@@ -33,6 +33,17 @@ class Inductor(FactorNode):
     REFDES_PREFIX: ClassVar[str] = 'L'
     FOOTPRINT: ClassVar[str | None] = "Inductor_SMD:L_0603_1608Metric"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'t1': 1, 't2': 2}
+
+    LAYOUT: ClassVar[dict[str, Any]] = {
+        'kind': 'axial_2lead',
+        'lead_spacing_holes': 3,
+    }
+
+    # SMD 0603 by default for PCB export; hobby breadboard inductors are
+    # typically axial through-hole chokes.
+    @property
+    def is_through_hole(self) -> bool:
+        return True
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(

@@ -39,6 +39,7 @@ from framework.errors import (
     PinCountMismatchError, PitchMismatchError,
     # Format / persistence errors.
     FormatError, SaveError, LoadError, UnknownFormatError,
+    BreadboardIncompatibleError,
     RendererRegistryError, DuplicateRendererError, RendererNotFoundError,
     # API-usage errors.
     UsageError, WiredChipCallError, AmbiguousPinNameError,
@@ -92,6 +93,7 @@ __all__ = [
     'MatingError', 'IncompatibleMateError', 'UnmateableError',
     'PinCountMismatchError', 'PitchMismatchError',
     'FormatError', 'SaveError', 'LoadError', 'UnknownFormatError',
+    'BreadboardIncompatibleError',
     'RendererRegistryError', 'DuplicateRendererError', 'RendererNotFoundError',
     'UsageError', 'WiredChipCallError', 'AmbiguousPinNameError',
     'CompositeShapeError', 'UnknownPortError', 'OrphanWireError',

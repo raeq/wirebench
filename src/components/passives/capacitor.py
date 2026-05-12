@@ -1,4 +1,4 @@
-from typing import Annotated, ClassVar
+from typing import Annotated, Any, ClassVar
 
 from pydantic import Field, validate_call
 
@@ -33,6 +33,17 @@ class Capacitor(FactorNode):
     REFDES_PREFIX: ClassVar[str] = 'C'
     FOOTPRINT: ClassVar[str | None] = "Capacitor_SMD:C_0603_1608Metric"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'t1': 1, 't2': 2}
+
+    LAYOUT: ClassVar[dict[str, Any]] = {
+        'kind': 'radial_2lead',
+        'lead_spacing_holes': 1,
+    }
+
+    # SMD 0603 by default for PCB export, but hobby breadboard use is
+    # overwhelmingly through-hole ceramic / electrolytic capacitors.
+    @property
+    def is_through_hole(self) -> bool:
+        return True
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(

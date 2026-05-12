@@ -213,6 +213,18 @@ class UnknownFormatError(FormatError, ValueError):
     renamed."""
 
 
+class BreadboardIncompatibleError(FormatError, ValueError):
+    """The `assembly_guide` export was asked to render a design that
+    contains parts which can't be assembled on a standard 830-pin
+    solderless breadboard — typically SMD chips, BGA packages, or
+    SMD-only connectors (USB-C receptacles, microSD slots, etc.).
+
+    Use a different export target (`kicad` for PCB layout) or rework
+    the design with breadboard-friendly part variants (an ATmega328P
+    DIP-28 instead of an ATmega2560 TQFP-100; a sensor breakout
+    module instead of a bare BGA chip)."""
+
+
 class RendererRegistryError(FormatError):
     """Anything wrong with the export-adapter renderer / net-namer
     registry.  Abstract; concrete subclasses pick the right built-in

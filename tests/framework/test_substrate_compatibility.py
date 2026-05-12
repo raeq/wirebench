@@ -1,0 +1,220 @@
+"""Substrate-compatibility property tests.
+
+Per docs/assembly-guide-spec.md §8 (tests 1–5):
+
+  1. Through-hole defaults map FOOTPRINT correctly.
+  2. No-FOOTPRINT parts are vacuously compatible with every substrate.
+  3. The four substrate properties compose with `and` / `or`.
+  4. Per-class overrides win over the FOOTPRINT-based defaults.
+  5. The substrate audit doc stays in sync with live properties.
+"""
+from __future__ import annotations
+
+from pathlib import Path
+
+import pytest
+
+import components.chips     # noqa: F401 — registry side effects
+import components.diodes    # noqa: F401
+import components.passives  # noqa: F401
+import components.transistors  # noqa: F401
+import components.connectors  # noqa: F401
+
+from framework.factor import (
+    FactorNode,
+    _footprint_is_through_hole,
+    _footprint_is_smd,
+)
+from framework.port import Port
+from framework.registry import _REGISTRY
+
+from components.passives.led import LED
+from components.passives.rail import Rail
+from components.passives.resistor import Resistor
+
+
+# ----------------------------------------------------------------- 1. defaults
+
+@pytest.mark.parametrize('footprint,expected_th,expected_smd', [
+    ('Package_DIP:DIP-14_W7.62mm',           True,  False),
+    ('Package_TO_SOT_THT:TO-92_Inline',      True,  False),
+    ('Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal', True, False),
+    ('Connector_PinHeader_2.54mm:Header_1x4',True,  False),
+    ('Package_SO:SOIC-8',                    False, True),
+    ('Package_QFP:TQFP-100',                 False, True),
+    ('Package_QFN:QFN-24',                   False, True),
+    ('Connector_USB:USB_C_Receptacle',       False, True),
+    (None,                                   False, False),
+])
+def test_footprint_classification(
+    footprint: str | None,
+    expected_th: bool,
+    expected_smd: bool,
+) -> None:
+    """The two private helpers classify common footprint strings as
+    THT or SMD per the marker tables."""
+    assert _footprint_is_through_hole(footprint) is expected_th
+    assert _footprint_is_smd(footprint)          is expected_smd
+
+
+# ----------------------------------------------------------- 2. vacuous
+
+def test_rail_is_substrate_vacuous() -> None:
+    """Rail has FOOTPRINT=None and is compatible with every substrate
+    — it's a net abstraction, not a placeable part, so it never
+    blocks an assembly."""
+    rail = Rail(True)
+    assert rail.is_breadboard_compatible
+    assert rail.is_perfboard_compatible
+    assert rail.is_pcb_compatible
+    assert rail.is_dead_bug_compatible
+    # The underlying flags are *both* False (no FOOTPRINT to classify)
+    # — vacuity is a higher-level abstraction.
+    assert not rail.is_through_hole
+    assert not rail.is_smd
+
+
+# ----------------------------------------------------------- 3. composability
+
+def test_substrate_properties_compose_with_and_or() -> None:
+    """Per spec §4.2 the properties are plain booleans and compose
+    with native Python `and`/`or` without ceremony."""
+    r = Resistor(330, refdes_number=1)
+    composed = r.is_breadboard_compatible and r.is_pcb_compatible
+    assert isinstance(composed, bool)
+    assert composed is True
+
+    led = LED('red', refdes_number=1)
+    either = r.is_breadboard_compatible or led.is_breadboard_compatible
+    assert either is True
+
+
+# ------------------------------------------------------------- 4. overrides
+
+def test_per_class_property_override_wins() -> None:
+    """A subclass that overrides `is_through_hole` via `@property`
+    sticks even though its FOOTPRINT marker would yield the opposite
+    default."""
+    class _FakeSMD(FactorNode):
+        FOOTPRINT = 'Package_SO:SOIC-8'   # would default to SMD only
+
+        @property
+        def is_through_hole(self) -> bool:   # override to True anyway
+            return True
+
+        @property
+        def ports(self) -> dict[str, Port]:
+            return {}
+        def evaluate(self) -> None: pass
+
+    inst = _FakeSMD()
+    # Override flips is_through_hole, which cascades into is_breadboard,
+    # is_perfboard, and is_dead_bug.
+    assert inst.is_through_hole is True
+    assert inst.is_breadboard_compatible is True
+    assert inst.is_dead_bug_compatible is True
+    # FOOTPRINT-based is_smd is independent — still True via the marker.
+    assert inst.is_smd is True
+    assert inst.is_pcb_compatible is True
+
+
+def test_resistor_class_override_is_through_hole_despite_smd_footprint() -> None:
+    """Real production case: Resistor's KiCad FOOTPRINT is a 0603 SMD
+    pad (for PCB export), but hobby breadboard use is THT.  The class
+    overrides `is_through_hole` to True so the assembly-guide doesn't
+    refuse a perfectly normal breadboard build."""
+    r = Resistor(330, refdes_number=1)
+    assert 'SMD' in (r.FOOTPRINT or '')   # baseline: FOOTPRINT says SMD
+    assert r.is_through_hole is True       # but the override flips it
+    assert r.is_breadboard_compatible is True
+
+
+# ----------------------------------------------------------- 5. audit doc
+
+# Path relative to the repo root.
+AUDIT_PATH = Path(__file__).resolve().parents[2] / 'docs' / 'substrate-compatibility-audit.md'
+
+
+def _construct_any(cls: type[FactorNode]) -> FactorNode | None:
+    """Best-effort registry-sweep instantiation — mirrors the helper
+    used in the format roundtrip sweep test."""
+    from typing import Any, cast
+    factory = cast(Any, cls)
+    try:
+        if hasattr(cls, 'REFDES_PREFIX'):
+            kwargs: dict[str, object] = {'refdes_number': 1}
+            name = cls.__name__
+            if name == 'Resistor':       kwargs['ohms']    = 330
+            elif name == 'Capacitor':    kwargs['farads']  = 100e-9
+            elif name == 'Inductor':     kwargs['henries'] = 100e-6
+            elif name == 'LED':          kwargs['color']   = 'red'
+            elif name == 'Cell':         kwargs['initial_state_of_charge'] = 1.0
+            elif name == 'NE555_Monostable': kwargs['duration_ms'] = 1.0
+            elif 'Header' in name and ('Female' in name or 'Male' in name):
+                kwargs.update({'pin_count': 4, 'pitch_mm': 2.54})
+            elif name in ('IDC2xNMale', 'IDC2xNSocket'):
+                kwargs.update({'pin_count': 10, 'pitch_mm': 2.54})
+            elif name == 'ScrewTerminalBlock':
+                kwargs.update({'pin_count': 4, 'pitch_mm': 5.08})
+            elif name.startswith('JST'):
+                kwargs['pin_count'] = 4
+            elif name == 'ISOW7841':
+                from framework.ground import GroundDomain
+                kwargs['iso_domain'] = GroundDomain('iso_sweep')
+            inst: FactorNode = factory(**kwargs)
+            return inst
+        if cls.__name__ == 'Rail':
+            return cast(FactorNode, factory(level=True))
+        if cls.__name__ == 'DiodeOR':
+            return cast(FactorNode, factory(input_names=('a',)))
+        if cls.__name__ == 'Monostable':
+            return cast(FactorNode, factory(duration_ms=1.0))
+        return cast(FactorNode, factory())
+    except Exception:
+        return None
+
+
+@pytest.mark.skipif(not AUDIT_PATH.exists(), reason="audit doc not generated yet")
+def test_substrate_audit_doc_matches_live_classes() -> None:
+    """Every line of `docs/substrate-compatibility-audit.md` agrees with
+    the live property values.  The doc is the human-readable mirror of
+    the live values; this test keeps them in sync."""
+    text = AUDIT_PATH.read_text()
+    # The audit doc uses a 4-column Markdown table:
+    #   | Class | TH | SMD | BB | PB | PCB | DB | Footprint |
+    # We parse `| ClassName | ...` rows and compare each Y/N against
+    # the live property.
+    rows: dict[str, tuple[str, str, str, str, str, str]] = {}
+    for line in text.splitlines():
+        if not line.startswith('| ') or '---' in line:
+            continue
+        cells = [c.strip() for c in line.strip('|').split('|')]
+        if len(cells) < 8 or cells[0] in ('Class', ''):
+            continue
+        rows[cells[0]] = tuple(cells[1:7])  # type: ignore[assignment]
+
+    seen_classes = 0
+    for name, cls in _REGISTRY.items():
+        if name not in rows:
+            continue
+        inst = _construct_any(cls)
+        if inst is None:
+            continue
+        seen_classes += 1
+        live = (
+            'Y' if inst.is_through_hole          else 'N',
+            'Y' if inst.is_smd                   else 'N',
+            'Y' if inst.is_breadboard_compatible else 'N',
+            'Y' if inst.is_perfboard_compatible  else 'N',
+            'Y' if inst.is_pcb_compatible        else 'N',
+            'Y' if inst.is_dead_bug_compatible   else 'N',
+        )
+        assert rows[name] == live, (
+            f"Audit doc out of sync for {name}: "
+            f"doc says {rows[name]}, live properties are {live}. "
+            f"Re-run scripts/generate_substrate_audit.py."
+        )
+    assert seen_classes >= 50, (
+        f"Audit doc only covers {seen_classes} live classes — "
+        f"expected the whole registry (>= 50). Regenerate."
+    )

@@ -1,4 +1,4 @@
-from typing import Annotated, ClassVar
+from typing import Annotated, Any, ClassVar
 
 from pydantic import Field, validate_call
 
@@ -45,6 +45,30 @@ class LED(FactorNode):
     REFDES_PREFIX: ClassVar[str] = 'D'   # LEDs are diodes; standard prefix is D, not LED.
     FOOTPRINT: ClassVar[str | None] = "LED_SMD:LED_0805"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
+
+    LAYOUT: ClassVar[dict[str, Any]] = {
+        'kind': 'radial_2lead_polarised',
+        'lead_spacing_holes': 1,
+        'positive_lead': 'anode',
+    }
+
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**LED polarity matters.** The longer lead of a fresh LED is the "
+        "anode (+); the shorter lead is the cathode (−). If the leads have "
+        "been trimmed, look for the flat side of the body — that's the "
+        "cathode side. Reversing the LED is silent: nothing lights up and "
+        "the framework's topology check can't catch it.",
+        "**Always use a current-limit resistor** in series with an LED. "
+        "Without it, the LED draws too much current at any sensible supply "
+        "voltage and dies in a flash. R = (V_supply − V_F) / I_target; "
+        "330 Ω at 5 V drives ~10 mA through a 2 V red LED.",
+    )
+
+    # SMD 0805 by default for PCB export; hobby breadboard use is
+    # through-hole 5 mm / 3 mm LEDs on radial leads.
+    @property
+    def is_through_hole(self) -> bool:
+        return True
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(

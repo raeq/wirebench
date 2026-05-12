@@ -1,4 +1,4 @@
-from typing import Annotated, ClassVar
+from typing import Annotated, Any, ClassVar
 
 from pydantic import Field, validate_call
 
@@ -40,6 +40,20 @@ class Resistor(FactorNode):
     REFDES_PREFIX: ClassVar[str] = 'R'
     FOOTPRINT: ClassVar[str | None] = "Resistor_SMD:R_0603_1608Metric"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'t1': 1, 't2': 2}
+
+    LAYOUT: ClassVar[dict[str, Any]] = {
+        'kind': 'axial_2lead',
+        'lead_spacing_holes': 3,
+    }
+
+    # The default KiCad footprint is a 0603 SMD pad — appropriate for
+    # PCB export — but hobby use on breadboards / perfboards is
+    # overwhelmingly through-hole carbon-film parts on axial leads.
+    # Force the substrate flag to THT so the assembly-guide doesn't
+    # refuse a perfectly normal breadboard build.
+    @property
+    def is_through_hole(self) -> bool:
+        return True
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(
