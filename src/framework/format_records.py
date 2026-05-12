@@ -143,6 +143,9 @@ class LP2950Record(_ChipRecord):     type: Literal['LP2950']     = 'LP2950'
 class LM5002Record(_ChipRecord):     type: Literal['LM5002']     = 'LM5002'
 class LM5160Record(_ChipRecord):     type: Literal['LM5160']     = 'LM5160'
 class TPS2660Record(_ChipRecord):    type: Literal['TPS2660']    = 'TPS2660'
+class TMP302Record(_ChipRecord):     type: Literal['TMP302']     = 'TMP302'
+class SN74AHC1G14Record(_ChipRecord): type: Literal['SN74AHC1G14'] = 'SN74AHC1G14'
+class DRV8313Record(_ChipRecord):    type: Literal['DRV8313']    = 'DRV8313'
 
 # Specialty ICs.
 class NE555Record(_ChipRecord):         type: Literal['NE555']         = 'NE555'
@@ -210,6 +213,7 @@ class D1N4148Record(_DiodeRecord):  type: Literal['D1N4148']  = 'D1N4148'
 class D1N4001Record(_DiodeRecord):  type: Literal['D1N4001']  = 'D1N4001'
 class D1N4007Record(_DiodeRecord):  type: Literal['D1N4007']  = 'D1N4007'
 class D1N5817Record(_DiodeRecord):  type: Literal['D1N5817']  = 'D1N5817'
+class D1N4728ARecord(_DiodeRecord): type: Literal['D1N4728A'] = 'D1N4728A'
 class D1N4733ARecord(_DiodeRecord): type: Literal['D1N4733A'] = 'D1N4733A'
 class D1N4742ARecord(_DiodeRecord): type: Literal['D1N4742A'] = 'D1N4742A'
 
@@ -384,6 +388,7 @@ ComponentRecord = Annotated[
         LM7805Record, LM7812Record, LM7905Record, LM317Record, LM337Record,
         AMS1117_33Record, AMS1117_50Record, LP2950Record,
         LM5002Record, LM5160Record, TPS2660Record,
+        TMP302Record, SN74AHC1G14Record, DRV8313Record,
         # Specialty ICs
         NE555Record, LM386Record, DS18B20Record, DS1307Record, MAX7219Record,
         Display5641ASRecord,
@@ -403,7 +408,7 @@ ComponentRecord = Annotated[
         Q2N7000Record, BS170Record, IRLB8721Record, IRFZ44NRecord,
         # Diodes
         D1N4148Record, D1N4001Record, D1N4007Record, D1N5817Record,
-        D1N4733ARecord, D1N4742ARecord,
+        D1N4728ARecord, D1N4733ARecord, D1N4742ARecord,
         Header1xNMaleRecord, Header1xNFemaleRecord,
         Header2xNMaleRecord, Header2xNFemaleRecord,
         IDC2xNMaleRecord, IDC2xNSocketRecord,

@@ -59,6 +59,9 @@ from .lm5160     import LM5160
 # Power-path protection / hot-swap.
 from .tps2660    import TPS2660
 
+# Motor drivers.
+from .drv8313    import DRV8313
+
 # Specialty ICs.
 from .ne555         import NE555
 from .lm386         import LM386
@@ -68,11 +71,15 @@ from .max7219       import MAX7219
 from .display5641as import Display5641AS
 
 # Sensors.
-from .tmp36   import TMP36
-from .bmp280  import BMP280
-from .mpu6050 import MPU6050
-from .hcsr04  import HCSR04
-from .dht11   import DHT11
+from .tmp36       import TMP36
+from .tmp302      import TMP302
+from .bmp280      import BMP280
+from .mpu6050     import MPU6050
+from .hcsr04      import HCSR04
+from .dht11       import DHT11
+
+# Single-gate logic.
+from .sn74ahc1g14 import SN74AHC1G14
 
 # Power / interface.
 from .moc3021      import MOC3021
@@ -110,10 +117,14 @@ __all__ = [
     'LM5002', 'LM5160',
     # Power-path / hot-swap
     'TPS2660',
+    # Motor drivers
+    'DRV8313',
     # Specialty
     'NE555', 'LM386', 'DS18B20', 'DS1307', 'MAX7219', 'Display5641AS',
     # Sensors
-    'TMP36', 'BMP280', 'MPU6050', 'HCSR04', 'DHT11',
+    'TMP36', 'TMP302', 'BMP280', 'MPU6050', 'HCSR04', 'DHT11',
+    # Single-gate logic
+    'SN74AHC1G14',
     # Power/interface
     'MOC3021', 'OPTO_4N25', 'OPTO_TLP521', 'TLC5940', 'MAX232',
     # MCUs
