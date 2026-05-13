@@ -28,21 +28,12 @@ def test_pin_numbers():
     assert D1N5817.PIN_NUMBERS == {'anode': 1, 'cathode': 2}
 
 
-def test_call_models_forward_conduction():
-    # The 1N5817 now wraps a `DiodeForward` cell with V_F = 0.3 V
-    # (Schottky drop).  Above V_F, the cathode tracks anode minus the
-    # drop; at or below V_F, the cell holds the cathode at 0 V.
-    d = D1N5817(refdes_number=1)
-    assert d(5.0) == 4.7
-    d2 = D1N5817(refdes_number=2)
-    assert d2(0.1) == 0.0   # below the 0.3 V threshold
-
-
-def test_call_with_no_anode_returns_default_cathode():
-    # Calling with no anode argument leaves the cell with a zero
-    # anode (the cell's evaluate() defaults None → 0.0), so the
-    # cathode reads 0.0 V — the diode is "off".
-    assert D1N5817(refdes_number=1)() == 0.0
+def test_call_is_noop():
+    # D1N5817 is Category A passive — the diode itself models no
+    # directional behaviour.  Forward-conduction in a series-rectifier
+    # role is provided by a `SeriesRectifier` cell wired alongside the
+    # diode in the circuit; see docs/behavioural-cell-audit-spec.md §7.2.2.
+    assert D1N5817(refdes_number=1)() is None
 
 
 def test_repr():

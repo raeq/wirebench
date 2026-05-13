@@ -71,10 +71,10 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
             for child in node._factor_nodes:
                 visit(child, node.refdes)
             return
-        # Refdes-bearing Circuit that isn't a Chip or Board — e.g. a
-        # diode that wraps a `DiodeForward` cell internally.  Treat it
-        # as a single procurable part (one BOM row); don't descend
-        # into its private internal cells.
+        # Refdes-bearing Circuit that isn't a Chip or Board — a
+        # composite part that models itself as a small sub-design but
+        # appears on the BOM as one procurable item.  Treat it as a
+        # single row; don't descend into its private internal cells.
         if isinstance(node, Circuit) and getattr(node, 'refdes', None):
             line = lookup_renderer(type(node), 'bom')(node, ctx, parent_refdes)
             if line:

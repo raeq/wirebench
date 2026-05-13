@@ -94,8 +94,21 @@ class LinearRegulator(FactorNode):
     def evaluate(self) -> None:
         v_in_raw = self._ports['v_in'].value
         v_in = float(v_in_raw) if v_in_raw is not None else 0.0
-        v_unclamped = v_in - self._dropout_v
-        v_regulated = max(0.0, min(self._output_voltage, v_unclamped))
+        if self._output_voltage >= 0:
+            # Positive regulator (7805, AMS1117, LP2950, LM317, …):
+            # output sits between 0 V and OUTPUT_VOLTAGE; sags when
+            # v_in falls within DROPOUT_V of the rated output.
+            v_unclamped = v_in - self._dropout_v
+            v_regulated = max(0.0, min(self._output_voltage, v_unclamped))
+        else:
+            # Negative regulator (7905, LM337, …): output sits between
+            # OUTPUT_VOLTAGE (a negative number) and 0 V; sags toward
+            # 0 V when v_in is within DROPOUT_V of the rated output.
+            # The sign-flip on `v_in + DROPOUT_V` and the mirrored
+            # min/max keep the formula structurally identical to the
+            # positive case but reflected through the origin.
+            v_unclamped = v_in + self._dropout_v
+            v_regulated = min(0.0, max(self._output_voltage, v_unclamped))
         self._ports['v_out'].drive(v_regulated)
 
     @validate_call(config={'arbitrary_types_allowed': True})

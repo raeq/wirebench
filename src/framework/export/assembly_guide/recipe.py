@@ -64,9 +64,9 @@ def _walk_top_parts(design: FactorNode) -> list[FactorNode]:
 
     Chips and Boards aren't descended into — each is one part on the
     BOM.  Refdes-bearing Circuit composites that aren't the top-level
-    design (e.g. a Diode wrapping an internal `DiodeForward` cell)
-    are also treated as single leaf parts — descend stops at the
-    refdes boundary.  Raw, refdes-less `Circuit` composites (the
+    design (a composite part that models itself as a small sub-design
+    but appears on the BOM as one item) are also treated as single
+    leaf parts — descent stops at the refdes boundary.  Raw, refdes-less `Circuit` composites (the
     user's top-level design class itself) ARE descended into so their
     contained leaves appear.  Rails are kept so the jumper-generation
     step can detect rail nets; the Parts table filters them out

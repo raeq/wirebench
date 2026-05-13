@@ -1,6 +1,6 @@
-from typing import ClassVar
+from typing import Annotated, ClassVar
 
-from pydantic import validate_call
+from pydantic import Field, validate_call
 
 from framework.chip import Chip
 from framework.ground import GroundDomain, ELECTRICAL
@@ -9,22 +9,29 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog
+from framework.wire import wire
+from .concepts.linear_regulator import LinearRegulator
 
 
 @register('LM337')
 class LM337(Chip):
     """Texas Instruments LM337 — adjustable -1.25V to -37V negative regulator (TO-220).
 
-    Black-box package model: pins follow the datasheet pinout verbatim;
-    no internal cells are instantiated. Pin 2 is INPUT and pin 3 is
-    OUTPUT — opposite of LM317. For behavioural simulation, use the
-    .SUBCKT placeholder in spice-models.lib or substitute a vendor model.
+    Composes a private `LinearRegulator` cell with a *negative*
+    output_voltage so the sign-aware clamp keeps the output in the
+    [OUTPUT_VOLTAGE, 0 V] range.  User asserts the target output at
+    construction (the same value they sized the external R1 / R2
+    pair to deliver via the ADJ reference pin) and the cell drives
+    the OUTPUT pin to it.  Pin 2 is INPUT and pin 3 is OUTPUT —
+    opposite of LM317.
     """
 
-    __slots__ = ('_refdes_number',)
+    __slots__ = ('_refdes_number', '_regulator', '_output_voltage')
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-220-3_Vertical"
+
+    DROPOUT_V: ClassVar[float] = 2.0
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1, 'ADJ',    Direction.IN,  Analog),
@@ -33,16 +40,35 @@ class LM337(Chip):
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})
-    def __init__(self, domain: GroundDomain = ELECTRICAL, *,
-                 refdes_number: RefdesNumber) -> None:
+    def __init__(
+        self,
+        domain: GroundDomain = ELECTRICAL,
+        *,
+        refdes_number: RefdesNumber,
+        output_voltage: Annotated[float, Field(ge=-37.0, le=-1.25)] = -5.0,
+    ) -> None:
         validate_refdes(self.REFDES_PREFIX, refdes_number)
         self._refdes_number = refdes_number
+        self._output_voltage = float(output_voltage)
         pins = [
             Pin(PinId(number, name), direction, domain,
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        self._regulator = LinearRegulator(
+            output_voltage=self._output_voltage,
+            dropout_v=self.DROPOUT_V,
+            domain=domain,
+        )
+        by_name = {pin.id.name: pin for pin in pins}
+        wire(by_name['INPUT'].internal,  self._regulator.ports['v_in'])
+        wire(self._regulator.ports['v_out'], by_name['OUTPUT'].internal)
+        wire(by_name['ADJ'].internal, self._regulator.ports['gnd'])
+        super().__init__(pins=pins, cells=[self._regulator])
+
+    @property
+    def output_voltage(self) -> float:
+        return self._output_voltage
 
     @property
     def refdes(self) -> str:
