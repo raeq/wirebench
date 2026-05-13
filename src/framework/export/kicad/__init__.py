@@ -123,6 +123,13 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
             for c in node._factor_nodes:
                 visit(new_stack, c)
             return
+        # Refdes-bearing composite (e.g. a diode wrapping an internal
+        # `DiodeForward` cell). Emit as a single component; don't
+        # descend into its private cells.
+        if isinstance(node, Circuit) and getattr(node, 'refdes', None):
+            qrd = _qualified_refdes(board_stack, node.refdes)
+            components.append((qrd, list(board_stack), node))
+            return
         if isinstance(node, Circuit):
             for c in node._factor_nodes:
                 visit(board_stack, c)

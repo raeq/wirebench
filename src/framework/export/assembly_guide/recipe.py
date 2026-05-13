@@ -63,10 +63,14 @@ def _walk_top_parts(design: FactorNode) -> list[FactorNode]:
     """Collect every top-level leaf part in `design`, including Rails.
 
     Chips and Boards aren't descended into — each is one part on the
-    BOM.  Raw `Circuit` composites (the user's top-level design class)
-    ARE descended into so their contained leaves appear.  Rails are
-    kept so the jumper-generation step can detect rail nets; the
-    Parts table filters them out later."""
+    BOM.  Refdes-bearing Circuit composites that aren't the top-level
+    design (e.g. a Diode wrapping an internal `DiodeForward` cell)
+    are also treated as single leaf parts — descend stops at the
+    refdes boundary.  Raw, refdes-less `Circuit` composites (the
+    user's top-level design class itself) ARE descended into so their
+    contained leaves appear.  Rails are kept so the jumper-generation
+    step can detect rail nets; the Parts table filters them out
+    later."""
     parts: list[FactorNode] = []
     stack: list[FactorNode] = [design]
     while stack:
@@ -75,6 +79,16 @@ def _walk_top_parts(design: FactorNode) -> list[FactorNode]:
             parts.append(node)
             continue
         if isinstance(node, Chip):
+            parts.append(node)
+            continue
+        # Composite part with a refdes (e.g., a Diode-as-Circuit
+        # wrapping a behavioural cell). Treat as a single leaf part
+        # for the BOM and placement — don't recurse into its private
+        # internal cells. The top-level design is excluded so its
+        # contents still get walked.
+        if (node is not design
+                and isinstance(node, Circuit)
+                and _refdes_or_none(node) is not None):
             parts.append(node)
             continue
         if isinstance(node, Circuit):

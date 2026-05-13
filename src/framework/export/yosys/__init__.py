@@ -132,6 +132,10 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
                 out.append(node); return
             if isinstance(node, Connector):
                 out.append(node); return
+            # Refdes-bearing composite (e.g. a Diode-as-Circuit) —
+            # emit as a single cell; don't descend.
+            if isinstance(node, Circuit) and getattr(node, 'refdes', None):
+                out.append(node); return
             if isinstance(node, Circuit):
                 for c in node._factor_nodes:
                     visit(c)

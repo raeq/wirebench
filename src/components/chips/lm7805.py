@@ -9,22 +9,29 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog
+from framework.wire import wire
+from .concepts.linear_regulator import LinearRegulator
 
 
 @register('LM7805')
 class LM7805(Chip):
     """Texas Instruments LM7805 — fixed +5V positive linear regulator (TO-220).
 
-    Black-box package model: pins follow the datasheet pinout verbatim;
-    no internal cells are instantiated. For behavioural simulation, use
-    the .SUBCKT placeholder in spice-models.lib or substitute a vendor
-    model.
+    Composes a private `LinearRegulator` cell wired between the INPUT,
+    GND, and OUTPUT pins so the OUTPUT pin's internal face has a real
+    driver — without it, the framework's ERC walker would treat the
+    regulator's downstream net as floating.  The cell is a steady-state
+    voltage-only model; for analogue / timing-accurate simulation,
+    substitute a vendor SPICE .SUBCKT.
     """
 
-    __slots__ = ('_refdes_number',)
+    __slots__ = ('_refdes_number', '_regulator')
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-220-3_Vertical"
+
+    OUTPUT_VOLTAGE: ClassVar[float] = 5.0
+    DROPOUT_V:      ClassVar[float] = 2.0
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Put a capacitor on each side of the regulator, close to its "
@@ -70,7 +77,21 @@ class LM7805(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        self._regulator = LinearRegulator(
+            output_voltage=self.OUTPUT_VOLTAGE,
+            dropout_v=self.DROPOUT_V,
+            domain=domain,
+        )
+        # Bond the regulator cell's three ports to the matching pin
+        # internal faces — same pattern ULN2003A uses for its
+        # DarlingtonChannel cells.  The OUTPUT pin's internal face
+        # gains its driver from regulator.v_out; the framework's ERC
+        # walker now sees a real driver on the OUTPUT net.
+        by_name = {pin.id.name: pin for pin in pins}
+        wire(by_name['INPUT'].internal,  self._regulator.ports['v_in'])
+        wire(self._regulator.ports['v_out'], by_name['OUTPUT'].internal)
+        wire(by_name['GND'].internal,    self._regulator.ports['gnd'])
+        super().__init__(pins=pins, cells=[self._regulator])
 
     @property
     def refdes(self) -> str:

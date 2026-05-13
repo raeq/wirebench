@@ -9,23 +9,27 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog
+from framework.wire import wire
+from .concepts.linear_regulator import LinearRegulator
 
 
 @register('AMS1117_33')
 class AMS1117_33(Chip):
     """AMS1117-3.3 — fixed +3.3V 1A LDO regulator (SOT-223).
 
-    Black-box package model: pins follow the datasheet pinout verbatim;
-    no internal cells are instantiated. The tab (pin 4) is electrically
-    OUTPUT and exposed here as a distinct port `OUTPUT_TAB` because
-    `PinId` requires unique pin numbers but the port name must also be
-    unique. For behavioural simulation, supply a generic LDO model.
+    Composes a private `LinearRegulator` cell wired between INPUT, GND,
+    and both OUTPUT pins (pin 2 + the OUTPUT_TAB on pin 4 are tied
+    together inside the package — same silicon node).  Dropout is
+    ~1.1 V at 1 A.
     """
 
-    __slots__ = ('_refdes_number',)
+    __slots__ = ('_refdes_number', '_regulator')
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_SMD:SOT-223-3_TabPin2"
+
+    OUTPUT_VOLTAGE: ClassVar[float] = 3.3
+    DROPOUT_V:      ClassVar[float] = 1.1
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1, 'GND',        Direction.IN,  Analog),
@@ -44,7 +48,20 @@ class AMS1117_33(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        self._regulator = LinearRegulator(
+            output_voltage=self.OUTPUT_VOLTAGE,
+            dropout_v=self.DROPOUT_V,
+            domain=domain,
+        )
+        by_name = {pin.id.name: pin for pin in pins}
+        wire(by_name['INPUT'].internal,  self._regulator.ports['v_in'])
+        # OUTPUT and OUTPUT_TAB are the same silicon node — drive both
+        # internal faces from the cell's single v_out.
+        wire(self._regulator.ports['v_out'],
+             by_name['OUTPUT'].internal,
+             by_name['OUTPUT_TAB'].internal)
+        wire(by_name['GND'].internal,    self._regulator.ports['gnd'])
+        super().__init__(pins=pins, cells=[self._regulator])
 
     @property
     def refdes(self) -> str:

@@ -253,8 +253,8 @@
           "hide_name": 0,
           "parameters": {},
           "port_directions": {
-            "anode": "inout",
-            "cathode": "inout"
+            "anode": "input",
+            "cathode": "output"
           },
           "type": "D1N5817"
         },

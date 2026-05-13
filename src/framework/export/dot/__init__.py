@@ -87,6 +87,13 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
             for c in node._factor_nodes:
                 collect(node.refdes, c)
             return
+        # Refdes-bearing composite — emit as a single box, don't
+        # descend into its private cells.
+        if isinstance(node, Circuit) and getattr(node, 'refdes', None):
+            target = (board_components.setdefault(parent_board, [])
+                      if parent_board else top_components)
+            target.append(node)
+            return
         if isinstance(node, Circuit):
             for c in node._factor_nodes:
                 collect(parent_board, c)
