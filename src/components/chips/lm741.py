@@ -9,21 +9,19 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog
+from framework.wire import wire
+from .concepts.opamp import OpAmp
 
 
 @register('LM741')
 class LM741(Chip):
     """Texas Instruments LM741 — classic single bipolar op-amp (DIP-8).
 
-    Pin 8 is NC on the LM741 and is omitted from the model.
-
-    Black-box package model: pins follow the datasheet pinout verbatim;
-    no internal cells are instantiated. For behavioural simulation, use
-    the .SUBCKT placeholder in spice-models.lib or substitute a vendor
-    model.
+    Pin 8 is NC on the LM741 and is omitted from the model.  Composes
+    one private `OpAmp` cell with the chip's V_POS / V_NEG as supply.
     """
 
-    __slots__ = ('_refdes_number',)
+    __slots__ = ('_refdes_number', '_cell')
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-8_W7.62mm"
@@ -48,7 +46,14 @@ class LM741(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        self._cell = OpAmp(domain)
+        by_name = {pin.id.name: pin for pin in pins}
+        wire(by_name['IN_POS'].internal, self._cell.ports['v_in_pos'])
+        wire(by_name['IN_NEG'].internal, self._cell.ports['v_in_neg'])
+        wire(self._cell.ports['out'], by_name['OUT'].internal)
+        wire(by_name['V_POS'].internal, self._cell.ports['v_supply'])
+        wire(by_name['V_NEG'].internal, self._cell.ports['v_gnd'])
+        super().__init__(pins=pins, cells=[self._cell])
 
     @property
     def refdes(self) -> str:

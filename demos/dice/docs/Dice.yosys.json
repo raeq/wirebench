@@ -6,10 +6,10 @@
         "C1": {
           "connections": {
             "t1": [
-              40
+              42
             ],
             "t2": [
-              41
+              43
             ]
           },
           "hide_name": 0,
@@ -23,10 +23,10 @@
         "C2": {
           "connections": {
             "t1": [
-              42
+              44
             ],
             "t2": [
-              43
+              45
             ]
           },
           "hide_name": 0,
@@ -351,25 +351,6 @@
         "R5": {
           "connections": {
             "t1": [
-              34
-            ],
-            "t2": [
-              35
-            ]
-          },
-          "hide_name": 0,
-          "parameters": {
-            "ohms": "10000"
-          },
-          "port_directions": {
-            "t1": "inout",
-            "t2": "inout"
-          },
-          "type": "Resistor"
-        },
-        "R6": {
-          "connections": {
-            "t1": [
               36
             ],
             "t2": [
@@ -386,7 +367,7 @@
           },
           "type": "Resistor"
         },
-        "R7": {
+        "R6": {
           "connections": {
             "t1": [
               38
@@ -405,31 +386,50 @@
           },
           "type": "Resistor"
         },
+        "R7": {
+          "connections": {
+            "t1": [
+              40
+            ],
+            "t2": [
+              41
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "10000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
         "U1": {
           "connections": {
             "CONT": [
-              25
-            ],
-            "DISCH": [
               27
             ],
+            "DISCH": [
+              29
+            ],
             "GND": [
-              22
+              24
             ],
             "OUT": [
-              24
+              26
             ],
             "RESET": [
               18
             ],
             "THRES": [
-              26
+              28
             ],
             "TRIG": [
-              23
+              25
             ],
             "VCC": [
-              28
+              30
             ]
           },
           "hide_name": 0,
@@ -449,16 +449,16 @@
         "U2": {
           "connections": {
             "CE": [
-              20
+              22
             ],
             "CLK": [
-              19
+              21
             ],
             "CO": [
               5
             ],
             "Q0": [
-              21
+              23
             ],
             "Q1": [
               10
@@ -479,22 +479,22 @@
               11
             ],
             "Q7": [
-              29
-            ],
-            "Q8": [
               31
             ],
+            "Q8": [
+              33
+            ],
             "Q9": [
-              32
+              34
             ],
             "RST": [
               11
             ],
             "VDD": [
-              33
+              35
             ],
             "VSS": [
-              30
+              32
             ]
           },
           "hide_name": 0,
@@ -602,19 +602,19 @@
       "ports": {
         "button": {
           "bits": [
-            20
+            22
           ],
           "direction": "input"
         },
         "q": {
           "bits": [
-            21
+            23
           ],
           "direction": "output"
         },
         "tick": {
           "bits": [
-            19
+            21
           ],
           "direction": "input"
         }

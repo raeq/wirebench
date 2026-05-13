@@ -9,20 +9,24 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog, Digital
+from framework.wire import wire
+from .concepts.idle_driver import IdleDriver
 
 
 @register('HCSR04')
 class HCSR04(Chip):
     """HC-SR04 — ultrasonic ranging breakout module (4-pin SIP, 2.54 mm).
 
-    Black-box package model: pins follow the module pinout verbatim;
-    no internal cells are instantiated. For behavioural simulation, use
-    the .SUBCKT placeholder in spice-models.lib or substitute a vendor
-    model. 5 V part — divide ECHO for 3.3 V MCUs. Min trigger pulse
-    10 µs; ≥60 ms between measurements.
+    ECHO is the chip's response to a trigger pulse — its width
+    encodes the distance.  The framework can't model that pulse-
+    width-encoded timing, so the OUT pin is driven by an
+    `IdleDriver` (LOW idle).  Demos that need echo behaviour
+    prescribe the value via Python state before evaluation, or run
+    SPICE for accurate timing.  5 V part — divide ECHO for 3.3 V
+    MCUs.  Min trigger pulse 10 µs; ≥60 ms between measurements.
     """
 
-    __slots__ = ('_refdes_number',)
+    __slots__ = ('_refdes_number', '_echo_drv')
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
@@ -44,7 +48,10 @@ class HCSR04(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        self._echo_drv = IdleDriver(Digital, idle_value=False, domain=domain)
+        by_name = {pin.id.name: pin for pin in pins}
+        wire(self._echo_drv.ports['out'], by_name['ECHO'].internal)
+        super().__init__(pins=pins, cells=[self._echo_drv])
 
     @property
     def refdes(self) -> str:

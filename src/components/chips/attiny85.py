@@ -25,6 +25,15 @@ class ATtiny85(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = 'Package_DIP:DIP-8_W7.62mm'
 
+    # Category C — application-firmware-driven (per
+    # docs/behavioural-cell-audit-spec.md §7.3): the MCU's OUT
+    # pins are driven by user firmware, not by a deterministic
+    # function of its input pins. The bare class legitimately
+    # ships with `cells=[]`; users subclass and inject a
+    # firmware-as-cell per the existing `Uno_ThermometerSketch`
+    # / `Uno_BLDCCommutator` pattern.
+    BARE_FIRMWARE_DRIVEN: ClassVar[bool] = True
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**A new ATtiny85 runs at 1 MHz out of the box, not 8 MHz.** "
         "The chip ships with the internal oscillator divided by 8 "

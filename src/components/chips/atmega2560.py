@@ -25,6 +25,15 @@ class ATmega2560(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = 'Package_QFP:TQFP-100_14x14mm_P0.5mm'
 
+    # Category C — application-firmware-driven (per
+    # docs/behavioural-cell-audit-spec.md §7.3): the MCU's OUT
+    # pins are driven by user firmware, not by a deterministic
+    # function of its input pins. The bare class legitimately
+    # ships with `cells=[]`; users subclass and inject a
+    # firmware-as-cell per the existing `Uno_ThermometerSketch`
+    # / `Uno_BLDCCommutator` pattern.
+    BARE_FIRMWARE_DRIVEN: ClassVar[bool] = True
+
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (  1, 'PG5',          Direction.BIDIR,  Digital),
         (  2, 'PE0',          Direction.BIDIR,  Digital),

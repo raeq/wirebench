@@ -9,19 +9,22 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog, Digital
+from framework.wire import wire
+from .concepts.analog_temp_sensor import AnalogTempSensor
 
 
 @register('TMP36')
 class TMP36(Chip):
     """Analog Devices TMP36 — low-voltage analog temperature sensor (TO-92).
 
-    Black-box package model: pins follow the datasheet pinout verbatim;
-    no internal cells are instantiated. For behavioural simulation, use
-    the .SUBCKT placeholder in spice-models.lib or substitute a vendor
-    model. 10 mV/°C linear output; 750 mV at 25 °C.
+    Composes one private `AnalogTempSensor` cell that drives `VOUT`
+    from a user-prescribed temperature (10 mV/°C + 0.5 V offset).
+    Set `chip.temperature_c = T` (passed through to the cell) before
+    `evaluate()` to read the resulting VOUT in scenarios; default
+    25 °C.
     """
 
-    __slots__ = ('_refdes_number',)
+    __slots__ = ('_refdes_number', '_sensor')
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-92_Inline"
@@ -42,7 +45,18 @@ class TMP36(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        self._sensor = AnalogTempSensor(domain=domain)
+        by_name = {pin.id.name: pin for pin in pins}
+        wire(self._sensor.ports['v_out'], by_name['VOUT'].internal)
+        super().__init__(pins=pins, cells=[self._sensor])
+
+    @property
+    def temperature_c(self) -> float:
+        return self._sensor.temperature_c
+
+    @temperature_c.setter
+    def temperature_c(self, value: float) -> None:
+        self._sensor.temperature_c = value
 
     @property
     def refdes(self) -> str:

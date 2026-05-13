@@ -9,20 +9,21 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog
+from framework.wire import wire
+from .concepts.opamp import OpAmp
 
 
 @register('MCP6002')
 class MCP6002(Chip):
     """Microchip MCP6002 — dual 1 MHz rail-to-rail CMOS op-amp (DIP-8).
 
-    Black-box package model: pins follow the datasheet pinout verbatim;
-    no internal cells are instantiated. For behavioural simulation, use
-    the .SUBCKT placeholder in spice-models.lib or substitute a vendor
-    model.
+    Composes two private `OpAmp` cells sharing the chip's VDD / VSS
+    pin internal faces.
     """
 
-    __slots__ = ('_refdes_number',)
+    __slots__ = ('_refdes_number', '_cells')
 
+    CHANNELS: int = 2
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-8_W7.62mm"
 
@@ -47,7 +48,16 @@ class MCP6002(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        self._cells = tuple(OpAmp(domain) for _ in range(self.CHANNELS))
+        by_name = {pin.id.name: pin for pin in pins}
+        for i in range(self.CHANNELS):
+            n = i + 1
+            wire(by_name[f'IN{n}_POS'].internal, self._cells[i].ports['v_in_pos'])
+            wire(by_name[f'IN{n}_NEG'].internal, self._cells[i].ports['v_in_neg'])
+            wire(self._cells[i].ports['out'], by_name[f'OUT{n}'].internal)
+        wire(by_name['VDD'].internal, *(c.ports['v_supply'] for c in self._cells))
+        wire(by_name['VSS'].internal, *(c.ports['v_gnd']    for c in self._cells))
+        super().__init__(pins=pins, cells=list(self._cells))
 
     @property
     def refdes(self) -> str:

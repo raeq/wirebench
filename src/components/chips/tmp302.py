@@ -9,6 +9,7 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog, Digital
+from .concepts._helpers import wire_idle_drivers
 
 
 @register('TMP302')
@@ -51,7 +52,8 @@ class TMP302(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        drivers = wire_idle_drivers(pins, domain)
+        super().__init__(pins=pins, cells=drivers)
 
     @property
     def refdes(self) -> str:

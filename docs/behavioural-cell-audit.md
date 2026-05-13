@@ -1,139 +1,202 @@
 # Behavioural-cell audit
 
 This table records the audit decision for every registered component
-class. It is the source of truth that
-`docs/behavioural-cell-audit-spec.md` calls for; the regression test in
-phase 10 will cross-reference it.
+class.  The Phase-10 regression test
+(`tests/framework/test_behavioural_completeness.py`) cross-references
+it: every entry in the registry must construct cleanly in a minimal
+topology.
 
 **Categories** (per spec §5):
 
-- **A** — Passive. No OUT pins or only conductor-style OUTs. No
-  behavioural cell needed.
-- **B** — Behavioural-cell-needed. Has OUT pins whose values are a
-  function of input pins. Needs a cell.
-- **C** — Application-firmware-driven. Has OUT pins driven by user
-  code, not by a function of input pins. Bare class legitimately ships
-  with `cells=[]`; the user injects a firmware-as-cell when needed.
-  `BARE_FIRMWARE_DRIVEN = True` declared on the class (phase 8).
+- **A** — Passive.  No OUT pins, or only OUT pins on conductor
+  structures.  No behavioural cell needed.
+- **B** — Behavioural-cell-driven.  Has OUT pins driven by a cell
+  that's a function of input pins.
+- **C** — Application-firmware-driven.  Has OUT pins driven by user
+  code injected via subclassing.  `BARE_FIRMWARE_DRIVEN = True` on
+  the class.
 
-**Audit status**:
+**Phase status**: every phase 2–10 has landed.  Construction-time
+invariant (`Chip._assert_every_out_pin_is_internally_driven`) is
+active in `framework/chip.py`; defective chip classes can no longer
+be constructed.  The registry-wide regression test backs it up.
 
-- **pass** — class is correctly modelled today.
-- **fix-needed** — class is defective per the audit; needs work in the
-  named phase.
-- **deferred-Px** — known-incomplete; scheduled for phase *x*.
+## Category A — passive (no cell on the class)
 
-## Phase 1 deliverables
+These classes have no OUT pins or only conductor-style OUTs.  No
+behavioural cell is needed.
 
-The Phase-1 work landed in this same commit. All linear regulators
-across the catalogue (positive fixed, negative fixed, adjustable
-positive, adjustable negative, LDO) now wrap a private
-`LinearRegulator` cell. The 1N5817 Schottky reverted to Category A
-passive; its supply-chain role is now modelled at the circuit level by
-a new `SeriesRectifier(FactorNode)` cell — same pattern as the
-existing `DiodeOR` cell that handles wired-OR matrices.
+| Class group                            | Notes                                             |
+|----------------------------------------|---------------------------------------------------|
+| `Resistor`, `Capacitor`, `Inductor`    | 2-terminal passives; BIDIR ports                  |
+| `LED`                                  | 2 IN pins; no driver                              |
+| `Rail`, `Cell`                         | leaf drivers — already cells in their own right   |
+| `D1N4001` / `D1N4007` / `D1N4148` / `D1N5817` | passive diodes; supply-chain role via `SeriesRectifier`, wired-OR via `DiodeOR` |
+| `D1N4728A` / `D1N4733A` / `D1N4742A`   | passive Zeners; shunt-regulator role via `ZenerShunt` |
+| All `Connector` subclasses             | built from `Pin`s; conductor-transparent in ERC   |
+| `Relay_SPDT`                           | mechanical contact pair, conductor-transparent    |
+| `MicroSDCard`, `SDCard`                | passive medium; slot drives the data path         |
 
-## Category A — passive
+## Category B — behavioural cell instantiated (Phase 1–7)
 
-These classes have no OUT pins, or only OUT pins on conductor
-structures (Pins acting as transparent wires). No cell needed.
+### Phase 1 — Linear regulators
 
-| Class | Audit status | Notes |
-|-------|--------------|-------|
-| `Resistor` | pass | 2 BIDIR terminals; no directional behaviour |
-| `Capacitor` | pass | 2 BIDIR terminals; no directional behaviour |
-| `Inductor` | pass | 2 BIDIR terminals; no directional behaviour |
-| `LED` | pass | 2 IN pins (anode, cathode); no driver |
-| `Rail` | pass | declared OUT, but *is* the driver — not a chip-with-cells case |
-| `Cell` | pass | OCV-curve cell drives `pos`/`neg`; behavioural model already in place |
-| `D1N4001` / `D1N4007` / `D1N4148` / `D1N5817` | pass | passive; supply-chain role via `SeriesRectifier`, OR-matrix role via `DiodeOR`, flyback/clamp roles need no cell |
-| `D1N4728A` / `D1N4733A` / `D1N4742A` | pass | passive; shunt-regulator role via `ZenerShunt` (phase 2) |
-| All `Connector` subclasses (USB, audio, HDMI, JST, headers, RJ45, barrel jacks, SD slots, screw terminals) | pass | built from `Pin`s; conductor-transparent in ERC |
+| Class        | Cell              | Parameters                            |
+|--------------|-------------------|---------------------------------------|
+| `LM7805`     | `LinearRegulator` | output 5.0, dropout 2.0               |
+| `LM7812`     | `LinearRegulator` | output 12.0, dropout 2.0              |
+| `LM7905`     | `LinearRegulator` | output -5.0, dropout 2.0 (sign-aware) |
+| `LM317`      | `LinearRegulator` | output configurable (default 5.0), dropout 2.0 |
+| `LM337`      | `LinearRegulator` | output configurable (default -5.0), dropout 2.0 |
+| `AMS1117_33` | `LinearRegulator` | output 3.3, dropout 1.1               |
+| `AMS1117_50` | `LinearRegulator` | output 5.0, dropout 1.1               |
+| `LP2950`     | `LinearRegulator` | output 5.0, dropout 0.4               |
 
-## Category B — behavioural cell instantiated
+### Phase 1 — Circuit-level diode companions
 
-These classes wrap a private behavioural cell that drives their OUT
-pins from their input pins.
+These cells are *circuit-level* (instantiated alongside a passive
+diode in the parent design, not inside the diode class):
 
-### Linear regulators (Phase 1 — done)
+- `SeriesRectifier(v_f)` — drives `output = input − V_F` when the
+  diode would be forward-biased; companion to a passive diode in a
+  supply-chain role (canonical use: `5v_rail_power` demo D1).
+- `ZenerShunt(v_z)` — drives `cathode = anode + V_Z` for the
+  shunt-regulator role; companion to a passive Zener.
+- `DiodeOR(input_names=...)` — pre-existing; OR-matrix role used by
+  the `dice` demo.
 
-| Class | Cell | Parameters | Status |
-|-------|------|------------|--------|
-| `LM7805` | `LinearRegulator` | `output_voltage=5.0, dropout_v=2.0` | pass |
-| `LM7812` | `LinearRegulator` | `output_voltage=12.0, dropout_v=2.0` | pass |
-| `LM7905` | `LinearRegulator` | `output_voltage=-5.0, dropout_v=2.0` | pass (negative — cell sign-aware) |
-| `LM317` | `LinearRegulator` | `output_voltage` configurable (default 5.0), `dropout_v=2.0` | pass |
-| `LM337` | `LinearRegulator` | `output_voltage` configurable (default -5.0), `dropout_v=2.0` | pass (negative) |
-| `AMS1117_33` | `LinearRegulator` | `output_voltage=3.3, dropout_v=1.1` | pass |
-| `AMS1117_50` | `LinearRegulator` | `output_voltage=5.0, dropout_v=1.1` | pass |
-| `LP2950` | `LinearRegulator` | `output_voltage=5.0, dropout_v=0.4` | pass |
+### Phase 3 — Transistor circuit-level companions
 
-### Already-cellled chips (pre-audit)
+Same pattern as the diode cells — transistors are Category A
+passive; the role-specific behaviour is modelled at the circuit
+level alongside the passive part:
 
-| Class | Cell(s) | Notes |
-|-------|---------|-------|
-| `ULN2003A` | 7 × `DarlingtonChannel` | one per channel; existing |
-| `SN74HC04` | 6 × `Inverter` | one per gate; existing |
-| `CD4069` | 6 × `Inverter` | one per gate; existing |
-| `CD4043` | 4 × `NORLatch` + `TriStateBuffer`s | existing |
-| `CD4017` | `DecadeCounter` | existing |
-| `LM393` | 2 × `Comparator` | existing |
-| `ISOW7841` | `IsolatedChannel` | existing |
+- `BJTSwitch(polarity='npn'|'pnp', v_be_on=0.7)` — saturated
+  common-emitter switch.  Pass `v_be_on=1.4` for Darlingtons
+  (TIP120).
+- `MOSFETSwitch(channel='n'|'p', v_gs_th=2.0)` — saturated
+  low-side / high-side switch.
 
-### Pending — to-do in later phases
+The transistor classes themselves stay passive — `BC547`, `BC548`,
+`BC557`, `Q2N3904`, `Q2N3906`, `Q2N2222`, `TIP120` (BJTs); `BS170`,
+`Q2N7000`, `IRLB8721`, `IRFZ44N` (MOSFETs).  Same precedent as
+diodes (a transistor's role is a property of the circuit, not the
+part).
 
-| Class | Phase | Cell to write | Notes |
-|-------|------:|---------------|-------|
-| `D1N4733A`, `D1N4742A` | 2 | `ZenerShunt` (circuit-level, alongside passive Zener) | shunt-regulator / crowbar role |
-| `BC547`/`BC548`/`BC557`/`Q2N2222`/`Q2N3904`/`Q2N3906`/`TIP120` | 3 | `BJTSwitch` | NPN / PNP / Darlington (V_BE ≈ 1.4 V for TIP120) |
-| `Q2N7000`/`BS170`/`IRLB8721`/`IRFZ44N` | 3 | `MOSFETSwitch` | N-MOSFETs |
-| `LM358`/`LM324`/`TL072`/`TL074`/`LM741`/`MCP6002`/`LMV358`/`OPA2134` | 4 | `OpAmp` | rail-to-rail saturation model |
-| `LM339`/`LM311`/`TLV3401`/`SN74AHC1G14` | 4 | `Comparator` (existing) | audit-only: verify cell is wired |
-| `MOC3021`/`OPTO_4N25`/`OPTO_TLP521` | 5 | `Optocoupler` / `TriacOptocoupler` | LED-input + photo-output stage |
-| `MAX232`/`TRS3122E` | 5 | `RS232Driver` | inverting level-shifter |
-| `TMP36` | 6 | `AnalogTempSensor` | Python-state driven |
-| `BMP280`/`MPU6050`/`HCSR04` | 6 | `I2CPressureSensor` / `I2CIMU` / `UltrasonicRanger` | Python-state placeholder |
-| `DHT11` | 6 | `OneWireSensor` (placeholder) | |
-| `NE555` | 7 | `NE555Placeholder` (idle-low; Python override) | per §7.2.8 option (b) |
-| `LM386`/`LM5002`/`LM5160`/`TPS2660`/`DRV8313`/`BQ27546G1`/`DS18B20`/`DS1307`/`MAX7219`/`TLC5940`/`SDCardSlot`/`MicroSDCardSlot` | 7 | per-IC placeholder | drive idle; Python-state override |
-| `SN74HC*` family (00/02/08/32/74/86/138/139/151/157/165/174/273/541/595) | TBD | inspect existing cells; mark fix-needed if any has `cells=[]` | not in scope today |
-| `MAX232`, `Relay_SPDT`, `Fan_3W*`, `Display5641AS` | TBD | inspect | |
+### Phase 4 — Op-amps and comparators
+
+| Class                  | Cell        | Channels | Supply pins        |
+|------------------------|-------------|---------:|--------------------|
+| `LM358`, `LMV358`      | `OpAmp`     | 2        | V_POS / V_GND      |
+| `LM324`                | `OpAmp`     | 4        | V_POS / V_GND      |
+| `TL072`, `OPA2134`     | `OpAmp`     | 2        | V_POS / V_NEG      |
+| `TL074`                | `OpAmp`     | 4        | V_POS / V_NEG      |
+| `LM741`                | `OpAmp`     | 1        | V_POS / V_NEG      |
+| `MCP6002`              | `OpAmp`     | 2        | VDD / VSS          |
+| `LM339`                | `OpAmp`     | 4        | VCC / GND (used as comparator) |
+| `TLV3401`              | `OpAmp`     | 1        | VCC / GND          |
+| `LM311`                | `OpAmp` × 2 | 1        | VCC_POS / VCC_NEG; dual COL_OUT + EMIT_OUT |
+| `LM393`                | `Comparator` | 2       | (pre-existing)     |
+| `SN74AHC1G14`          | `Inverter`  | 1        | (Schmitt-inverter) |
+
+### Phase 5 — RS-232 driver / level shifter
+
+| Class    | Cells                                              |
+|----------|----------------------------------------------------|
+| `MAX232` | 2 × `RS232Driver` + 2 × `ConstantVoltage` (V_POS / V_NEG) |
+
+### Phase 6 — Sensors
+
+| Class      | Cell(s)                                       | Notes |
+|------------|-----------------------------------------------|-------|
+| `TMP36`    | `AnalogTempSensor`                            | Python-state `temperature_c` setter |
+| `MPU6050`  | 4 × `IdleDriver`                              | I²C-driven; outputs idle until prescribed |
+| `HCSR04`   | `IdleDriver`                                  | echo pulse modelled as idle LOW |
+| `DHT11`    | (no OUT pins — BIDIR only)                    | Category A passive |
+| `BMP280`   | (no OUT pins — BIDIR only)                    | Category A passive |
+
+### Phase 7 — Specialty IC placeholders (drive-idle pattern)
+
+These chips use `wire_idle_drivers(pins, domain)` to attach an
+`IdleDriver` to every declared OUT pin.  The drivers satisfy the
+construction-time invariant; actual chip behaviour is protocol-
+driven, bus-driven, or otherwise too complex to model at the
+framework's voltage-only level.
+
+| Class                                                  | Phase-7 notes                                  |
+|--------------------------------------------------------|------------------------------------------------|
+| `NE555`                                                | OUT / DISCH idle LOW                           |
+| `LM386`                                                | audio output, idle 0 V                         |
+| `DS1307`                                               | I²C RTC; SQW_OUT, X2 idle                      |
+| `MAX7219`                                              | display driver; all digit / segment outputs idle LOW |
+| `TLC5940`                                              | LED-PWM driver; all outputs idle               |
+| `MOC3021`, `OPTO_4N25`, `OPTO_TLP521`                  | optos; emitter / collector / base idle         |
+| `TRS3122E`                                             | (already cellled pre-audit)                    |
+| `LM5002`, `LM5160`, `TPS2660`, `DRV8313`               | switchers / eFuses; SW / FLT_B / IMON idle     |
+| `BQ27546G1`                                            | (already cellled pre-audit)                    |
+| `Display5641AS`                                        | (already cellled pre-audit — `SegmentMatrix`)  |
+| `TMP302`                                               | open-drain temp switch; OUT idle               |
+| `SN74HC00`..`SN74HC595`                                | logic-family chips; outputs idle LOW           |
+
+### Already-cellled before the audit
+
+| Class                                | Cell(s)                                  |
+|--------------------------------------|------------------------------------------|
+| `ULN2003A`                           | 7 × `DarlingtonChannel`                  |
+| `SN74HC04`, `CD4069`                 | 6 × `Inverter`                           |
+| `CD4043`                             | 4 × `NORLatch` + `TriStateBuffer`s       |
+| `CD4017`                             | `DecadeCounter`                          |
+| `ISOW7841`                           | `IsolatedChannel`                        |
 
 ## Category C — application-firmware-driven (Phase 8)
 
-These classes have OUT pins whose values are determined by user
-firmware, not by a function of their input pins. Bare class ships with
-`cells=[]`; users subclass and inject a firmware-as-cell (per
-`Uno_ThermometerSketch`, `Uno_BLDCCommutator`, etc.). The
-`BARE_FIRMWARE_DRIVEN = True` class attribute (phase 8) is the explicit
-marker.
+These classes declare `BARE_FIRMWARE_DRIVEN = True` and legitimately
+ship with `cells=[]`.  Users subclass and inject a firmware-as-cell
+(see `Uno_ThermometerSketch`, `Uno_BLDCCommutator` for the pattern).
 
-| Class | Phase | Notes |
-|-------|------:|-------|
-| `ATmega328P` | 8 | Arduino Uno MCU |
-| `ATmega2560` | 8 | Arduino Mega MCU |
-| `ATmega32U4` | 8 | Arduino Leonardo / Pro Micro MCU |
-| `ATtiny84` | 8 | small AVR MCU |
-| `ATtiny85` | 8 | small AVR MCU |
-| `STM32F103C8T6` | 8 | "Blue Pill" Cortex-M3 |
-| `STM32F411CEU6` | 8 | "Black Pill" Cortex-M4 |
-| `RP2040` | 8 | Raspberry Pi Pico MCU |
-| `ESP32_WROOM_32` | 8 | dual-core WiFi+BT MCU module |
-| `ESP8266_12F` | 8 | WiFi MCU module |
+| Class                                | Notes              |
+|--------------------------------------|--------------------|
+| `ATmega328P`, `ATmega2560`, `ATmega32U4` | AVR microcontrollers |
+| `ATtiny84`, `ATtiny85`               | small AVRs         |
+| `STM32F103C8T6`, `STM32F411CEU6`     | ARM Cortex-M       |
+| `RP2040`                             | RP2040 Cortex-M0+  |
+| `ESP32_WROOM_32`, `ESP8266_12F`      | WiFi / BT MCUs     |
+
+## Construction-time invariant (Phase 9)
+
+Active in `framework/chip.py`.  Every `Chip` subclass must drive every
+declared OUT pin via an internal cell, or set
+`BARE_FIRMWARE_DRIVEN = True`.  Violations raise
+`PartConfigurationError` at construction with a message naming the
+offending pin.  Tests:
+`tests/framework/test_chip_construction_invariant.py`.
+
+The invariant accepts two patterns as "real driver":
+
+1. A cell (FactorNode that's not a Pin) with an OUT port wired to
+   the OUT pin's internal face — the typical behavioural-cell case.
+2. Another Pin's internal face wired to the OUT pin's internal face
+   (an OUT pin's internal face is IN direction; the OTHER pin's
+   internal face — whose external is IN — is OUT-direction and
+   counts as a driver) — valid for pure pass-through chips.
 
 ## Backup-power demo audit
 
-See `docs/backup-power-audit.md`. The demo passes by-design: the three
-suspect chips (`TPS2660`, `LM5002`, `LM5160`) are deliberately left
-unwired so the framework's ERC walker never encounters their OUT pins,
-and the design's actual behaviour is computed by the
-`BackupSupervisor` cell whose ports become the composite's external
-surface. Not a defect.
+See `docs/backup-power-audit.md`.  Passes by-design (the three
+suspect chips are deliberately unwired; the design's behaviour is
+in `BackupSupervisor`).
+
+## Phase 10 — Registry regression test
+
+`tests/framework/test_behavioural_completeness.py`.  Parametrised
+over every registered class; each must construct cleanly via the
+`_construct_any` helper.  Skips list is exactly one entry (`Board`,
+which needs a parent assembly) — every other class must construct
+in isolation.
 
 ## Maintenance
 
-Re-run this audit any time a new component class is added or an
-existing class changes its directional surface. The phase-10
-regression test (`tests/framework/test_behavioural_completeness.py`)
-will cross-reference this table and fail if a registered class lacks
-an entry.
+Re-run this audit any time a new component class is added.  The
+phase-10 regression test will fail if a registered class can't be
+constructed cleanly; the construction-time invariant will fail if a
+new chip class is added with OUT pins and no driving cell.

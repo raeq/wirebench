@@ -9,6 +9,7 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog, Digital
+from .concepts._helpers import wire_idle_drivers
 
 
 @register('DRV8313')
@@ -77,7 +78,12 @@ class DRV8313(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        # Behavioural placeholder: every OUT pin gets an `IdleDriver`
+        # so the framework's logical-net walker sees a real driver on
+        # each output net. Demos that need protocol-accurate behaviour
+        # substitute a SPICE .SUBCKT or cycle-accurate emulator.
+        drivers = wire_idle_drivers(pins, domain)
+        super().__init__(pins=pins, cells=drivers)
 
     @property
     def refdes(self) -> str:

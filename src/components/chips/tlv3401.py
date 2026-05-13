@@ -9,19 +9,21 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog
+from framework.wire import wire
+from .concepts.opamp import OpAmp
 
 
 @register('TLV3401')
 class TLV3401(Chip):
     """Texas Instruments TLV3401 — single nanopower open-drain CMOS comparator (SOT-23-5).
 
-    Black-box package model: pins follow the datasheet pinout verbatim;
-    no internal cells are instantiated. For behavioural simulation, use
-    the .SUBCKT placeholder in spice-models.lib or substitute a vendor
-    model. Open-drain output requires an external pull-up.
+    Composes one private `OpAmp` cell wired to the chip's
+    IN_POS / IN_NEG / OUT pins with VCC / GND as supply.  Real
+    output is open-drain; the cell drives rail-to-rail for
+    simulation purposes (add an external pull-up at the bench).
     """
 
-    __slots__ = ('_refdes_number',)
+    __slots__ = ('_refdes_number', '_cell')
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_SMD:SOT-23-5"
@@ -44,7 +46,14 @@ class TLV3401(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        self._cell = OpAmp(domain)
+        by_name = {pin.id.name: pin for pin in pins}
+        wire(by_name['IN_POS'].internal, self._cell.ports['v_in_pos'])
+        wire(by_name['IN_NEG'].internal, self._cell.ports['v_in_neg'])
+        wire(self._cell.ports['out'], by_name['OUT'].internal)
+        wire(by_name['VCC'].internal, self._cell.ports['v_supply'])
+        wire(by_name['GND'].internal, self._cell.ports['v_gnd'])
+        super().__init__(pins=pins, cells=[self._cell])
 
     @property
     def refdes(self) -> str:

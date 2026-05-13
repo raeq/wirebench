@@ -25,6 +25,15 @@ class ESP32_WROOM_32(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = 'RF_Module:ESP32-WROOM-32'
 
+    # Category C — application-firmware-driven (per
+    # docs/behavioural-cell-audit-spec.md §7.3): the MCU's OUT
+    # pins are driven by user firmware, not by a deterministic
+    # function of its input pins. The bare class legitimately
+    # ships with `cells=[]`; users subclass and inject a
+    # firmware-as-cell per the existing `Uno_ThermometerSketch`
+    # / `Uno_BLDCCommutator` pattern.
+    BARE_FIRMWARE_DRIVEN: ClassVar[bool] = True
+
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (  1, 'GND',        Direction.IN,     Analog),
         (  2, '3V3',          Direction.IN,     Analog),

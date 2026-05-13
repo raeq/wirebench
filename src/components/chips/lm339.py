@@ -9,20 +9,24 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog
+from framework.wire import wire
+from .concepts.opamp import OpAmp
 
 
 @register('LM339')
 class LM339(Chip):
     """Texas Instruments LM339 — quad open-collector differential comparator (PDIP-14).
 
-    Black-box package model: pins follow the datasheet pinout verbatim;
-    no internal cells are instantiated. For behavioural simulation, use
-    the .SUBCKT placeholder in spice-models.lib or substitute a vendor
-    model. Open-collector outputs require an external pull-up.
+    Composes four private `OpAmp` cells (used as comparators here)
+    sharing the chip's VCC / GND pin internal faces.  Real LM339
+    outputs are open-collector; the cell drives a clean rail-to-rail
+    output for simulation purposes, and the user is still expected
+    to add a pull-up at the bench.
     """
 
-    __slots__ = ('_refdes_number',)
+    __slots__ = ('_refdes_number', '_cells')
 
+    CHANNELS: int = 4
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-14_W7.62mm"
 
@@ -53,7 +57,16 @@ class LM339(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        self._cells = tuple(OpAmp(domain) for _ in range(self.CHANNELS))
+        by_name = {pin.id.name: pin for pin in pins}
+        for i in range(self.CHANNELS):
+            n = i + 1
+            wire(by_name[f'IN{n}_POS'].internal, self._cells[i].ports['v_in_pos'])
+            wire(by_name[f'IN{n}_NEG'].internal, self._cells[i].ports['v_in_neg'])
+            wire(self._cells[i].ports['out'], by_name[f'OUT{n}'].internal)
+        wire(by_name['VCC'].internal, *(c.ports['v_supply'] for c in self._cells))
+        wire(by_name['GND'].internal, *(c.ports['v_gnd']    for c in self._cells))
+        super().__init__(pins=pins, cells=list(self._cells))
 
     @property
     def refdes(self) -> str:

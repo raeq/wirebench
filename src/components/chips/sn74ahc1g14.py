@@ -9,6 +9,8 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog, Digital
+from framework.wire import wire
+from .concepts.inverter import Inverter
 
 
 @register('SN74AHC1G14')
@@ -16,13 +18,13 @@ class SN74AHC1G14(Chip):
     """Texas Instruments SN74AHC1G14 — single Schmitt-trigger inverter
     in SOT-23-5 (DBV package).
 
-    Black-box package model.  Where a behavioural inverter is needed,
-    a parent circuit can wire a `components.chips.concepts.inverter.Inverter`
-    cell in parallel with this chip on the same net (same trick the
-    dice demo uses for the wired-OR diode matrix).
+    Composes one private `Inverter` cell wired between the A input
+    pin and the Y output pin.  The Schmitt-trigger hysteresis is
+    elided at the framework level (a Schmitt input still inverts);
+    SPICE remains the right tool for hysteresis-threshold accuracy.
     """
 
-    __slots__ = ('_refdes_number',)
+    __slots__ = ('_refdes_number', '_cell')
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_SMD:SOT-23-5"
@@ -45,7 +47,11 @@ class SN74AHC1G14(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        self._cell = Inverter(domain)
+        by_name = {pin.id.name: pin for pin in pins}
+        wire(by_name['A'].internal, self._cell.ports['a'])
+        wire(self._cell.ports['y'], by_name['Y'].internal)
+        super().__init__(pins=pins, cells=[self._cell])
 
     @property
     def refdes(self) -> str:

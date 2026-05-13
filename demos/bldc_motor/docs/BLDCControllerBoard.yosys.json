@@ -6,40 +6,6 @@
         "C1": {
           "connections": {
             "t1": [
-              57
-            ],
-            "t2": [
-              58
-            ]
-          },
-          "hide_name": 0,
-          "parameters": {},
-          "port_directions": {
-            "t1": "inout",
-            "t2": "inout"
-          },
-          "type": "Capacitor"
-        },
-        "C2": {
-          "connections": {
-            "t1": [
-              59
-            ],
-            "t2": [
-              60
-            ]
-          },
-          "hide_name": 0,
-          "parameters": {},
-          "port_directions": {
-            "t1": "inout",
-            "t2": "inout"
-          },
-          "type": "Capacitor"
-        },
-        "C3": {
-          "connections": {
-            "t1": [
               61
             ],
             "t2": [
@@ -54,7 +20,7 @@
           },
           "type": "Capacitor"
         },
-        "C4": {
+        "C2": {
           "connections": {
             "t1": [
               63
@@ -71,7 +37,7 @@
           },
           "type": "Capacitor"
         },
-        "C5": {
+        "C3": {
           "connections": {
             "t1": [
               65
@@ -88,7 +54,7 @@
           },
           "type": "Capacitor"
         },
-        "C6": {
+        "C4": {
           "connections": {
             "t1": [
               67
@@ -105,13 +71,47 @@
           },
           "type": "Capacitor"
         },
+        "C5": {
+          "connections": {
+            "t1": [
+              69
+            ],
+            "t2": [
+              70
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C6": {
+          "connections": {
+            "t1": [
+              71
+            ],
+            "t2": [
+              72
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
         "J1": {
           "connections": {
             "p1": [
-              17
+              21
             ],
             "p2": [
-              18
+              22
             ]
           },
           "hide_name": 0,
@@ -125,13 +125,13 @@
         "J2": {
           "connections": {
             "p1": [
-              19
+              23
             ],
             "p2": [
-              20
+              24
             ],
             "p3": [
-              21
+              25
             ]
           },
           "hide_name": 0,
@@ -146,13 +146,13 @@
         "J3": {
           "connections": {
             "p1": [
-              22
+              26
             ],
             "p2": [
-              23
+              27
             ],
             "p3": [
-              24
+              28
             ]
           },
           "hide_name": 0,
@@ -167,10 +167,10 @@
         "R1": {
           "connections": {
             "t1": [
-              69
+              73
             ],
             "t2": [
-              70
+              74
             ]
           },
           "hide_name": 0,
@@ -186,16 +186,16 @@
         "U1": {
           "connections": {
             "AREF": [
-              36
+              40
             ],
             "AVCC": [
-              35
+              39
             ],
             "GND_1": [
-              29
+              33
             ],
             "GND_2": [
-              37
+              41
             ],
             "PB0": [
               8
@@ -207,19 +207,19 @@
               14
             ],
             "PB3": [
-              32
+              36
             ],
             "PB4": [
-              33
+              37
             ],
             "PB5": [
-              34
+              38
             ],
             "PB6": [
-              30
+              34
             ],
             "PB7": [
-              31
+              35
             ],
             "PC0": [
               2
@@ -231,22 +231,22 @@
               4
             ],
             "PC3": [
-              38
+              42
             ],
             "PC4": [
-              39
+              43
             ],
             "PC5": [
-              40
+              44
             ],
             "PC6": [
-              25
+              29
             ],
             "PD0": [
-              26
+              30
             ],
             "PD1": [
-              27
+              31
             ],
             "PD2": [
               9
@@ -267,7 +267,7 @@
               16
             ],
             "VCC": [
-              28
+              32
             ]
           },
           "hide_name": 0,
@@ -307,19 +307,19 @@
         "U2": {
           "connections": {
             "BST1": [
-              51
+              55
             ],
             "BST2": [
-              52
+              56
             ],
             "BST3": [
-              53
+              57
             ],
             "CP1": [
-              43
+              47
             ],
             "CP2": [
-              44
+              48
             ],
             "EN1": [
               8
@@ -331,10 +331,10 @@
               14
             ],
             "GND": [
-              41
+              45
             ],
             "GVDD": [
-              46
+              50
             ],
             "IN1": [
               9
@@ -364,31 +364,31 @@
               7
             ],
             "PGND_1": [
-              54
+              58
             ],
             "PGND_2": [
-              55
+              59
             ],
             "PPAD": [
-              56
+              60
             ],
             "V3P3OUT": [
-              47
+              51
             ],
             "VCP": [
-              45
-            ],
-            "VM": [
-              42
-            ],
-            "nFAULT": [
-              50
-            ],
-            "nRESET": [
               49
             ],
+            "VM": [
+              46
+            ],
+            "nFAULT": [
+              54
+            ],
+            "nRESET": [
+              53
+            ],
             "nSLEEP": [
-              48
+              52
             ]
           },
           "hide_name": 0,
@@ -536,49 +536,49 @@
       "ports": {
         "J1.p1": {
           "bits": [
-            17
+            21
           ],
           "direction": "inout"
         },
         "J1.p2": {
           "bits": [
-            18
+            22
           ],
           "direction": "inout"
         },
         "J2.p1": {
           "bits": [
-            19
+            23
           ],
           "direction": "inout"
         },
         "J2.p2": {
           "bits": [
-            20
+            24
           ],
           "direction": "inout"
         },
         "J2.p3": {
           "bits": [
-            21
+            25
           ],
           "direction": "inout"
         },
         "J3.p1": {
           "bits": [
-            22
+            26
           ],
           "direction": "inout"
         },
         "J3.p2": {
           "bits": [
-            23
+            27
           ],
           "direction": "inout"
         },
         "J3.p3": {
           "bits": [
-            24
+            28
           ],
           "direction": "inout"
         }

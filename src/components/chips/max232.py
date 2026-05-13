@@ -9,21 +9,27 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog, Digital
+from framework.wire import wire
+from .concepts.rs232_driver import RS232Driver
+from .concepts.constant_voltage import ConstantVoltage
 
 
 @register('MAX232')
 class MAX232(Chip):
     """Texas Instruments MAX232 — dual RS-232 driver/receiver with charge-pump (DIP-16).
 
-    Black-box package model: pins follow the datasheet pinout verbatim;
-    no internal cells are instantiated. For behavioural simulation, use
-    the .SUBCKT placeholder in spice-models.lib or substitute a vendor
-    model. Charge-pump capacitor pins (C1+, C1-, C2+, C2-) and rail
-    outputs (V+, V-) are analog; TTL-side ports are Digital; RS-232-side
-    ports are Analog (±10 V swing).
+    Composes two `RS232Driver` cells (one per TX/RX channel pair)
+    plus two `ConstantVoltage` cells for the V_POS (+10 V) and
+    V_NEG (-10 V) charge-pump rails.  Charge-pump capacitor pins
+    (C1_POS, C1_NEG, C2_POS, C2_NEG) stay passive in the framework
+    model — they're external-cap connection points and need no
+    internal driver.
+
+    TTL-side ports are Digital; RS-232-side ports are Analog with
+    ±9 V swing modelled by the cell.
     """
 
-    __slots__ = ('_refdes_number',)
+    __slots__ = ('_refdes_number', '_ch1', '_ch2', '_vpos_drv', '_vneg_drv')
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-16_W7.62mm"
@@ -57,7 +63,27 @@ class MAX232(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        self._ch1 = RS232Driver(domain)
+        self._ch2 = RS232Driver(domain)
+        self._vpos_drv = ConstantVoltage(+10.0, domain)
+        self._vneg_drv = ConstantVoltage(-10.0, domain)
+        by_name = {pin.id.name: pin for pin in pins}
+        # Channel 1
+        wire(by_name['T1IN'].internal,  self._ch1.ports['tx_in'])
+        wire(self._ch1.ports['tx_out'], by_name['T1OUT'].internal)
+        wire(by_name['R1IN'].internal,  self._ch1.ports['rx_in'])
+        wire(self._ch1.ports['rx_out'], by_name['R1OUT'].internal)
+        # Channel 2
+        wire(by_name['T2IN'].internal,  self._ch2.ports['tx_in'])
+        wire(self._ch2.ports['tx_out'], by_name['T2OUT'].internal)
+        wire(by_name['R2IN'].internal,  self._ch2.ports['rx_in'])
+        wire(self._ch2.ports['rx_out'], by_name['R2OUT'].internal)
+        # Charge-pump rails
+        wire(self._vpos_drv.ports['out'], by_name['V_POS'].internal)
+        wire(self._vneg_drv.ports['out'], by_name['V_NEG'].internal)
+        super().__init__(pins=pins, cells=[
+            self._ch1, self._ch2, self._vpos_drv, self._vneg_drv,
+        ])
 
     @property
     def refdes(self) -> str:

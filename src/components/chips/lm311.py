@@ -9,6 +9,8 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog
+from framework.wire import wire
+from .concepts.opamp import OpAmp
 
 
 @register('LM311')
@@ -16,13 +18,17 @@ class LM311(Chip):
     """Texas Instruments LM311 — single high-speed open-collector comparator
     with strobe and balance (PDIP-8).
 
-    Black-box package model: pins follow the datasheet pinout verbatim;
-    no internal cells are instantiated. For behavioural simulation, use
-    the .SUBCKT placeholder in spice-models.lib or substitute a vendor
-    model. Open-collector COL_OUT requires an external pull-up.
+    Composes two private `OpAmp` cells — one each for COL_OUT and
+    EMIT_OUT — because the LM311's output is an internal NPN
+    transistor whose *collector* and *emitter* are both brought out
+    to package pins.  In real silicon the two are linked by the
+    transistor; in the framework each pin has its own driver from a
+    cell observing the same comparator inputs.  The cells produce
+    rail-to-rail drive for topology purposes; add a pull-up resistor
+    at the bench for the actual open-collector behaviour.
     """
 
-    __slots__ = ('_refdes_number',)
+    __slots__ = ('_refdes_number', '_cell_col', '_cell_emit')
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-8_W7.62mm"
@@ -72,7 +78,26 @@ class LM311(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        self._cell_col  = OpAmp(domain)
+        self._cell_emit = OpAmp(domain)
+        by_name = {pin.id.name: pin for pin in pins}
+        # Both cells share the same inputs and supply; each drives its
+        # own output pin.
+        wire(by_name['IN_POS'].internal,
+             self._cell_col.ports['v_in_pos'],
+             self._cell_emit.ports['v_in_pos'])
+        wire(by_name['IN_NEG'].internal,
+             self._cell_col.ports['v_in_neg'],
+             self._cell_emit.ports['v_in_neg'])
+        wire(by_name['VCC_POS'].internal,
+             self._cell_col.ports['v_supply'],
+             self._cell_emit.ports['v_supply'])
+        wire(by_name['VCC_NEG'].internal,
+             self._cell_col.ports['v_gnd'],
+             self._cell_emit.ports['v_gnd'])
+        wire(self._cell_col.ports['out'],  by_name['COL_OUT'].internal)
+        wire(self._cell_emit.ports['out'], by_name['EMIT_OUT'].internal)
+        super().__init__(pins=pins, cells=[self._cell_col, self._cell_emit])
 
     @property
     def refdes(self) -> str:

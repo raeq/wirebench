@@ -9,20 +9,24 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog, Digital
+from framework.wire import wire
+from .concepts.idle_driver import IdleDriver
 
 
 @register('MPU6050')
 class MPU6050(Chip):
     """InvenSense / TDK MPU-6050 — 6-axis MEMS IMU (QFN-24).
 
-    Black-box package model: only the datasheet headline pins are
-    instantiated; pins 2–5, 14–17, 19, 21, 22 are reserved/NC and
-    omitted. No internal cells. For behavioural simulation, use the
-    .SUBCKT placeholder in spice-models.lib or substitute a vendor
-    model. 3.3 V part — do NOT drive directly from 5 V logic.
+    The MPU-6050's behaviour is I²C-protocol-driven (host queries
+    accelerometer / gyro registers over a bus), too complex to model
+    behaviourally at the framework level.  Each declared OUT pin is
+    backed by an `IdleDriver` cell so the topology validates;
+    actual sensor readings come from a SPICE / cycle-accurate emulator
+    when accuracy matters, or from Python-state prescription by the
+    enclosing demo.  3.3 V part — do NOT drive directly from 5 V logic.
     """
 
-    __slots__ = ('_refdes_number',)
+    __slots__ = ('_refdes_number', '_drivers')
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Sensor_Motion:InvenSense_QFN-24_4x4mm_P0.5mm"
@@ -53,7 +57,20 @@ class MPU6050(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        # Drive every OUT pin with an IdleDriver so the topology
+        # validates.  AUX_CL and INT are Digital; REGOUT and CPOUT
+        # are Analog rails the chip's internal LDO / charge pump
+        # generates.
+        self._drivers = {
+            'AUX_CL': IdleDriver(Digital, idle_value=False, domain=domain),
+            'REGOUT': IdleDriver(Analog,  idle_value=1.8,   domain=domain),
+            'INT':    IdleDriver(Digital, idle_value=False, domain=domain),
+            'CPOUT':  IdleDriver(Analog,  idle_value=0.0,   domain=domain),
+        }
+        by_name = {pin.id.name: pin for pin in pins}
+        for name, drv in self._drivers.items():
+            wire(drv.ports['out'], by_name[name].internal)
+        super().__init__(pins=pins, cells=list(self._drivers.values()))
 
     @property
     def refdes(self) -> str:

@@ -9,6 +9,8 @@ from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 from framework.signals import Analog
+from framework.wire import wire
+from .concepts.opamp import OpAmp
 
 
 @register('LM324')
@@ -16,14 +18,13 @@ class LM324(Chip):
     """Texas Instruments LM324 — quad single-supply low-power bipolar
     op-amp (DIP-14).
 
-    Black-box package model: pins follow the datasheet pinout verbatim;
-    no internal cells are instantiated. For behavioural simulation, use
-    the .SUBCKT placeholder in spice-models.lib or substitute a vendor
-    model.
+    Composes four private `OpAmp` cells sharing the chip's
+    V_POS / V_GND pin internal faces.
     """
 
-    __slots__ = ('_refdes_number',)
+    __slots__ = ('_refdes_number', '_cells')
 
+    CHANNELS: int = 4
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-14_W7.62mm"
 
@@ -54,7 +55,16 @@ class LM324(Chip):
                 mandatory=False, signal_type=signal_type)
             for number, name, direction, signal_type in self._PIN_TABLE
         ]
-        super().__init__(pins=pins, cells=[])
+        self._cells = tuple(OpAmp(domain) for _ in range(self.CHANNELS))
+        by_name = {pin.id.name: pin for pin in pins}
+        for i in range(self.CHANNELS):
+            n = i + 1
+            wire(by_name[f'IN{n}_POS'].internal, self._cells[i].ports['v_in_pos'])
+            wire(by_name[f'IN{n}_NEG'].internal, self._cells[i].ports['v_in_neg'])
+            wire(self._cells[i].ports['out'], by_name[f'OUT{n}'].internal)
+        wire(by_name['V_POS'].internal, *(c.ports['v_supply'] for c in self._cells))
+        wire(by_name['V_GND'].internal, *(c.ports['v_gnd']    for c in self._cells))
+        super().__init__(pins=pins, cells=list(self._cells))
 
     @property
     def refdes(self) -> str:
