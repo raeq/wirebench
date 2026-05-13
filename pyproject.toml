@@ -1,5 +1,5 @@
 [project]
-name = "circuitbench"
+name = "wirebench"
 version = "0.1.0"
 description = "A Python framework for modelling real electronic circuits with physical fidelity."
 readme = "README.md"
@@ -20,7 +20,7 @@ dev = [
 ]
 
 [project.scripts]
-circuitry = "cli.export:main"
+wirebench = "cli.export:main"
 
 [tool.pytest.ini_options]
 pythonpath = ["src", "demos", "tests/framework"]

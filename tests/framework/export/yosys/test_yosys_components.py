@@ -43,7 +43,7 @@ def _doc(design):
 
 def test_yosys_top_level_shape():
     d = _doc(_silently(WaterAlarm))
-    assert d['creator'].startswith('circuitry')
+    assert d['creator'].startswith('wirebench')
     assert 'modules' in d
 
 

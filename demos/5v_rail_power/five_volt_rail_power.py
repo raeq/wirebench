@@ -153,7 +153,7 @@ if str(_SRC) not in sys.path:
 
 from pydantic import Field, validate_call
 
-from circuitry import (
+from wirebench import (
     Circuit, FactorNode,
     Direction, Port,
     GroundDomain, ELECTRICAL,

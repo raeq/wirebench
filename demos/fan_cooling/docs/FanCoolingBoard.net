@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "Fan Cooling Module")
-    (tool "circuitry 0.x"))
+    (tool "wirebench 0.x"))
   (components
     (comp (ref "A1_D1")
       (value "D1N4728A") (footprint "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal") (libsource (lib "Device") (part "D1N4728A") (description "D1N4728A"))

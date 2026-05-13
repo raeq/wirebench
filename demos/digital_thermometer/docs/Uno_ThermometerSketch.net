@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "Uno_ThermometerSketch")
-    (tool "circuitry 0.x"))
+    (tool "wirebench 0.x"))
   (components
   )
   (nets

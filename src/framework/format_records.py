@@ -1,4 +1,4 @@
-"""Pydantic record types for the `.circuitry` file format.
+"""Pydantic record types for the `.wirebench` file format.
 
 Each registered FactorNode subclass has a corresponding record class
 with a `type` Literal discriminator, refdes / id, and any class-

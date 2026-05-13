@@ -99,7 +99,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
     ctx.emit('(export (version "E")')
     ctx.emit(f'  (design')
     ctx.emit(f'    (source "{title}")')
-    ctx.emit(f'    (tool "circuitry 0.x"))')
+    ctx.emit(f'    (tool "wirebench 0.x"))')
 
     # ----- components block ---------------------------------------------------
     ctx.emit('  (components')

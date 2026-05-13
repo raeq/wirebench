@@ -8,7 +8,7 @@ that work here so a demo's `_main()` reads like a data file.
 
 Example:
 
-    from circuitry import run_scenarios
+    from wirebench import run_scenarios
 
     run_scenarios(
         WaterAlarm(),

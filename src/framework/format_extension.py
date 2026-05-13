@@ -1,6 +1,6 @@
 """Helpers for the generic-fallback save/load path.
 
-A class that wants to roundtrip through `.circuitry` without a
+A class that wants to roundtrip through `.wirebench` without a
 dedicated record declares two things on itself:
 
     @register('MyClass')

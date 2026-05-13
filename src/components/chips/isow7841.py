@@ -53,7 +53,7 @@ class ISOW7841(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm"
 
-    # Serialise both domain kwargs so `.circuitry` files survive a
+    # Serialise both domain kwargs so `.wirebench` files survive a
     # round-trip even though the constructor needs per-instance ground
     # domains the generic record can't represent.  GroundDomain is
     # interned by name, so storing the names is enough to reconstruct

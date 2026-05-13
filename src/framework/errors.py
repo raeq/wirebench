@@ -1,11 +1,11 @@
-"""Exception hierarchy for the circuitry framework.
+"""Exception hierarchy for the wirebench framework.
 
-Every framework-raised error inherits from `CircuitryError`.  The
+Every framework-raised error inherits from `WirebenchError`.  The
 hierarchy mirrors the real-world classes of mistakes a breadboarder
 actually makes, so callers can `except WiringError` or
 `except ForbiddenStateError` without scraping message text.
 
-The three top-level families under `CircuitryError`:
+The three top-level families under `WirebenchError`:
 
     CircuitError   — something is wrong with the circuit you described
     FormatError    — something is wrong with saving / loading / rendering
@@ -22,14 +22,14 @@ from __future__ import annotations
 
 # ----------------------------------------------------------------- root
 
-class CircuitryError(Exception):
+class WirebenchError(Exception):
     """Root of every framework-raised exception."""
 
 
 # ============================================================ Circuit ===
 # Something is wrong with the circuit you described.
 
-class CircuitError(CircuitryError):
+class CircuitError(WirebenchError):
     """Anything wrong with the circuit being modelled — its topology,
     its signals, its parts, its connectors, or its allowed states."""
 
@@ -138,7 +138,7 @@ class DuplicateRegistrationError(PartError, ValueError):
 
 class UnknownPartError(PartError, KeyError):
     """The component registry was asked for a class name that hasn't
-    been registered — typically when a saved `.circuitry` file
+    been registered — typically when a saved `.wirebench` file
     references a class whose module hasn't been imported."""
 
 
@@ -188,19 +188,19 @@ class PitchMismatchError(MatingError, ValueError):
 # ============================================================= Format ===
 # Something is wrong with saving / loading / rendering a circuit.
 
-class FormatError(CircuitryError):
+class FormatError(WirebenchError):
     """Anything wrong with the file format / persistence / rendering
     layer.  The circuit itself may be fine; the I/O around it isn't."""
 
 
 class SaveError(FormatError, ValueError):
-    """`save_circuitry` couldn't serialise the design — a component
+    """`save_wirebench` couldn't serialise the design — a component
     has no refdes and no synthesised id, a kwarg's type isn't
     encodable, etc."""
 
 
 class LoadError(FormatError, ValueError):
-    """`load_circuitry` couldn't reconstruct a design from its
+    """`load_wirebench` couldn't reconstruct a design from its
     serialised form — malformed port reference, unknown component id,
     duplicate id, unknown class, missing required field."""
 
@@ -248,7 +248,7 @@ class RendererNotFoundError(RendererRegistryError, KeyError):
 # The framework's API was called incorrectly.  The circuit is fine;
 # the caller's interaction with the framework is the problem.
 
-class UsageError(CircuitryError):
+class UsageError(WirebenchError):
     """The framework's API was called incorrectly."""
 
 

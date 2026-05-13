@@ -169,7 +169,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
         modules[title] = build_module(title, design, gather_top_components(design))
 
     doc = {
-        'creator': 'circuitry 0.x',
+        'creator': 'wirebench 0.x',
         'modules': modules,
     }
     ctx.emit(json.dumps(doc, indent=2, sort_keys=True))

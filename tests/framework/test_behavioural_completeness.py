@@ -2,7 +2,7 @@
 
 Walks every class in the component registry and asserts each
 constructs cleanly — without `FloatingNetError`,
-`PartConfigurationError`, or any other `CircuitryError`.  The
+`PartConfigurationError`, or any other `WirebenchError`.  The
 primary defence (Phase 9's `Chip.__init__` invariant) refuses
 defective chips at construction; this test exercises that path on
 every registered class so a newly-added chip can't ship without
@@ -33,7 +33,7 @@ import components.relays       # noqa: F401
 import components.transistors  # noqa: F401
 import framework.board         # noqa: F401
 
-from framework.errors import CircuitryError
+from framework.errors import WirebenchError
 from framework.factor import FactorNode
 from framework.registry import _REGISTRY
 
@@ -89,14 +89,14 @@ def _construct_any(cls: type[FactorNode]) -> FactorNode | None:
 )
 def test_class_constructs_cleanly(name: str) -> None:
     """Every registered component class constructs without raising
-    a `CircuitryError`.  If this fails the class is incomplete —
+    a `WirebenchError`.  If this fails the class is incomplete —
     either it lacks a behavioural cell (Phase 9's invariant fires)
     or its construction has some other defect that prevents real
     use in a design."""
     cls = _REGISTRY[name]
     try:
         instance = _construct_any(cls)
-    except CircuitryError as e:
+    except WirebenchError as e:
         pytest.fail(
             f"{name} raises {type(e).__name__} on minimal-topology "
             f"construction: {e}\n\n"

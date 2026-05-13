@@ -1,4 +1,4 @@
-"""Round-trip tests for `.circuitry` — per spec §12 (#15-18)."""
+"""Round-trip tests for `.wirebench` — per spec §12 (#15-18)."""
 import json
 import warnings
 from pathlib import Path
@@ -13,7 +13,7 @@ import framework.board      # noqa: F401
 
 from framework.board import Board
 from framework.circuit import Circuit
-from framework.format import load_circuitry, save_circuitry
+from framework.format import load_wirebench, save_wirebench
 from framework.refdes import RefdesBearing
 
 from water_alarm import WaterAlarm
@@ -25,13 +25,13 @@ from water_alarm_split import (
 def _load_silently(*args, **kwargs):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        return load_circuitry(*args, **kwargs)
+        return load_wirebench(*args, **kwargs)
 
 
 def _save_silently(*args, **kwargs):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        return save_circuitry(*args, **kwargs)
+        return save_wirebench(*args, **kwargs)
 
 
 def _refdes_set(circuit: Circuit) -> set[str]:
@@ -50,7 +50,7 @@ def _component_count(circuit: Circuit) -> int:
 ], ids=["WaterAlarm", "SensorBoard", "ControllerBoard", "WaterAlarmAssembly"])
 def test_roundtrip_preserves_structure(factory, tmp_path):
     original = factory()
-    p1 = tmp_path / "a.circuitry"
+    p1 = tmp_path / "a.wirebench"
     _save_silently(original, p1)
     loaded = _load_silently(p1)
 
@@ -59,14 +59,14 @@ def test_roundtrip_preserves_structure(factory, tmp_path):
     assert _refdes_set(loaded) == _refdes_set(original)
 
     # Save again and assert byte-identical (determinism).
-    p2 = tmp_path / "b.circuitry"
+    p2 = tmp_path / "b.wirebench"
     _save_silently(loaded, p2)
     assert p1.read_text() == p2.read_text()
 
 
 def test_roundtrip_water_alarm_behaves_identically(tmp_path):
     original = WaterAlarm()
-    p = tmp_path / "w.circuitry"
+    p = tmp_path / "w.wirebench"
     _save_silently(original, p)
     loaded = _load_silently(p)
 
@@ -94,7 +94,7 @@ def _drive_and_snapshot(circuit, drives: dict) -> dict:
 
 def test_roundtrip_water_alarm_assembly_behaves_identically(tmp_path):
     original = WaterAlarmAssembly()
-    p = tmp_path / "asm.circuitry"
+    p = tmp_path / "asm.wirebench"
     _save_silently(original, p)
     loaded = _load_silently(p)
 
@@ -114,7 +114,7 @@ def test_roundtrip_sensor_board_behaves_identically(tmp_path):
     # a single drive cycle — enough to demonstrate that the loaded
     # board behaves identically to the original under the same input.
     original = SensorBoard(refdes_number=1)
-    p = tmp_path / "sensor.circuitry"
+    p = tmp_path / "sensor.wirebench"
     _save_silently(original, p)
     loaded = _load_silently(p)
 
@@ -126,7 +126,7 @@ def test_roundtrip_sensor_board_behaves_identically(tmp_path):
 
 def test_roundtrip_controller_board_behaves_identically(tmp_path):
     original = ControllerBoard(refdes_number=2)
-    p = tmp_path / "controller.circuitry"
+    p = tmp_path / "controller.wirebench"
     _save_silently(original, p)
     loaded = _load_silently(p)
 
@@ -141,8 +141,8 @@ def test_roundtrip_controller_board_behaves_identically(tmp_path):
 
 def test_determinism_two_saves_byte_identical(tmp_path):
     asm = WaterAlarmAssembly()
-    p1 = tmp_path / "1.circuitry"
-    p2 = tmp_path / "2.circuitry"
+    p1 = tmp_path / "1.wirebench"
+    p2 = tmp_path / "2.wirebench"
     _save_silently(asm, p1)
     _save_silently(asm, p2)
     assert p1.read_text() == p2.read_text()
@@ -162,7 +162,7 @@ def test_hand_edited_file_loads(tmp_path):
             "wires": [],
         },
     }
-    p = tmp_path / "hand.circuitry"
+    p = tmp_path / "hand.wirebench"
     p.write_text(json.dumps(content))
     loaded = _load_silently(p)
     assert len(loaded._factor_nodes) == 2
@@ -174,7 +174,7 @@ def test_mated_assembly_loader_terminates(tmp_path):
     # this test verifies the loader can rebuild it without infinite
     # recursion.  (Regression check.)
     asm = WaterAlarmAssembly()
-    p = tmp_path / "asm.circuitry"
+    p = tmp_path / "asm.wirebench"
     _save_silently(asm, p)
     loaded = _load_silently(p)
     assert isinstance(loaded, Circuit)

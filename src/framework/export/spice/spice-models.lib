@@ -1,7 +1,7 @@
-* circuitry — default SPICE model library
+* wirebench — default SPICE model library
 *
 * Behavioural placeholders for the chips and devices supported by the
-* circuitry component library. Pin order in each .SUBCKT matches the
+* wirebench component library. Pin order in each .SUBCKT matches the
 * exporter's datasheet-pin-number sort, so swapping in a vendor-supplied
 * model is a one-line .LIB change.
 

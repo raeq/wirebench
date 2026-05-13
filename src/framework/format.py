@@ -1,10 +1,10 @@
-"""`.circuitry` file format — save/load entry points.
+"""`.wirebench` file format — save/load entry points.
 
-A `.circuitry` file is JSON describing the structure of a design: its
+A `.wirebench` file is JSON describing the structure of a design: its
 parts (by refdes / synthesised id), their wiring, and any composed
 boards or mates.  The format is the foundation for downstream consumers
 (SPICE / KiCad / EDIF exporters, schematic visualisers); each reads
-`.circuitry` files rather than walking the in-memory model.
+`.wirebench` files rather than walking the in-memory model.
 """
 from __future__ import annotations
 
@@ -350,14 +350,14 @@ def _to_record(root: FactorNode) -> AssemblyRecord | BoardRecord | CircuitRecord
             return _assembly_to_record(root)
         return _circuit_to_record(root)
     raise SaveError(
-        f"save_circuitry root must be a Board, Assembly, or Circuit; "
+        f"save_wirebench root must be a Board, Assembly, or Circuit; "
         f"got {type(root).__name__}"
     )
 
 
 @validate_call(config={'arbitrary_types_allowed': True})
-def save_circuitry(root: FactorNode, path: Path | str) -> None:
-    """Serialise a Circuit / Board / Assembly to a `.circuitry` file."""
+def save_wirebench(root: FactorNode, path: Path | str) -> None:
+    """Serialise a Circuit / Board / Assembly to a `.wirebench` file."""
     record = _to_record(root)
     file = CircuitryFile(format_version=CURRENT_FORMAT_VERSION, root=record)
     text = json.dumps(
@@ -567,15 +567,15 @@ def _check_format_version(version: str) -> None:
     expected_major = int(CURRENT_FORMAT_VERSION.split('.', 1)[0])
     if major != expected_major:
         raise LoadError(
-            f"Unsupported .circuitry format version {version!r}; "
+            f"Unsupported .wirebench format version {version!r}; "
             f"this loader supports {expected_major}.x.x "
             f"(current is {CURRENT_FORMAT_VERSION})"
         )
 
 
 @validate_call(config={'arbitrary_types_allowed': True})
-def load_circuitry(path: Path | str) -> FactorNode:
-    """Load a `.circuitry` file and reconstruct the in-memory model.
+def load_wirebench(path: Path | str) -> FactorNode:
+    """Load a `.wirebench` file and reconstruct the in-memory model.
 
     Raises:
         pydantic.ValidationError — schema violation (unknown component

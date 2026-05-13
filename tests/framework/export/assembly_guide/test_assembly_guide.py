@@ -29,7 +29,7 @@ import components.connectors  # noqa: F401
 from framework.errors import BreadboardIncompatibleError
 from framework.export import export_to_string
 
-from circuitry import Circuit, LED, Rail, Resistor, wire
+from wirebench import Circuit, LED, Rail, Resistor, wire
 
 
 # ----------------------------------------------------------------- e2e

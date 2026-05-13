@@ -38,7 +38,7 @@ def test_short_hash_net_name_style():
 def test_header_comment_emission():
     cfg = SpiceExportConfig(include_header_comment=True)
     out = export_to_string(_wa(), 'spice', config=cfg)
-    assert out.startswith('* Exported from circuitry')
+    assert out.startswith('* Exported from wirebench')
 
 
 def test_inline_models_emission():

@@ -48,7 +48,7 @@ if str(_SRC) not in sys.path:
 
 from pydantic import validate_call
 
-from circuitry import (
+from wirebench import (
     Board, Direction, ELECTRICAL, wire,
     BQ27546G1, Capacitor, Cell, Resistor,
     run_scenarios,

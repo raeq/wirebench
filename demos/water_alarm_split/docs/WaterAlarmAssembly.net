@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "WaterAlarmAssembly")
-    (tool "circuitry 0.x"))
+    (tool "wirebench 0.x"))
   (components
     (comp (ref "A1_J1")
       (value "Header2xNFemale_40") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical") (libsource (lib "Connector") (part "Header2xNFemale") (description "Header2xNFemale"))

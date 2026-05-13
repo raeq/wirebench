@@ -1,14 +1,14 @@
 """Component registry — maps registered class names to FactorNode subclasses.
 
-The `.circuitry` deserialiser looks up component classes by name in this
+The `.wirebench` deserialiser looks up component classes by name in this
 registry rather than importing arbitrary modules at runtime.  This is
 the framework's security boundary: a malicious or accidental
-`.circuitry` file can only construct classes that have been explicitly
+`.wirebench` file can only construct classes that have been explicitly
 registered at import time by the codebase itself.  No `eval`,
 `importlib.import_module`, or pickle-style arbitrary-code surface.
 
 Convention: every concrete FactorNode subclass that may appear in a
-`.circuitry` file decorates itself with `@register("ClassName")`
+`.wirebench` file decorates itself with `@register("ClassName")`
 (bare class name).  Uniqueness is checked at registration; collisions
 raise at import time.
 """
@@ -43,7 +43,7 @@ def register(name: str) -> Callable[[type[T]], type[T]]:
 
 def lookup(name: str) -> type[FactorNode]:
     """Look up a component class by registered name.  Used by the
-    `.circuitry` loader.  Raises UnknownPartError (a KeyError
+    `.wirebench` loader.  Raises UnknownPartError (a KeyError
     subclass) if the name is unknown."""
     if name not in _REGISTRY:
         raise UnknownPartError(

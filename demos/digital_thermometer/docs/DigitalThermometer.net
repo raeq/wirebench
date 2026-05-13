@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "DigitalThermometer")
-    (tool "circuitry 0.x"))
+    (tool "wirebench 0.x"))
   (components
     (comp (ref "R1")
       (value "220") (footprint "Resistor_SMD:R_0603_1608Metric") (libsource (lib "Device") (part "R") (description "Resistor"))

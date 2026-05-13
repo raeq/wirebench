@@ -1,7 +1,7 @@
 """Parametrised round-trip sweep over every class in the component
 registry.  Catches refdes-collision regressions, pin-id serialisation
 bugs, and any new-component class that doesn't survive
-save_circuitry → load_circuitry.
+save_wirebench → load_wirebench.
 
 Default construction is `cls(refdes_number=1)`.  Parts whose
 constructor needs more than that are listed in `_OVERRIDES`.  Parts
@@ -25,7 +25,7 @@ import components.transistors  # noqa: F401
 import framework.board         # noqa: F401
 
 from framework.circuit import Circuit
-from framework.format import load_circuitry, save_circuitry
+from framework.format import load_wirebench, save_wirebench
 from framework.registry import lookup, registered_names
 
 
@@ -120,9 +120,9 @@ def test_component_roundtrip(name, tmp_path):
     # parts like LED (mandatory anode) fail unconnected-port validation.
     wrapper = Circuit(factor_nodes=[part], ports=dict(part.ports))
 
-    p1 = tmp_path / 'a.circuitry'
-    _silently(save_circuitry, wrapper, p1)
-    loaded = _silently(load_circuitry, p1)
+    p1 = tmp_path / 'a.wirebench'
+    _silently(save_wirebench, wrapper, p1)
+    loaded = _silently(load_wirebench, p1)
 
     assert len(loaded._factor_nodes) == 1, (
         f"{name}: loaded circuit has {len(loaded._factor_nodes)} components, "
@@ -131,7 +131,7 @@ def test_component_roundtrip(name, tmp_path):
     assert type(loaded_part).__name__ == name, (
         f"{name}: loaded component is {type(loaded_part).__name__}")
 
-    p2 = tmp_path / 'b.circuitry'
-    _silently(save_circuitry, loaded, p2)
+    p2 = tmp_path / 'b.wirebench'
+    _silently(save_wirebench, loaded, p2)
     assert p1.read_text() == p2.read_text(), (
         f"{name}: re-save not byte-identical (non-deterministic round-trip)")

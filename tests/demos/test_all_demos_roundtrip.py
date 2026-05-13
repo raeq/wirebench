@@ -2,13 +2,13 @@
 
 The framework's extension-record path (see `framework/format_extension.py`)
 plus the per-class `SERIALIZE_KWARGS` declarations are what let a demo
-save its design through `save_circuitry` and reload it with
-`load_circuitry`.  This module proves that every top-level construct
+save its design through `save_wirebench` and reload it with
+`load_wirebench`.  This module proves that every top-level construct
 in `demos/*.py` roundtrips structurally:
 
     - same number of factor_nodes
     - same set of refdes strings on refdes-bearing children
-    - second `save_circuitry` produces a byte-identical file (proves
+    - second `save_wirebench` produces a byte-identical file (proves
       determinism — the JSON output is canonical)
 
 It does not assert behavioural equivalence (the demos run scenarios,
@@ -24,7 +24,7 @@ import pytest
 
 # Trigger registration of every chip / passive / connector and every
 # demo's locally-defined subclasses.  Without these imports the
-# registry only has core library parts and load_circuitry can't find
+# registry only has core library parts and load_wirebench can't find
 # demo-local classes like Uno_ThermometerSketch.
 import components.chips        # noqa: F401
 import components.passives     # noqa: F401
@@ -42,7 +42,7 @@ import bldc_motor               # noqa: F401
 import isolated_rs232           # noqa: F401
 import li_ion_fuel_gauge        # noqa: F401
 
-from framework.format import load_circuitry, save_circuitry
+from framework.format import load_wirebench, save_wirebench
 from framework.refdes import RefdesBearing
 
 
@@ -95,9 +95,9 @@ _FACTORIES = [
                          ids=[label for label, _ in _FACTORIES])
 def test_demo_roundtrips_structurally(label, factory, tmp_path):
     original = factory()
-    p1 = tmp_path / "a.circuitry"
-    _silent(save_circuitry, original, p1)
-    loaded = _silent(load_circuitry, p1)
+    p1 = tmp_path / "a.wirebench"
+    _silent(save_wirebench, original, p1)
+    loaded = _silent(load_wirebench, p1)
 
     assert len(loaded._factor_nodes) == len(original._factor_nodes), (
         f"{label}: loaded has {len(loaded._factor_nodes)} factor_nodes, "
@@ -116,12 +116,12 @@ def test_demo_resave_is_byte_identical(label, factory, tmp_path):
     key order, no spurious whitespace) and that the extension-record
     path correctly round-trips every kwarg it touched."""
     original = factory()
-    p1 = tmp_path / "a.circuitry"
-    p2 = tmp_path / "b.circuitry"
+    p1 = tmp_path / "a.wirebench"
+    p2 = tmp_path / "b.wirebench"
 
-    _silent(save_circuitry, original, p1)
-    loaded = _silent(load_circuitry, p1)
-    _silent(save_circuitry, loaded, p2)
+    _silent(save_wirebench, original, p1)
+    loaded = _silent(load_wirebench, p1)
+    _silent(save_wirebench, loaded, p2)
 
     assert p1.read_text() == p2.read_text(), (
         f"{label}: re-save is not byte-identical — non-deterministic "

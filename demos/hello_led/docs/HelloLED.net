@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "HelloLED")
-    (tool "circuitry 0.x"))
+    (tool "wirebench 0.x"))
   (components
     (comp (ref "D1")
       (value "red") (footprint "LED_SMD:LED_0805") (libsource (lib "Device") (part "LED") (description "Light-emitting diode"))

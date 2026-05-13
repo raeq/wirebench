@@ -1,10 +1,10 @@
-"""`circuitry export` — CLI front-end for the export framework.
+"""`wirebench export` — CLI front-end for the export framework.
 
 Usage:
 
-    circuitry export design.circuitry --format spice --output design.cir
-    circuitry export design.circuitry --format spice           # stdout
-    circuitry export --list-formats
+    wirebench export design.wirebench --format spice --output design.cir
+    wirebench export design.wirebench --format spice           # stdout
+    wirebench export --list-formats
 """
 from __future__ import annotations
 
@@ -19,20 +19,20 @@ import components.connectors # noqa: F401
 import framework.board       # noqa: F401
 
 from framework.export import export_to_string, list_formats
-from framework.format import load_circuitry
+from framework.format import load_wirebench
 
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog='circuitry',
-        description='Export a .circuitry design to a netlist or schematic format.',
+        prog='wirebench',
+        description='Export a .wirebench design to a netlist or schematic format.',
     )
     sub = parser.add_subparsers(dest='cmd')
 
     p_export = sub.add_parser('export', help='Export a design.')
     p_export.add_argument(
         'input', nargs='?',
-        help='Path to a .circuitry design file.',
+        help='Path to a .wirebench design file.',
     )
     p_export.add_argument(
         '--format', '-f',
@@ -67,7 +67,7 @@ def main(argv: list[str] | None = None) -> int:
     if not args.format:
         parser.error('--format is required')
 
-    design = load_circuitry(Path(args.input))
+    design = load_wirebench(Path(args.input))
     text = export_to_string(design, args.format)
 
     if args.output:

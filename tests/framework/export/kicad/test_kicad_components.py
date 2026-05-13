@@ -45,7 +45,7 @@ def test_kicad_header_directives():
     wire(r.ports['t2'], gnd.ports['out'])
     text = export_to_string(Circuit(factor_nodes=[r, vcc, gnd], ports={}), 'kicad')
     assert text.startswith('(export (version "E")')
-    assert '(tool "circuitry' in text
+    assert '(tool "wirebench' in text
     assert text.rstrip().endswith(')')
 
 

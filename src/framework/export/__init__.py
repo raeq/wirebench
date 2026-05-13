@@ -1,6 +1,6 @@
 """Generic export framework.
 
-Format-agnostic machinery for walking a `.circuitry` design and emitting
+Format-agnostic machinery for walking a `.wirebench` design and emitting
 it to industry-standard netlist or schematic formats. The framework
 provides the shared mechanics — logical-net computation, hierarchical
 walking, renderer registration; each format adapter (SPICE, KiCad, …)

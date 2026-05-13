@@ -79,7 +79,7 @@ def _discover() -> Iterator[tuple[str, str, type]]:
 
     The `obj.__module__ == mod_name` guard prevents yielding classes
     that were imported into the module from elsewhere (so e.g.
-    `from circuitry import Circuit` doesn't inject Circuit itself
+    `from wirebench import Circuit` doesn't inject Circuit itself
     into the rendering list).  Files whose name starts with `_` are
     skipped — that's the convention for private modules; same for
     subdirectories beginning with `_`."""

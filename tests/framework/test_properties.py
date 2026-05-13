@@ -33,7 +33,7 @@ from framework.circuit import Circuit
 from framework.connector import Connector
 from framework.export import export_to_string
 from framework.export.nets import compute_logical_nets
-from framework.format import load_circuitry, save_circuitry
+from framework.format import load_wirebench, save_wirebench
 from framework.ground import ELECTRICAL
 from framework.mate import mate
 from framework.pin import Pin, PinId
@@ -122,9 +122,9 @@ def test_portmap_dispatch_correctness(pins):
 def test_roundtrip_identity_for_any_component(component, tmp_path_factory):
     tmp = tmp_path_factory.mktemp('hyp_rt')
     wrapper = Circuit(factor_nodes=[component], ports=dict(component.ports))
-    p = tmp / 'a.circuitry'
-    _silently(save_circuitry, wrapper, p)
-    loaded = _silently(load_circuitry, p)
+    p = tmp / 'a.wirebench'
+    _silently(save_wirebench, wrapper, p)
+    loaded = _silently(load_wirebench, p)
     loaded_part = loaded._factor_nodes[0]
     assert type(loaded_part).__name__ == type(component).__name__
     if hasattr(component, 'refdes') and hasattr(loaded_part, 'refdes'):
@@ -139,10 +139,10 @@ def test_roundtrip_identity_for_any_component(component, tmp_path_factory):
 def test_save_is_deterministic(component, tmp_path_factory):
     tmp = tmp_path_factory.mktemp('hyp_det')
     wrapper = Circuit(factor_nodes=[component], ports=dict(component.ports))
-    p1 = tmp / 'a.circuitry'
-    p2 = tmp / 'b.circuitry'
-    _silently(save_circuitry, wrapper, p1)
-    _silently(save_circuitry, wrapper, p2)
+    p1 = tmp / 'a.wirebench'
+    p2 = tmp / 'b.wirebench'
+    _silently(save_wirebench, wrapper, p1)
+    _silently(save_wirebench, wrapper, p2)
     assert p1.read_text() == p2.read_text()
 
 

@@ -8,7 +8,7 @@ This document explains *what the framework refuses, and why*, in enough depth th
 
 ## What the framework promises
 
-A circuitbench design that passes `pytest` is **topologically buildable**:
+A wirebench design that passes `pytest` is **topologically buildable**:
 
 - Every wire in the Python source maps to a wire on the breadboard.
 - Every component has a stable refdes (`R1`, `U2`, `D3`) that appears in the BOM, the KiCad netlist, and the SPICE deck consistently.
@@ -146,7 +146,7 @@ Cells inside chips (`Inverter`, `NORLatch`, `Comparator`) are concept classes, n
 
 ### Why every design is logic-level
 
-The framework targets the design *topology* — what's wired to what, what parts go on the BOM, what the silkscreen says. Continuous-voltage behaviour is the simulator's job. Splitting the responsibilities cleanly lets each tool be excellent at its part: SPICE for analog, KiCad for layout, circuitbench for the source of truth.
+The framework targets the design *topology* — what's wired to what, what parts go on the BOM, what the silkscreen says. Continuous-voltage behaviour is the simulator's job. Splitting the responsibilities cleanly lets each tool be excellent at its part: SPICE for analog, KiCad for layout, wirebench for the source of truth.
 
 ## How the discipline maps to the API
 

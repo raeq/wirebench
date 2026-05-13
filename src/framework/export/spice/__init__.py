@@ -1,6 +1,6 @@
 """SPICE adapter.
 
-Renders a `.circuitry` design to a SPICE deck (.cir). Importing this
+Renders a `.wirebench` design to a SPICE deck (.cir). Importing this
 package executes the @register_renderer decorators in `renderers.py`,
 making them discoverable through the framework registry.
 
@@ -66,7 +66,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
         # Per §6.7: deterministic content only — no wall-clock timestamp.
         # Design name is stable; tools can correlate without a date.
         title = getattr(design, 'name', None) or type(design).__name__
-        ctx.emit(f"* Exported from circuitry — {title}")
+        ctx.emit(f"* Exported from wirebench — {title}")
 
     name = getattr(design, 'name', None) or type(design).__name__
     ctx.emit(f".TITLE {name}")

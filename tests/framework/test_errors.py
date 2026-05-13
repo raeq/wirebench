@@ -3,7 +3,7 @@
 Verifies the framework's domain-specific exception classes:
 
   - every leaf has the right MRO (family parent + built-in)
-  - every leaf is importable from the public `circuitry` package
+  - every leaf is importable from the public `wirebench` package
   - the actual raise sites in the source produce the expected leaves
     (not just the parent built-ins)
 """
@@ -16,8 +16,8 @@ import components.passives  # noqa: F401
 import components.connectors  # noqa: F401
 
 from framework import errors as E
-from circuitry import (
-    CircuitryError,
+from wirebench import (
+    WirebenchError,
     CircuitError, WiringError, ShortCircuitError, FloatingNetError,
     UnconnectedPinError, NodeMergeError, EmptyWireError,
     SignalError, SignalTypeMismatchError, DomainCrossingError,
@@ -38,7 +38,7 @@ from circuitry import (
 # ---------------------------------------------------------------- MRO
 
 # Pair every leaf with the family classes / built-ins it must inherit
-# from.  Each leaf is rooted at `CircuitryError`; this table records the
+# from.  Each leaf is rooted at `WirebenchError`; this table records the
 # specifically required ancestors beyond that.
 MRO_TABLE: list[tuple[type, tuple[type, ...]]] = [
     # --- Wiring family ---
@@ -84,44 +84,44 @@ MRO_TABLE: list[tuple[type, tuple[type, ...]]] = [
                          ids=[cls.__name__ for cls, _ in MRO_TABLE])
 def test_leaf_mro(cls: type, ancestors: tuple[type, ...]) -> None:
     """Every leaf inherits from its family parents + the appropriate
-    Python built-in, *and* ultimately from CircuitryError."""
+    Python built-in, *and* ultimately from WirebenchError."""
     for ancestor in ancestors:
         assert issubclass(cls, ancestor), (
             f"{cls.__name__} must inherit from {ancestor.__name__}; "
             f"MRO is {[c.__name__ for c in cls.__mro__]}"
         )
-    assert issubclass(cls, CircuitryError), (
-        f"{cls.__name__} must inherit from CircuitryError"
+    assert issubclass(cls, WirebenchError), (
+        f"{cls.__name__} must inherit from WirebenchError"
     )
 
 
 # -------------------------------------------------------- catchability
 
-def test_circuitry_error_catches_every_leaf() -> None:
-    """Every leaf can be caught by the umbrella `CircuitryError`."""
+def test_wirebench_error_catches_every_leaf() -> None:
+    """Every leaf can be caught by the umbrella `WirebenchError`."""
     for cls, _ in MRO_TABLE:
         instance = cls('m')
-        assert isinstance(instance, CircuitryError)
+        assert isinstance(instance, WirebenchError)
 
 
-def test_family_classes_are_abstract_under_circuitry_error() -> None:
-    """Family classes also inherit from CircuitryError (not just leaves)."""
+def test_family_classes_are_abstract_under_wirebench_error() -> None:
+    """Family classes also inherit from WirebenchError (not just leaves)."""
     families = [
         CircuitError, WiringError, SignalError, PartError, MatingError,
         FormatError, UsageError, RendererRegistryError,
     ]
     for family in families:
-        assert issubclass(family, CircuitryError)
+        assert issubclass(family, WirebenchError)
 
 
 # -------------------------------------------------- importability
 
-def test_every_leaf_is_importable_from_circuitry_package() -> None:
-    """Public re-export: `from circuitry import LeafError` works."""
-    import circuitry
+def test_every_leaf_is_importable_from_wirebench_package() -> None:
+    """Public re-export: `from wirebench import LeafError` works."""
+    import wirebench
     for cls, _ in MRO_TABLE:
-        assert getattr(circuitry, cls.__name__, None) is cls, (
-            f"{cls.__name__} is not re-exported from `circuitry`"
+        assert getattr(wirebench, cls.__name__, None) is cls, (
+            f"{cls.__name__} is not re-exported from `wirebench`"
         )
 
 

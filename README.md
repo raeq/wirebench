@@ -1,15 +1,15 @@
-# circuitbench
+# wirebench
 
 > *Describe real electronic circuits in Python. The framework refuses to compile a design that wouldn't physically work — so when your tests are green, the breadboard build matches.*
 
-**KiCad's ERC catches defective wiring after you've drawn the schematic. circuitbench refuses to construct the design at all.** Wire two chip outputs together and `wire()` raises. Leave a regulator's input floating and the `Circuit` subclass refuses to instantiate. Try to mate a male pin header to a JST plug and `mate()` says no. The defects ERC flags *after* you've drawn the schematic are flagged *before* the Python design even imports cleanly.
+**KiCad's ERC catches defective wiring after you've drawn the schematic. wirebench refuses to construct the design at all.** Wire two chip outputs together and `wire()` raises. Leave a regulator's input floating and the `Circuit` subclass refuses to instantiate. Try to mate a male pin header to a JST plug and `mate()` says no. The defects ERC flags *after* you've drawn the schematic are flagged *before* the Python design even imports cleanly.
 
-If you've programmed an Arduino but felt like wiring the surrounding circuit is a black art — every project a hunt for the magic combination of pull-ups, current-limiting resistors, decoupling caps, and "did I just wire the LED backwards?" — circuitbench is where every line of code maps to a physical operation. You write Python that says *"a 330 Ω resistor in series with a red LED between VCC and GND."* The wires in the code are the wires you'll need on the breadboard, and the design either constructs cleanly or it doesn't — there's no middle state where pytest passes but the bench build smokes.
+If you've programmed an Arduino but felt like wiring the surrounding circuit is a black art — every project a hunt for the magic combination of pull-ups, current-limiting resistors, decoupling caps, and "did I just wire the LED backwards?" — wirebench is where every line of code maps to a physical operation. You write Python that says *"a 330 Ω resistor in series with a red LED between VCC and GND."* The wires in the code are the wires you'll need on the breadboard, and the design either constructs cleanly or it doesn't — there's no middle state where pytest passes but the bench build smokes.
 
 ## Hello, world
 
 ```python
-from circuitry import Resistor, LED, Rail, Circuit, wire, export
+from wirebench import Resistor, LED, Rail, Circuit, wire, export
 
 class HelloLED(Circuit):
     def __init__(self) -> None:
@@ -86,7 +86,7 @@ class CrossedRails(Circuit):
 # ShortCircuitError: Short circuit on logical net — multiple drivers: 'Rail.out', 'Rail.out'
 ```
 
-Each `wire()` call is fine on its own — the violation only emerges when the framework walks the combined logical net at `super().__init__()`. This is the same algorithm KiCad's ERC runs — except KiCad waits for you to click "Run ERC," and circuitbench waits no longer than `__init__` returning.
+Each `wire()` call is fine on its own — the violation only emerges when the framework walks the combined logical net at `super().__init__()`. This is the same algorithm KiCad's ERC runs — except KiCad waits for you to click "Run ERC," and wirebench waits no longer than `__init__` returning.
 
 ---
 

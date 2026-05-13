@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "Dice")
-    (tool "circuitry 0.x"))
+    (tool "wirebench 0.x"))
   (components
     (comp (ref "C1")
       (value "1e-08") (footprint "Capacitor_SMD:C_0603_1608Metric") (libsource (lib "Device") (part "C") (description "Capacitor"))

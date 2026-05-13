@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "CooledSystem")
-    (tool "circuitry 0.x"))
+    (tool "wirebench 0.x"))
   (components
     (comp (ref "A1_P1")
       (value "Header1xNMale_2") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical") (libsource (lib "Connector") (part "Header1xNMale") (description "Header1xNMale"))
