@@ -1,8 +1,8 @@
 # wirebench
 
-> *Describe real electronic circuits in Python. The framework refuses to compile a design that wouldn't physically work — so when your tests are green, the breadboard build matches.*
+> *Describe real electronic circuits in Python. The framework won't let a design that wouldn't physically work compile — so when your tests are green, the breadboard build matches.*
 
-**KiCad's ERC catches defective wiring after you've drawn the schematic. wirebench refuses to construct the design at all.** Wire two chip outputs together and `wire()` raises. Leave a regulator's input floating and the `Circuit` subclass refuses to instantiate. Try to mate a male pin header to a JST plug and `mate()` says no. The defects ERC flags *after* you've drawn the schematic are flagged *before* the Python design even imports cleanly.
+**KiCad's ERC catches defective wiring after you've drawn the schematic. wirebench prevents you from constructing the wrong design in the first place** — no burnt CMOS outputs from two drivers fighting on one net, no half-evenings tracing a regulator that never had a ground wired, no second order at Mouser because the cable housings don't fit the header you placed. Wire two chip outputs together and `wire()` raises. Leave a regulator's input floating and the `Circuit` subclass refuses to instantiate. Try to mate a male pin header to a JST plug and `mate()` says no. The defects ERC would flag *after* you've drawn the schematic are flagged *before* the Python design even imports cleanly.
 
 If you've programmed an Arduino but felt like wiring the surrounding circuit is a black art — every project a hunt for the magic combination of pull-ups, current-limiting resistors, decoupling caps, and "did I just wire the LED backwards?" — wirebench is where every line of code maps to a physical operation. You write Python that says *"a 330 Ω resistor in series with a red LED between VCC and GND."* The wires in the code are the wires you'll need on the breadboard, and the design either constructs cleanly or it doesn't — there's no middle state where pytest passes but the bench build smokes.
 
@@ -49,11 +49,11 @@ Components are stored as `self.<name>` attributes so the framework can auto-coll
 
 Every demo in `demos/` ships with all seven exports pre-generated in its `docs/` subfolder — open any `*.svg` to see the rendered schematic, or any `*.md` to read the bench-assembly guide.
 
-## When it refuses
+## What it prevents
 
-The framework refuses defective designs at three layers, each in milliseconds:
+Three categories of real-world harm wirebench rules out before the design ever reaches a breadboard — each caught in milliseconds, each with the kind of error message that names the offending part and tells you what to fix.
 
-### Two outputs wired together
+### Burnt outputs
 
 ```python
 u1 = SN74HC04(refdes_number=1)
@@ -61,18 +61,18 @@ wire(u1.y_1, u1.y_2)
 # ShortCircuitError: wire() has multiple drivers ('y_1', 'y_2') — short circuit
 ```
 
-You don't need to know that two fighting CMOS outputs will burn out one or both. The framework knows, and `wire()` raises before the call returns.
+Two CMOS outputs fighting on the same net will burn out one or both. You don't need to know which — wirebench knows, and `wire()` raises before the call returns. The chip never gets the chance to suffer the experiment.
 
-### Connectors that don't physically mate
+### A wasted parts order
 
 ```python
 mate(Header2xNMale(...), JSTPHCableHousing(...))
 # IncompatibleMateError: Header2xNMale mates with Header2xNFemale, not JSTPHCableHousing
 ```
 
-Pitch, pin count, and gender all checked. The cables you buy match the connectors you actually placed; receptacles ship with their plugs.
+Pitch, pin count, and gender all checked at `mate()` time. You don't put through a JST cable order, wait five days, and discover the housings don't fit the header on your board — the wrong combination never gets past the Python.
 
-### Shorts that only emerge at the circuit level
+### Hours of fault-tracing
 
 ```python
 class CrossedRails(Circuit):
@@ -86,11 +86,11 @@ class CrossedRails(Circuit):
 # ShortCircuitError: Short circuit on logical net — multiple drivers: 'Rail.out', 'Rail.out'
 ```
 
-Each `wire()` call is fine on its own — the violation only emerges when the framework walks the combined logical net at `super().__init__()`. This is the same algorithm KiCad's ERC runs — except KiCad waits for you to click "Run ERC," and wirebench waits no longer than `__init__` returning.
+Each `wire()` call is fine in isolation — the contention only emerges when the framework walks the combined logical net at `super().__init__()`. This is the same algorithm KiCad's ERC runs, except KiCad waits for you to click *Run ERC* and wirebench waits no longer than `__init__` returning. Without that walk, you'd find the conflict the slow way: build the design, watch the supplies fight, scope every node looking for the one that doesn't sit where it should.
 
 ---
 
-The same logic catches other classes of defect hobbyists don't always know to look for: forbidden runtime states (S=1, R=1 on an SR latch), ground-domain crossings without an isolator, chips with declared output pins that nothing internal drives. Every error message names the offending part by refdes and pin number.
+The same logic prevents other classes of harm hobbyists don't always know to look for: forbidden runtime states (S=1, R=1 on an SR latch) that would lock a latch into undefined behaviour, ground-domain crossings without an isolator that would defeat the point of having isolation, chips with declared output pins that nothing internal drives — every quiet failure mode where the circuit looks right and doesn't work. Every error message names the offending part by refdes and pin number, so you know what to fix before you reach for a soldering iron.
 
 When `pytest` is green, the topology is sound.
 
@@ -101,7 +101,7 @@ When `pytest` is green, the topology is sound.
 ## What it doesn't do
 
 - **Solve Ohm's law.** Logic-level only. For continuous-voltage simulation, export to SPICE and let ngspice handle it.
-- **Catch parameter mistakes.** The framework refuses defective *topology* — shorts, floating nets, mismatched connectors, forbidden states, cross-domain wiring. It doesn't catch a 330 Ω current limiter sized for a high-current LED, a 25 V capacitor on a 30 V rail, or a regulator dissipating 4 W with no heatsink. Use SPICE, arithmetic, or the per-component `GOTCHAS` strings for that.
+- **Catch parameter mistakes.** The framework prevents defective *topology* — shorts, floating nets, mismatched connectors, forbidden states, cross-domain wiring — but it won't save you from a 330 Ω current limiter sized for a high-current LED, a 25 V capacitor on a 30 V rail, or a regulator dissipating 4 W with no heatsink. Use SPICE, arithmetic, or the per-component `GOTCHAS` strings for those.
 - **Simulate firmware.** Model firmware as a private cell inside a chip subclass (see `demos/digital_thermometer/`); the cell is your code.
 - **Lay out a PCB.** KiCad netlist export gets you to the start of layout; KiCad does the rest.
 
@@ -129,7 +129,7 @@ Full coverage of the framework, components, every export format with byte-determ
 
 - [`demos/`](demos/) — every demo is a complete study artifact (source + all six exports + rendered schematic).
 - [`docs/learning-path.md`](docs/learning-path.md) — suggested order for working through the demos.
-- [`docs/design-principles.md`](docs/design-principles.md) — why the framework refuses what it refuses.
+- [`docs/design-principles.md`](docs/design-principles.md) — why the framework prevents what it prevents.
 - [`docs/component-library-data.md`](docs/component-library-data.md) — catalogue of all 122 modelled components with datasheet links, pin maps, and footprints.
 - [`docs/`](docs/) — implementation specs for every major work package.
 - [`CLAUDE.md`](CLAUDE.md) — design philosophy in full, for contributors.
