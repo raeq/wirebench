@@ -25,8 +25,8 @@ def wire_idle_drivers(
     behaviourally at the framework's voltage-only level (specialty
     ICs, protocol-bus devices, internal-state-machine parts), this
     helper produces the bare minimum of cells needed to satisfy the
-    "every OUT pin must be driven" invariant (per
-    docs/behavioural-cell-audit-spec.md §6.1).
+    "every OUT pin must be driven" invariant enforced in
+    `framework.chip.Chip.__init__`.
 
     Idle values follow a uniform convention: Digital outputs idle
     LOW (False); Analog outputs idle at 0.0 V.  Demos that need

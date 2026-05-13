@@ -1,9 +1,8 @@
 """Construction-time invariant tests for `Chip.__init__`.
 
-Per docs/behavioural-cell-audit-spec.md §6.1: a chip class with an
-OUT pin must drive that pin's internal face via a cell, or declare
-`BARE_FIRMWARE_DRIVEN = True` to opt out.  These tests pin the
-contract:
+A chip class with an OUT pin must drive that pin's internal face via
+a cell, or declare `BARE_FIRMWARE_DRIVEN = True` to opt out.  These
+tests pin the contract:
 
 - A `_BrokenChip` with an OUT pin and `cells=[]` raises
   `PartConfigurationError` at construction.
@@ -128,9 +127,10 @@ def test_passthrough_chip_satisfies_invariant() -> None:
     assert chip is not None
 
 
-def test_error_message_names_pin_and_points_at_spec() -> None:
+def test_error_message_names_pin_and_points_at_pattern() -> None:
     """The `PartConfigurationError` message is actionable — it
-    names the offending pin number and points at the audit spec."""
+    names the offending pin and points at the established cell
+    pattern."""
 
     class _MisconfiguredChip(Chip):
         __slots__ = ()
@@ -151,4 +151,4 @@ def test_error_message_names_pin_and_points_at_spec() -> None:
     assert "'BAD'" in msg
     assert "pin 2" in msg
     assert "BARE_FIRMWARE_DRIVEN" in msg
-    assert "behavioural-cell-audit-spec.md" in msg
+    assert "src/components/chips/concepts/" in msg

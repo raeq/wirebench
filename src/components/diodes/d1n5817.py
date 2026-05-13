@@ -28,8 +28,11 @@ class D1N5817(Diode):
         switches the inductive load).
 
     V_R max = 20 V; I_F avg = 1 A; V_F typ ~0.3 V at hobby-sized
-    currents; I_FSM = 25 A.  See `docs/behavioural-cell-audit-spec.md`
-    §7.2.2 for the decision rationale.
+    currents; I_FSM = 25 A.  A diode is a passive part whose
+    directional role is a property of the circuit using it, not of
+    the device itself — so the class itself carries no internal
+    cell and the circuit pairs it with the role-specific cell
+    (`SeriesRectifier`, `DiodeOR`) as needed.
     """
 
     __slots__ = ('_ports', '_refdes_number')

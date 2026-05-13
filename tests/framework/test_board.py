@@ -1,4 +1,4 @@
-"""Board class tests — per docs/board-connector-spec.md §13."""
+"""Board class tests."""
 import pytest
 
 from framework.board import Board

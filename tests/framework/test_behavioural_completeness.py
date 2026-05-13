@@ -100,10 +100,11 @@ def test_class_constructs_cleanly(name: str) -> None:
         pytest.fail(
             f"{name} raises {type(e).__name__} on minimal-topology "
             f"construction: {e}\n\n"
-            f"Per docs/behavioural-cell-audit-spec.md §6.2, every "
-            f"registered class must construct cleanly.  Likely fix: "
-            f"add a behavioural cell that drives the class's declared "
-            f"OUT pins; see §7.2 for the cell pattern."
+            f"Every registered class must construct cleanly in a "
+            f"minimal topology.  Likely fix: add a behavioural cell "
+            f"that drives the class's declared OUT pins — see "
+            f"`src/components/chips/concepts/` for established "
+            f"patterns (LinearRegulator, OpAmp, Comparator, …)."
         )
     if instance is None:
         pytest.fail(

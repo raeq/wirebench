@@ -2,7 +2,7 @@
 
 For each chip class, walk its factor nodes, filter to Pin instances,
 and check that the (number, name) pairs match the manufacturer's
-datasheet pinout per docs/pin-id-spec.md §7.x.
+datasheet pinout.
 """
 from __future__ import annotations
 

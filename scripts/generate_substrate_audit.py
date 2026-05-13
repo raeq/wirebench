@@ -1,4 +1,4 @@
-"""Generate docs/substrate-compatibility-audit.md.
+"""Generate .plans/substrate-compatibility-audit.md.
 
 Walks the component registry, constructs every class via the same
 best-effort instantiation used elsewhere in the framework, reads the
@@ -109,7 +109,8 @@ def main() -> None:
     for _, line in rows:
         lines.append(line)
 
-    out_path = _REPO / 'docs' / 'substrate-compatibility-audit.md'
+    out_path = _REPO / '.plans' / 'substrate-compatibility-audit.md'
+    out_path.parent.mkdir(exist_ok=True)
     out_path.write_text('\n'.join(lines) + '\n')
     print(f"Wrote {out_path} ({len(rows)} components).")
 

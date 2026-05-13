@@ -2,6 +2,12 @@
 CLAUDE.md
 responses.md
 
+# Claude-generated working docs (plans, specs, audits, status reports —
+# per the CLAUDE.md rule). Already covered by the `.*` rule below;
+# listed explicitly so the policy is discoverable when grepping this
+# file.
+.plans/
+
 # Dotfiles and environment files
 .*
 !.gitignore

@@ -26,7 +26,7 @@ class STM32F411CEU6(Chip):
     FOOTPRINT: ClassVar[str | None] = 'Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.6x5.6mm'
 
     # Category C — application-firmware-driven (per
-    # docs/behavioural-cell-audit-spec.md §7.3): the MCU's OUT
+    # the behavioural-cell audit policy): the MCU's OUT
     # pins are driven by user firmware, not by a deterministic
     # function of its input pins. The bare class legitimately
     # ships with `cells=[]`; users subclass and inject a

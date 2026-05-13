@@ -26,7 +26,7 @@ class ATmega32U4(Chip):
     FOOTPRINT: ClassVar[str | None] = 'Package_QFP:TQFP-44_10x10mm_P0.8mm'
 
     # Category C — application-firmware-driven (per
-    # docs/behavioural-cell-audit-spec.md §7.3): the MCU's OUT
+    # the behavioural-cell audit policy): the MCU's OUT
     # pins are driven by user firmware, not by a deterministic
     # function of its input pins. The bare class legitimately
     # ships with `cells=[]`; users subclass and inject a

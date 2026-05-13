@@ -32,7 +32,7 @@ def test_call_is_noop():
     # D1N5817 is Category A passive — the diode itself models no
     # directional behaviour.  Forward-conduction in a series-rectifier
     # role is provided by a `SeriesRectifier` cell wired alongside the
-    # diode in the circuit; see docs/behavioural-cell-audit-spec.md §7.2.2.
+    # diode in the circuit (e.g. via `SeriesRectifier` or `DiodeOR`).
     assert D1N5817(refdes_number=1)() is None
 
 

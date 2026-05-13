@@ -35,13 +35,16 @@ class Chip(Circuit):
     `self._assert_no_inputs_wired()` first to refuse silent overwrites
     of parent-driven pins.
 
-    **Construction-time invariant (per docs/behavioural-cell-audit-spec.md
-    §6.1):** every declared OUT pin must be driven by an internal cell.
-    The check runs after `super().__init__` completes and refuses to
-    construct any subclass whose OUT pin's internal face has no real
-    driver.  The opt-out is `BARE_FIRMWARE_DRIVEN = True` for chips
-    whose OUT pins are driven by user firmware injected via subclassing
-    (MCUs are the canonical case).
+    **Construction-time invariant:** every declared OUT pin must be
+    driven by an internal cell.  The check runs after `super().__init__`
+    completes and refuses to construct any subclass whose OUT pin's
+    internal face has no real driver.  The opt-out is
+    `BARE_FIRMWARE_DRIVEN = True` for chips whose OUT pins are driven
+    by user firmware injected via subclassing (MCUs are the canonical
+    case).  Cells follow the pattern in
+    `src/components/chips/concepts/`: a `FactorNode` with input ports
+    matching the chip's IN pins and an OUT port wired to the chip's
+    OUT-pin internal face.
     """
 
     # Opt-out flag for chip classes that legitimately ship with `cells=[]`
@@ -117,8 +120,9 @@ class Chip(Circuit):
             f"cell drives its internal face.  Add a cell to __init__ "
             f"that drives this pin's internal face, or — if this chip "
             f"is firmware-driven — set BARE_FIRMWARE_DRIVEN = True on "
-            f"the class.  See docs/behavioural-cell-audit-spec.md §6.1 "
-            f"for the cell pattern."
+            f"the class.  See `src/components/chips/concepts/` for "
+            f"established cell patterns (LinearRegulator, OpAmp, "
+            f"Comparator, Inverter, …)."
         )
 
     @property
