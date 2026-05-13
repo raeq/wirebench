@@ -1,3 +1,7 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "wirebench"
 version = "0.1.0"
@@ -17,10 +21,25 @@ dev = [
     "coverage[toml]>=7.0",
     "mutmut>=3.0",
     "hypothesis>=6.0",
+    "mypy>=1.10",
 ]
 
 [project.scripts]
 wirebench = "cli.export:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/framework", "src/components", "src/wirebench", "src/cli"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/framework",
+    "src/components",
+    "src/wirebench",
+    "src/cli",
+    "README.md",
+    "LICENSE",
+    "pyproject.toml",
+]
 
 [tool.pytest.ini_options]
 pythonpath = ["src", "demos", "tests/framework"]
