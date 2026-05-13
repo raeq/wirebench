@@ -29,19 +29,25 @@ class D1N4728A(Diode):
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Zeners are installed reverse-biased.** The banded end "
-        "(cathode) goes toward the *positive* rail; the regulation "
-        "happens through reverse breakdown. Mis-installing one with "
-        "the bar to ground turns it into an ordinary forward-biased "
-        "diode and the regulation simply doesn't happen.",
-        "**A Zener regulator needs a series resistor.** The Zener clamps "
-        "voltage but doesn't limit current — without a series R sized "
-        "for `(V_in − V_z) / I_load`, the Zener dissipates the entire "
-        "supply current as heat and exceeds its 1 W rating in seconds.",
-        "**Zener V_Z drifts with temperature.** Below ~5 V the coefficient "
-        "is negative; above ~5 V it's positive; ~5.6 V is the sweet spot "
-        "where they cancel. The 1N4728A (3.3 V) drifts by several mV/°C — "
-        "use a voltage reference (TL431, LM4040) where stability matters.",
+        "**Zeners are installed *backwards* compared with an ordinary "
+        "diode.** The black band (cathode) goes toward the *positive* "
+        "rail, not toward ground. Zeners regulate by deliberately "
+        "letting current flow in their reverse-breakdown region — "
+        "install one with the band toward ground and it acts like a "
+        "regular diode (no regulation happens at all).",
+        "**A Zener always needs a series resistor between it and the "
+        "supply.** The Zener clamps voltage but it does not limit "
+        "current — without a resistor sizing the current, the Zener "
+        "passes whatever the supply delivers, overheats, and burns out "
+        "in seconds. Pick R = (V_in − V_z) / I_load for the smallest "
+        "load you'll have on the regulated rail.",
+        "**A 3.3 V Zener like this one drifts noticeably with "
+        "temperature** — several mV per °C. Fine for simple voltage "
+        "clamping or rough regulation; bad for anything precision. "
+        "If you care about stability use a real voltage reference "
+        "(TL431, LM4040). (For the curious: the temperature coefficient "
+        "flips sign around 5.6 V — below that it's negative, above it's "
+        "positive, and a 5.6 V Zener is the most temperature-stable.)",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

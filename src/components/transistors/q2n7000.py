@@ -26,19 +26,27 @@ class Q2N7000(MOSFET):
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'s': 1, 'g': 2, 'd': 3}
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**MOSFETs are static-sensitive.** Touch the bench frame or use "
-        "an ESD strap before handling. A discharge through the gate-source "
-        "oxide destroys the transistor silently — it still looks fine, it "
-        "just doesn't switch any more. Leave the leads shorted with foil "
-        "or in conductive foam until you install it.",
-        "**TO-92 pinout, flat side facing you, leads down: S-G-D.** Easy "
-        "to confuse with a BJT in the same package (E-B-C). Mis-installing "
-        "an N-MOSFET as if it were an NPN puts the body diode across the "
-        "supply and shorts your rail.",
-        "**The 2N7000 is a logic-level part** (V_GS(th) ≈ 1–3 V), so 5 V "
-        "drives it on hard. At 3.3 V it conducts but with higher R_DS(on); "
-        "use a true logic-level FET (like the IRLB8721) for low-side "
-        "switching from a 3.3 V MCU at meaningful currents.",
+        "**Touch a grounded metal surface before picking up a MOSFET, "
+        "every time.** MOSFETs are static-sensitive in a way bipolar "
+        "transistors aren't — a tiny spark you can't feel (under "
+        "100 V from walking across a carpet) punches through the gate "
+        "insulator and damages the part silently. The transistor still "
+        "looks fine after the zap; it just won't switch correctly, and "
+        "you'll spend an hour blaming your wiring. Keep new MOSFETs "
+        "in their conductive foam until you install them.",
+        "**Hold the 2N7000 flat-side towards you, leads down — the pins "
+        "are Source, Gate, Drain from left to right.** This is easy to "
+        "mix up with a BJT in the same TO-92 package (which is "
+        "E-B-C). Wire an N-MOSFET as if it were an NPN and the chip's "
+        "internal body diode ends up across your supply, shorting the "
+        "rail.",
+        "**This is a logic-level MOSFET — it turns on with a 5 V gate "
+        "signal.** A 5 V MCU pin drives it fully into conduction. At "
+        "3.3 V it still conducts but with higher resistance (and so "
+        "more heat) — for low-side switching from a 3.3 V MCU at "
+        "meaningful currents, prefer a true logic-level FET like the "
+        "IRLB8721 instead. (Technically: V_GS(th) is 1–3 V, "
+        "R_DS(on) is spec'd at 4.5 V gate drive.)",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

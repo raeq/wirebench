@@ -26,21 +26,28 @@ class TIP120(BJT):
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'b': 1, 'c': 2, 'e': 3}
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Darlington V_BE is ~1.4 V**, not the usual ~0.7 V — it's two "
-        "BJTs in cascade. A pull-up that just barely turned on a single "
-        "transistor will leave the TIP120 sitting in its high-loss region. "
-        "Size the base resistor for a base current of I_load / 1000 (β ≈ "
-        "1000 typical) and confirm V_BE clears 1.4 V.",
-        "**Darlingtons saturate at ~1 V V_CE(sat).** That's lossy: at 1 A "
-        "the part dissipates 1 W in switching. A logic-level MOSFET "
-        "(IRLB8721) dissipates ~50 mW at the same current. Use the Darlington "
-        "only when you specifically need its current gain and don't mind "
-        "the heat.",
-        "**Inductive loads need a flyback diode** from collector to "
-        "supply, cathode toward supply. Without it the inductor's collapsing "
-        "field kicks the collector to +V_supply + 50–200 V and punctures "
-        "the part. A 1N4001 across a relay or solenoid is enough; faster "
-        "loads (motors) want a Schottky like the 1N5817.",
+        "**The TIP120 needs about 1.4 V on its base to turn on — twice "
+        "as much as an ordinary BJT.** That's because a Darlington is "
+        "two BJTs cascaded inside one package. A pull-up resistor that "
+        "would have switched a 2N3904 cleanly may leave the TIP120 "
+        "stuck halfway on, dissipating heat. Size the base resistor "
+        "for I_base ≈ I_load / 1000 (the Darlington's gain is roughly "
+        "1000) and confirm the base voltage clears 1.4 V.",
+        "**This part dissipates a lot of heat when switching.** A "
+        "Darlington drops about 1 V across its collector-emitter "
+        "junction when fully 'on', so at 1 A of load current the part "
+        "dissipates 1 W — heat you can feel with a finger. A modern "
+        "logic-level MOSFET (IRLB8721) drops only ~20 mV at the same "
+        "current, so dissipates ~20 mW. Use the TIP120 only when you "
+        "specifically want the current-gain (like a small motor speed "
+        "controller) and don't mind a heatsink.",
+        "**Put a diode across any inductive load — coil, relay, motor "
+        "— with the band toward the + supply.** A 1N4001 is enough for "
+        "relays and solenoids; a Schottky (1N5817) handles faster "
+        "loads like motors. Without the flyback diode, the inductive "
+        "load's collapsing field kicks the transistor's collector up "
+        "to V_supply + 50 to 200 V on switch-off, blowing the "
+        "transistor every time.",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

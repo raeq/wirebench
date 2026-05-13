@@ -25,12 +25,19 @@ class D1N4007(Diode):
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**The banded end is the cathode (−).** Universal diode "
-        "convention; the band matches the bar in the schematic symbol.",
-        "**1N4007 is the workhorse mains rectifier** (1000 V reverse / "
-        "1 A average). It also makes an excellent inductive-load flyback "
-        "diode on relays, solenoids, and slow motors. Slow recovery rules "
-        "it out of switching-supply rectifiers.",
+        "**The black band marks the cathode (− end).** Match the band "
+        "to the bar in the schematic symbol; they mean the same thing. "
+        "Reverse-installing a rectifier on a transformer secondary is "
+        "one of the most reliable ways to pop both the diode and the "
+        "fuse in the same switch-on event.",
+        "**The 1N4007 is the workhorse mains rectifier and a great "
+        "flyback diode for slow inductive loads.** It blocks 1000 V "
+        "reverse, conducts 1 A continuous, and costs almost nothing. "
+        "Use it for relay coils, solenoids, small motors at audio "
+        "frequencies, and any AC rectification at line frequency. "
+        "Slow recovery (~2 µs) means it's the wrong choice for "
+        "switching power supplies above a few kHz; a Schottky like "
+        "the 1N5817 handles those.",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

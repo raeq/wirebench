@@ -51,17 +51,25 @@ class CD4043(Chip):
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-16_W7.62mm"
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**OE (Output Enable, pin 5) must be tied HIGH** for the four "
-        "tri-state outputs to actually drive their pins. Floating OE "
-        "leaves all four outputs in high-impedance — easy to mistake "
-        "for a dead chip when the real fix is one jumper to Vdd.",
-        "**Tie unused S and R inputs to ground.** Floating S/R inputs on "
-        "the unused latches drift unpredictably and can flip neighbouring "
-        "latches through chip-internal coupling — the data sheet's "
-        "absolute-max table calls floating CMOS inputs out specifically.",
-        "**There's no /Q output pin.** Real silicon has only Q; if you "
-        "need the inverted output, run Q through an external inverter "
-        "(a spare 74HC04 or CD4069 gate is the usual fix).",
+        "**Jumper pin 5 (OE) to Vdd or the outputs do nothing.** OE is "
+        "the Output Enable — when it's not pulled HIGH, all four latch "
+        "outputs sit in high-impedance and the chip looks dead even "
+        "though it's working internally. This is a one-second fix that "
+        "wastes an evening if you miss it: a jumper from pin 5 to the "
+        "+ rail.",
+        "**Ground the inputs of every latch you're not using.** Each "
+        "latch has its own S (Set) and R (Reset) pin; for any latch "
+        "you don't plan to use, tie both pins to ground. Floating CMOS "
+        "inputs drift through their threshold and the noise can couple "
+        "into neighbouring latches through the chip's silicon, "
+        "occasionally flipping outputs you *are* using.",
+        "**The /Q (NOT-Q) outputs aren't brought out to package pins.** "
+        "The silicon has them internally, but the chip only exposes the "
+        "four Q outputs. If your design needs the inverted signal, send "
+        "Q through a separate inverter gate — a spare gate of a "
+        "74HC04 or CD4069 is the cheapest fix; software inversion "
+        "downstream of the chip is the simplest if a microcontroller "
+        "is reading the output.",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

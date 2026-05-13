@@ -50,20 +50,32 @@ class CD4017(Chip):
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-16_W7.62mm"
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Tie unused CMOS inputs.** CE (clock-enable) and RST (reset) "
-        "must each see a defined level — tie CE LOW for normal counting, "
-        "RST LOW unless you want a permanent reset. Floating either pin "
-        "lets the counter free-run or stall unpredictably.",
-        "**The output pin order is *not* sequential.** Pin 3 is Q0, "
-        "pin 2 is Q1, pin 4 is Q2, pin 7 is Q3, pin 10 is Q4, pin 1 is "
-        "Q5, pin 5 is Q6, pin 6 is Q7, pin 9 is Q8, pin 11 is Q9. Wiring "
-        "by physical pin order instead of by Q-number is the single most "
-        "common 4017 mistake — keep the datasheet's pin table open.",
-        "**RST is a HIGH-active reset that captures the edge.** A short "
-        "RST pulse from any of the Q-outputs lets you make a modulo-N "
-        "counter — wire QN to RST and the counter cycles 0..N-1. The "
-        "pulse needs to be wider than the propagation delay (~150 ns at "
-        "5 V); for slower clocks just route QN→RST directly.",
+        "**Every pin must connect to something — never leave one "
+        "floating.** Tie CE (pin 13, clock-enable) to ground with a "
+        "jumper for normal counting, and tie RST (pin 15, reset) to "
+        "ground too unless you want a permanently-reset chip. A floating "
+        "CMOS input drifts unpredictably; the symptom is a chip that "
+        "behaves differently when you wave your hand near it. This is "
+        "*the* most common 'why doesn't my CMOS work?' problem.",
+        "**The Q-output pins are scrambled — not in physical order.** "
+        "Wire 'pin 1 to LED 1, pin 2 to LED 2 …' and you get a confused "
+        "dance pattern, not a counter sweep. The actual mapping is: "
+        "Q0 → pin 3, Q1 → pin 2, Q2 → pin 4, Q3 → pin 7, Q4 → pin 10, "
+        "Q5 → pin 1, Q6 → pin 5, Q7 → pin 6, Q8 → pin 9, Q9 → pin 11. "
+        "Keep the datasheet pin table open while wiring; reading "
+        "'pin 1' off the chip and assuming it's Q0 is the classic 4017 "
+        "trap.",
+        "**Pull RST HIGH and the counter restarts from zero.** Useful "
+        "at power-on, or any time you want to start counting from the "
+        "top. The neat trick: wire an output back to RST to make a "
+        "counter that automatically restarts at a chosen number — "
+        "wire Q3 → RST and the counter cycles 0, 1, 2, then snaps back "
+        "to 0 the moment Q3 goes HIGH. One jumper turns the 4017 into "
+        "any modulus you want (a 'mod-3 counter' here). (Advanced: the "
+        "RST pulse must outlast the chip's ~150 ns response time at "
+        "5 V. Typical breadboard clock rates are slow enough that this "
+        "is automatic; only matters if you're running the chip near its "
+        "maximum clock rate.)",
     )
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (

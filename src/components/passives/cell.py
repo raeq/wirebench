@@ -105,27 +105,37 @@ class Cell(FactorNode):
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'pos': 1, 'neg': 2}
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Lithium cells are not toys.** Never short the terminals — "
-        "shorted Li-Ion delivers tens of amps in milliseconds, ignites "
-        "its own electrolyte, and burns at metal-fire temperatures (water "
-        "makes it worse). Don't pierce the can. Don't overcharge above "
-        "4.25 V/cell. Don't discharge below ~2.8 V/cell — both ends of "
-        "the SOC range are damaging, and recovery from a deep discharge "
-        "produces a hidden short in the cell that fires later.",
-        "**Use a protected cell or a protection IC** for any project that "
-        "leaves the bench. Protected 18650s have a small PCB in the "
-        "negative-terminal cap that disconnects on over-current, over-"
-        "voltage, and under-voltage. Unprotected cells need an external "
-        "protection IC (DW01A / BQ297xx-class) inline with the negative "
-        "lead.",
-        "**The positive terminal is the button-end** on 18650 cells; the "
-        "flat end is negative. Some holders are mis-marked; always "
-        "verify with a multimeter before powering up.",
-        "**Series cells need balancing.** Two cells in series at different "
-        "SOCs charge unevenly — one hits 4.2 V first while the other is "
-        "still climbing, and the charger over-volts the leading cell. A "
-        "multi-cell pack needs either matched cells and balance taps or "
-        "a proper BMS (bq76920-class).",
+        "**Lithium cells can catch fire — treat them carefully and "
+        "always wear safety glasses when working with them.** Never "
+        "short the terminals: even briefly, a shorted Li-Ion cell "
+        "delivers tens of amps and can ignite its own electrolyte. "
+        "Don't pierce the casing. Don't charge above 4.25 V per cell. "
+        "Don't discharge below ~2.8 V per cell — either extreme "
+        "damages the cell, and a deeply-discharged cell can develop "
+        "an internal short that fires unexpectedly later. (Lithium "
+        "fires burn at metal-fire temperatures; water makes them worse.)",
+        "**For anything that leaves the bench, use a protected cell "
+        "or add a protection IC.** Protected 18650 cells have a tiny "
+        "circuit board built into the negative-terminal cap that "
+        "automatically disconnects on over-current, over-voltage, or "
+        "under-voltage. Unprotected cells need an external protection "
+        "chip (DW01A or BQ297xx-family) wired inline with the negative "
+        "lead. Either way, you should never trust software alone to "
+        "stop a cell hitting its limits.",
+        "**The button end of an 18650 cell is the + (positive) "
+        "terminal; the flat end is −.** Sounds obvious, but some "
+        "battery holders are mis-marked from the factory; check with a "
+        "multimeter the first time you power a holder up. Reversing "
+        "polarity on a sensitive load (a protection IC, an MCU, a "
+        "fuel-gauge chip) damages everything downstream in milliseconds.",
+        "**Two cells in series have to be matched and balanced — never "
+        "stack mismatched cells.** A pair at different states of "
+        "charge charges unevenly: one hits 4.2 V while the other is "
+        "still climbing, and the charger over-volts the leading cell. "
+        "Either use cells that came off the same production run (and "
+        "are at the same voltage to within 10 mV) and tap each cell "
+        "for balance during charging, or add a proper battery-"
+        "management chip like the BQ76920.",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

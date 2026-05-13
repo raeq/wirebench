@@ -40,21 +40,28 @@ class Capacitor(FactorNode):
     }
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Electrolytic capacitors are polarised.** The longer lead is "
-        "positive (+); the can has a stripe near the *negative* lead. "
-        "Reverse a typical aluminium electrolytic and it heats up, vents, "
-        "and sometimes explodes — eye protection matters near power "
-        "supplies under test. Ceramic and film capacitors are non-polarised.",
-        "**Voltage rating is a working maximum, not nominal.** Rule of "
-        "thumb: pick a rated voltage of at least 1.5× the highest steady-"
-        "state voltage the cap will see, more if the supply rings on "
-        "transients. A 16 V cap on a 12 V rail dies early; a 25 V cap "
-        "shrugs it off.",
-        "**Bulk vs decoupling vs timing.** Big electrolytics (µF range) "
-        "are bulk reservoirs; small ceramics (10–100 nF) are local "
-        "decouplers placed close to chip supply pins; film and "
-        "polypropylene caps handle precision timing. Mismatching types "
-        "to roles is the single most common bench mistake.",
+        "**Electrolytic capacitors have a + and − end — always check "
+        "which is which.** The longer lead is + (positive); the can "
+        "has a stripe along the side near the − (negative) lead. "
+        "Install one backwards and it heats up, vents boiling "
+        "electrolyte, and sometimes pops loudly — this is the main "
+        "reason 'always wear safety glasses' is a bench rule. Ceramic "
+        "and film capacitors are not polarised and go in either way.",
+        "**Always use a capacitor rated well above the voltage it will "
+        "actually see.** Rule of thumb: pick a part rated for at least "
+        "1.5 times the highest steady-state voltage in your circuit. "
+        "A 16 V cap on a 12 V rail will die early as the supply rings "
+        "or sags; a 25 V cap shrugs the same conditions off. (The "
+        "rated voltage is the *working* maximum, not a nominal "
+        "indicator.)",
+        "**Different capacitor types do different jobs — match the "
+        "type to the role.** Big electrolytics (microfarads) sit on "
+        "supply rails as bulk reservoirs; small ceramics (10–100 nF) "
+        "go right next to chip supply pins as local decouplers; "
+        "film and polypropylene caps handle precision timing where "
+        "drift matters. Putting an electrolytic where a ceramic "
+        "belongs (and vice versa) is the single most common 'why "
+        "does this circuit oscillate?' bench mistake.",
     )
 
     # SMD 0603 by default for PCB export, but hobby breadboard use is

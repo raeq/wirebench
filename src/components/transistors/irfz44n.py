@@ -26,21 +26,29 @@ class IRFZ44N(MOSFET):
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'g': 1, 'd': 2, 's': 3}
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**The IRFZ44N is not a logic-level FET** (V_GS(th) up to 4 V). "
-        "Driving it directly from a 3.3 V or 5 V MCU pin only partially "
-        "turns it on — R_DS(on) is much higher than the datasheet number "
-        "(which is spec'd at V_GS = 10 V) and the part dissipates heat "
-        "instead of switching. For MCU-driven loads, use a true logic-level "
-        "FET (IRLB8721) or a gate driver.",
-        "**TO-220 tab is connected to the drain.** Bolting the tab to a "
-        "heatsink without insulation puts the drain potential on the "
-        "heatsink. If two FETs share a heatsink they end up tied "
-        "drain-to-drain — use insulating shoulder washers and a thermal pad.",
-        "**Power FETs need gate-current at switching edges.** The gate "
-        "capacitance is ~1 nF; charging it through a 10 kΩ resistor takes "
-        "microseconds. For PWM above a few kHz, drop the gate resistor to "
-        "~100 Ω or use a dedicated gate driver — slow edges mean the FET "
-        "spends time in its linear region, dissipating heat.",
+        "**Don't drive the IRFZ44N directly from a 3.3 V or 5 V MCU "
+        "pin — it won't fully turn on.** The datasheet's impressively "
+        "low on-resistance is spec'd at a 10 V gate drive; at 5 V "
+        "(let alone 3.3 V) the FET only partly conducts, the chip "
+        "dissipates the difference as heat, and your load runs warm "
+        "and unpredictable. For MCU-driven loads, reach for a true "
+        "logic-level FET (IRLB8721) or add a dedicated gate driver "
+        "chip that delivers 10 V.",
+        "**The metal tab on a TO-220 is electrically connected to the "
+        "drain — treat it as a live wire.** If you bolt the tab to a "
+        "grounded heatsink directly, you've shorted drain to ground. "
+        "Use an insulating shoulder washer plus a thermal pad between "
+        "tab and heatsink, or use isolated-tab variants of the part. "
+        "Two FETs on the same heatsink without insulation end up "
+        "drain-tied — usually not what you wanted.",
+        "**Add a small resistor (~100 Ω) in series with the gate when "
+        "switching at audio or PWM frequencies.** The FET's gate has "
+        "about 1 nF of capacitance — charging that through a slow "
+        "path means the FET spends time half-on during switching, "
+        "which dissipates surprising amounts of heat. A 100 Ω gate "
+        "resistor (from driver to gate) is the standard fix; for "
+        "anything faster than a few kHz consider a dedicated "
+        "gate-driver chip.",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

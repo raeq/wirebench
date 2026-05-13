@@ -30,23 +30,29 @@ class DHT11(Chip):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:DHT11"
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Don't poll faster than once per second.** The DHT11's "
-        "internal sample rate is ~1 Hz; reading more often returns "
-        "stale data and stresses the sensor's self-heating budget "
-        "(which already biases the temperature reading by ~1°C). "
-        "Schedule reads on a 1-second timer, not in your main loop.",
-        "**Accuracy is mediocre by design.** ±2°C and ±5% RH are typical; "
-        "the chip is a teaching-grade humidity sensor, not an "
-        "instrument. For real measurement use a SHT3x / BME280 — "
-        "double the cost, ten times the accuracy.",
-        "**One-wire protocol is bit-banged with tight timing.** Many "
-        "Arduino libraries disable interrupts during reads (~25 ms). "
-        "If you're running PWM, software-serial, or an OS, the DHT11 "
-        "read can corrupt other timing-sensitive operations.",
-        "**4-pin TO-92-ish package: V+, DATA, NC, GND** from the screen "
-        "side (the side with the metal grille). The NC pin really is "
-        "no-connect; some tutorials show a pull-up resistor on it — "
-        "that's wrong, the pull-up goes on DATA.",
+        "**Read the DHT11 at most once per second.** The sensor only "
+        "updates its internal reading about that often; polling faster "
+        "just gives you the same number back, while heating the chip "
+        "and shifting its temperature reading by ~1°C. Put the read in "
+        "a one-second timer, not in your main loop.",
+        "**This is a teaching-grade sensor, not an instrument.** "
+        "Expect ±2°C and ±5% relative humidity error — fine for "
+        "'is the room hot or humid?' projects, useless for anything "
+        "that needs real accuracy. If your build cares about precision "
+        "(a weather station, an HVAC monitor), swap in a BME280 or "
+        "SHT31; both cost about twice as much and are ten times more "
+        "accurate.",
+        "**The pin labelled NC really has nothing inside.** Looking at "
+        "the side with the grille, the pins are V+, DATA, NC, GND. "
+        "Some online tutorials show a pull-up resistor going to NC — "
+        "that's wrong; the pull-up belongs on DATA. The NC pin should "
+        "stay completely unconnected.",
+        "**The DHT11's protocol is timing-sensitive, and the standard "
+        "library reads disable interrupts for ~25 ms.** If your sketch "
+        "also runs PWM, software-serial, or an interrupt-driven task, "
+        "the DHT11 read can disrupt those. On RTOS-class boards "
+        "(ESP32, RP2040 under MicroPython) prefer the BME280 — its "
+        "I²C protocol is interrupt-friendly.",
     )
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (

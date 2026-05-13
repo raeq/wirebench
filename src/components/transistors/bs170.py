@@ -26,14 +26,18 @@ class BS170(MOSFET):
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'d': 1, 'g': 2, 's': 3}
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**MOSFETs are static-sensitive.** Touch the bench frame or use "
-        "an ESD strap before handling. The gate-source oxide is thin and "
-        "an electrostatic discharge punches through it silently — the "
-        "part still looks fine, but it won't switch.",
-        "**The BS170 is the 2N7000's mirror twin** (D-G-S vs S-G-D, flat "
-        "side facing you, leads down). If you swap one for the other "
-        "without re-checking the pinout, drain and source get reversed "
-        "— the body diode conducts and the FET won't switch off.",
+        "**Touch a grounded metal surface before picking up the BS170, "
+        "every time.** MOSFETs are static-sensitive — a static spark "
+        "too small to feel can damage the gate insulator silently. The "
+        "part still looks fine afterwards but won't switch correctly, "
+        "and you'll spend an hour blaming your wiring. Keep new "
+        "MOSFETs in their conductive foam until you install them.",
+        "**The BS170 has the *opposite* pinout from the otherwise-"
+        "similar 2N7000.** Hold the part flat-side towards you, leads "
+        "down — the BS170's pins are Drain, Gate, Source from left to "
+        "right (the 2N7000 is Source, Gate, Drain). Swap one for the "
+        "other without re-checking the pinout and the internal body "
+        "diode lands across your supply, shorting the rail.",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

@@ -26,21 +26,28 @@ class ATtiny85(Chip):
     FOOTPRINT: ClassVar[str | None] = 'Package_DIP:DIP-8_W7.62mm'
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Pin 1 (PB5) is also the RESET pin.** Using it as a GPIO needs "
-        "the RSTDISBL fuse set — which permanently disables ISP "
-        "programming. Don't take that step without an HVPP programmer "
-        "available, or you'll have a paperweight when you next need to "
-        "update the firmware.",
-        "**Internal 8 MHz oscillator divided by 8 ships from factory.** "
-        "Newly received parts run at 1 MHz unless you change the CKDIV8 "
-        "fuse. `F_CPU` defines in Arduino sketches that disagree with "
-        "the actual clock produce baud-rate errors, timer drift, and "
-        "delay-loop inaccuracies.",
-        "**Only 6 I/O pins total** (and PB5 is half-disabled by default "
-        "as RESET). Plan pin assignments before laying out — software "
-        "SPI plus ADC plus an interrupt input plus a PWM output can "
-        "easily run out of pins without you noticing in the schematic "
-        "stage.",
+        "**A new ATtiny85 runs at 1 MHz out of the box, not 8 MHz.** "
+        "The chip ships with the internal oscillator divided by 8 "
+        "(via a fuse called CKDIV8). If your Arduino sketch was "
+        "compiled assuming 8 MHz but the fuse is at its default, "
+        "everything will run 8× too slow — serial baud rates wrong, "
+        "timers drifting, `delay(1000)` taking 8 seconds. Either set "
+        "F_CPU = 1000000 in your sketch or burn the CKDIV8 fuse "
+        "to disable the divider.",
+        "**Only 6 I/O pins are available — plan ahead.** Software-SPI "
+        "alone uses three, an ADC input uses one, an interrupt input "
+        "uses one, and a PWM output uses one. That's all six. The "
+        "ATtiny85 is wonderfully compact but it forces you to choose "
+        "between features; sketch out pin assignments on paper before "
+        "wiring.",
+        "**Don't reclaim pin 1 (PB5/RESET) as a GPIO unless you have "
+        "an HVPP programmer.** PB5 doubles as RESET; turning it into "
+        "a normal pin requires setting the RSTDISBL fuse, which "
+        "permanently disables the standard ISP programming interface. "
+        "From that point you can only update the firmware with a "
+        "high-voltage parallel programmer — and most people don't "
+        "have one. Sacrificing the ability to ever reprogram the chip "
+        "is rarely worth one extra I/O pin.",
     )
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (

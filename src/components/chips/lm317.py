@@ -27,23 +27,31 @@ class LM317(Chip):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-220-3_Vertical"
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Vout = 1.25 V × (1 + R2/R1) + I_ADJ × R2.** R1 is the upper "
-        "leg (ADJ to OUT, typically 240 Ω); R2 is the lower leg (ADJ to "
-        "GND). The fixed 1.25 V reference appears between OUT and ADJ — "
-        "swapping R1 and R2 inverts the relationship.",
-        "**Minimum load ~10 mA.** Below that the regulator loses "
-        "regulation and Vout climbs. The R1 / R2 divider itself usually "
-        "provides this — sizing R1 = 240 Ω puts about 5 mA through the "
-        "divider, and any real load adds to it.",
-        "**ADJ pin is high-impedance and noisy.** A 10 µF cap from ADJ "
-        "to ground dramatically improves ripple rejection (the datasheet's "
-        "famous trick). Without it the LM317 passes most of the input "
-        "ripple straight through, especially at light loads.",
-        "**Protection diodes against capacitor discharge.** If you have "
-        "a big output cap (>25 µF) and a separate ADJ bypass cap, add a "
-        "1N4001 from OUT→IN (cathode to IN) and another from OUT→ADJ "
-        "(cathode to ADJ). On a power-off short the caps can dump current "
-        "back through the regulator and crack the die.",
+        "**The LM317 sets its output voltage from two resistors — R1 "
+        "(OUT to ADJ) and R2 (ADJ to GND).** The math: output voltage "
+        "= 1.25 × (1 + R2/R1). A typical pair is R1 = 240 Ω plus "
+        "R2 chosen for the voltage you want — e.g. R2 = 720 Ω gives "
+        "5 V output. Swap R1 and R2 around and the equation inverts; "
+        "the regulator either tries to output less than its minimum "
+        "or much more than the input can supply.",
+        "**Always have at least ~10 mA flowing through the output — "
+        "even at no load.** Below that current, the LM317 loses "
+        "regulation and the output drifts upward. The R1/R2 divider "
+        "you already need (sized around 240 Ω for R1) bleeds ~5 mA, "
+        "and any actual load adds to that, so this usually takes "
+        "care of itself.",
+        "**Add a 10 µF capacitor from the ADJ pin (pin 1) to ground.** "
+        "Without it, most of the supply's ripple comes straight through "
+        "to the output — especially at low loads. The cap shunts the "
+        "ripple to ground at the ADJ pin instead. This one-cap fix is "
+        "famous enough that the datasheet calls it out explicitly.",
+        "**If you have both a big output cap (>25 µF) *and* the ADJ "
+        "bypass cap above, add two protection diodes.** When the supply "
+        "shorts out at power-off, the caps can dump current back "
+        "through the regulator and crack the chip. A 1N4001 from OUT "
+        "to IN with the band pointing at IN, and another from OUT to "
+        "ADJ with the band pointing at ADJ, gives the dump current "
+        "somewhere to go.",
     )
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (

@@ -26,29 +26,38 @@ class ATmega328P(Chip):
     FOOTPRINT: ClassVar[str | None] = 'Package_DIP:DIP-28_W7.62mm'
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Decouple every Vcc pin separately.** The ATmega328P has VCC "
-        "and AVCC (analogue Vcc) — both need a 100 nF cap to their "
-        "respective ground pin, leads under 5 mm. AVCC should be tied "
-        "to VCC through a ferrite bead or 10 Ω resistor with its own "
-        "100 nF + 10 µF on the chip side; without that, ADC readings "
-        "pick up digital switching noise.",
-        "**RESET pin must be pulled high.** A 10 kΩ pull-up from RESET "
-        "(pin 1) to Vcc is mandatory — floating RESET drifts low and "
-        "the chip cycles. Add a 100 nF cap from RESET to ground for noise "
-        "immunity (an auto-reset arrangement for serial bootloaders also "
-        "uses this capacitor).",
-        "**Fuse settings persist across power cycles** and aren't visible "
-        "in the program. The chip ships with the internal 8 MHz RC "
-        "oscillator divided by 8 (so 1 MHz effective). If you wired an "
-        "external crystal but forgot to update CKSEL fuses, the chip "
-        "still runs from the internal oscillator and your timing is "
-        "wrong. Worse: setting CKSEL to external crystal without one "
-        "wired up bricks the chip until you apply an external clock "
-        "via HVPP.",
-        "**Don't drive RESET as an I/O.** PC6 doubles as the RESET pin "
-        "but using it for I/O requires setting the RSTDISBL fuse — which "
-        "disables ISP programming permanently. Only do this with HVPP "
-        "available as a recovery path.",
+        "**Put a 100 nF capacitor at each supply pin, leads under 5 mm "
+        "long.** The ATmega328P has two supply pins (VCC and AVCC, "
+        "the analogue Vcc) and each needs its own cap to ground. "
+        "Without these caps the chip glitches under load and ADC "
+        "readings drift. For clean ADC readings, also wire AVCC to "
+        "VCC through a small ferrite bead or 10 Ω resistor, with a "
+        "10 µF cap on the AVCC side — this isolates the analogue "
+        "supply from digital switching noise.",
+        "**Add a 10 kΩ resistor from RESET (pin 1) to the + rail.** "
+        "Without that pull-up, RESET drifts LOW and the chip resets "
+        "itself in a loop. Add a 100 nF cap from RESET to ground too "
+        "— it makes RESET noise-immune, and Arduino-style serial "
+        "bootloaders also use that cap to auto-reset the board for "
+        "uploads.",
+        "**Don't try to use PC6 (pin 1) as a normal I/O pin** unless "
+        "you have a high-voltage programmer (HVPP). PC6 doubles as "
+        "the RESET pin; freeing it as I/O requires setting the "
+        "RSTDISBL fuse, which permanently disables the standard ISP "
+        "programming interface. If you ever need to update the "
+        "firmware after that, your only path is HVPP — which most "
+        "hobbyists don't have. Hardly worth it for one extra I/O pin.",
+        "**'Fuse' settings persist across power cycles and aren't "
+        "visible in your program.** They're a separate set of "
+        "configuration bytes that control things like clock source, "
+        "brown-out detection, and bootloader behaviour. New chips "
+        "ship configured for the internal 8 MHz oscillator divided "
+        "by 8 (so 1 MHz effective) — if you wired an external "
+        "crystal but didn't update the CKSEL fuses, your code still "
+        "runs from the internal oscillator and timing is wrong. "
+        "Worse: setting CKSEL to 'external crystal' without one "
+        "actually wired up bricks the chip until you apply an "
+        "external clock via HVPP.",
     )
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (

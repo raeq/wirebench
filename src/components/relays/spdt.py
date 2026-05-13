@@ -48,28 +48,36 @@ class Relay_SPDT(FactorNode):
     FOOTPRINT: ClassVar[str | None] = "Relay_THT:Relay_SPDT_Generic"
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Flyback diode across the coil is mandatory.** A 1N4001 or "
-        "1N4007 with the cathode toward the coil's positive lead. "
-        "Without it the collapsing coil field puts +100 V or more "
-        "across whatever drove the coil (MCU pin, transistor, MOSFET) "
-        "and destroys it. This is the single most common relay-circuit "
-        "mistake.",
-        "**Coil voltage ≠ contact voltage rating.** A 5 V coil relay "
-        "might switch 250 V AC on its contacts — the two ratings are "
-        "independent. Don't confuse them when reading datasheets, and "
-        "don't tie the coil supply and the contact load supply through "
-        "a single component without checking both.",
-        "**Contact arcing wears the contacts.** Switching an inductive "
-        "AC load (motor, transformer primary) repeatedly arcs the "
-        "contacts; expected lifetime drops from millions of cycles to "
-        "thousands. Add a snubber (100 Ω + 100 nF series) across the "
-        "contacts for inductive loads, or use a solid-state relay if "
-        "cycle rate is high.",
-        "**Coil draws steady current** while energised (50–100 mA "
-        "typical for hobby parts). MCU pins can't source that directly; "
-        "drive the coil through a transistor or MOSFET. The 5 V supply "
-        "for the coil should also be substantial — a 9 V battery with "
-        "an LM7805 already at its current limit can't power a 5 V relay.",
+        "**Put a diode across the relay's coil — the band toward the "
+        "+ supply side.** A 1N4001 or 1N4007 does the job. Without "
+        "this 'flyback' diode, the moment you switch the coil off the "
+        "collapsing magnetic field generates a +100 V spike that "
+        "destroys whatever was driving the coil (your MCU pin, your "
+        "transistor, or your MOSFET). This is the single most common "
+        "relay-circuit mistake, and the failure happens silently — the "
+        "driving transistor just stops working some time later.",
+        "**The relay has two voltage ratings, and they're independent.** "
+        "The coil voltage is what powers the electromagnet (5 V, 12 V, "
+        "etc.); the contact voltage rating is what the relay can switch "
+        "(often 250 V AC at several amps). A 5 V relay with 250 V "
+        "contacts is normal. Don't tie the coil supply and the load "
+        "supply together without checking both ratings — they're "
+        "designed to be separate.",
+        "**MCU pins can't power a relay coil directly — use a transistor "
+        "in between.** Relay coils typically draw 50–100 mA continuously "
+        "while energised; MCU pins are rated for about 20 mA absolute "
+        "max. Drive the coil through an NPN transistor (or N-channel "
+        "MOSFET) and switch *that* with the MCU. Also confirm your "
+        "supply has the current to spare: a 9 V battery feeding a "
+        "small regulator may already be near its limit when you add "
+        "a relay.",
+        "**Switching inductive AC loads (motors, transformer primaries) "
+        "wears the contacts out fast.** Each switch-off arcs the "
+        "contacts; over thousands of cycles the surfaces pit and "
+        "eventually weld shut or fail to make contact. Add a 'snubber' "
+        "(100 Ω resistor in series with a 100 nF capacitor, the pair "
+        "wired across the contacts) to dissipate the arc energy. For "
+        "fast or frequent switching, use a solid-state relay instead.",
     )
     PIN_NUMBERS: ClassVar[dict[str, int]] = {
         'coil_plus':  1,

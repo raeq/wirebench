@@ -41,20 +41,27 @@ class SN74HC04(Chip):
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-14_W7.62mm"
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Tie unused inputs to Vcc or ground.** 74HC has the same "
-        "floating-input pathology as 4xxx CMOS — the input drifts through "
-        "its threshold and the output stage spends time in linear region, "
-        "drawing tens of milliamps from the supply and radiating noise.",
-        "**Decoupling cap belongs *at* the supply pin.** A 100 nF ceramic "
-        "from pin 14 (Vcc) to pin 7 (GND) with leads under 5 mm. Decoupling "
-        "elsewhere on the board doesn't help — the chip's switching current "
-        "creates V_supply ringing within the chip itself, and the cap "
-        "needs to be a few millimetres away to suppress it.",
-        "**74HC is not 74LS or 74HCT.** HC inputs are CMOS thresholds "
-        "(~Vcc/2); 74HCT and 74LS are TTL thresholds (~1.4 V). A 3.3 V "
-        "signal into a 5 V HC input might or might not register HIGH "
-        "depending on tolerance. Use 74HCT (or a level shifter) when "
-        "driving 5 V CMOS from 3.3 V logic.",
+        "**Jumper every unused input to Vcc or ground.** This is a "
+        "CMOS family chip just like the 4xxx parts; floating inputs "
+        "misbehave the same way (random oscillation, extra supply "
+        "current, hand-wave-sensitive behaviour). If you only use one "
+        "of the six inverters, ground the other five inputs.",
+        "**Put a 100 nF decoupling capacitor right at the supply pin.** "
+        "From pin 14 (Vcc) to pin 7 (GND), with the cap's leads under "
+        "5 mm long — close enough that you'd call it 'touching the "
+        "chip'. This is the most-skipped step in CMOS hobby work, and "
+        "the most common cause of 'sometimes it works, sometimes it "
+        "doesn't' bugs. The chip's switching currents create supply "
+        "ringing inside the package itself; the cap has to be "
+        "millimetres away to suppress it. A cap on the other side of "
+        "the breadboard does nothing.",
+        "**Don't drive 5 V logic with a 3.3 V signal — at least not "
+        "this family.** The HC variant has CMOS-style input thresholds "
+        "(around half the supply, so ~2.5 V on a 5 V rail). A 3.3 V "
+        "HIGH from an ESP32 or RPi might or might not register as HIGH "
+        "depending on temperature and chip tolerance. Use a 74HCT04 "
+        "instead (TTL-style ~1.4 V threshold, recognises 3.3 V cleanly) "
+        "or insert a level-shifter chip between the two voltage domains.",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

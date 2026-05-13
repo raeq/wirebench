@@ -43,16 +43,24 @@ class CD4069(Chip):
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-14_W7.62mm"
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Tie every unused CMOS input to Vdd or Vss.** Floating inputs "
-        "drift through the input's high-impedance threshold, causing the "
-        "output stage to oscillate or sit in linear region — wasting "
-        "current and producing radio-frequency noise on the supply. The "
-        "datasheet absolute-max table has a footnote about this.",
-        "**The 'UB' suffix means unbuffered.** Each gate is a single "
-        "inversion stage with a roughly linear region — useful for "
-        "oscillators and amplifiers (e.g. crystal Pierce oscillators) "
-        "where you bias the gate into its transition zone. Don't expect "
-        "sharp digital edges; use a buffered 74HC04 if you need them.",
+        "**Every input pin must connect somewhere — Vdd or ground, but "
+        "never floating.** If you only use two of the six inverter "
+        "gates, jumper the unused inputs straight to ground. A floating "
+        "CMOS input misbehaves in odd ways: the chip can oscillate, "
+        "draw extra supply current, and behave differently when you "
+        "wave your hand near the board. (Technically the input "
+        "high-impedance node drifts through the threshold; the output "
+        "stage spends time in its linear region and radiates noise into "
+        "the supply rail.)",
+        "**This chip's gates make weak digital edges — that's by "
+        "design.** The 'UB' in the part number means *unbuffered*: "
+        "each gate is one transistor stage instead of three. If you "
+        "need crisp digital outputs (a clock for another chip, a clean "
+        "trigger), use a 74HC04 instead. The CD4069's weakness is "
+        "actually its party trick — biased into the in-between region "
+        "with feedback resistors, each gate becomes a small linear "
+        "amplifier; that's how you build crystal oscillators and "
+        "Schmitt-trigger-like circuits out of CMOS inverters.",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

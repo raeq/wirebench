@@ -25,16 +25,23 @@ class D1N5817(Diode):
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**The banded end is the cathode (−).** Same convention as silicon "
-        "diodes; the Schottky's marking matches the schematic bar.",
-        "**Low V_F (~0.3 V) but high reverse leakage.** That's why Schottkys "
-        "win as switching-supply rectifiers: less heat per switching cycle. "
-        "It's also why you shouldn't use them for OR-ing batteries together "
-        "long-term — the leakage current drains the lower-voltage cell.",
-        "**Low reverse rating (20 V).** Don't use the 1N5817 for mains "
-        "rectification, motor flyback above 12 V, or anywhere transients "
-        "can push V_reverse past 20 V. The 1N5819 (40 V) gives more headroom; "
-        "above that, use a silicon diode.",
+        "**The black band marks the cathode (− end)** — same convention "
+        "as silicon diodes. The Schottky's marking matches the bar in "
+        "the schematic symbol.",
+        "**Use the 1N5817 wherever you'd use a 1N4001 but need lower "
+        "voltage drop or faster switching.** Schottkys drop only ~0.3 V "
+        "in forward bias (versus ~0.7 V for a silicon diode), so a "
+        "switching-supply rectifier or a battery-OR diode loses less "
+        "power as heat. The trade-off: Schottkys leak a small reverse "
+        "current even when 'off' — over weeks they slowly drain the "
+        "lower of two OR'd batteries, so don't use them for long-term "
+        "battery backup arrangements.",
+        "**This part only blocks 20 V reverse — don't use it where "
+        "voltages exceed that.** A mains-rectifier transformer "
+        "secondary, a 24 V motor flyback path, or anywhere ringing "
+        "transients might exceed 20 V will pop the 1N5817. The 1N5819 "
+        "(same package, 40 V reverse) handles more; above that, use a "
+        "silicon diode like the 1N4007 instead.",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

@@ -28,28 +28,35 @@ class MAX7219(Chip):
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-24_W15.24mm"
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**ISET resistor on pin 18 sets the peak segment current.** "
-        "The datasheet table relates R_ISET to segment current for a "
-        "given LED V_F. ~10 kΩ gives ~40 mA peak (~20 mA average through "
-        "the 1/8 multiplex duty cycle) — bright enough for indoor use. "
-        "Drop to 47 kΩ for dim panels; never below 8 kΩ or you exceed "
-        "the chip's absolute-max segment current.",
-        "**Intensity register caps the duty cycle separately from "
-        "ISET.** The chip wakes up in shutdown mode with intensity at 0; "
-        "forgetting to write the configuration registers (decode mode, "
-        "scan limit, intensity, and shutdown=normal) leaves the panel "
-        "dark even though SPI is talking to it. The first-time "
-        "configure-sequence is four register writes.",
-        "**Daisy chain DOUT → next chip's DIN.** Pin 24 (DOUT) outputs "
-        "the bits shifted out the back of the chip's 16-bit register; "
-        "wire it to the next chip's DIN to extend the chain. LOAD/CS "
-        "and CLK go to every chip in parallel. A 16-chip chain wants "
-        "a 100 nF cap right at each chip's Vcc — the per-chip switching "
-        "noise piles up otherwise.",
-        "**Pin 19 (V+) wants its own bypass cap** — a 10 µF electrolytic "
-        "plus a 100 nF ceramic to ground. Without bulk capacitance the "
-        "supply rail droops on each scan-cycle pulse, the segments "
-        "appear dim, and adjacent ICs on the same rail see noise.",
+        "**Pick the ISET resistor (pin 18 to V+) to set how bright "
+        "your display is.** A 10 kΩ ISET gives roughly 40 mA peak per "
+        "segment — bright for indoor viewing. Go to 47 kΩ for a dim "
+        "panel. Never below 8 kΩ — that lets the chip exceed its "
+        "absolute-maximum per-segment current and the chip cooks "
+        "itself. The datasheet has a table linking ISET to segment "
+        "current for a given LED forward voltage.",
+        "**A fresh MAX7219 is in shutdown mode and stays dark until "
+        "you write four configuration registers.** Many first builds "
+        "of a MAX7219 panel show the SPI lines working on a scope but "
+        "nothing lighting up — that's because the chip needs you to "
+        "explicitly set decode mode, scan limit, intensity, *and* "
+        "switch out of shutdown before anything appears. Most "
+        "MAX7219 libraries do this on init; if you're driving it "
+        "by hand, make sure your start-up code sets all four.",
+        "**Stack multiple chips by wiring DOUT (pin 24) of one chip "
+        "to DIN of the next.** LOAD/CS and CLK go to every chip in "
+        "parallel; only the data line is chained. Bits you shift in "
+        "fall out the back of one chip and into the next. A 16-chip "
+        "chain works as long as each chip has its own 100 nF cap "
+        "right at its Vcc pin — without per-chip caps the switching "
+        "noise piles up along the chain and corrupts data.",
+        "**Bypass V+ (pin 19) with both a big cap and a small cap, "
+        "right at the chip.** A 10 µF electrolytic gives bulk "
+        "reservoir for the scan-cycle current pulses, and a 100 nF "
+        "ceramic right next to it handles the higher-frequency noise. "
+        "Without the bulk cap, the supply rail visibly droops at each "
+        "scan pulse, segments look dim, and any chip sharing the "
+        "rail sees garbage on its supply.",
     )
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (

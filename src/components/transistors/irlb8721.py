@@ -26,17 +26,25 @@ class IRLB8721(MOSFET):
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'g': 1, 'd': 2, 's': 3}
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Logic-level gate** (V_GS(th) ≈ 1.8 V). A 3.3 V or 5 V MCU pin "
-        "drives it on hard — no gate driver needed for slow PWM. For PWM "
-        "above ~10 kHz, add a small gate resistor (~100 Ω) and watch the "
-        "edges on a scope; gate ringing can damage the part.",
-        "**TO-220 tab is connected to the drain.** Tab-to-heatsink "
-        "connections need insulating shoulder washers + a thermal pad if "
-        "the heatsink is shared or grounded, otherwise the drain shorts "
-        "to ground.",
-        "**Pull the gate down with a resistor (~10 kΩ to GND).** Without "
-        "it, the gate floats during MCU reset and the FET can turn on "
-        "unexpectedly — momentarily energising whatever's on the drain.",
+        "**A 3.3 V or 5 V MCU pin drives this FET fully on, directly — "
+        "no gate driver chip needed for slow switching.** That's what "
+        "'logic-level' means in the part name. (For the curious: the "
+        "gate threshold is around 1.8 V, well below typical logic "
+        "HIGH.) For PWM faster than ~10 kHz, add a ~100 Ω gate "
+        "resistor in series with the MCU pin to slow the edges and "
+        "prevent gate ringing.",
+        "**The metal tab on a TO-220 is electrically connected to the "
+        "drain — treat it as a live wire.** Bolting the tab to a "
+        "grounded heatsink directly shorts drain to ground. Use an "
+        "insulating shoulder washer plus a thermal pad if the heatsink "
+        "is grounded or shared with another part; isolated-tab "
+        "variants exist for builds where this matters.",
+        "**Add a 10 kΩ resistor between the gate and ground.** Without "
+        "it, when the MCU resets or boots up the gate is briefly "
+        "floating, and stray charge can turn the FET on unexpectedly — "
+        "momentarily energising whatever is on the drain (motor, "
+        "lamp, solenoid). The pull-down resistor holds the gate at a "
+        "known LOW state until the MCU drives it.",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

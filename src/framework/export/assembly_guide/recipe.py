@@ -483,9 +483,49 @@ def build_recipe(design: FactorNode) -> str:
     if blurb:
         sections.append(blurb)
         sections.append("")
+    sections.append(_safety_section())
+    sections.append("")
     sections.append(_ingredients_section(placeable))
     sections.append("")
     sections.append(_method_section(parts, placeable, placements))
     sections.append("")
     sections.append(_notes_section(placeable))
     return '\n'.join(sections).rstrip() + '\n'
+
+
+def _safety_section() -> str:
+    """Universal bench-safety preamble emitted before the parts list.
+
+    Three baseline protections every engineer at the bench should put
+    on regardless of the design: eye protection, ESD precautions, and
+    insulating gloves. These are non-negotiable; the bullets follow the
+    progressive-disclosure pattern (do-this → why → expert nuance) so
+    a first-time builder isn't put off and an experienced one isn't
+    patronised."""
+    return '\n'.join([
+        "## Safety first",
+        "",
+        "- **Put on safety glasses before powering anything up.** "
+        "Electrolytic capacitors can vent boiling electrolyte if "
+        "reverse-installed or over-volted; battery cells can flash "
+        "violently on a short; small parts under tension (springs in "
+        "switches, leads under a soldering iron) launch in unexpected "
+        "directions. The glasses are cheap insurance against an "
+        "afternoon you'd otherwise regret.",
+        "- **Discharge static before touching chips.** Touch a grounded "
+        "metal surface (the bench frame, a radiator, the case of a "
+        "mains-powered tool that's plugged in but switched off) before "
+        "picking up MOSFETs or CMOS logic. A static spark you can't "
+        "feel — under 100 V from walking across a carpet — punches "
+        "through a gate oxide silently. The part still looks fine; it "
+        "just doesn't work, and you spend two hours blaming your wiring. "
+        "An ESD wrist strap clipped to a grounded surface is the "
+        "permanent fix.",
+        "- **Wear insulating gloves when working above ~30 V or near "
+        "mains.** Standard hobby breadboard work (3.3–24 V) doesn't "
+        "need them; anything reaching into a wall-wart's primary side, "
+        "a charged high-voltage capacitor, or a tube-amp B+ rail does. "
+        "If the design includes a transformer, a switching supply's "
+        "input stage, or a Cell pack above a few volts, treat it as "
+        "hot until you've personally verified it's discharged.",
+    ])

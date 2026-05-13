@@ -53,15 +53,20 @@ class LED(FactorNode):
     }
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**LED polarity matters.** The longer lead of a fresh LED is the "
-        "anode (+); the shorter lead is the cathode (−). If the leads have "
-        "been trimmed, look for the flat side of the body — that's the "
-        "cathode side. Reversing the LED is silent: nothing lights up and "
-        "the framework's topology check can't catch it.",
-        "**Always use a current-limit resistor** in series with an LED. "
-        "Without it, the LED draws too much current at any sensible supply "
-        "voltage and dies in a flash. R = (V_supply − V_F) / I_target; "
-        "330 Ω at 5 V drives ~10 mA through a 2 V red LED.",
+        "**LEDs have a + and − end — the long lead is +.** Get them "
+        "the wrong way around and the LED simply doesn't light up; "
+        "there's no spark or smoke, just a dark LED. If someone has "
+        "already trimmed the leads, look at the rim of the plastic "
+        "body: the flat spot marks the − (cathode) side. Both leads "
+        "are valid wires as far as the framework is concerned, so it "
+        "can't catch this mistake for you.",
+        "**Always put a resistor in series with an LED — never connect "
+        "an LED directly across a supply.** Without a resistor the LED "
+        "draws too much current and burns out in a literal flash. "
+        "330 Ω works fine for most LEDs on a 5 V supply. (The formula, "
+        "if you care: R = (V_supply − V_F) / I_target; 330 Ω drives "
+        "about 10 mA through a typical red LED at 5 V, which is bright "
+        "but not stressed.)",
     )
 
     # SMD 0805 by default for PCB export; hobby breadboard use is

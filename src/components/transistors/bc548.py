@@ -27,14 +27,21 @@ class BC548(BJT):
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'c': 1, 'b': 2, 'e': 3}
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**TO-92 pinout, flat side facing you, leads down: C-B-E.** This "
-        "is the European pinout (BC54x family). Don't confuse with the "
-        "American 2N3904 / 2N2222 (E-B-C) — those are *mirrored*. Swapping "
-        "without rotating 180° puts emitter where collector should be.",
-        "**Base resistor is mandatory** when driving from a logic pin: "
-        "the B-E junction is a diode and conducts whatever current the "
-        "driving stage can supply. Without a ~1 kΩ in series, base "
-        "current exceeds the absolute-max rating and cooks the part.",
+        "**Hold the BC548 with the flat side facing you, leads pointing "
+        "down — the pins are then Collector, Base, Emitter from left "
+        "to right.** This is the European pinout (the whole BC54x "
+        "family). The Americans wired their TO-92 parts in the mirror "
+        "order — a 2N3904 or 2N2222 in the same package has the pins "
+        "in *reversed* order: E, B, C from left to right. Swapping a "
+        "BC548 for a 2N3904 in a hurry without rotating the part puts "
+        "the emitter where the collector should be; nothing visibly "
+        "fails, the circuit just stops working.",
+        "**Always put a resistor in series with the base when driving "
+        "from a logic pin.** The base-emitter junction is a diode; "
+        "wired directly to a 5 V MCU pin it draws whatever current the "
+        "pin can supply — which is more than the BC548's base can "
+        "handle, and the part cooks. A 1 kΩ resistor in series limits "
+        "base current to ~4 mA, plenty for switching a small load.",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

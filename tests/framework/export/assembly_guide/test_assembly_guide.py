@@ -103,8 +103,10 @@ def test_led_polarity_gotcha_in_output() -> None:
     in the Notes & Gotchas section.  Per spec §5.4."""
     from hello_led import HelloLED
     text = export_to_string(HelloLED(), 'assembly_guide')
-    assert 'LED polarity' in text
-    assert 'longer lead' in text.lower()
+    # The polarity warning is the LED's first GOTCHA; it talks about
+    # + and − ends and the long lead being +.
+    assert '+ and − end' in text
+    assert 'long lead' in text.lower()
 
 
 def test_general_gotchas_emitted() -> None:
@@ -141,7 +143,9 @@ def test_duplicate_gotchas_deduplicate() -> None:
     """Three LEDs in a design produce the LED polarity warning *once*,
     not three times."""
     text = export_to_string(_ThreeLEDs(), 'assembly_guide')
-    assert text.count('**LED polarity matters.**') == 1
+    # The first sentence of the LED's polarity GOTCHA is unique enough
+    # to count occurrences against.
+    assert text.count('**LEDs have a + and − end') == 1
 
 
 # ------------------------------------------------------ determinism

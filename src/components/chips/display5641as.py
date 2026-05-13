@@ -60,26 +60,33 @@ class Display5641AS(Chip):
     FOOTPRINT: ClassVar[str | None] = "Display_7Segment:Display_5641AS"
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Common-cathode**: each digit's cathode goes low to enable that "
-        "digit; segments are driven HIGH. The common-anode variant "
-        "(5641AH) has the opposite polarity — wiring code written for "
-        "one type into the other lights all the wrong digits.",
-        "**Each segment needs its own current-limit resistor.** ~330 Ω "
-        "per segment at 5 V drives ~10 mA, which is plenty bright. "
-        "Don't share one resistor across multiple segments — when only "
-        "one segment is on it gets full current; when seven are on each "
-        "gets a seventh, and brightness changes with digit content.",
-        "**Multiplex one digit at a time.** With four digits sharing "
-        "seven segment wires, the firmware enables digit 0 → drives "
-        "its pattern → 1 ms later enables digit 1 → drives *its* "
-        "pattern → and so on. Persistence of vision fuses the four "
-        "frames into one image. Refresh below ~50 Hz visibly flickers; "
-        "above ~200 Hz needs careful PWM-vs-multiplex timing.",
-        "**Drive currents add up.** During digit-on time, seven segments "
-        "× 10 mA = 70 mA flows through the digit's cathode pin and back "
-        "through the MCU. If your MCU pin is rated 20 mA absolute-max, "
-        "use a transistor (NPN to ground for common-cathode) — not a "
-        "direct MCU connection.",
+        "**This is the common-cathode version: pull a digit's cathode "
+        "LOW to enable it, and drive segments HIGH to light them.** "
+        "If you accidentally bought the 5641AH (common-anode), the "
+        "polarity is reversed and code written for one will light all "
+        "the wrong digits in the other. Check the part number on the "
+        "device label before wiring.",
+        "**One current-limit resistor per segment, never one shared "
+        "across segments.** Use ~330 Ω on each of the seven segment "
+        "lines for a 5 V supply. Sharing a single resistor sounds "
+        "frugal but the brightness changes with the digit's content "
+        "— a '1' (two segments lit) glows twice as bright as a '8' "
+        "(seven segments) because each segment gets half the current "
+        "when shared with a partner.",
+        "**The MCU drives one digit at a time, very quickly, and your "
+        "eye fuses them into one image.** The firmware loop is: "
+        "enable digit 0 → drive its segment pattern → 1 ms later "
+        "enable digit 1 → drive that pattern → ... and so on, cycling "
+        "through all four digits about 100 times a second. Refresh "
+        "slower than ~50 Hz and you see visible flicker; faster than "
+        "~200 Hz needs care with timer interrupts.",
+        "**The digit's common pin can sink a lot of current — too much "
+        "for an MCU to handle directly.** When all seven segments are "
+        "on, ~70 mA flows through one digit's cathode pin (7 × 10 mA). "
+        "Most MCU pins are rated for only ~20 mA. Put an NPN transistor "
+        "or a low-side MOSFET between each digit's common pin and "
+        "ground, and switch *that* with the MCU; never wire a digit "
+        "common straight into a logic pin.",
     )
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (

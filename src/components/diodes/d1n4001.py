@@ -25,17 +25,21 @@ class D1N4001(Diode):
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**The banded end is the cathode (−).** Reverse-installing a "
-        "rectifier silently blocks current under normal bias; on a "
-        "transformer secondary it conducts through reverse breakdown — "
-        "which often pops the diode and trips the fuse.",
-        "**1N4001 is rated 50 V reverse / 1 A average.** For mains-derived "
-        "rectifiers use the 1N4007 (1000 V) — transformer-secondary "
-        "transients routinely peak well above nominal RMS, and a 1N4001 "
-        "in a mains rectifier is one ringing event away from failure.",
-        "**Slow recovery (~2 µs).** Fine for 50/60 Hz mains rectification; "
-        "wrong choice for high-frequency switching supplies — use a "
-        "Schottky (1N5817) or a fast-recovery diode there.",
+        "**The black band marks the cathode (− end).** Same convention "
+        "as every other diode — the band matches the bar in the "
+        "schematic. Install a rectifier backwards on a transformer "
+        "secondary and the diode conducts through its reverse-breakdown "
+        "region; the diode usually pops and the fuse blows.",
+        "**For mains-derived rectifiers, use the 1N4007 instead.** The "
+        "1N4001 only blocks 50 V reverse, which sounds like a lot until "
+        "a transformer secondary spike sails past that on switch-off. "
+        "The 1N4007 is the same physical part with a 1000 V reverse "
+        "rating; same price, much more headroom.",
+        "**This is a slow diode — fine for 50/60 Hz mains but wrong for "
+        "switching supplies.** Reverse recovery is around 2 µs, which "
+        "is no problem at line frequency but a disaster at kHz "
+        "switching rates. For switching-supply rectifiers reach for a "
+        "Schottky (1N5817) or a fast-recovery part labelled UF400x.",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

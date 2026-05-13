@@ -28,23 +28,29 @@ class LM358(Chip):
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-8_W7.62mm"
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Not rail-to-rail.** The output swings to within ~50 mV of GND "
-        "but only to ~V_supply − 1.5 V on the high side. Designs that "
-        "expect the output to reach Vcc see clipping at the top of the "
-        "range and ascribe it to bandwidth or instability — it's just "
-        "the LM358's output topology. Use the LMV358 or a true R-R "
-        "opamp (MCP6002) when you need the full range.",
-        "**Single-supply but not zero-input.** The common-mode input "
-        "range includes ground but not the positive rail. Inputs above "
-        "V_supply − 1.5 V leave the linear region; inputs below 0 V "
-        "trigger phase reversal (the output flips polarity and latches "
-        "until the input returns). Keep input signals away from both "
-        "rails by ~1.5 V of headroom.",
-        "**Crossover distortion at low output current.** The class-B "
-        "output stage has a ~0.6 V notch around zero crossings. Add a "
-        "pull-up or pull-down resistor (~10 kΩ from output to the rail "
-        "the signal doesn't naturally pull toward) to bias the stage "
-        "into class-A; audio applications need this.",
+        "**The output can't reach all the way up to the supply rail — "
+        "it tops out about 1.5 V short of Vcc.** It does reach almost "
+        "all the way down to ground. So on a 5 V supply, expect the "
+        "output to swing between roughly 0 V and 3.5 V, not 0 to 5 V. "
+        "Designs that assume the output can reach Vcc see clipping at "
+        "the top of the range and often misdiagnose it as a bandwidth "
+        "or stability problem. If you need full rail-to-rail output, "
+        "use the LMV358 or MCP6002 instead.",
+        "**Keep input signals at least 1.5 V away from each rail.** "
+        "The LM358 works on a single supply (ground to +V) but the "
+        "*input* range is narrower than the supply: 0 V is fine, but "
+        "above (Vcc − 1.5 V) the chip leaves linear operation, and "
+        "below 0 V the chip does something nasty called 'phase "
+        "reversal' — the output flips polarity and stays flipped "
+        "until the input climbs back. Add a tiny offset bias or limit "
+        "your signal range explicitly.",
+        "**Add a pull-down (or pull-up) resistor on the output for "
+        "audio work.** The LM358 has a quirky output stage that "
+        "distorts mildly when the signal crosses zero — about 0.6 V "
+        "of crossover distortion. A 10 kΩ resistor from the output "
+        "to ground (or to Vcc, whichever the signal naturally pulls "
+        "*away from*) biases the output stage permanently into one "
+        "direction and removes the kink.",
     )
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (

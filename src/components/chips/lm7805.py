@@ -27,26 +27,31 @@ class LM7805(Chip):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-220-3_Vertical"
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Input and output bypass capacitors are mandatory.** The "
-        "datasheet calls for 0.33 µF on the input and 0.1 µF on the "
-        "output, close to the pins. Without them the regulator oscillates "
-        "(audible whine, ringing on a scope) and over-shoots on load "
-        "transients.",
-        "**Minimum dropout ~2 V.** The 7805 needs V_in ≥ ~7 V to hold "
-        "5 V on its output under load. A battery sagging from 9 V to "
-        "6 V at high current crosses the dropout threshold and the "
-        "output goes with it — use an LDO (LP2950, AMS1117-5.0) for "
-        "battery-powered designs.",
-        "**TO-220 tab is internally connected to ground** (pin 2). It "
-        "can be bolted to a grounded heatsink without insulation — "
-        "convenient. But the tab and pin 2 share connection on the "
-        "PCB / breadboard, so don't mount the tab to anything *not* at "
-        "ground potential.",
-        "**Heatsink it above ~250 mA load.** Power dissipated is "
-        "(V_in − 5 V) × I_out; a 12 V → 5 V drop at 500 mA dissipates "
-        "3.5 W and the package thermal-shuts-down in seconds without a "
-        "heatsink. A switching regulator is a better choice for >1 W "
-        "drops.",
+        "**Put a capacitor on each side of the regulator, close to its "
+        "pins.** A 0.33 µF capacitor from input (pin 1) to ground, and "
+        "a 0.1 µF from output (pin 3) to ground, with the leads under "
+        "5 mm long. Skip these and the 7805 misbehaves — it can "
+        "oscillate (audible whine, ringing on a scope) or overshoot "
+        "when the load changes suddenly. This step seems optional but "
+        "isn't.",
+        "**Feed the input at least 7 V — anything lower and the output "
+        "drops with it.** The 7805 needs about 2 V of headroom between "
+        "input and output to hold regulation. A 9 V battery slowly "
+        "sagging under load eventually crosses that line and the "
+        "regulator's output sags too. For battery-powered work, use "
+        "an LDO regulator (LP2950, AMS1117-5.0) — they only need a few "
+        "hundred millivolts of headroom.",
+        "**Add a heatsink whenever the load draws more than ~250 mA.** "
+        "Whatever voltage the regulator is dropping (input minus 5 V) "
+        "becomes heat — a 12 V input dropping to 5 V at 500 mA "
+        "dissipates 3.5 W, enough to thermal-shutdown the chip in "
+        "seconds without a heatsink. If the heat is more than a "
+        "watt or two, switch to a switching regulator instead.",
+        "**The TO-220's metal tab is internally tied to ground** "
+        "(pin 2). That makes mounting easy — you can bolt it straight "
+        "to a grounded heatsink without an insulator. The flip side: "
+        "the tab and pin 2 are the same node, so don't mount the tab "
+        "to anything that isn't at ground potential.",
     )
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (

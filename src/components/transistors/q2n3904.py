@@ -26,17 +26,22 @@ class Q2N3904(BJT):
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'e': 1, 'b': 2, 'c': 3}
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**TO-92 pinout, flat side facing you, leads down: E-B-C.** This "
-        "is the American JEDEC convention. European parts like the BC547/"
-        "BC548 use the *opposite* C-B-E ordering — swapping a 2N3904 for "
-        "a BC547 without rotating it 180° puts emitter where collector "
-        "should be. The transistor still conducts, but as a high-loss "
-        "common-base stage; nothing visibly fails, just stops working.",
-        "**Always include a base resistor.** The base-emitter junction is "
-        "a diode; driving it from a 5 V MCU pin without a series resistor "
-        "(~1 kΩ for switching) lets the base draw whatever the MCU pin "
-        "can source, exceeds the absolute-max base current, and cooks "
-        "the transistor.",
+        "**Hold the 2N3904 with the flat side facing you, leads "
+        "pointing down — the pins are Emitter, Base, Collector from "
+        "left to right.** This is the American JEDEC convention. The "
+        "European BC547 / BC548 in the same TO-92 package have the "
+        "*opposite* pin order (C, B, E). Drop a BC547 into a 2N3904's "
+        "spot without rotating it 180° and emitter ends up where "
+        "collector should be — the part still conducts a little, but "
+        "the circuit silently doesn't work.",
+        "**Always put a resistor in series with the base when driving "
+        "from a logic pin.** The base-emitter junction is a forward-"
+        "biased diode; wired directly to a 5 V MCU pin it conducts "
+        "whatever current the pin can deliver, which exceeds the "
+        "transistor's absolute-max base rating and burns it out. "
+        "A 1 kΩ resistor limits the base current to about 4 mA — "
+        "plenty to switch the transistor fully on for any small "
+        "collector load.",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})

@@ -28,19 +28,27 @@ class LM311(Chip):
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-8_W7.62mm"
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Output is open-collector — pull-up resistor mandatory.** Same "
-        "as the LM393, but the LM311 also brings out the emitter (pin 1) "
-        "separately so you can level-shift the output to any rail you "
-        "like (handy for driving an opto-isolator or a logic family on "
-        "a different supply).",
-        "**Strobe pin (pin 6) is active-LOW.** Tie it to V+ for normal "
-        "operation; pulling it low forces the output transistor off "
-        "regardless of inputs. Floating strobe is the unstrobed (active) "
-        "state on most parts, but check the datasheet — some variants "
-        "behave differently when the pin floats.",
-        "**Add hysteresis (positive feedback) or the output chatters** "
-        "around the threshold the same way the LM393's does. A 1 MΩ "
-        "from output to the non-inverting input is the standard fix.",
+        "**Wire a pull-up resistor on the output — same as the LM393.** "
+        "The LM311 can only pull its output LOW; without a pull-up "
+        "(~10 kΩ to wherever you want HIGH to live), the output node "
+        "floats when the comparator wants to drive HIGH and the "
+        "circuit appears dead. The LM311 has an extra trick the LM393 "
+        "doesn't: the emitter (pin 1) is brought out separately, so "
+        "you can pull the output up to *any* supply rail — handy for "
+        "driving an optoisolator or a different logic family.",
+        "**Tie pin 6 (Strobe) to V+ for normal operation.** Strobe is "
+        "an active-LOW disable: pull it LOW and the output is forced "
+        "off regardless of what the inputs are doing. Most LM311 "
+        "variants are 'active' (responding to inputs) when strobe "
+        "floats, but check the datasheet for your specific part — a "
+        "few behave the other way around, and a floating pin can give "
+        "you mystery comparator failures.",
+        "**Add a 1 MΩ resistor from the output back to the + input to "
+        "stop chatter at the threshold.** With no feedback, tiny input "
+        "noise causes the output to flicker rapidly between HIGH and "
+        "LOW. The 1 MΩ resistor creates a small amount of hysteresis "
+        "(~50 mV) that ignores noise without significantly shifting "
+        "the switching threshold. Same fix as on the LM393.",
     )
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (

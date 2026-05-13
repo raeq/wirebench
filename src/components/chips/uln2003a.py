@@ -50,21 +50,28 @@ class ULN2003A(Chip):
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-16_W7.62mm"
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
-        "**Outputs are open-collector** — they sink current, they don't "
-        "source it. Wire the load between V+ and the output pin; the "
-        "ULN pulls the output LOW to energise the load. Wiring a load "
-        "between the output and ground (expecting the chip to drive it "
-        "HIGH) silently does nothing.",
-        "**COMMON pin (pin 9) is the kickback diode anode.** Wire it "
-        "to the load supply (the same V+ your relays / motors are using), "
-        "*not* to logic-Vcc. The internal freewheel diodes need somewhere "
-        "to clamp inductive transients; if COMMON isn't tied to the load "
-        "supply, every switch-off spike punches through the chip instead.",
-        "**One pin of GND** (pin 8) — keep its return path short. At 7× "
-        "500 mA simultaneous sink, the ULN dumps several amps through "
-        "pin 8 in a tight loop; a long ground trace makes the chip's "
-        "internal reference move relative to system ground and partial "
-        "channels start switching.",
+        "**Wire your load between the + rail and the output pin — not "
+        "between the output pin and ground.** The ULN2003A *sinks* "
+        "current to ground; it doesn't *source* current from a rail. "
+        "Put your relay / motor / coil with one end on V+, the other "
+        "end on the chip's output, and the chip pulls the output LOW to "
+        "energise the load. Wiring it the way you'd wire a transistor "
+        "to drive HIGH is the most common 'why is nothing happening?' "
+        "mistake with this part.",
+        "**Pin 9 (COMMON) goes to the load supply, not to logic Vcc.** "
+        "If you're driving 12 V relays, pin 9 connects to the 12 V "
+        "rail. The chip has built-in freewheel diodes (the things "
+        "that catch the voltage spike when a relay turns off) and "
+        "pin 9 is where their cathodes meet. Without pin 9 tied to "
+        "the load supply, every switch-off pulse punches straight "
+        "through the chip and eventually kills a channel.",
+        "**Keep the ground wire from pin 8 short.** With seven channels "
+        "each sinking up to 500 mA at once, this one ground pin can "
+        "carry several amps in a tight switching loop. A long ground "
+        "wire on a breadboard introduces enough inductance that the "
+        "chip's internal reference shifts relative to system ground, "
+        "and channels can start switching when you didn't ask them to. "
+        "Run pin 8's wire directly to the rail, no detours.",
     )
 
     @validate_call(config={'arbitrary_types_allowed': True})
