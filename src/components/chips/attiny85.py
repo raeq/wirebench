@@ -25,6 +25,24 @@ class ATtiny85(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = 'Package_DIP:DIP-8_W7.62mm'
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Pin 1 (PB5) is also the RESET pin.** Using it as a GPIO needs "
+        "the RSTDISBL fuse set — which permanently disables ISP "
+        "programming. Don't take that step without an HVPP programmer "
+        "available, or you'll have a paperweight when you next need to "
+        "update the firmware.",
+        "**Internal 8 MHz oscillator divided by 8 ships from factory.** "
+        "Newly received parts run at 1 MHz unless you change the CKDIV8 "
+        "fuse. `F_CPU` defines in Arduino sketches that disagree with "
+        "the actual clock produce baud-rate errors, timer drift, and "
+        "delay-loop inaccuracies.",
+        "**Only 6 I/O pins total** (and PB5 is half-disabled by default "
+        "as RESET). Plan pin assignments before laying out — software "
+        "SPI plus ADC plus an interrupt input plus a PWM output can "
+        "easily run out of pins without you noticing in the schematic "
+        "stage.",
+    )
+
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (  1, 'PB5',          Direction.BIDIR,  Digital),
         (  2, 'PB3',          Direction.BIDIR,  Digital),

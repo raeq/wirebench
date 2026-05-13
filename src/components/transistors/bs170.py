@@ -25,6 +25,17 @@ class BS170(MOSFET):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-92_Inline"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'d': 1, 'g': 2, 's': 3}
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**MOSFETs are static-sensitive.** Touch the bench frame or use "
+        "an ESD strap before handling. The gate-source oxide is thin and "
+        "an electrostatic discharge punches through it silently — the "
+        "part still looks fine, but it won't switch.",
+        "**The BS170 is the 2N7000's mirror twin** (D-G-S vs S-G-D, flat "
+        "side facing you, leads down). If you swap one for the other "
+        "without re-checking the pinout, drain and source get reversed "
+        "— the body diode conducts and the FET won't switch off.",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *,
                  refdes_number: RefdesNumber) -> None:

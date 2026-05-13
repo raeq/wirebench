@@ -24,6 +24,15 @@ class D1N4007(Diode):
     FOOTPRINT: ClassVar[str | None] = "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**The banded end is the cathode (−).** Universal diode "
+        "convention; the band matches the bar in the schematic symbol.",
+        "**1N4007 is the workhorse mains rectifier** (1000 V reverse / "
+        "1 A average). It also makes an excellent inductive-load flyback "
+        "diode on relays, solenoids, and slow motors. Slow recovery rules "
+        "it out of switching-supply rectifiers.",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *,
                  refdes_number: RefdesNumber) -> None:

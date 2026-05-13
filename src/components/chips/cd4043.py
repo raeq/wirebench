@@ -50,6 +50,20 @@ class CD4043(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-16_W7.62mm"
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**OE (Output Enable, pin 5) must be tied HIGH** for the four "
+        "tri-state outputs to actually drive their pins. Floating OE "
+        "leaves all four outputs in high-impedance — easy to mistake "
+        "for a dead chip when the real fix is one jumper to Vdd.",
+        "**Tie unused S and R inputs to ground.** Floating S/R inputs on "
+        "the unused latches drift unpredictably and can flip neighbouring "
+        "latches through chip-internal coupling — the data sheet's "
+        "absolute-max table calls floating CMOS inputs out specifically.",
+        "**There's no /Q output pin.** Real silicon has only Q; if you "
+        "need the inverted output, run Q through an external inverter "
+        "(a spare 74HC04 or CD4069 gate is the usual fix).",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *, refdes_number: RefdesNumber) -> None:
         validate_refdes(self.REFDES_PREFIX, refdes_number)

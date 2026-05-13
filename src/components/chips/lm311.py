@@ -27,6 +27,22 @@ class LM311(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-8_W7.62mm"
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Output is open-collector — pull-up resistor mandatory.** Same "
+        "as the LM393, but the LM311 also brings out the emitter (pin 1) "
+        "separately so you can level-shift the output to any rail you "
+        "like (handy for driving an opto-isolator or a logic family on "
+        "a different supply).",
+        "**Strobe pin (pin 6) is active-LOW.** Tie it to V+ for normal "
+        "operation; pulling it low forces the output transistor off "
+        "regardless of inputs. Floating strobe is the unstrobed (active) "
+        "state on most parts, but check the datasheet — some variants "
+        "behave differently when the pin floats.",
+        "**Add hysteresis (positive feedback) or the output chatters** "
+        "around the threshold the same way the LM393's does. A 1 MΩ "
+        "from output to the non-inverting input is the standard fix.",
+    )
+
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1, 'EMIT_OUT', Direction.OUT, Analog),
         (2, 'IN_POS',      Direction.IN,  Analog),

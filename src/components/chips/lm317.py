@@ -26,6 +26,26 @@ class LM317(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-220-3_Vertical"
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Vout = 1.25 V × (1 + R2/R1) + I_ADJ × R2.** R1 is the upper "
+        "leg (ADJ to OUT, typically 240 Ω); R2 is the lower leg (ADJ to "
+        "GND). The fixed 1.25 V reference appears between OUT and ADJ — "
+        "swapping R1 and R2 inverts the relationship.",
+        "**Minimum load ~10 mA.** Below that the regulator loses "
+        "regulation and Vout climbs. The R1 / R2 divider itself usually "
+        "provides this — sizing R1 = 240 Ω puts about 5 mA through the "
+        "divider, and any real load adds to it.",
+        "**ADJ pin is high-impedance and noisy.** A 10 µF cap from ADJ "
+        "to ground dramatically improves ripple rejection (the datasheet's "
+        "famous trick). Without it the LM317 passes most of the input "
+        "ripple straight through, especially at light loads.",
+        "**Protection diodes against capacitor discharge.** If you have "
+        "a big output cap (>25 µF) and a separate ADJ bypass cap, add a "
+        "1N4001 from OUT→IN (cathode to IN) and another from OUT→ADJ "
+        "(cathode to ADJ). On a power-off short the caps can dump current "
+        "back through the regulator and crack the die.",
+    )
+
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1, 'ADJ',    Direction.IN,  Analog),
         (2, 'OUTPUT', Direction.OUT, Analog),

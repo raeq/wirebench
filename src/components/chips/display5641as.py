@@ -59,6 +59,29 @@ class Display5641AS(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Display_7Segment:Display_5641AS"
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Common-cathode**: each digit's cathode goes low to enable that "
+        "digit; segments are driven HIGH. The common-anode variant "
+        "(5641AH) has the opposite polarity — wiring code written for "
+        "one type into the other lights all the wrong digits.",
+        "**Each segment needs its own current-limit resistor.** ~330 Ω "
+        "per segment at 5 V drives ~10 mA, which is plenty bright. "
+        "Don't share one resistor across multiple segments — when only "
+        "one segment is on it gets full current; when seven are on each "
+        "gets a seventh, and brightness changes with digit content.",
+        "**Multiplex one digit at a time.** With four digits sharing "
+        "seven segment wires, the firmware enables digit 0 → drives "
+        "its pattern → 1 ms later enables digit 1 → drives *its* "
+        "pattern → and so on. Persistence of vision fuses the four "
+        "frames into one image. Refresh below ~50 Hz visibly flickers; "
+        "above ~200 Hz needs careful PWM-vs-multiplex timing.",
+        "**Drive currents add up.** During digit-on time, seven segments "
+        "× 10 mA = 70 mA flows through the digit's cathode pin and back "
+        "through the MCU. If your MCU pin is rated 20 mA absolute-max, "
+        "use a transistor (NPN to ground for common-cathode) — not a "
+        "direct MCU connection.",
+    )
+
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         ( 1, 'SEG_E',  Direction.IN, Digital),
         ( 2, 'SEG_D',  Direction.IN, Digital),

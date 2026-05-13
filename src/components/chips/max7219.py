@@ -27,6 +27,31 @@ class MAX7219(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-24_W15.24mm"
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**ISET resistor on pin 18 sets the peak segment current.** "
+        "The datasheet table relates R_ISET to segment current for a "
+        "given LED V_F. ~10 kΩ gives ~40 mA peak (~20 mA average through "
+        "the 1/8 multiplex duty cycle) — bright enough for indoor use. "
+        "Drop to 47 kΩ for dim panels; never below 8 kΩ or you exceed "
+        "the chip's absolute-max segment current.",
+        "**Intensity register caps the duty cycle separately from "
+        "ISET.** The chip wakes up in shutdown mode with intensity at 0; "
+        "forgetting to write the configuration registers (decode mode, "
+        "scan limit, intensity, and shutdown=normal) leaves the panel "
+        "dark even though SPI is talking to it. The first-time "
+        "configure-sequence is four register writes.",
+        "**Daisy chain DOUT → next chip's DIN.** Pin 24 (DOUT) outputs "
+        "the bits shifted out the back of the chip's 16-bit register; "
+        "wire it to the next chip's DIN to extend the chain. LOAD/CS "
+        "and CLK go to every chip in parallel. A 16-chip chain wants "
+        "a 100 nF cap right at each chip's Vcc — the per-chip switching "
+        "noise piles up otherwise.",
+        "**Pin 19 (V+) wants its own bypass cap** — a 10 µF electrolytic "
+        "plus a 100 nF ceramic to ground. Without bulk capacitance the "
+        "supply rail droops on each scan-cycle pulse, the segments "
+        "appear dim, and adjacent ICs on the same rail see noise.",
+    )
+
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         ( 1, 'DIN',    Direction.IN,  Digital),
         ( 2, 'DIG_0',  Direction.OUT, Digital),

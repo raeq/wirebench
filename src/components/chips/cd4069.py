@@ -42,6 +42,19 @@ class CD4069(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-14_W7.62mm"
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Tie every unused CMOS input to Vdd or Vss.** Floating inputs "
+        "drift through the input's high-impedance threshold, causing the "
+        "output stage to oscillate or sit in linear region — wasting "
+        "current and producing radio-frequency noise on the supply. The "
+        "datasheet absolute-max table has a footnote about this.",
+        "**The 'UB' suffix means unbuffered.** Each gate is a single "
+        "inversion stage with a roughly linear region — useful for "
+        "oscillators and amplifiers (e.g. crystal Pierce oscillators) "
+        "where you bias the gate into its transition zone. Don't expect "
+        "sharp digital edges; use a buffered 74HC04 if you need them.",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *, refdes_number: RefdesNumber) -> None:
         validate_refdes(self.REFDES_PREFIX, refdes_number)

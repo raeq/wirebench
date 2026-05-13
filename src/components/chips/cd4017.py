@@ -49,6 +49,23 @@ class CD4017(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-16_W7.62mm"
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Tie unused CMOS inputs.** CE (clock-enable) and RST (reset) "
+        "must each see a defined level — tie CE LOW for normal counting, "
+        "RST LOW unless you want a permanent reset. Floating either pin "
+        "lets the counter free-run or stall unpredictably.",
+        "**The output pin order is *not* sequential.** Pin 3 is Q0, "
+        "pin 2 is Q1, pin 4 is Q2, pin 7 is Q3, pin 10 is Q4, pin 1 is "
+        "Q5, pin 5 is Q6, pin 6 is Q7, pin 9 is Q8, pin 11 is Q9. Wiring "
+        "by physical pin order instead of by Q-number is the single most "
+        "common 4017 mistake — keep the datasheet's pin table open.",
+        "**RST is a HIGH-active reset that captures the edge.** A short "
+        "RST pulse from any of the Q-outputs lets you make a modulo-N "
+        "counter — wire QN to RST and the counter cycles 0..N-1. The "
+        "pulse needs to be wider than the propagation delay (~150 ns at "
+        "5 V); for slower clocks just route QN→RST directly.",
+    )
+
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         ( 1, 'Q5',  Direction.OUT, Digital),
         ( 2, 'Q1',  Direction.OUT, Digital),

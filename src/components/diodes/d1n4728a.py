@@ -28,6 +28,22 @@ class D1N4728A(Diode):
     FOOTPRINT: ClassVar[str | None] = "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Zeners are installed reverse-biased.** The banded end "
+        "(cathode) goes toward the *positive* rail; the regulation "
+        "happens through reverse breakdown. Mis-installing one with "
+        "the bar to ground turns it into an ordinary forward-biased "
+        "diode and the regulation simply doesn't happen.",
+        "**A Zener regulator needs a series resistor.** The Zener clamps "
+        "voltage but doesn't limit current — without a series R sized "
+        "for `(V_in − V_z) / I_load`, the Zener dissipates the entire "
+        "supply current as heat and exceeds its 1 W rating in seconds.",
+        "**Zener V_Z drifts with temperature.** Below ~5 V the coefficient "
+        "is negative; above ~5 V it's positive; ~5.6 V is the sweet spot "
+        "where they cancel. The 1N4728A (3.3 V) drifts by several mV/°C — "
+        "use a voltage reference (TL431, LM4040) where stability matters.",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *,
                  refdes_number: RefdesNumber) -> None:

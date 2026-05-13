@@ -25,6 +25,20 @@ class IRLB8721(MOSFET):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-220-3_Vertical"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'g': 1, 'd': 2, 's': 3}
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Logic-level gate** (V_GS(th) ≈ 1.8 V). A 3.3 V or 5 V MCU pin "
+        "drives it on hard — no gate driver needed for slow PWM. For PWM "
+        "above ~10 kHz, add a small gate resistor (~100 Ω) and watch the "
+        "edges on a scope; gate ringing can damage the part.",
+        "**TO-220 tab is connected to the drain.** Tab-to-heatsink "
+        "connections need insulating shoulder washers + a thermal pad if "
+        "the heatsink is shared or grounded, otherwise the drain shorts "
+        "to ground.",
+        "**Pull the gate down with a resistor (~10 kΩ to GND).** Without "
+        "it, the gate floats during MCU reset and the FET can turn on "
+        "unexpectedly — momentarily energising whatever's on the drain.",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *,
                  refdes_number: RefdesNumber) -> None:

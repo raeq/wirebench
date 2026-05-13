@@ -25,6 +25,24 @@ class TIP120(BJT):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-220-3_Vertical"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'b': 1, 'c': 2, 'e': 3}
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Darlington V_BE is ~1.4 V**, not the usual ~0.7 V — it's two "
+        "BJTs in cascade. A pull-up that just barely turned on a single "
+        "transistor will leave the TIP120 sitting in its high-loss region. "
+        "Size the base resistor for a base current of I_load / 1000 (β ≈ "
+        "1000 typical) and confirm V_BE clears 1.4 V.",
+        "**Darlingtons saturate at ~1 V V_CE(sat).** That's lossy: at 1 A "
+        "the part dissipates 1 W in switching. A logic-level MOSFET "
+        "(IRLB8721) dissipates ~50 mW at the same current. Use the Darlington "
+        "only when you specifically need its current gain and don't mind "
+        "the heat.",
+        "**Inductive loads need a flyback diode** from collector to "
+        "supply, cathode toward supply. Without it the inductor's collapsing "
+        "field kicks the collector to +V_supply + 50–200 V and punctures "
+        "the part. A 1N4001 across a relay or solenoid is enough; faster "
+        "loads (motors) want a Schottky like the 1N5817.",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *,
                  refdes_number: RefdesNumber) -> None:

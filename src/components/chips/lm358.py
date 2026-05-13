@@ -27,6 +27,26 @@ class LM358(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-8_W7.62mm"
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Not rail-to-rail.** The output swings to within ~50 mV of GND "
+        "but only to ~V_supply − 1.5 V on the high side. Designs that "
+        "expect the output to reach Vcc see clipping at the top of the "
+        "range and ascribe it to bandwidth or instability — it's just "
+        "the LM358's output topology. Use the LMV358 or a true R-R "
+        "opamp (MCP6002) when you need the full range.",
+        "**Single-supply but not zero-input.** The common-mode input "
+        "range includes ground but not the positive rail. Inputs above "
+        "V_supply − 1.5 V leave the linear region; inputs below 0 V "
+        "trigger phase reversal (the output flips polarity and latches "
+        "until the input returns). Keep input signals away from both "
+        "rails by ~1.5 V of headroom.",
+        "**Crossover distortion at low output current.** The class-B "
+        "output stage has a ~0.6 V notch around zero crossings. Add a "
+        "pull-up or pull-down resistor (~10 kΩ from output to the rail "
+        "the signal doesn't naturally pull toward) to bias the stage "
+        "into class-A; audio applications need this.",
+    )
+
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1, 'OUT1',  Direction.OUT, Analog),
         (2, 'IN1_NEG',  Direction.IN,  Analog),

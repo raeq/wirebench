@@ -26,6 +26,17 @@ class BC548(BJT):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-92_Inline"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'c': 1, 'b': 2, 'e': 3}
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**TO-92 pinout, flat side facing you, leads down: C-B-E.** This "
+        "is the European pinout (BC54x family). Don't confuse with the "
+        "American 2N3904 / 2N2222 (E-B-C) — those are *mirrored*. Swapping "
+        "without rotating 180° puts emitter where collector should be.",
+        "**Base resistor is mandatory** when driving from a logic pin: "
+        "the B-E junction is a diode and conducts whatever current the "
+        "driving stage can supply. Without a ~1 kΩ in series, base "
+        "current exceeds the absolute-max rating and cooks the part.",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *,
                  refdes_number: RefdesNumber) -> None:

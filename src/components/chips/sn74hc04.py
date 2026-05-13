@@ -40,6 +40,23 @@ class SN74HC04(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-14_W7.62mm"
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Tie unused inputs to Vcc or ground.** 74HC has the same "
+        "floating-input pathology as 4xxx CMOS — the input drifts through "
+        "its threshold and the output stage spends time in linear region, "
+        "drawing tens of milliamps from the supply and radiating noise.",
+        "**Decoupling cap belongs *at* the supply pin.** A 100 nF ceramic "
+        "from pin 14 (Vcc) to pin 7 (GND) with leads under 5 mm. Decoupling "
+        "elsewhere on the board doesn't help — the chip's switching current "
+        "creates V_supply ringing within the chip itself, and the cap "
+        "needs to be a few millimetres away to suppress it.",
+        "**74HC is not 74LS or 74HCT.** HC inputs are CMOS thresholds "
+        "(~Vcc/2); 74HCT and 74LS are TTL thresholds (~1.4 V). A 3.3 V "
+        "signal into a 5 V HC input might or might not register HIGH "
+        "depending on tolerance. Use 74HCT (or a level shifter) when "
+        "driving 5 V CMOS from 3.3 V logic.",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *, refdes_number: RefdesNumber) -> None:
         validate_refdes(self.REFDES_PREFIX, refdes_number)

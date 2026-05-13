@@ -25,6 +25,22 @@ class Q2N7000(MOSFET):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-92_Inline"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'s': 1, 'g': 2, 'd': 3}
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**MOSFETs are static-sensitive.** Touch the bench frame or use "
+        "an ESD strap before handling. A discharge through the gate-source "
+        "oxide destroys the transistor silently — it still looks fine, it "
+        "just doesn't switch any more. Leave the leads shorted with foil "
+        "or in conductive foam until you install it.",
+        "**TO-92 pinout, flat side facing you, leads down: S-G-D.** Easy "
+        "to confuse with a BJT in the same package (E-B-C). Mis-installing "
+        "an N-MOSFET as if it were an NPN puts the body diode across the "
+        "supply and shorts your rail.",
+        "**The 2N7000 is a logic-level part** (V_GS(th) ≈ 1–3 V), so 5 V "
+        "drives it on hard. At 3.3 V it conducts but with higher R_DS(on); "
+        "use a true logic-level FET (like the IRLB8721) for low-side "
+        "switching from a 3.3 V MCU at meaningful currents.",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *,
                  refdes_number: RefdesNumber) -> None:

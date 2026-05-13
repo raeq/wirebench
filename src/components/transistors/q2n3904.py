@@ -25,6 +25,20 @@ class Q2N3904(BJT):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-92_Inline"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'e': 1, 'b': 2, 'c': 3}
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**TO-92 pinout, flat side facing you, leads down: E-B-C.** This "
+        "is the American JEDEC convention. European parts like the BC547/"
+        "BC548 use the *opposite* C-B-E ordering — swapping a 2N3904 for "
+        "a BC547 without rotating it 180° puts emitter where collector "
+        "should be. The transistor still conducts, but as a high-loss "
+        "common-base stage; nothing visibly fails, just stops working.",
+        "**Always include a base resistor.** The base-emitter junction is "
+        "a diode; driving it from a 5 V MCU pin without a series resistor "
+        "(~1 kΩ for switching) lets the base draw whatever the MCU pin "
+        "can source, exceeds the absolute-max base current, and cooks "
+        "the transistor.",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *,
                  refdes_number: RefdesNumber) -> None:

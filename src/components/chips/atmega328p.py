@@ -25,6 +25,32 @@ class ATmega328P(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = 'Package_DIP:DIP-28_W7.62mm'
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Decouple every Vcc pin separately.** The ATmega328P has VCC "
+        "and AVCC (analogue Vcc) — both need a 100 nF cap to their "
+        "respective ground pin, leads under 5 mm. AVCC should be tied "
+        "to VCC through a ferrite bead or 10 Ω resistor with its own "
+        "100 nF + 10 µF on the chip side; without that, ADC readings "
+        "pick up digital switching noise.",
+        "**RESET pin must be pulled high.** A 10 kΩ pull-up from RESET "
+        "(pin 1) to Vcc is mandatory — floating RESET drifts low and "
+        "the chip cycles. Add a 100 nF cap from RESET to ground for noise "
+        "immunity (an auto-reset arrangement for serial bootloaders also "
+        "uses this capacitor).",
+        "**Fuse settings persist across power cycles** and aren't visible "
+        "in the program. The chip ships with the internal 8 MHz RC "
+        "oscillator divided by 8 (so 1 MHz effective). If you wired an "
+        "external crystal but forgot to update CKSEL fuses, the chip "
+        "still runs from the internal oscillator and your timing is "
+        "wrong. Worse: setting CKSEL to external crystal without one "
+        "wired up bricks the chip until you apply an external clock "
+        "via HVPP.",
+        "**Don't drive RESET as an I/O.** PC6 doubles as the RESET pin "
+        "but using it for I/O requires setting the RSTDISBL fuse — which "
+        "disables ISP programming permanently. Only do this with HVPP "
+        "available as a recovery path.",
+    )
+
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (  1, 'PC6',          Direction.BIDIR,  Digital),
         (  2, 'PD0',          Direction.BIDIR,  Digital),

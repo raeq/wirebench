@@ -24,6 +24,18 @@ class D1N4148(Diode):
     FOOTPRINT: ClassVar[str | None] = "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**The banded end is the cathode (−).** This is the universal "
+        "diode convention — the line on the body matches the bar in the "
+        "schematic symbol. Mis-installing a diode passes current the wrong "
+        "way under normal bias and silently does nothing; under reverse "
+        "bias it conducts and shorts your protected node to its supply.",
+        "**1N4148 is a *signal* diode** (200 mA average, 1 A peak). It's "
+        "the right part for logic-level steering, level-shifting, or RF, "
+        "but the wrong part for rectifying mains-derived AC or carrying "
+        "motor flyback current — use a 1N400x for those.",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *,
                  refdes_number: RefdesNumber) -> None:

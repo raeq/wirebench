@@ -104,6 +104,30 @@ class Cell(FactorNode):
     FOOTPRINT: ClassVar[str | None] = "Battery:BatteryHolder_Keystone_1042_1x18650"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'pos': 1, 'neg': 2}
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Lithium cells are not toys.** Never short the terminals — "
+        "shorted Li-Ion delivers tens of amps in milliseconds, ignites "
+        "its own electrolyte, and burns at metal-fire temperatures (water "
+        "makes it worse). Don't pierce the can. Don't overcharge above "
+        "4.25 V/cell. Don't discharge below ~2.8 V/cell — both ends of "
+        "the SOC range are damaging, and recovery from a deep discharge "
+        "produces a hidden short in the cell that fires later.",
+        "**Use a protected cell or a protection IC** for any project that "
+        "leaves the bench. Protected 18650s have a small PCB in the "
+        "negative-terminal cap that disconnects on over-current, over-"
+        "voltage, and under-voltage. Unprotected cells need an external "
+        "protection IC (DW01A / BQ297xx-class) inline with the negative "
+        "lead.",
+        "**The positive terminal is the button-end** on 18650 cells; the "
+        "flat end is negative. Some holders are mis-marked; always "
+        "verify with a multimeter before powering up.",
+        "**Series cells need balancing.** Two cells in series at different "
+        "SOCs charge unevenly — one hits 4.2 V first while the other is "
+        "still climbing, and the charger over-volts the leading cell. A "
+        "multi-cell pack needs either matched cells and balance taps or "
+        "a proper BMS (bq76920-class).",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(
         self,

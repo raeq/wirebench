@@ -49,6 +49,24 @@ class ULN2003A(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-16_W7.62mm"
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Outputs are open-collector** — they sink current, they don't "
+        "source it. Wire the load between V+ and the output pin; the "
+        "ULN pulls the output LOW to energise the load. Wiring a load "
+        "between the output and ground (expecting the chip to drive it "
+        "HIGH) silently does nothing.",
+        "**COMMON pin (pin 9) is the kickback diode anode.** Wire it "
+        "to the load supply (the same V+ your relays / motors are using), "
+        "*not* to logic-Vcc. The internal freewheel diodes need somewhere "
+        "to clamp inductive transients; if COMMON isn't tied to the load "
+        "supply, every switch-off spike punches through the chip instead.",
+        "**One pin of GND** (pin 8) — keep its return path short. At 7× "
+        "500 mA simultaneous sink, the ULN dumps several amps through "
+        "pin 8 in a tight loop; a long ground trace makes the chip's "
+        "internal reference move relative to system ground and partial "
+        "channels start switching.",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *, refdes_number: RefdesNumber) -> None:
         validate_refdes(self.REFDES_PREFIX, refdes_number)

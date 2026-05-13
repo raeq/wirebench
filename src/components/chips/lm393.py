@@ -36,6 +36,25 @@ class LM393(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-8_W7.62mm"
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Outputs are open-collector — pull-up resistor mandatory.** "
+        "The LM393 only sinks; without an external pull-up (typically "
+        "10 kΩ to the output's supply rail) the output sits floating "
+        "when the comparator wants to drive HIGH. This is *the* most "
+        "common LM393 mistake — the chip works fine, the breadboard "
+        "shows nothing.",
+        "**Open-collector lets you do wired-OR.** Tie multiple comparator "
+        "outputs to one pull-up resistor and any comparator can pull the "
+        "shared node LOW. Handy for window comparators (two LM393 outputs "
+        "wired-OR through one pull-up signal an out-of-range condition).",
+        "**Add hysteresis or the output chatters.** Around the threshold, "
+        "input noise causes the output to flicker between states "
+        "repeatedly. A small positive-feedback resistor (~1 MΩ from "
+        "output back to the non-inverting input) creates a Schmitt trigger "
+        "with ~50 mV of hysteresis — enough to suppress noise without "
+        "smudging the threshold.",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *, refdes_number: RefdesNumber) -> None:
         validate_refdes(self.REFDES_PREFIX, refdes_number)

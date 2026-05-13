@@ -28,6 +28,26 @@ class DS1307(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-8_W7.62mm"
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**A 32.768 kHz watch crystal across X1/X2 is mandatory.** No "
+        "external load caps — the DS1307 has them on-die. Any other "
+        "crystal (a 32 kHz oscillator can, a different load capacitance) "
+        "either won't start or runs at the wrong rate. Keep the crystal "
+        "leads under 1 cm and surround it with a grounded guard ring on "
+        "PCBs; long traces let it pick up noise.",
+        "**Battery on Vbat (pin 3) keeps time across power-off.** A "
+        "CR2032 coin cell is standard; expect ~7 years of timekeeping. "
+        "Reversing the battery puts +3 V on what was meant to be ground "
+        "and destroys the chip — coin-cell holders' orientation is "
+        "easy to confuse on a fresh build.",
+        "**Square-wave output (pin 7) is open-drain.** Needs a pull-up "
+        "to Vcc; without one the SQW pin reads floating. Useful for "
+        "interrupt-driven 1 Hz timing without polling the registers.",
+        "**I²C address is fixed at 0x68.** No address pins — only one "
+        "DS1307 per bus. If you need multiple, use an I²C mux (TCA9548A) "
+        "or a part with addressable pins (PCF8523, DS3231 + 0x68 alone).",
+    )
+
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1, 'X1',      Direction.IN,    Analog),
         (2, 'X2',      Direction.OUT,   Analog),

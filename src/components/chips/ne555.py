@@ -26,6 +26,23 @@ class NE555(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-8_W7.62mm"
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Bypass the supply close to the chip.** The 555's output stage "
+        "draws an instantaneous current spike — without a 100 nF (or 100 µF "
+        "+ 100 nF) cap right at pin 8, you get supply ringing that "
+        "couples back into other circuits sharing the rail. A misbehaving "
+        "555 oscillator with weird timing usually has poor decoupling.",
+        "**Control voltage (pin 5) needs a 10 nF cap to ground** even when "
+        "you're not using it. The internal voltage-divider node is high-"
+        "impedance and picks up noise that modulates the comparator "
+        "thresholds — your stable oscillator becomes a jittery one.",
+        "**Bipolar NE555 vs CMOS variants (TLC555, ICM7555).** Use a CMOS "
+        "555 for low-current battery work (~100 µA supply vs the bipolar "
+        "part's 3–10 mA) and for clean output edges. Bipolar parts can "
+        "source/sink ~200 mA directly — handy for driving small loads "
+        "but rough on the supply rail.",
+    )
+
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1, 'GND',   Direction.IN,    Analog),
         (2, 'TRIG',  Direction.IN,    Digital),

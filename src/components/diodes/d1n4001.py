@@ -24,6 +24,20 @@ class D1N4001(Diode):
     FOOTPRINT: ClassVar[str | None] = "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**The banded end is the cathode (−).** Reverse-installing a "
+        "rectifier silently blocks current under normal bias; on a "
+        "transformer secondary it conducts through reverse breakdown — "
+        "which often pops the diode and trips the fuse.",
+        "**1N4001 is rated 50 V reverse / 1 A average.** For mains-derived "
+        "rectifiers use the 1N4007 (1000 V) — transformer-secondary "
+        "transients routinely peak well above nominal RMS, and a 1N4001 "
+        "in a mains rectifier is one ringing event away from failure.",
+        "**Slow recovery (~2 µs).** Fine for 50/60 Hz mains rectification; "
+        "wrong choice for high-frequency switching supplies — use a "
+        "Schottky (1N5817) or a fast-recovery diode there.",
+    )
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *,
                  refdes_number: RefdesNumber) -> None:

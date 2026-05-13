@@ -29,6 +29,26 @@ class DHT11(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:DHT11"
 
+    GOTCHAS: ClassVar[tuple[str, ...]] = (
+        "**Don't poll faster than once per second.** The DHT11's "
+        "internal sample rate is ~1 Hz; reading more often returns "
+        "stale data and stresses the sensor's self-heating budget "
+        "(which already biases the temperature reading by ~1°C). "
+        "Schedule reads on a 1-second timer, not in your main loop.",
+        "**Accuracy is mediocre by design.** ±2°C and ±5% RH are typical; "
+        "the chip is a teaching-grade humidity sensor, not an "
+        "instrument. For real measurement use a SHT3x / BME280 — "
+        "double the cost, ten times the accuracy.",
+        "**One-wire protocol is bit-banged with tight timing.** Many "
+        "Arduino libraries disable interrupts during reads (~25 ms). "
+        "If you're running PWM, software-serial, or an OS, the DHT11 "
+        "read can corrupt other timing-sensitive operations.",
+        "**4-pin TO-92-ish package: V+, DATA, NC, GND** from the screen "
+        "side (the side with the metal grille). The NC pin really is "
+        "no-connect; some tutorials show a pull-up resistor on it — "
+        "that's wrong, the pull-up goes on DATA.",
+    )
+
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1, 'VDD',  Direction.IN,    Analog),
         (2, 'DATA', Direction.BIDIR, Digital),
