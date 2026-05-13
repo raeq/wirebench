@@ -25,6 +25,18 @@ class IRLB8721(MOSFET):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-220-3_Vertical"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'g': 1, 'd': 2, 's': 3}
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**Test for an intact gate oxide and a working body diode.** "
+        "Discharge yourself first, then in diode-test mode: TO-220 "
+        "pinout is pin 1 = Gate, pin 2 = Drain, pin 3 = Source "
+        "(looking at the labelled face). Gate-to-source should read "
+        "OL both directions; any continuity there means ESD has "
+        "zapped the gate. Drain-to-source reads ~0.4 V one way (the "
+        "body diode — Schottky-like in this part) and OL the other. "
+        "The metal tab is electrically tied to the drain; verify by "
+        "checking continuity tab-to-pin-2.",
+    )
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**A 3.3 V or 5 V MCU pin drives this FET fully on, directly — "
         "no gate driver chip needed for slow switching.** That's what "

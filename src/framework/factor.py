@@ -117,6 +117,13 @@ class FactorNode(metaclass=ABCMeta):
     # Empty tuple → no part-specific warnings.
     GOTCHAS: ClassVar[tuple[str, ...]] = ()
 
+    # Per-class pre-install verification steps the assembly-guide
+    # exporter emits in the "How to verify" section.  Bench-grade
+    # multimeter checks that catch DOA parts before they go on the
+    # breadboard.  Empty tuple → no specific check (typical for parts
+    # that can't be meaningfully verified in isolation, e.g. most chips).
+    VERIFY: ClassVar[tuple[str, ...]] = ()
+
     # -------------------------------------------------------------
     # Substrate-compatibility surface
     # -------------------------------------------------------------

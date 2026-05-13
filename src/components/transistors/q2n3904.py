@@ -25,6 +25,18 @@ class Q2N3904(BJT):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-92_Inline"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'e': 1, 'b': 2, 'c': 3}
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**Test an NPN BJT with the diode-test mode as 'two diodes "
+        "back-to-back, sharing the base'.** Put the red probe on the "
+        "base (middle pin); touch the black probe to the emitter, "
+        "then to the collector. Both readings should be about 0.6 V "
+        "forward — base-to-emitter and base-to-collector junctions in "
+        "forward bias. Now put red on the emitter or collector and "
+        "black on the base: both should read OL (junctions in reverse). "
+        "Any reading of 0 V (short) or unexpected OL means the part is "
+        "damaged.",
+    )
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Hold the 2N3904 with the flat side facing you, leads "
         "pointing down — the pins are Emitter, Base, Collector from "

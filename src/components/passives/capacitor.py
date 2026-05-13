@@ -39,6 +39,27 @@ class Capacitor(FactorNode):
         'lead_spacing_holes': 1,
     }
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**For an electrolytic capacitor, use your multimeter's diode-"
+        "test or continuity mode to confirm it charges.** Put the red "
+        "probe on the + lead (longer / unmarked side) and the black on "
+        "the − lead (the side with the stripe). A healthy cap shows a "
+        "voltage that climbs over a second or two and then settles to "
+        "OL — the meter is charging the cap through its internal "
+        "current source. Reverse the leads briefly to discharge and "
+        "repeat. A cap that immediately reads zero (continuous beep) "
+        "is shorted; one that reads OL from the first touch is open "
+        "or has lost its capacitance.",
+        "**Confirm the printed value matches what the design calls "
+        "for** — capacitor markings are easy to misread. Big "
+        "electrolytics print the value directly (e.g. '100 µF 25 V'); "
+        "smaller ceramics use a three-digit code where the first two "
+        "digits are the value in pF and the third is the number of "
+        "trailing zeros ('104' means 100,000 pF = 100 nF = 0.1 µF). "
+        "A capacitance meter (built into many DMMs) confirms the "
+        "value within ±10%.",
+    )
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Electrolytic capacitors have a + and − end — always check "
         "which is which.** The longer lead is + (positive); the can "

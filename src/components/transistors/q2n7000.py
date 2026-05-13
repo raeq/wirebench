@@ -25,6 +25,20 @@ class Q2N7000(MOSFET):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-92_Inline"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'s': 1, 'g': 2, 'd': 3}
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**Test an N-channel MOSFET for a working gate and an intact "
+        "body diode.** Discharge yourself first (touch a grounded "
+        "surface — see the safety bullet) then put the multimeter in "
+        "diode-test mode. Probe gate to source: should read OL in "
+        "*both* directions (the gate is isolated from the channel by "
+        "a thin oxide layer). Any continuity gate-to-source means the "
+        "oxide has been punctured by ESD and the FET is finished. "
+        "Probe drain to source: one direction shows about 0.6 V "
+        "(forward voltage of the internal body diode), the other "
+        "reads OL. Pinout for the 2N7000 is S-G-D, flat side facing "
+        "you.",
+    )
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Touch a grounded metal surface before picking up a MOSFET, "
         "every time.** MOSFETs are static-sensitive in a way bipolar "

@@ -25,6 +25,16 @@ class BS170(MOSFET):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-92_Inline"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'d': 1, 'g': 2, 's': 3}
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**Test for an intact gate oxide and a working body diode** — "
+        "same procedure as for a 2N7000, but mind the BS170's "
+        "*mirrored* pinout (D-G-S from the flat side, not S-G-D). "
+        "Discharge yourself first, then in diode-test mode: gate to "
+        "source should read OL both directions (continuity here means "
+        "ESD has zapped the part). Drain to source should read ~0.6 V "
+        "in one direction (body diode) and OL in the other.",
+    )
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Touch a grounded metal surface before picking up the BS170, "
         "every time.** MOSFETs are static-sensitive — a static spark "

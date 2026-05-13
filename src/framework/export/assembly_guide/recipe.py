@@ -1,12 +1,19 @@
 """Assemble the assembly-guide Markdown for one design.
 
-Per spec §5.1 / §6 the document structure is:
+The document structure is:
 
     # Build Guide: <DesignName>
     <optional one-paragraph description from the design's class docstring>
 
+    ## Safety first
+    <three universal bench-safety bullets>
+
     ## Parts
     <parts table + free-form prose for non-electronic items>
+
+    ## How to verify
+    <generic intro paragraph, then per-component multimeter checks
+     so DOA parts are caught before they go on the breadboard>
 
     ## Method
     <numbered build steps>
@@ -15,8 +22,7 @@ Per spec §5.1 / §6 the document structure is:
     <general bullets, then per-component bullets>
 
 The Testing section is intentionally omitted in v1 — most designs
-don't expose a self-describing test surface, and the spec calls it
-optional.
+don't expose a self-describing test surface.
 
 This module owns the structural assembly; placement details live in
 `placement.py`; universal gotchas in `general_gotchas.py`.
@@ -422,6 +428,47 @@ def _method_section(
 # --------------------------------------------------------- notes & gotchas
 
 
+def _verify_section(parts: list[FactorNode]) -> str:
+    """How-to-verify section: per-component pre-install multimeter checks.
+
+    Emits an empty-but-titled section even when no part contributes a
+    `VERIFY` tuple — the heading documents the missing surface rather
+    than hiding it.  Per-component bullets are deduplicated and ordered
+    by class name + tuple index so output is deterministic for the
+    goldens."""
+    lines: list[str] = [
+        "## How to verify",
+        "",
+        "Before you start wiring, take five minutes to confirm each part "
+        "actually works. A multimeter on the diode-test and resistance "
+        "settings catches most pre-install failures: dead LEDs, "
+        "mis-bagged parts, transistors damaged in shipping, batteries "
+        "below their safe-discharge limit. The checks below cover what "
+        "you can verify with a basic multimeter; chips and complex "
+        "modules generally need a working test rig instead, so they're "
+        "not listed here.",
+        "",
+    ]
+    seen: OrderedDict[tuple[str, int], str] = OrderedDict()
+    parts_sorted = sorted(parts, key=lambda p: (type(p).__name__, p.refdes))
+    for part in parts_sorted:
+        cls = type(part)
+        checks = getattr(cls, 'VERIFY', ())
+        for i, c in enumerate(checks):
+            key = (cls.__name__, i)
+            seen.setdefault(key, c)
+    if seen:
+        for c in seen.values():
+            lines.append(f"- {c}")
+    else:
+        lines.append(
+            "*(No standalone bench checks declared for the parts in this "
+            "design — proceed directly to assembly and watch for trouble "
+            "during the first power-up.)*"
+        )
+    return '\n'.join(lines).rstrip() + '\n'
+
+
 def _notes_section(parts: list[FactorNode]) -> str:
     """Notes & Gotchas section: universal warnings first, then unique
     per-component warnings collected across the parts list."""
@@ -486,6 +533,8 @@ def build_recipe(design: FactorNode) -> str:
     sections.append(_safety_section())
     sections.append("")
     sections.append(_ingredients_section(placeable))
+    sections.append("")
+    sections.append(_verify_section(placeable))
     sections.append("")
     sections.append(_method_section(parts, placeable, placements))
     sections.append("")

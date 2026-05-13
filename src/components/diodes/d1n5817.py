@@ -24,6 +24,17 @@ class D1N5817(Diode):
     FOOTPRINT: ClassVar[str | None] = "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**A Schottky reads a lower forward voltage than a silicon "
+        "diode on the multimeter's diode test.** Red probe on the "
+        "anode (unmarked end), black on the cathode (banded end): a "
+        "healthy 1N5817 reads about 0.2–0.3 V forward, not the 0.6 V "
+        "you'd see from a 1N4001 — the low drop is the Schottky's "
+        "defining feature. Reverse the probes and the meter reads OL. "
+        "If you read 0.6 V forward, somebody put a silicon diode in "
+        "the Schottky bin.",
+    )
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**The black band marks the cathode (− end)** — same convention "
         "as silicon diodes. The Schottky's marking matches the bar in "

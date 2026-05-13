@@ -47,6 +47,24 @@ class Relay_SPDT(FactorNode):
     REFDES_PREFIX: ClassVar[str] = 'K'
     FOOTPRINT: ClassVar[str | None] = "Relay_THT:Relay_SPDT_Generic"
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**Measure the coil resistance with your multimeter.** Put the "
+        "meter in resistance (Ω) mode and probe the two coil pins. "
+        "A small hobby relay's coil typically reads between 50 Ω and "
+        "a few hundred ohms; 0 Ω means the coil is shorted (don't "
+        "apply power), OL means it's burned open. The package usually "
+        "labels which pins are the coil.",
+        "**Check the resting contact state.** Switch the meter to "
+        "continuity / beep mode. Probe Common (COM) to Normally-Closed "
+        "(NC): the meter should beep — these contacts are connected "
+        "when the coil is *not* energised. Probe Common to "
+        "Normally-Open (NO): OL — these contacts are not connected at "
+        "rest. Now briefly apply the rated coil voltage and you should "
+        "hear an audible click as the relay actuates; the readings "
+        "flip (COM-NC opens, COM-NO closes). No click means the coil "
+        "is dead or you've applied the wrong voltage.",
+    )
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Put a diode across the relay's coil — the band toward the "
         "+ supply side.** A 1N4001 or 1N4007 does the job. Without "

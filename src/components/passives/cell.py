@@ -104,6 +104,19 @@ class Cell(FactorNode):
     FOOTPRINT: ClassVar[str | None] = "Battery:BatteryHolder_Keystone_1042_1x18650"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'pos': 1, 'neg': 2}
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**Measure the cell's voltage with your multimeter before "
+        "installing.** Set the meter to DC volts, put red on the + "
+        "(button) end and black on the − (flat) end. A healthy Li-Ion "
+        "cell at rest reads between 3.0 V (nearly empty) and 4.2 V "
+        "(fully charged). Anything below 2.5 V means the cell is "
+        "deeply discharged — *do not* try to charge it normally; "
+        "internal damage from deep discharge can cause delayed failure "
+        "(fire) days later. A reading near 0 V means the cell is dead "
+        "or the holder is broken. A *negative* reading means you've "
+        "installed the cell backwards in its holder.",
+    )
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Lithium cells can catch fire — treat them carefully and "
         "always wear safety glasses when working with them.** Never "

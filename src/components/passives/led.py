@@ -52,6 +52,20 @@ class LED(FactorNode):
         'positive_lead': 'anode',
     }
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**Set your multimeter to diode-test mode and probe the LED's "
+        "leads.** Put the red probe on the long lead (anode +) and the "
+        "black probe on the short lead (cathode −). A healthy LED "
+        "lights up dimly — the meter is forcing a tiny current "
+        "through it — and the reading shows the forward voltage "
+        "(around 1.8 V for red, 2 V for yellow, 3.2 V for blue/white). "
+        "Reverse the probes and the LED should stay dark with the "
+        "meter reading OL. If both directions show OL the LED is "
+        "open / dead; if both directions light the LED it has failed "
+        "as a short. This also tells you which lead is the anode, "
+        "useful if the leads were trimmed.",
+    )
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**LEDs have a + and − end — the long lead is +.** Get them "
         "the wrong way around and the LED simply doesn't light up; "

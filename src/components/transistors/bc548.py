@@ -26,6 +26,19 @@ class BC548(BJT):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-92_Inline"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'c': 1, 'b': 2, 'e': 3}
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**Test as 'two diodes back-to-back sharing the base'.** Put "
+        "the red probe on the base (middle pin) and touch the black "
+        "probe to each of the other two pins in turn — both should "
+        "read about 0.6 V forward (base-to-emitter, base-to-collector "
+        "in forward bias). Reverse: red on one of the other pins, "
+        "black on the base — both readings should be OL. Any 0 V or "
+        "unexpected OL means the junction is damaged. (Mind the "
+        "European C-B-E pinout: looking at the flat side with the "
+        "leads down, the *middle* pin is the base for the BC548 the "
+        "same as for the 2N3904, but the outer pins are swapped.)",
+    )
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Hold the BC548 with the flat side facing you, leads pointing "
         "down — the pins are then Collector, Base, Emitter from left "

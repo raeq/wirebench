@@ -475,12 +475,22 @@ The exporter emits exactly this section structure:
 
 <optional one-paragraph description from the design's class docstring>
 
+## Safety first
+
+<three universal bench-safety bullets: eyewear, ESD, gloves>
+
 ## Parts
 
 <table: Refdes | Part | Value/Spec | Quantity | Notes>
 
 <paragraph naming any non-electronic items needed: breadboard, jumper
 wires, power supply, etc.>
+
+## How to verify
+
+<short intro paragraph framing the multimeter pre-install check, then
+per-component bullets pulled from each refdes-bearing part's `VERIFY`
+ClassVar — deduplicated and sorted deterministically>
 
 ## Method
 
@@ -489,13 +499,41 @@ wires, power supply, etc.>
 ## Notes & Gotchas
 
 <General bullet list, then per-component bullets>
-
-## Testing
-
-<short paragraph: how to verify the design works>
 ```
 
-The *Testing* section can be omitted for designs where the framework can't sensibly suggest a test (anything where the `__call__` surface isn't a clear driveable interface). The exporter checks for the presence of an `expected_outputs` or similar declarative testing surface and emits the section only if available.
+### 6.1 Per-component verification metadata
+
+Each component class declares a `VERIFY` class attribute — a tuple of
+Markdown-formatted strings, each one a bench-grade multimeter check the
+user can run before installing the part:
+
+```python
+class LED(FactorNode):
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**Set your multimeter to diode-test mode and probe the LED's "
+        "leads.** ...",
+    )
+```
+
+The exporter walks the design, collects every unique check across all
+refdes-bearing parts, deduplicates exact matches, and emits the result
+in the *How to verify* section in stable order (by class name, then by
+tuple index). Components without a meaningful standalone test (most
+chips, modules with no exposed primitive surface) have `VERIFY = ()`
+and contribute nothing. If no part contributes a check, the section
+still emits its heading and a single italicised note pointing the user
+straight to assembly — surfacing the absence of checks rather than
+hiding it.
+
+### 6.2 Testing section (deferred)
+
+A `## Testing` section was specified at v1 but deliberately omitted:
+most designs don't expose a self-describing test surface, and "how do
+I know my finished build works?" splits between the verification side
+(covered above) and behavioural testing (covered by the framework's
+`run_scenarios` helper, which lives outside the assembly guide).
+Re-introduce as a future revision when there's a declarative test
+surface to render.
 
 ## 7. File-by-file change list
 

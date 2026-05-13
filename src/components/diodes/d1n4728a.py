@@ -28,6 +28,18 @@ class D1N4728A(Diode):
     FOOTPRINT: ClassVar[str | None] = "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**A multimeter's diode-test mode can only confirm the Zener "
+        "works as a forward diode** — about 0.6 V drop with red on "
+        "the anode, OL with the probes reversed, just like any silicon "
+        "diode. The reverse-breakdown voltage that makes a Zener "
+        "useful can't be measured this way; for that you need a "
+        "current-limited supply and a voltmeter. For pre-install "
+        "screening, the diode test plus reading the part-number on "
+        "the body of the part is enough to confirm you haven't grabbed "
+        "an ordinary 1N4148 by mistake.",
+    )
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Zeners are installed *backwards* compared with an ordinary "
         "diode.** The black band (cathode) goes toward the *positive* "

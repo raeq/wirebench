@@ -24,6 +24,17 @@ class D1N4001(Diode):
     FOOTPRINT: ClassVar[str | None] = "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**Use the multimeter's diode-test mode.** Red probe on the "
+        "anode (unmarked end), black probe on the cathode (banded "
+        "end): the meter reads about 0.6 V forward. Reverse the probes: "
+        "OL. Both directions showing 0.6 V means a shorted diode; both "
+        "showing OL means an open diode. Confirm the body marking "
+        "matches what you wanted — 1N4001 / 1N4002 / … / 1N4007 all "
+        "look identical externally; only the printed code distinguishes "
+        "them, and they have different reverse-voltage ratings.",
+    )
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**The black band marks the cathode (− end).** Same convention "
         "as every other diode — the band matches the bar in the "

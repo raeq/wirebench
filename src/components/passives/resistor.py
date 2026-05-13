@@ -46,6 +46,17 @@ class Resistor(FactorNode):
         'lead_spacing_holes': 3,
     }
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**Measure the resistance with your multimeter before "
+        "installing.** Set the meter to the Ω (ohms) range, probe one "
+        "lead, then the other; the reading should match the value "
+        "printed on the part (or decoded from its colour bands) to "
+        "within a few percent. A reading of OL (open / infinity) means "
+        "the resistor is broken inside; a value wildly different from "
+        "what's marked usually means someone has swapped parts in the "
+        "bin and you've grabbed the wrong one.",
+    )
+
     # The default KiCad footprint is a 0603 SMD pad — appropriate for
     # PCB export — but hobby use on breadboards / perfboards is
     # overwhelmingly through-hole carbon-film parts on axial leads.

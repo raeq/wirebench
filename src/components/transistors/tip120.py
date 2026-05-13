@@ -25,6 +25,17 @@ class TIP120(BJT):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-220-3_Vertical"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'b': 1, 'c': 2, 'e': 3}
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**Diode-test the base-emitter junction — it should read about "
+        "1.4 V, not the usual 0.6 V.** That doubled voltage is the "
+        "signature of a Darlington (two BJTs in cascade share one "
+        "base terminal). TO-220 pinout: pin 1 = Base, pin 2 = Collector, "
+        "pin 3 = Emitter. Put red on base, black on emitter: ~1.4 V. "
+        "Red on base, black on collector: ~0.6 V (only one junction "
+        "this way). Reverse both: OL. A base-emitter reading of only "
+        "0.6 V means you've grabbed a regular BJT by mistake.",
+    )
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**The TIP120 needs about 1.4 V on its base to turn on — twice "
         "as much as an ordinary BJT.** That's because a Darlington is "

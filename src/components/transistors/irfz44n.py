@@ -25,6 +25,19 @@ class IRFZ44N(MOSFET):
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-220-3_Vertical"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'g': 1, 'd': 2, 's': 3}
 
+    VERIFY: ClassVar[tuple[str, ...]] = (
+        "**Test for an intact gate oxide and a working body diode.** "
+        "Touch a grounded surface to discharge static first, then put "
+        "the multimeter in diode-test mode. TO-220 pinout (looking at "
+        "the labelled face): pin 1 = Gate, pin 2 = Drain, pin 3 = "
+        "Source. Probe gate to source: OL both directions; any "
+        "continuity means ESD has punctured the gate oxide and the "
+        "FET is finished. Probe drain to source: ~0.6 V one way, OL "
+        "the other (the body diode). The metal tab is internally tied "
+        "to the drain, so reading from the tab should match readings "
+        "from pin 2.",
+    )
+
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Don't drive the IRFZ44N directly from a 3.3 V or 5 V MCU "
         "pin — it won't fully turn on.** The datasheet's impressively "
