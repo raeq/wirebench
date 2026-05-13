@@ -1,0 +1,34 @@
+digraph "FiveVoltRailPower" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  
+  D1 [label="D1\\nD1N5817"];
+  C1 [label="C1\\n1e-07F"];
+  U1 [label="U1\\nLM7805"];
+  C2 [label="C2\\n1e-05F"];
+  D2 [label="D2\\nD1N4733A"];
+  R1 [label="R1\\n470Ω"];
+  D3 [label="D3\\ngreen LED"];
+  // Nets
+  node [shape=circle, label="", width=0.15, fixedsize=true];
+  net_0; net_1; net_2; net_3; net_4;
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+  BT1 -> net_1 [taillabel="neg"];
+  BT1 -> net_4 [taillabel="pos"];
+  C1 -> net_3 [taillabel="t1"];
+  C1 -> net_1 [taillabel="t2"];
+  C2 -> net_2 [taillabel="t1"];
+  C2 -> net_1 [taillabel="t2"];
+  D1 -> net_4 [taillabel="anode"];
+  D1 -> net_3 [taillabel="cathode"];
+  D2 -> net_1 [taillabel="anode"];
+  D2 -> net_2 [taillabel="cathode"];
+  D3 -> net_0 [taillabel="anode"];
+  D3 -> net_1 [taillabel="cathode"];
+  R1 -> net_2 [taillabel="t1"];
+  R1 -> net_0 [taillabel="t2"];
+  U1 -> net_1 [taillabel="GND"];
+  U1 -> net_3 [taillabel="INPUT"];
+  U1 -> net_2 [taillabel="OUTPUT"];
+}

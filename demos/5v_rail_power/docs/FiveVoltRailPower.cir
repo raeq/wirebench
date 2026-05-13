@@ -1,0 +1,10 @@
+.TITLE FiveVoltRailPower
+D1 net_4 net_3 D1N5817
+C1 net_3 net_1 1e-07
+U1 net_3 net_1 net_2 LM7805
+C2 net_2 net_1 1e-05
+D2 net_1 net_2 D1N4733A
+R1 net_2 net_0 470.0
+D3 net_0 net_1 D_LED
+.LIB spice-models.lib
+.END

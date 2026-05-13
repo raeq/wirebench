@@ -1,0 +1,32 @@
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    
+    D1["D1<br/>D1N5817"]
+    C1["C1<br/>1e-07F"]
+    U1["U1<br/>LM7805"]
+    C2["C2<br/>1e-05F"]
+    D2["D2<br/>D1N4733A"]
+    R1["R1<br/>470Ω"]
+    D3["D3<br/>green LED"]
+    net_1(("net_1"))
+    net_4(("net_4"))
+    net_3(("net_3"))
+    net_2(("net_2"))
+    net_0(("net_0"))
+    BT1 ---|"neg"| net_1
+    BT1 ---|"pos"| net_4
+    C1 ---|"t1"| net_3
+    C1 ---|"t2"| net_1
+    C2 ---|"t1"| net_2
+    C2 ---|"t2"| net_1
+    D1 ---|"anode"| net_4
+    D1 ---|"cathode"| net_3
+    D2 ---|"anode"| net_1
+    D2 ---|"cathode"| net_2
+    D3 ---|"anode"| net_0
+    D3 ---|"cathode"| net_1
+    R1 ---|"t1"| net_2
+    R1 ---|"t2"| net_0
+    U1 ---|"GND"| net_1
+    U1 ---|"INPUT"| net_3
+    U1 ---|"OUTPUT"| net_2
