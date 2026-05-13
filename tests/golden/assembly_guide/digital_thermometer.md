@@ -2,7 +2,7 @@
 
 Single-board digital thermometer.
 
-## Ingredients
+## Parts
 
 | Refdes | Part | Value / Spec | Quantity | Notes |
 |--------|------|--------------|----------|-------|

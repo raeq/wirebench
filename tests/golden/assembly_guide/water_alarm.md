@@ -2,7 +2,7 @@
 
 Water level alarm.
 
-## Ingredients
+## Parts
 
 | Refdes | Part | Value / Spec | Quantity | Notes |
 |--------|------|--------------|----------|-------|

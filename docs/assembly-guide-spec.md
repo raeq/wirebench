@@ -4,7 +4,7 @@
 
 Two coordinated additions:
 
-1. **A text-based bench-assembly-guide exporter** that emits a Markdown document structured like a cooking recipe: *Ingredients* (the parts list), *Method* (numbered build steps that map directly to breadboard holes and jumper paths), and *Notes & Gotchas* (per-component bench warnings derived from the parts actually used). The user reads it one step at a time at the bench and ends up with a working circuit.
+1. **A text-based bench-assembly-guide exporter** that emits a Markdown document structured like a cooking recipe: *Parts* (the parts list), *Method* (numbered build steps that map directly to breadboard holes and jumper paths), and *Notes & Gotchas* (per-component bench warnings derived from the parts actually used). The user reads it one step at a time at the bench and ends up with a working circuit.
 
 2. **A uniform substrate-compatibility surface** on every component — `is_breadboard_compatible`, `is_pcb_compatible`, `is_perfboard_compatible`, `is_dead_bug_compatible`, plus the underlying `is_through_hole` / `is_smd` flags. Composable with logical `and` / `or`, computed from each part's existing `FOOTPRINT` metadata where possible, overridable per-class where physical reality is more nuanced than the footprint string alone implies.
 
@@ -211,7 +211,7 @@ The exporter produces a single Markdown document with a recipe-style structure:
 A small build to verify your breadboard, your parts, and your soldering iron all
 agree on what "this LED should light up" means.
 
-## Ingredients
+## Parts
 
 | Refdes | Part        | Value / Spec   | Quantity | Notes                          |
 |--------|-------------|----------------|----------|--------------------------------|
@@ -475,7 +475,7 @@ The exporter emits exactly this section structure:
 
 <optional one-paragraph description from the design's class docstring>
 
-## Ingredients
+## Parts
 
 <table: Refdes | Part | Value/Spec | Quantity | Notes>
 
@@ -539,7 +539,7 @@ The *Testing* section can be omitted for designs where the framework can't sensi
 
 **`tests/framework/export/assembly_guide/test_assembly_guide.py`:**
 
-6. **End-to-end emit.** For each existing demo whose components are all `is_breadboard_compatible=True`, call `export(design, 'assembly_guide', tmp_path)` and assert the file is created, contains all four section headings (`# Build Guide`, `## Ingredients`, `## Method`, `## Notes & Gotchas`), and the BOM table has one row per refdes-bearing component.
+6. **End-to-end emit.** For each existing demo whose components are all `is_breadboard_compatible=True`, call `export(design, 'assembly_guide', tmp_path)` and assert the file is created, contains all four section headings (`# Build Guide`, `## Parts`, `## Method`, `## Notes & Gotchas`), and the BOM table has one row per refdes-bearing component.
 7. **Refusal on SMD parts.** For a demo containing any `is_breadboard_compatible=False` component (e.g. `digital_thermometer` uses a DHT11 module which may or may not qualify; `bldc_motor` uses DRV8313 SOIC), assert `BreadboardIncompatibleError` is raised with the offending parts named.
 8. **Gotchas appear.** A design containing an LED produces an assembly guide whose "Notes & Gotchas" section contains the LED polarity warning. A design containing a MOSFET produces the static-sensitivity warning. A design containing a CMOS chip produces the "tie unused inputs" warning. Spot-check across categories.
 9. **No duplicate gotchas.** A design with three LEDs produces the LED polarity warning *once*, not three times.

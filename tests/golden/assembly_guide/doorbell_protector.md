@@ -2,7 +2,7 @@
 
 Two-LM555 doorbell protector.
 
-## Ingredients
+## Parts
 
 | Refdes | Part | Value / Spec | Quantity | Notes |
 |--------|------|--------------|----------|-------|

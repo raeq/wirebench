@@ -5,7 +5,7 @@ design on a standard 830-pin solderless breadboard.  The output has
 four sections per spec §5.1 / §6:
 
   - Title and one-line blurb (from the design's class docstring).
-  - **Ingredients** — table of refdes-bearing parts plus free-form
+  - **Parts** — table of refdes-bearing parts plus free-form
     prose listing non-electronic items (breadboard, jumpers, supply).
   - **Method** — numbered build steps, one per part placement and
     one per jumper wire, plus a final "verify and power on" step.

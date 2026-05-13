@@ -2,7 +2,7 @@
 
 A single LED with a current-limit resistor across the supply rails.
 
-## Ingredients
+## Parts
 
 | Refdes | Part | Value / Spec | Quantity | Notes |
 |--------|------|--------------|----------|-------|

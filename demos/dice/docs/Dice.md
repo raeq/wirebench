@@ -2,7 +2,7 @@
 
 Push-button electronic dice on a single board.
 
-## Ingredients
+## Parts
 
 | Refdes | Part | Value / Spec | Quantity | Notes |
 |--------|------|--------------|----------|-------|

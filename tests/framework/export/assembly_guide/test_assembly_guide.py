@@ -39,7 +39,7 @@ def test_hello_led_emits_four_sections() -> None:
     one BOM row per refdes-bearing part."""
     from hello_led import HelloLED
     text = export_to_string(HelloLED(), 'assembly_guide')
-    for heading in ('# Build Guide:', '## Ingredients', '## Method', '## Notes & Gotchas'):
+    for heading in ('# Build Guide:', '## Parts', '## Method', '## Notes & Gotchas'):
         assert heading in text, f"missing section {heading!r}"
     # Two refdes-bearing parts: R1 and D1.
     assert '| R1 |' in text

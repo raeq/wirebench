@@ -5,8 +5,8 @@ Per spec §5.1 / §6 the document structure is:
     # Build Guide: <DesignName>
     <optional one-paragraph description from the design's class docstring>
 
-    ## Ingredients
-    <ingredients table + free-form prose for non-electronic items>
+    ## Parts
+    <parts table + free-form prose for non-electronic items>
 
     ## Method
     <numbered build steps>
@@ -60,7 +60,7 @@ def _walk_top_parts(design: FactorNode) -> list[FactorNode]:
     BOM.  Raw `Circuit` composites (the user's top-level design class)
     ARE descended into so their contained leaves appear.  Rails are
     kept so the jumper-generation step can detect rail nets; the
-    Ingredients table filters them out later."""
+    Parts table filters them out later."""
     parts: list[FactorNode] = []
     stack: list[FactorNode] = [design]
     while stack:
@@ -178,10 +178,10 @@ def _bom_note(part: FactorNode) -> str:
 
 
 def _ingredients_section(parts: list[FactorNode]) -> str:
-    """Build the Ingredients section: a Markdown table + free-form
+    """Build the Parts section: a Markdown table + free-form
     prose listing non-electronic items."""
     lines: list[str] = [
-        "## Ingredients", "",
+        "## Parts", "",
         "| Refdes | Part | Value / Spec | Quantity | Notes |",
         "|--------|------|--------------|----------|-------|",
     ]
