@@ -106,4 +106,4 @@ def test_validate_still_catches_shorts_via_extracted_walker():
     wire(vcc1.ports['out'], pin.external)
     wire(vcc2.ports['out'], pin.internal)
     with pytest.raises(ShortCircuitError, match='Short circuit'):
-        Circuit(factor_nodes=[conn, vcc1, vcc2], ports={})
+        Circuit(parts=[conn, vcc1, vcc2], ports={})

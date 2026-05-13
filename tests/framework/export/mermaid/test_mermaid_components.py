@@ -39,7 +39,7 @@ def _silently(fn, *a, **k):
 
 def test_mermaid_init_directive_and_flowchart_type():
     text = export_to_string(
-        Circuit(factor_nodes=[Resistor(100, refdes_number=1)], ports={}),
+        Circuit(parts=[Resistor(100, refdes_number=1)], ports={}),
         'mermaid')
     assert text.startswith('%%{init:')
     assert '\nflowchart LR' in text
@@ -50,7 +50,7 @@ def test_mermaid_resistor_node():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[r, vcc, gnd], ports={}), 'mermaid')
+    text = export_to_string(Circuit(parts=[r, vcc, gnd], ports={}), 'mermaid')
     assert 'R1["R1<br/>330Ω"]' in text
 
 
@@ -59,19 +59,19 @@ def test_mermaid_led_node():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], d.ports['anode'])
     wire(d.ports['cathode'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[d, vcc, gnd], ports={}), 'mermaid')
+    text = export_to_string(Circuit(parts=[d, vcc, gnd], ports={}), 'mermaid')
     assert 'D1["D1<br/>red LED"]' in text
 
 
 def test_mermaid_chip_node():
     u = SN74HC04(refdes_number=1)
-    text = export_to_string(Circuit(factor_nodes=[u], ports={}), 'mermaid')
+    text = export_to_string(Circuit(parts=[u], ports={}), 'mermaid')
     assert 'U1["U1<br/>SN74HC04"]' in text
 
 
 def test_mermaid_no_connector_node():
     j = Header2xNFemale(pin_count=2, pitch_mm=2.54, refdes_number=1)
-    text = export_to_string(Circuit(factor_nodes=[j], ports={}), 'mermaid')
+    text = export_to_string(Circuit(parts=[j], ports={}), 'mermaid')
     assert 'J1[' not in text
 
 
@@ -80,7 +80,7 @@ def test_mermaid_no_rail_node():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[r, vcc, gnd], ports={}), 'mermaid')
+    text = export_to_string(Circuit(parts=[r, vcc, gnd], ports={}), 'mermaid')
     assert 'Rail' not in text
 
 
@@ -89,7 +89,7 @@ def test_mermaid_net_is_double_circle():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[r, vcc, gnd], ports={}), 'mermaid')
+    text = export_to_string(Circuit(parts=[r, vcc, gnd], ports={}), 'mermaid')
     assert 'vcc(("vcc"))' in text
     assert 'gnd(("gnd"))' in text
 
@@ -99,7 +99,7 @@ def test_mermaid_edge_includes_port_name():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], d.ports['anode'])
     wire(d.ports['cathode'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[d, vcc, gnd], ports={}), 'mermaid')
+    text = export_to_string(Circuit(parts=[d, vcc, gnd], ports={}), 'mermaid')
     assert re.search(r'D1 ---\|"anode"\| \S+', text)
     assert re.search(r'D1 ---\|"cathode"\| \S+', text)
 
@@ -111,7 +111,7 @@ def test_mermaid_board_becomes_subgraph():
     wire(r.ports['t2'], gnd.ports['out'])
     b = Board(name='Tiny', revision='A',
               components=[r, vcc, gnd], refdes_number=1)
-    text = export_to_string(Circuit(factor_nodes=[b], ports={}), 'mermaid')
+    text = export_to_string(Circuit(parts=[b], ports={}), 'mermaid')
     assert re.search(r'subgraph A1\["A1: Tiny Rev A"\]', text)
     assert '\n    end\n' in text
 
@@ -129,5 +129,5 @@ def test_mermaid_html_escape_in_label():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], d.ports['anode'])
     wire(d.ports['cathode'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[d, vcc, gnd], ports={}), 'mermaid')
+    text = export_to_string(Circuit(parts=[d, vcc, gnd], ports={}), 'mermaid')
     assert '<br/>' in text

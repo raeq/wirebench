@@ -10,7 +10,7 @@ from __future__ import annotations
 from framework.board import Board
 from framework.chip import Chip
 from framework.circuit import Circuit
-from framework.factor import FactorNode
+from framework.part import Part
 
 from framework.export.base import (
     ExporterContext, lookup_renderer, register_net_namer,
@@ -31,7 +31,7 @@ def name_mermaid_net(net: LogicalNet, ctx: ExporterContext) -> str:
 register_net_namer('mermaid', name_mermaid_net)
 
 
-def render(design: FactorNode, ctx: ExporterContext) -> str:
+def render(design: Part, ctx: ExporterContext) -> str:
     """Assemble a complete Mermaid flowchart for `design`."""
     from framework.connector import Connector
     from framework.pin import Pin
@@ -41,10 +41,10 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
     ctx.emit('flowchart LR')
 
     boards: list[Board] = []
-    top: list[FactorNode] = []
-    by_board: dict[str, list[FactorNode]] = {}
+    top: list[Part] = []
+    by_board: dict[str, list[Part]] = {}
 
-    def collect(parent_board: str, node: FactorNode) -> None:
+    def collect(parent_board: str, node: Part) -> None:
         if isinstance(node, (Pin, Connector, Rail)):
             return
         if isinstance(node, Chip):
@@ -53,7 +53,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
         if isinstance(node, Board):
             boards.append(node)
             by_board.setdefault(node.refdes, [])
-            for c in node._factor_nodes:
+            for c in node.parts:
                 collect(node.refdes, c)
             return
         # Refdes-bearing composite — emit as a single box; don't
@@ -62,7 +62,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
             (by_board.setdefault(parent_board, []) if parent_board else top).append(node)
             return
         if isinstance(node, Circuit):
-            for c in node._factor_nodes:
+            for c in node.parts:
                 collect(parent_board, c)
             return
         if getattr(node, 'refdes', None):
@@ -70,10 +70,10 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
 
     if isinstance(design, Board):
         boards.append(design)
-        for c in design._factor_nodes:
+        for c in design.parts:
             collect(design.refdes, c)
     else:
-        children = design._factor_nodes if isinstance(design, Circuit) else [design]
+        children = design.parts if isinstance(design, Circuit) else [design]
         for c in children:
             collect("", c)
 

@@ -54,7 +54,7 @@ def test_repr(cell):
 
 def test_call_refuses_when_input_is_wired(cell):
     # Same silent-overwrite guard as Chip — every node with input ports
-    # has the hazard, so the check lives on FactorNode.
+    # has the hazard, so the check lives on Part.
     from framework.wire import wire
     from framework.port import Port, Direction
     from framework.signals import Digital

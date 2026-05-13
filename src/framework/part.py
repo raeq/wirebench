@@ -59,10 +59,10 @@ def _footprint_is_smd(footprint: str | None) -> bool:
     return any(footprint.startswith(m) for m in _SMD_FOOTPRINT_MARKERS)
 
 
-class FactorNode(metaclass=ABCMeta):
+class Part(metaclass=ABCMeta):
     """Base class for all circuit elements: components and composite circuits.
 
-    A factor node expresses a constitutive relation over its ports. Leaf nodes
+    A part expresses a constitutive relation over its ports. Leaf nodes
     are components (Resistor, LED, …). Composite nodes are circuits containing
     sub-components wired together.
     """

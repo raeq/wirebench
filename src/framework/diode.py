@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from framework.factor import FactorNode
+from framework.part import Part
 
 
-class Diode(FactorNode):
+class Diode(Part):
     """Two-terminal rectifier — silicon, Schottky, or Zener.
 
     A black-box marker class: subclasses provide `anode` and `cathode`

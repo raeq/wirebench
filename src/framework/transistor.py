@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from framework.factor import FactorNode
+from framework.part import Part
 
 
-class Transistor(FactorNode):
+class Transistor(Part):
     """Three-terminal active device — BJT or MOSFET.
 
     A black-box marker class: subclasses declare their terminal ports

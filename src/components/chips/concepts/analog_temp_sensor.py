@@ -11,13 +11,13 @@ from __future__ import annotations
 from pydantic import validate_call
 
 from framework.errors import PartParameterError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Analog
 
 
-class AnalogTempSensor(FactorNode):
+class AnalogTempSensor(Part):
     """Linear analog temperature sensor (TMP36-style).
 
     Ports

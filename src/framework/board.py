@@ -7,7 +7,7 @@ from pydantic import Field, validate_call
 from framework.circuit import Circuit
 from framework.connector import Connector
 from framework.errors import CompositeShapeError, RefdesError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.refdes import RefdesNumber, validate_refdes
 from framework.registry import register
 
@@ -38,7 +38,7 @@ class Board(Circuit):
         *,
         name: Annotated[str, Field(min_length=1)],
         revision: Annotated[str, Field(min_length=1)],
-        components: list[FactorNode] | None = None,
+        components: list[Part] | None = None,
         refdes_number: RefdesNumber,
     ) -> None:
         # Board's own state (name / revision / refdes_number) lives in
@@ -51,14 +51,14 @@ class Board(Circuit):
 
         # Auto-collect: if the subclass omits __slots__ and assigns
         # parts as `self.x = Y(...)` before calling super().__init__(),
-        # `components=None` scans `self.__dict__` for FactorNode-typed
+        # `components=None` scans `self.__dict__` for Part-typed
         # values (one level of tuple/list/dict unpacking).  Same rules
         # as Circuit's auto-collect — including Rule 1 (empty auto-collect
         # → teaching error).  Board fires Rule 1 itself because it
         # passes the resolved list to Circuit explicitly, which would
         # otherwise bypass Circuit's auto-collect path.
         if components is None:
-            components = self._auto_collect_factor_nodes()
+            components = self._auto_collect_parts()
             if not components:
                 raise CompositeShapeError(self._empty_circuit_message())
 
@@ -76,7 +76,7 @@ class Board(Circuit):
                     )
                 ports[qualified] = port
 
-        super().__init__(factor_nodes=list(components), ports=ports)
+        super().__init__(parts=list(components), ports=ports)
 
     @property
     def name(self) -> str:

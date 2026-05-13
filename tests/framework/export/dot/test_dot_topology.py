@@ -23,7 +23,7 @@ from framework.circuit import Circuit
 from framework.connector import Connector
 from framework.export.base import ExporterContext
 from framework.export.dot import render as dot_render
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.pin import Pin
 
 from components.passives.led import LED
@@ -45,7 +45,7 @@ def _expected_triples(design, ctx: ExporterContext) -> set[tuple[str, str, str]]
     conductors (Pin, Connector) and Rails."""
     out: set[tuple[str, str, str]] = set()
 
-    def visit(n: FactorNode) -> None:
+    def visit(n: Part) -> None:
         if isinstance(n, (Pin, Connector, Rail)):
             return
         if isinstance(n, Chip):
@@ -55,7 +55,7 @@ def _expected_triples(design, ctx: ExporterContext) -> set[tuple[str, str, str]]
                 out.add((n.refdes, name, ctx.net_name(port)))
             return
         if isinstance(n, Circuit):
-            for c in n._factor_nodes:
+            for c in n.parts:
                 visit(c)
             return
         rd = getattr(n, 'refdes', None)

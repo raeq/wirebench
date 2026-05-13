@@ -13,7 +13,7 @@ def test_bom_present(thermometer):
     from framework.refdes import RefdesBearing
     parts = {
         f"{type(fn).__name__}.{fn.refdes}"
-        for fn in thermometer._factor_nodes
+        for fn in thermometer.parts
         if isinstance(fn, RefdesBearing)
     }
     assert "Uno_ThermometerSketch.U1" in parts

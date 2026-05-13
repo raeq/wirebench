@@ -57,7 +57,7 @@ def test_yosys_resistor_cell():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
-    d = _doc(Circuit(factor_nodes=[r, vcc, gnd], ports={}))
+    d = _doc(Circuit(parts=[r, vcc, gnd], ports={}))
     cells = next(iter(d['modules'].values()))['cells']
     assert 'R1' in cells
     assert cells['R1']['type'] == 'Resistor'
@@ -70,7 +70,7 @@ def test_yosys_led_cell_carries_color_parameter():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], d.ports['anode'])
     wire(d.ports['cathode'], gnd.ports['out'])
-    doc = _doc(Circuit(factor_nodes=[d, vcc, gnd], ports={}))
+    doc = _doc(Circuit(parts=[d, vcc, gnd], ports={}))
     cell = next(iter(doc['modules'].values()))['cells']['D1']
     assert cell['type'] == 'LED'
     assert cell['parameters']['color'] == 'red'
@@ -78,7 +78,7 @@ def test_yosys_led_cell_carries_color_parameter():
 
 def test_yosys_chip_cell_has_all_pins():
     u = SN74HC04(refdes_number=1)
-    cells = _doc(Circuit(factor_nodes=[u], ports={}))['modules']['Circuit']['cells']
+    cells = _doc(Circuit(parts=[u], ports={}))['modules']['Circuit']['cells']
     chip = cells['U1']
     assert chip['type'] == 'SN74HC04'
     # All 12 chip pins present.
@@ -92,7 +92,7 @@ def test_yosys_chip_cell_has_all_pins():
 
 def test_yosys_connector_emitted_as_cell():
     j = Header2xNFemale(pin_count=2, pitch_mm=2.54, refdes_number=1)
-    cells = _doc(Circuit(factor_nodes=[j], ports={}))['modules']['Circuit']['cells']
+    cells = _doc(Circuit(parts=[j], ports={}))['modules']['Circuit']['cells']
     assert 'J1' in cells
     # Connector pins use 'inout' direction (BIDIR).
     assert all(d == 'inout' for d in cells['J1']['port_directions'].values())

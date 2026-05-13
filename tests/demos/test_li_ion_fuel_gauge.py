@@ -15,7 +15,7 @@ def test_bom_present(board):
     from framework.refdes import RefdesBearing
     parts = {
         f"{type(fn).__name__}.{fn.refdes}"
-        for fn in board._factor_nodes
+        for fn in board.parts
         if isinstance(fn, RefdesBearing)
     }
     assert "BQ27546G1.U1"       in parts

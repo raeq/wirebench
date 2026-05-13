@@ -1,7 +1,7 @@
 """Renderer registry + ExporterContext + ExportConfig.
 
 A renderer is a function `(component, ctx) -> str` that takes one
-FactorNode and returns the format-specific text fragment for that
+Part and returns the format-specific text fragment for that
 instance.  Renderers are registered against (class, format) keys.
 
 Lookup walks the class MRO so a renderer registered against a base
@@ -15,13 +15,13 @@ from typing import Any, Callable, Literal, TypeVar
 from pydantic import BaseModel, ConfigDict, Field, PositiveFloat
 
 from framework.errors import DuplicateRendererError, RendererNotFoundError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.port import Port
 
 from framework.export.nets import LogicalNet, compute_logical_nets
 
 
-T = TypeVar('T', bound=FactorNode)
+T = TypeVar('T', bound=Part)
 # Renderers are typed as the most permissive Callable shape — different
 # format adapters take different extra positional arguments (`bom` adds
 # `parent_refdes`, `kicad` adds `qrd / names / tstamps`).  Using
@@ -30,13 +30,13 @@ T = TypeVar('T', bound=FactorNode)
 Renderer = Callable[..., str]
 
 
-# The registry's keys hold `type[FactorNode]` so callers can register
+# The registry's keys hold `type[Part]` so callers can register
 # abstract bases (`Chip`, `Diode`, `Transistor`) whose subclasses inherit
 # the renderer via MRO.  `mypy --strict` would flag `type[Diode]` as
 # abstract; that's precisely the use-case we want, so the registry
-# function uses `type[FactorNode]` rather than a TypeVar bound to a
+# function uses `type[Part]` rather than a TypeVar bound to a
 # concrete subclass.
-_RENDERERS: dict[tuple[type[FactorNode], str], Renderer] = {}
+_RENDERERS: dict[tuple[type[Part], str], Renderer] = {}
 
 
 def register_renderer(
@@ -51,7 +51,7 @@ def register_renderer(
     handles every subclass that doesn't have its own renderer.  Abstract
     bases like `Chip`, `Diode`, and `Transistor` are intentionally
     allowed here so a single renderer can cover every subclass — the
-    parameter is annotated as `type[Any]` rather than `type[FactorNode]`
+    parameter is annotated as `type[Any]` rather than `type[Part]`
     because mypy's `[type-abstract]` check would otherwise reject an
     abstract subclass even though that's exactly the use case.
     """
@@ -68,7 +68,7 @@ def register_renderer(
 
 
 def lookup_renderer(
-    component_class: type[FactorNode],
+    component_class: type[Part],
     format: str,
 ) -> Renderer:
     """Return the renderer for `component_class` in `format`.
@@ -91,7 +91,7 @@ def lookup_renderer(
     )
 
 
-def _registered_keys() -> list[tuple[type[FactorNode], str]]:
+def _registered_keys() -> list[tuple[type[Part], str]]:
     """Internal: snapshot of registered keys, for test inspection."""
     return list(_RENDERERS.keys())
 
@@ -129,7 +129,7 @@ def lookup_net_namer(format: str) -> NetNamer:
         )
 
 
-def pin_number_of(component: FactorNode, port_name: str) -> int | None:
+def pin_number_of(component: Part, port_name: str) -> int | None:
     """The datasheet pin number for `port_name` on `component`,
     regardless of whether the component models its terminals as Pin
     instances (chips, connectors) or as raw Ports with PIN_NUMBERS
@@ -175,7 +175,7 @@ class ExporterContext:
 
     def __init__(
         self,
-        design: FactorNode,
+        design: Part,
         format: str,
         config: ExportConfig | None = None,
     ) -> None:
@@ -194,7 +194,7 @@ class ExporterContext:
         self._net_name_by_node = self._assign_net_names()
 
     @property
-    def design(self) -> FactorNode:
+    def design(self) -> Part:
         return self._design
 
     @property
@@ -239,7 +239,7 @@ class ExporterContext:
         self._synth_counter[prefix] = n + 1
         return f"{prefix}_{n}"
 
-    def refdes_of(self, component: FactorNode) -> str:
+    def refdes_of(self, component: Part) -> str:
         """Return the refdes for refdes-bearing components, or a
         synthesised id for those that don't carry one."""
         rd = getattr(component, 'refdes', None)

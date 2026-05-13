@@ -15,7 +15,7 @@ from framework.board import Board
 from framework.chip import Chip
 from framework.circuit import Circuit
 from framework.connector import Connector
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.port import Port
 
 from framework.export.base import (
@@ -89,7 +89,7 @@ def _qualified_refdes(board_stack: list[Board], comp_refdes: str) -> str:
     return '_'.join(b.refdes for b in board_stack) + '_' + comp_refdes
 
 
-def render(design: FactorNode, ctx: ExporterContext) -> str:
+def render(design: Part, ctx: ExporterContext) -> str:
     """Assemble a complete KiCad netlist for `design`."""
     from framework.pin import Pin
     from components.passives.rail import Rail
@@ -105,9 +105,9 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
     ctx.emit('  (components')
 
     # Build a list of (qualified_refdes, board_stack, component) tuples.
-    components: list[tuple[str, list[Board], FactorNode]] = []
+    components: list[tuple[str, list[Board], Part]] = []
 
-    def visit(board_stack: list[Board], node: FactorNode) -> None:
+    def visit(board_stack: list[Board], node: Part) -> None:
         if isinstance(node, (Pin, Rail)):
             return
         if isinstance(node, Chip) or (
@@ -120,7 +120,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
             # Board itself is not emitted as a component; only its
             # children, with the board prepended to the stack.
             new_stack = board_stack + [node]
-            for c in node._factor_nodes:
+            for c in node.parts:
                 visit(new_stack, c)
             return
         # Refdes-bearing composite — a composite part that has
@@ -131,7 +131,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
             components.append((qrd, list(board_stack), node))
             return
         if isinstance(node, Circuit):
-            for c in node._factor_nodes:
+            for c in node.parts:
                 visit(board_stack, c)
             return
         # Leaf passive.
@@ -143,7 +143,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
     if isinstance(design, Board):
         visit([], design)
     elif isinstance(design, Circuit):
-        for c in design._factor_nodes:
+        for c in design.parts:
             visit([], c)
     else:
         visit([], design)
@@ -164,7 +164,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
     # alone — its 'Net-(...)' synthesis uses unqualified refdes which
     # collides across boards.
     from components.passives.rail import Rail
-    nodes_to_entries: dict[int, list[tuple[str, int, str, object, FactorNode]]] = {}
+    nodes_to_entries: dict[int, list[tuple[str, int, str, object, Part]]] = {}
     nodes_to_rails: dict[int, list[Rail]] = {}
     for qrd, stack, comp in components:
         for port_name, port in comp.ports.items():
@@ -178,14 +178,14 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
                 (qrd, pn, _kicad_pintype(comp, port), port, comp)
             )
     # Rails attach to nodes too — track them so the namer can use them.
-    def collect_rails(node: FactorNode) -> None:
+    def collect_rails(node: Part) -> None:
         if isinstance(node, Rail):
             for p in node.ports.values():
                 if p.node is not None:
                     nodes_to_rails.setdefault(id(p.node), []).append(node)
             return
         if isinstance(node, Circuit):
-            for c in node._factor_nodes:
+            for c in node.parts:
                 collect_rails(c)
     collect_rails(design)
 
@@ -219,7 +219,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
     return ctx.output()
 
 
-def _kicad_pintype(owner: FactorNode, port: Port) -> str:
+def _kicad_pintype(owner: Part, port: Port) -> str:
     """Map a port's direction to a KiCad pintype string, per spec
     §5.1's table."""
     from framework.connector import Connector

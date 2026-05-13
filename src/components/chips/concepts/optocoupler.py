@@ -23,13 +23,13 @@ from typing import ClassVar
 
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Analog
 
 
-class Optocoupler(FactorNode):
+class Optocoupler(Part):
     """Phototransistor-output optocoupler cell.
 
     Ports
@@ -96,7 +96,7 @@ class Optocoupler(FactorNode):
         return f"Optocoupler(collector={self._ports['collector'].value!r})"
 
 
-class TriacOptocoupler(FactorNode):
+class TriacOptocoupler(Part):
     """TRIAC-output optocoupler (e.g. MOC3021) — the output side is a
     bidirectional TRIAC, not a phototransistor.
 

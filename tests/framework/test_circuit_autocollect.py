@@ -1,15 +1,15 @@
 """Tests for `Circuit` auto-collection + Rule 1 / Rule 2.
 
-Auto-collection scans `self.__dict__` for `FactorNode` attributes when
-`factor_nodes` is omitted from `super().__init__()`.  Two rules guard
+Auto-collection scans `self.__dict__` for `Part` attributes when
+`parts` is omitted from `super().__init__()`.  Two rules guard
 against silent failures:
 
   Rule 1 — empty auto-collect raises `CompositeShapeError`, teaching
             the canonical `self.<name> = …` pattern.
 
   Rule 2 — orphan-port detection raises `OrphanWireError` when a wire
-            joins a known factor_node to a port whose owner isn't in
-            `factor_nodes`.  Fires regardless of how `factor_nodes`
+            joins a known part to a port whose owner isn't in
+            `parts`.  Fires regardless of how `parts`
             was obtained.
 """
 from __future__ import annotations
@@ -45,14 +45,14 @@ class _ThreeAttrs(Circuit):
 
 def test_attribute_auto_collection_picks_up_self_attrs() -> None:
     c = _ThreeAttrs()
-    assert {id(fn) for fn in c._factor_nodes} == {
+    assert {id(fn) for fn in c.parts} == {
         id(c.r1), id(c.d1), id(c.vcc),
     }
 
 
 def test_attribute_auto_collection_preserves_insertion_order() -> None:
     c = _ThreeAttrs()
-    assert c._factor_nodes == [c.r1, c.d1, c.vcc]
+    assert c.parts == (c.r1, c.d1, c.vcc)
 
 
 class _ListGates(Circuit):
@@ -66,7 +66,7 @@ class _ListGates(Circuit):
 
 def test_list_attribute_collection() -> None:
     c = _ListGates()
-    inverters = [fn for fn in c._factor_nodes if isinstance(fn, Inverter)]
+    inverters = [fn for fn in c.parts if isinstance(fn, Inverter)]
     assert len(inverters) == 3
 
 
@@ -81,7 +81,7 @@ class _TupleGates(Circuit):
 
 def test_tuple_attribute_collection() -> None:
     c = _TupleGates()
-    assert sum(1 for fn in c._factor_nodes if isinstance(fn, Inverter)) == 2
+    assert sum(1 for fn in c.parts if isinstance(fn, Inverter)) == 2
 
 
 class _MixedAttrs(Circuit):
@@ -97,7 +97,7 @@ class _MixedAttrs(Circuit):
 
 def test_mixed_scalar_and_list_attributes() -> None:
     c = _MixedAttrs()
-    types = [type(fn).__name__ for fn in c._factor_nodes]
+    types = [type(fn).__name__ for fn in c.parts]
     assert types.count('Resistor') == 1
     assert types.count('Inverter') == 2
     assert types.count('Rail') == 1
@@ -105,7 +105,7 @@ def test_mixed_scalar_and_list_attributes() -> None:
 
 class _WithJunk(Circuit):
     def __init__(self) -> None:
-        self.config = {'foo': 'bar'}     # not a FactorNode
+        self.config = {'foo': 'bar'}     # not a Part
         self.threshold = 5.0
         self.r = Resistor(100, refdes_number=1)
         self.rail = Rail(True)
@@ -115,12 +115,12 @@ class _WithJunk(Circuit):
 
 def test_non_factornode_attributes_are_skipped() -> None:
     c = _WithJunk()
-    types = {type(fn).__name__ for fn in c._factor_nodes}
+    types = {type(fn).__name__ for fn in c.parts}
     assert types == {'Resistor', 'Rail'}
 
 
 def test_manual_override_preserved() -> None:
-    """Explicit factor_nodes=[…] overrides auto-collect, even when
+    """Explicit parts=[…] overrides auto-collect, even when
     self.x attributes are set."""
 
     class _ExplicitOverride(Circuit):
@@ -129,21 +129,21 @@ def test_manual_override_preserved() -> None:
             self.unused_d = LED('red', refdes_number=2)  # not in explicit list
             self.rail = Rail(True)
             wire(self.rail.out, self.r.t1)
-            super().__init__(factor_nodes=[self.r, self.rail])
+            super().__init__(parts=[self.r, self.rail])
 
     c = _ExplicitOverride()
-    assert c._factor_nodes == [c.r, c.rail]
+    assert c.parts == (c.r, c.rail)
 
 
 def test_empty_circuit_explicit_succeeds() -> None:
-    """`super().__init__(factor_nodes=[])` is a legitimate opt-out."""
+    """`super().__init__(parts=[])` is a legitimate opt-out."""
 
     class _Empty(Circuit):
         def __init__(self) -> None:
-            super().__init__(factor_nodes=[])
+            super().__init__(parts=[])
 
     c = _Empty()
-    assert c._factor_nodes == []
+    assert c.parts == ()
 
 
 # ----------------------------------------------------------------- Rule 1
@@ -161,34 +161,34 @@ def test_empty_circuit_implicit_raises() -> None:
     msg = str(excinfo.value)
     assert '_ForgotSelf' in msg
     assert 'self.<name>' in msg
-    assert 'factor_nodes=[]' in msg   # mentions the explicit escape hatch
+    assert 'parts=[]' in msg   # mentions the explicit escape hatch
 
 
 def test_dunder_prefixed_attributes_skipped() -> None:
     """Python's name mangling turns `self.__x` into
     `self._ClassName__x` — these double-underscored attrs may appear
-    in __dict__ but the framework still ignores non-FactorNode values
+    in __dict__ but the framework still ignores non-Part values
     (the type check is the filter).
     """
 
     class _WithMangledAttr(Circuit):
         def __init__(self) -> None:
-            self.__dunder_thing = "string, not a FactorNode"  # noqa: F841
+            self.__dunder_thing = "string, not a Part"  # noqa: F841
             self.r = Resistor(100, refdes_number=1)
             self.rail = Rail(True)
             wire(self.rail.out, self.r.t1)
             super().__init__()
 
     c = _WithMangledAttr()
-    # Only the real FactorNode attrs are collected.
-    assert all(not isinstance(fn, str) for fn in c._factor_nodes)
-    types = {type(fn).__name__ for fn in c._factor_nodes}
+    # Only the real Part attrs are collected.
+    assert all(not isinstance(fn, str) for fn in c.parts)
+    types = {type(fn).__name__ for fn in c.parts}
     assert types == {'Resistor', 'Rail'}
 
 
 def test_deduplication_when_component_stored_twice() -> None:
-    """A FactorNode reachable through two attributes (a scalar attr
-    and a list attr) appears exactly once in `_factor_nodes`."""
+    """A Part reachable through two attributes (a scalar attr
+    and a list attr) appears exactly once in `_parts`."""
 
     class _Duplicated(Circuit):
         def __init__(self) -> None:
@@ -199,7 +199,7 @@ def test_deduplication_when_component_stored_twice() -> None:
             super().__init__()
 
     c = _Duplicated()
-    resistor_refs = [fn for fn in c._factor_nodes if isinstance(fn, Resistor)]
+    resistor_refs = [fn for fn in c.parts if isinstance(fn, Resistor)]
     assert len(resistor_refs) == 1
 
 
@@ -243,8 +243,8 @@ def test_orphan_port_detected_under_auto_collect() -> None:
     assert 'self.<name>' in msg
 
 
-def test_orphan_port_detected_under_explicit_factor_nodes() -> None:
-    """Rule 2: even with an explicit factor_nodes list, an omitted
+def test_orphan_port_detected_under_explicit_parts() -> None:
+    """Rule 2: even with an explicit parts list, an omitted
     orphan is still caught."""
 
     class _ExplicitButIncomplete(Circuit):
@@ -253,7 +253,7 @@ def test_orphan_port_detected_under_explicit_factor_nodes() -> None:
             r2 = Resistor(100, refdes_number=2)
             rail = Rail(True)
             wire(rail.out, r1.t1, r2.t1)   # both r1 and r2 share the same net
-            super().__init__(factor_nodes=[r1, rail])   # r2 deliberately omitted
+            super().__init__(parts=[r1, rail])   # r2 deliberately omitted
 
     with pytest.raises(OrphanWireError):
         _ExplicitButIncomplete()
@@ -266,8 +266,8 @@ def test_no_orphan_when_everything_is_known() -> None:
     _ThreeAttrs()
 
 
-def test_empty_factor_nodes_with_wired_locals_is_a_quiet_corner() -> None:
-    """`factor_nodes=[]` plus wired local-variable components is a
+def test_empty_parts_with_wired_locals_is_a_quiet_corner() -> None:
+    """`parts=[]` plus wired local-variable components is a
     degenerate corner: the framework's view of the design is empty
     by declaration, so there are no known ports for Rule 2 to walk
     from, and no error fires.
@@ -283,7 +283,7 @@ def test_empty_factor_nodes_with_wired_locals_is_a_quiet_corner() -> None:
             r = Resistor(100, refdes_number=1)
             rail = Rail(True)
             wire(rail.out, r.t1)
-            super().__init__(factor_nodes=[])
+            super().__init__(parts=[])
 
     # No error.
     _EmptyOptOutButWired()

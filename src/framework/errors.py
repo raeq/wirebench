@@ -268,7 +268,7 @@ class AmbiguousPinNameError(UsageError, KeyError):
 class CompositeShapeError(UsageError, TypeError):
     """A composite `Circuit` subclass is missing the `__dict__` the
     auto-collect machinery needs (typically because it declared
-    `__slots__`), or it constructed itself with an empty factor-node
+    `__slots__`), or it constructed itself with an empty part
     list."""
 
 
@@ -280,9 +280,9 @@ class UnknownPortError(UsageError, ValueError):
 
 class OrphanWireError(UsageError, ValueError):
     """A wire crosses the boundary of the enclosing circuit — joining
-    one of the circuit's `factor_nodes` to a component that wasn't
+    one of the circuit's `parts` to a component that wasn't
     included.  The orphan is either a local variable (auto-collect
     couldn't see it because it wasn't stored as `self.<name>`) or an
-    explicit `factor_nodes=[...]` list that omitted it.  The
+    explicit `parts=[...]` list that omitted it.  The
     framework can validate or evaluate the orphan's contribution to
     the circuit, so it refuses to build the composite."""

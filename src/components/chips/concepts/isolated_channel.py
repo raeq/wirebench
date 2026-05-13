@@ -1,13 +1,13 @@
 from pydantic import validate_call
 
 from framework.errors import PartConfigurationError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain
 from framework.port import Port, Direction
 from framework.signals import Digital
 
 
-class IsolatedChannel(FactorNode):
+class IsolatedChannel(Part):
     """Single-bit digital crossing of a galvanic isolation barrier.
 
     The cell's `input` port lives in one `GroundDomain`; its `output`

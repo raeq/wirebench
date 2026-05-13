@@ -40,7 +40,7 @@ def test_walk_visits_root_with_empty_path():
     Path.empty() and no descendants beyond the leaf component."""
     from components.chips.sn74hc04 import SN74HC04
     ic = SN74HC04(refdes_number=1)
-    root = Circuit(factor_nodes=[ic], ports={})
+    root = Circuit(parts=[ic], ports={})
 
     seen: list[tuple[type, str]] = []
     walk_hierarchy(root, lambda c, p: seen.append((type(c), p.qualified_refdes())))
@@ -55,7 +55,7 @@ def test_walk_descends_into_chip_composites():
     """SN74HC04 is itself a Circuit; the walker recurses into it."""
     from components.chips.sn74hc04 import SN74HC04
     ic = SN74HC04(refdes_number=1)
-    root = Circuit(factor_nodes=[ic], ports={})
+    root = Circuit(parts=[ic], ports={})
 
     paths: list[str] = []
     walk_hierarchy(root, lambda c, p: paths.append(p.qualified_refdes()))
@@ -69,7 +69,7 @@ def test_walk_descends_into_chip_composites():
 def test_iter_composites_yields_same_set_as_walk_hierarchy():
     from components.chips.sn74hc04 import SN74HC04
     ic = SN74HC04(refdes_number=1)
-    root = Circuit(factor_nodes=[ic], ports={})
+    root = Circuit(parts=[ic], ports={})
 
     walked: list[tuple[int, str]] = []
     walk_hierarchy(root, lambda c, p: walked.append((id(c), p.qualified_refdes())))

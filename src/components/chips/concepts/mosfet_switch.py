@@ -31,7 +31,7 @@ from typing import Literal
 
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.registry import register
@@ -39,7 +39,7 @@ from framework.signals import Analog
 
 
 @register('MOSFETSwitch')
-class MOSFETSwitch(FactorNode):
+class MOSFETSwitch(Part):
     """Saturated low-side / high-side switch behaviour, N or P channel.
 
     Ports

@@ -42,7 +42,7 @@ if str(_SRC) not in sys.path:
 from pydantic import validate_call
 
 from wirebench import (
-    Chip, Circuit, FactorNode,
+    Chip, Circuit, Part,
     Direction, Port, Pin, PinId,
     GroundDomain, ELECTRICAL,
     RefdesNumber, validate_refdes,
@@ -89,7 +89,7 @@ def _format_temperature(temp_c: float) -> tuple[str, str, str]:
     return (tens_char, ones_char, 'C')
 
 
-class _ThermometerSketch(FactorNode):
+class _ThermometerSketch(Part):
     """Model of the Arduino sketch driving the multiplexed display.
 
     Not a placeable part: there is no soldering iron that installs

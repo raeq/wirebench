@@ -4,7 +4,7 @@ from pydantic import validate_call
 
 from framework.chip import Chip
 from framework.circuit import Circuit
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
@@ -142,12 +142,12 @@ class CD4017(Chip):
                                        and p.id.name not in out_pin_names]
         self._ports_by_number = {pin.id.number: pin.external for pin in pins}
         self._port_map = PortMap(self._ports_by_number)
-        ordered: list[FactorNode] = [
+        ordered: list[Part] = [
             *in_pins, self._counter, *out_pins, *power_pins,
         ]
         Circuit.__init__(
             self,
-            factor_nodes=ordered,
+            parts=ordered,
             ports=dict(self._port_map.items()),
         )
 

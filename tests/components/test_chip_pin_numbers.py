@@ -1,6 +1,6 @@
 """Datasheet pin-number assertions for every chip in the codebase.
 
-For each chip class, walk its factor nodes, filter to Pin instances,
+For each chip class, walk its parts, filter to Pin instances,
 and check that the (number, name) pairs match the manufacturer's
 datasheet pinout.
 """
@@ -19,7 +19,7 @@ from components.chips.uln2003a import ULN2003A
 def _pin_set(chip) -> set[tuple[int, str]]:
     return {
         (fn.id.number, fn.id.name)
-        for fn in chip._factor_nodes
+        for fn in chip.parts
         if isinstance(fn, Pin)
     }
 
@@ -102,6 +102,6 @@ def test_uln2003a_pin_numbers_match_datasheet():
 @pytest.mark.parametrize("chip_cls", [SN74HC04, CD4069, LM393, CD4043, ULN2003A])
 def test_pin_numbers_are_unique_within_a_chip(chip_cls):
     chip = chip_cls(refdes_number=1)
-    numbers = [fn.id.number for fn in chip._factor_nodes if isinstance(fn, Pin)]
+    numbers = [fn.id.number for fn in chip.parts if isinstance(fn, Pin)]
     assert len(numbers) == len(set(numbers)), \
         f"{chip_cls.__name__} has duplicate pin numbers: {numbers}"

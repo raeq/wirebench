@@ -45,7 +45,7 @@ from framework.errors import (
     UsageError, WiredChipCallError, AmbiguousPinNameError,
     CompositeShapeError, UnknownPortError, OrphanWireError,
 )
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.mate import mate
 from framework.pin import Pin, PinId
@@ -73,7 +73,7 @@ from .scenarios import run_scenarios, print_bom
 # plus the scenario helpers.
 __all__ = [
     'Analog', 'Digital',
-    'Board', 'Chip', 'Circuit', 'Connector', 'FactorNode', 'Pin', 'PinId',
+    'Board', 'Chip', 'Circuit', 'Connector', 'Part', 'Pin', 'PinId',
     'Port', 'Direction',
     'GroundDomain', 'ELECTRICAL',
     'RefdesBearing', 'RefdesNumber', 'validate_refdes',

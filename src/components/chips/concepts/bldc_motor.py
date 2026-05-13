@@ -2,7 +2,7 @@ from typing import Annotated, ClassVar
 
 from pydantic import Field, validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.registry import register
@@ -29,7 +29,7 @@ _SECTOR_HALL_PATTERN: tuple[tuple[bool, bool, bool], ...] = (
 
 
 @register('BLDCMotor')
-class BLDCMotor(FactorNode):
+class BLDCMotor(Part):
     """Behavioural model of a 3-phase BLDC motor's Hall-sensor face.
 
     The framework's voltage-only graph can't solve rotor dynamics —

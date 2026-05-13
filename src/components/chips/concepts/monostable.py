@@ -2,7 +2,7 @@ from typing import Annotated, ClassVar
 
 from pydantic import Field, validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.registry import register
@@ -10,7 +10,7 @@ from framework.signals import Digital
 
 
 @register('Monostable')
-class Monostable(FactorNode):
+class Monostable(Part):
     """LM555-style monostable-timer cell.
 
     A real 555 in monostable mode triggers on TRIG going below 1/3 Vcc

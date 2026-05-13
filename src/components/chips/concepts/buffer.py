@@ -1,12 +1,12 @@
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Digital
 
 
-class Buffer(FactorNode):
+class Buffer(Part):
     """Single-bit digital passthrough cell.
 
     The cell's `output` mirrors `input` on each evaluate.  Same domain

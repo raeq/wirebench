@@ -51,7 +51,7 @@ from __future__ import annotations
 
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.registry import register
@@ -59,7 +59,7 @@ from framework.signals import Analog
 
 
 @register('ZenerShunt')
-class ZenerShunt(FactorNode):
+class ZenerShunt(Part):
     """Steady-state reverse-biased-Zener-as-shunt-clamp behaviour.
 
     Ports

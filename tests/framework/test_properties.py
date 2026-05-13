@@ -121,11 +121,11 @@ def test_portmap_dispatch_correctness(pins):
 @settings(max_examples=50, deadline=None)
 def test_roundtrip_identity_for_any_component(component, tmp_path_factory):
     tmp = tmp_path_factory.mktemp('hyp_rt')
-    wrapper = Circuit(factor_nodes=[component], ports=dict(component.ports))
+    wrapper = Circuit(parts=[component], ports=dict(component.ports))
     p = tmp / 'a.wirebench'
     _silently(save_wirebench, wrapper, p)
     loaded = _silently(load_wirebench, p)
-    loaded_part = loaded._factor_nodes[0]
+    loaded_part = loaded.parts[0]
     assert type(loaded_part).__name__ == type(component).__name__
     if hasattr(component, 'refdes') and hasattr(loaded_part, 'refdes'):
         assert loaded_part.refdes == component.refdes
@@ -138,7 +138,7 @@ def test_roundtrip_identity_for_any_component(component, tmp_path_factory):
 @settings(max_examples=50, deadline=None)
 def test_save_is_deterministic(component, tmp_path_factory):
     tmp = tmp_path_factory.mktemp('hyp_det')
-    wrapper = Circuit(factor_nodes=[component], ports=dict(component.ports))
+    wrapper = Circuit(parts=[component], ports=dict(component.ports))
     p1 = tmp / 'a.wirebench'
     p2 = tmp / 'b.wirebench'
     _silently(save_wirebench, wrapper, p1)
@@ -212,7 +212,7 @@ def test_compute_logical_nets_is_deterministic(ohms_values):
         wire(vcc.ports['out'], r.ports['t1'])
         wire(r.ports['t2'], gnd.ports['out'])
 
-    circuit = Circuit(factor_nodes=[vcc, gnd, *resistors_], ports={})
+    circuit = Circuit(parts=[vcc, gnd, *resistors_], ports={})
 
     n1 = compute_logical_nets(circuit)
     n2 = compute_logical_nets(circuit)
@@ -267,7 +267,7 @@ def test_mated_2xn_connectors_preserve_pin_count(pin_count, pitch):
     female = Header2xNFemale(refdes_number=2, pin_count=pin_count, pitch_mm=pitch)
     mate(male, female)
     circuit = Circuit(
-        factor_nodes=[male, female],
+        parts=[male, female],
         ports={**{f'M_{k}': p for k, p in male.ports.items()}},
     )
     nets = compute_logical_nets(circuit)
@@ -280,7 +280,7 @@ def test_mated_2xn_connectors_preserve_pin_count(pin_count, pitch):
 @given(component=simple_chips())
 @settings(max_examples=50, deadline=None)  # six format passes per example
 def test_renderer_is_deterministic(component):
-    wrapper = Circuit(factor_nodes=[component], ports=dict(component.ports))
+    wrapper = Circuit(parts=[component], ports=dict(component.ports))
     for fmt in ('spice', 'kicad', 'dot', 'mermaid', 'yosys', 'bom'):
         a = _silently(export_to_string, wrapper, fmt)
         b = _silently(export_to_string, wrapper, fmt)

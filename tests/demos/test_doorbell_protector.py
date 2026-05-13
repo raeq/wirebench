@@ -21,7 +21,7 @@ def test_bom_present(protector):
     from framework.refdes import RefdesBearing
     parts = {
         f"{type(fn).__name__}.{fn.refdes}"
-        for fn in protector._factor_nodes
+        for fn in protector.parts
         if isinstance(fn, RefdesBearing)
     }
     # Two LM555s (subclass), two transistors, two diodes, relay.

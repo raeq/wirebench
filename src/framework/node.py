@@ -19,7 +19,7 @@ class Node:
         self._value: Any = None
         # Ports attached to this node, in attachment order.  Populated
         # by `wire()` via `_attach`; used by Circuit's orphan-port
-        # detector to walk the wiring graph from one factor_node's
+        # detector to walk the wiring graph from one part's
         # port across the shared node to every other port on the same
         # net.
         self._ports: list[Port] = []

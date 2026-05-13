@@ -93,7 +93,7 @@ def _silently(fn, *a, **k):
 def test_export_runs_to_completion(name, fmt):
     factory = _OVERRIDES.get(name, lambda n: lookup(name)(refdes_number=n))
     part = factory(1)
-    wrapper = Circuit(factor_nodes=[part], ports=dict(part.ports))
+    wrapper = Circuit(parts=[part], ports=dict(part.ports))
     out = _silently(export_to_string, wrapper, fmt)
     assert isinstance(out, str)
 
@@ -115,7 +115,7 @@ from framework.export.base import (    # noqa: E402
 def test_renderer_direct_call_runs_to_completion(name, fmt):
     factory = _OVERRIDES.get(name, lambda n: lookup(name)(refdes_number=n))
     part = factory(1)
-    wrapper = Circuit(factor_nodes=[part], ports=dict(part.ports))
+    wrapper = Circuit(parts=[part], ports=dict(part.ports))
     ctx = ExporterContext(design=wrapper, format=fmt)
     renderer = lookup_renderer(type(part), fmt)
     # Per-format invocation signature:

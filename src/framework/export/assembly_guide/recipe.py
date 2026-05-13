@@ -37,7 +37,7 @@ from framework.board import Board
 from framework.chip import Chip
 from framework.circuit import Circuit
 from framework.errors import BreadboardIncompatibleError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.pin import Pin
 from framework.port import Port
 
@@ -50,16 +50,16 @@ from framework.export.assembly_guide.placement import (
 # ----------------------------------------------------------------- helpers
 
 
-def _is_rail(node: FactorNode) -> bool:
+def _is_rail(node: Part) -> bool:
     from components.passives.rail import Rail
     return isinstance(node, Rail)
 
 
-def _refdes_or_none(node: FactorNode) -> str | None:
+def _refdes_or_none(node: Part) -> str | None:
     return getattr(node, 'refdes', None)
 
 
-def _walk_top_parts(design: FactorNode) -> list[FactorNode]:
+def _walk_top_parts(design: Part) -> list[Part]:
     """Collect every top-level leaf part in `design`, including Rails.
 
     Chips and Boards aren't descended into — each is one part on the
@@ -71,8 +71,8 @@ def _walk_top_parts(design: FactorNode) -> list[FactorNode]:
     contained leaves appear.  Rails are kept so the jumper-generation
     step can detect rail nets; the Parts table filters them out
     later."""
-    parts: list[FactorNode] = []
-    stack: list[FactorNode] = [design]
+    parts: list[Part] = []
+    stack: list[Part] = [design]
     while stack:
         node = stack.pop(0)
         if isinstance(node, Board):
@@ -92,7 +92,7 @@ def _walk_top_parts(design: FactorNode) -> list[FactorNode]:
             parts.append(node)
             continue
         if isinstance(node, Circuit):
-            for child in node._factor_nodes:
+            for child in node.parts:
                 stack.append(child)
             continue
         # Leaf component — keep Rails, drop other refdes-less leaves
@@ -105,7 +105,7 @@ def _walk_top_parts(design: FactorNode) -> list[FactorNode]:
 # ------------------------------------------------------------- refusal
 
 
-def _check_breadboard_compatible(parts: list[FactorNode], design: FactorNode) -> None:
+def _check_breadboard_compatible(parts: list[Part], design: Part) -> None:
     """Raise `BreadboardIncompatibleError` if `parts` contains any
     SMD / multi-board / otherwise-unassemblable component.
 
@@ -153,7 +153,7 @@ def _check_breadboard_compatible(parts: list[FactorNode], design: FactorNode) ->
 # ------------------------------------------------------------ ingredients
 
 
-def _value_for_bom(part: FactorNode) -> str:
+def _value_for_bom(part: Part) -> str:
     """Format the BOM 'Value / Spec' column for one part."""
     from components.passives.resistor import Resistor
     from components.passives.capacitor import Capacitor
@@ -185,7 +185,7 @@ def _format_inductance(henries: float) -> str:
     return f"{henries * 1e6:g} µH"
 
 
-def _bom_note(part: FactorNode) -> str:
+def _bom_note(part: Part) -> str:
     """One-line note for the BOM row.  Common hints — polarity, lead
     notes, package style — to ease procurement at the bench."""
     from components.passives.led import LED
@@ -197,7 +197,7 @@ def _bom_note(part: FactorNode) -> str:
     return ""
 
 
-def _ingredients_section(parts: list[FactorNode]) -> str:
+def _ingredients_section(parts: list[Part]) -> str:
     """Build the Parts section: a Markdown table + free-form
     prose listing non-electronic items."""
     lines: list[str] = [
@@ -207,7 +207,7 @@ def _ingredients_section(parts: list[FactorNode]) -> str:
     ]
     # One row per part, sorted by refdes (alphabetical prefix, then
     # numeric suffix — same convention as the BOM exporter).
-    def sort_key(p: FactorNode) -> tuple[str, int]:
+    def sort_key(p: Part) -> tuple[str, int]:
         rd = p.refdes
         prefix = rd.rstrip('0123456789')
         n = rd[len(prefix):]
@@ -297,8 +297,8 @@ def _passive_step(placement: ComponentPlacement) -> str:
 
 
 def _jumper_steps(
-    all_parts: list[FactorNode],
-    placeable_parts: list[FactorNode],
+    all_parts: list[Part],
+    placeable_parts: list[Part],
     placements: dict[int, ComponentPlacement],
 ) -> list[str]:
     """Generate jumper instructions per logical net.
@@ -325,10 +325,10 @@ def _jumper_steps(
                 continue
             port_to_label[id(port)] = pin_place.tie_strip_label
 
-    # Build port → owner FactorNode lookup so we can spot rail-owned
+    # Build port → owner Part lookup so we can spot rail-owned
     # ports without relying on Port._owner (which is only set for Pin
     # faces).
-    port_owner: dict[int, FactorNode] = {}
+    port_owner: dict[int, Part] = {}
     for part in all_parts:
         if isinstance(part, Pin):
             continue
@@ -394,8 +394,8 @@ def _net_rail_polarity(ports: Iterable[Port]) -> bool | None:
 
 
 def _method_section(
-    all_parts: list[FactorNode],
-    placeable_parts: list[FactorNode],
+    all_parts: list[Part],
+    placeable_parts: list[Part],
     placements: tuple[ComponentPlacement, ...],
 ) -> str:
     """Build the numbered Method section."""
@@ -442,7 +442,7 @@ def _method_section(
 # --------------------------------------------------------- notes & gotchas
 
 
-def _verify_section(parts: list[FactorNode]) -> str:
+def _verify_section(parts: list[Part]) -> str:
     """How-to-verify section: per-component pre-install multimeter checks.
 
     Emits an empty-but-titled section even when no part contributes a
@@ -483,7 +483,7 @@ def _verify_section(parts: list[FactorNode]) -> str:
     return '\n'.join(lines).rstrip() + '\n'
 
 
-def _notes_section(parts: list[FactorNode]) -> str:
+def _notes_section(parts: list[Part]) -> str:
     """Notes & Gotchas section: universal warnings first, then unique
     per-component warnings collected across the parts list."""
     lines: list[str] = ["## Notes & Gotchas", "", "### General", ""]
@@ -515,7 +515,7 @@ def _notes_section(parts: list[FactorNode]) -> str:
 # ----------------------------------------------------------------- top
 
 
-def _design_blurb(design: FactorNode) -> str:
+def _design_blurb(design: Part) -> str:
     """Optional one-line description pulled from the design's class
     docstring (the first non-blank line)."""
     doc = (type(design).__doc__ or '').strip()
@@ -524,7 +524,7 @@ def _design_blurb(design: FactorNode) -> str:
     return doc.splitlines()[0].strip()
 
 
-def build_recipe(design: FactorNode) -> str:
+def build_recipe(design: Part) -> str:
     """Assemble the full assembly-guide Markdown for `design`.
 
     Raises `BreadboardIncompatibleError` per spec §5.5 if any part is

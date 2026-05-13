@@ -53,7 +53,7 @@ def test_bom_resistor_row():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[r, vcc, gnd], ports={}), 'bom')
+    text = export_to_string(Circuit(parts=[r, vcc, gnd], ports={}), 'bom')
     rows = _rows(text)
     [row] = [r for r in rows if r['Refdes'] == 'R1']
     assert row['Value'].startswith('330')
@@ -68,7 +68,7 @@ def test_bom_led_row_uses_color_as_value():
     wire(vcc.ports['out'], d.ports['anode'])
     wire(d.ports['cathode'], gnd.ports['out'])
     [row] = [r for r in _rows(export_to_string(
-        Circuit(factor_nodes=[d, vcc, gnd], ports={}), 'bom'))
+        Circuit(parts=[d, vcc, gnd], ports={}), 'bom'))
         if r['Refdes'] == 'D1']
     assert row['Value'] == 'red LED'
     assert row['Footprint'] == 'LED_SMD:LED_0805'
@@ -77,7 +77,7 @@ def test_bom_led_row_uses_color_as_value():
 def test_bom_chip_row_value_is_class_name():
     u = SN74HC04(refdes_number=1)
     [row] = [r for r in _rows(export_to_string(
-        Circuit(factor_nodes=[u], ports={}), 'bom'))
+        Circuit(parts=[u], ports={}), 'bom'))
         if r['Refdes'] == 'U1']
     assert row['Value'] == 'SN74HC04'
     assert row['Footprint'] == 'Package_DIP:DIP-14_W7.62mm'
@@ -87,7 +87,7 @@ def test_bom_connector_is_on_bom():
     """Connectors are real parts — they must appear on the BOM."""
     conn = Header2xNFemale(pin_count=2, pitch_mm=2.54, refdes_number=1)
     rows = _rows(export_to_string(
-        Circuit(factor_nodes=[conn], ports={}), 'bom'))
+        Circuit(parts=[conn], ports={}), 'bom'))
     assert any(r['Refdes'] == 'J1' for r in rows)
     [j1] = [r for r in rows if r['Refdes'] == 'J1']
     assert 'Header2xNFemale' in j1['Value']
@@ -101,7 +101,7 @@ def test_bom_rail_not_on_bom():
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
     rows = _rows(export_to_string(
-        Circuit(factor_nodes=[r, vcc, gnd], ports={}), 'bom'))
+        Circuit(parts=[r, vcc, gnd], ports={}), 'bom'))
     # No row referencing 'Rail' as a value or refdes.
     assert all('Rail' not in row['Value'] for row in rows)
 
@@ -111,7 +111,7 @@ def test_bom_chip_cells_not_separately_listed():
     implementation — never separately on the BOM."""
     u = SN74HC04(refdes_number=1)
     rows = _rows(export_to_string(
-        Circuit(factor_nodes=[u], ports={}), 'bom'))
+        Circuit(parts=[u], ports={}), 'bom'))
     # Only one refdes-bearing row: the chip itself.
     refdesed = [r for r in rows if r['Refdes']]
     assert len(refdesed) == 1
@@ -129,7 +129,7 @@ def test_bom_board_row_appears():
     wire(r.ports['t2'], gnd.ports['out'])
     b = Board(name='Tiny', revision='A',
               components=[r, vcc, gnd], refdes_number=1)
-    asm = Circuit(factor_nodes=[b], ports={})
+    asm = Circuit(parts=[b], ports={})
     rows = _rows(export_to_string(asm, 'bom'))
     [a1] = [r for r in rows if r['Refdes'] == 'A1']
     assert 'Tiny' in a1['Value']
@@ -167,7 +167,7 @@ def test_bom_rows_sorted_alphabetically_by_refdes():
 
 def test_bom_header_columns():
     text = export_to_string(
-        Circuit(factor_nodes=[Resistor(100, refdes_number=1)], ports={}), 'bom')
+        Circuit(parts=[Resistor(100, refdes_number=1)], ports={}), 'bom')
     first_line = text.splitlines()[0]
     assert first_line == 'Refdes,Value,Footprint,Quantity,Parent,Description'
 

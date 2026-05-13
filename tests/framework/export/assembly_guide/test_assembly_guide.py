@@ -67,7 +67,7 @@ class _OnlySMDDesign(Circuit):
         self.u1  = ATmega2560(refdes_number=1)
         # No wires required for the refusal test — refusal happens
         # before the placement pass.
-        super().__init__(factor_nodes=[self.vcc, self.gnd, self.u1],
+        super().__init__(parts=[self.vcc, self.gnd, self.u1],
                          ports={})
 
     def __call__(self) -> None: pass

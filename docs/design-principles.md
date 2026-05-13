@@ -39,7 +39,7 @@ The "logical net" qualifier matters. After a `mate()` call joins two boards' con
 r1 = Resistor(1000, refdes_number=1)
 r2 = Resistor(1000, refdes_number=2)
 wire(r1.t1, r2.t1)
-Circuit(factor_nodes=[r1, r2], ports={})
+Circuit(parts=[r1, r2], ports={})
 # ValueError: Floating logical net — multiple passive BIDIRs with no driver
 ```
 
@@ -63,7 +63,7 @@ A 2×20 0.1" male header doesn't physically mate with a JST PH cable housing. Th
 ```python
 r1a = Resistor(330, refdes_number=1)
 r1b = Resistor(470, refdes_number=1)
-Circuit(factor_nodes=[r1a, r1b], ports={})
+Circuit(parts=[r1a, r1b], ports={})
 # ValueError: Duplicate refdes: R1 used by Resistor and Resistor
 ```
 
@@ -84,7 +84,7 @@ Connecting two grounds that aren't supposed to share a reference is the failure 
 
 ```python
 led = LED('red', refdes_number=1)
-Circuit(factor_nodes=[led], ports={})
+Circuit(parts=[led], ports={})
 # ValueError: Unconnected mandatory port(s): 'LED.anode'
 ```
 
@@ -138,7 +138,7 @@ A soldered resistor has a fixed value. There is no operation in the physical wor
 
 ### Why connectors are themselves components
 
-A connector takes up board space, has a refdes, appears on the BOM, and gets a footprint in the PCB layout. It is a *part*, not a framework abstraction. The framework models it that way: `Connector` is a `FactorNode` subclass with refdes prefix `J` (chassis-side) or `P` (cable-side) per IEEE 315, with its own pin numbers and footprint.
+A connector takes up board space, has a refdes, appears on the BOM, and gets a footprint in the PCB layout. It is a *part*, not a framework abstraction. The framework models it that way: `Connector` is a `Part` subclass with refdes prefix `J` (chassis-side) or `P` (cable-side) per IEEE 315, with its own pin numbers and footprint.
 
 ### Why no inheritance between component types
 
@@ -158,7 +158,7 @@ The principles above appear as specific patterns throughout the code:
 - **Read-only properties** for state observation — `led.lit`, `latch.q_1`, `chip.refdes` all return the current state without allowing modification.
 - **`evaluate()` is a graph-ordered method** — the framework topologically sorts the components and calls `evaluate()` in dependency order. You don't call `evaluate()` directly on a single component within a circuit; the circuit's `evaluate()` does the right thing.
 - **`__call__` is the test surface** — for isolated component testing, every component is callable with its input ports as arguments and returns its output state. The framework refuses to let you call `__call__` on a component whose ports are wired into a parent circuit (would silently overwrite the parent's signal).
-- **Auto-collection from `self.__dict__`** — components stored as `self.<name>` attributes are picked up automatically when `super().__init__()` finalises the `Circuit` or `Board`. The framework refuses to construct an empty composite (Rule 1: the auto-collected `factor_nodes` is empty — almost certainly because the developer used local variables instead of attribute storage) or one with wires reaching outside its known parts (Rule 2: a port wired to a known port belongs to a component not in `factor_nodes` — partial coverage from mixed self/local usage). Both refusals raise with error messages that show the canonical attribute-storage pattern by example, so the framework teaches the right shape the first time a developer slips.
+- **Auto-collection from `self.__dict__`** — components stored as `self.<name>` attributes are picked up automatically when `super().__init__()` finalises the `Circuit` or `Board`. The framework refuses to construct an empty composite (Rule 1: the auto-collected `parts` is empty — almost certainly because the developer used local variables instead of attribute storage) or one with wires reaching outside its known parts (Rule 2: a port wired to a known port belongs to a component not in `parts` — partial coverage from mixed self/local usage). Both refusals raise with error messages that show the canonical attribute-storage pattern by example, so the framework teaches the right shape the first time a developer slips.
 
 Each pattern is a specific application of the central commitment: *every line of code maps to a physical operation*.
 

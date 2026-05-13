@@ -187,15 +187,15 @@ def test_refdes_error_for_non_positive_number() -> None:
 
 
 def test_duplicate_registration_error() -> None:
-    from framework.factor import FactorNode
+    from framework.part import Part
     from framework.registry import register
 
-    class _A(FactorNode):
+    class _A(Part):
         @property
         def ports(self): return {}
         def evaluate(self): pass
 
-    class _B(FactorNode):
+    class _B(Part):
         @property
         def ports(self): return {}
         def evaluate(self): pass

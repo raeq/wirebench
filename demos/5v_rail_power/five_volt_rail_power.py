@@ -154,7 +154,7 @@ if str(_SRC) not in sys.path:
 from pydantic import Field, validate_call
 
 from wirebench import (
-    Circuit, FactorNode,
+    Circuit, Part,
     Direction, Port,
     GroundDomain, ELECTRICAL,
     RefdesNumber, validate_refdes,
@@ -207,14 +207,14 @@ def _cr2032_ocv_from_soc(soc: float) -> float:
 
 
 # ---------------------------------------------------------------------------
-# CR2032 stack as a single FactorNode
+# CR2032 stack as a single Part
 # ---------------------------------------------------------------------------
 
 @register('CR2032Stack')
-class CR2032Stack(FactorNode):
+class CR2032Stack(Part):
     """A stack of three CR2032 lithium coin cells in series.
 
-    Modelled as a single FactorNode rather than three independent
+    Modelled as a single Part rather than three independent
     `Cell` instances. The framework's voltage-only ports treat each
     Cell's `neg` terminal as driven-to-0 V — naively stacking three
     Cells in series produces three drivers all claiming 0 V on

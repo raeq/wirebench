@@ -1,6 +1,6 @@
 """Pydantic record types for the `.wirebench` file format.
 
-Each registered FactorNode subclass has a corresponding record class
+Each registered Part subclass has a corresponding record class
 with a `type` Literal discriminator, refdes / id, and any class-
 specific arguments.  Records are unioned through a `Discriminator("type")`.
 
@@ -385,7 +385,7 @@ class SDCardRecord(_FixedMaleConnectorRecord):
 # --------------------------------------------------------- generic fallback
 
 class ExtensionRecord(_Record):
-    """Generic record for any registered FactorNode without a dedicated
+    """Generic record for any registered Part without a dedicated
     record class.
 
     Captures the bare class name plus a `kwargs` dict carrying the

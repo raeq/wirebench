@@ -139,7 +139,7 @@ def _build_expected(design, ctx: ExporterContext) -> dict[tuple[str, str], str]:
             refdes = getattr(node, 'refdes', None)
             if refdes:
                 new_prefix = f"{prefix}.{refdes}" if prefix else refdes
-            for child in node._factor_nodes:
+            for child in node.parts:
                 visit(child, new_prefix)
             return
         # Leaf passive (Resistor / LED).

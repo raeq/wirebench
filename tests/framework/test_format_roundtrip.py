@@ -35,11 +35,11 @@ def _save_silently(*args, **kwargs):
 
 
 def _refdes_set(circuit: Circuit) -> set[str]:
-    return {fn.refdes for fn in circuit._factor_nodes if isinstance(fn, RefdesBearing)}
+    return {fn.refdes for fn in circuit.parts if isinstance(fn, RefdesBearing)}
 
 
 def _component_count(circuit: Circuit) -> int:
-    return len(circuit._factor_nodes)
+    return len(circuit.parts)
 
 
 @pytest.mark.parametrize("factory", [
@@ -165,7 +165,7 @@ def test_hand_edited_file_loads(tmp_path):
     p = tmp_path / "hand.wirebench"
     p.write_text(json.dumps(content))
     loaded = _load_silently(p)
-    assert len(loaded._factor_nodes) == 2
+    assert len(loaded.parts) == 2
     assert _refdes_set(loaded) == {"R1", "R2"}
 
 
@@ -178,6 +178,6 @@ def test_mated_assembly_loader_terminates(tmp_path):
     _save_silently(asm, p)
     loaded = _load_silently(p)
     assert isinstance(loaded, Circuit)
-    assert len(loaded._factor_nodes) == 2  # two boards
-    for b in loaded._factor_nodes:
+    assert len(loaded.parts) == 2  # two boards
+    for b in loaded.parts:
         assert isinstance(b, Board)

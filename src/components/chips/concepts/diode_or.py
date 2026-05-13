@@ -3,7 +3,7 @@ from typing import ClassVar, Sequence
 from pydantic import validate_call
 
 from framework.errors import PartParameterError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.registry import register
@@ -11,7 +11,7 @@ from framework.signals import Digital
 
 
 @register('DiodeOR')
-class DiodeOR(FactorNode):
+class DiodeOR(Part):
     """Diode-OR matrix cell: out HIGH whenever any of its inputs is HIGH.
 
     Models the behaviour of a network of signal diodes whose anodes

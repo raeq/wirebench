@@ -10,7 +10,7 @@ from framework.errors import (
     FloatingNetError, PartConfigurationError, PortContentionError,
     ShortCircuitError, UnknownPortError, UnmateableError,
 )
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction, Port
@@ -165,7 +165,7 @@ def test_validate_rejects_cross_board_multi_out_via_mate():
     mate(b1.connectors[0], b2.connectors[0])
 
     with pytest.raises(ShortCircuitError, match="Short circuit on logical net"):
-        Circuit(factor_nodes=[b1, b2], ports={})
+        Circuit(parts=[b1, b2], ports={})
 
 
 # -- 14f. Resistor-resistor floating net still rejected --
@@ -178,7 +178,7 @@ def test_validate_still_rejects_two_resistors_no_driver():
     r1.ports['t1'].connect(shared)
     r2.ports['t1'].connect(shared)
     with pytest.raises(FloatingNetError, match="Floating logical net"):
-        Circuit(factor_nodes=[r1, r2],
+        Circuit(parts=[r1, r2],
                 ports={'a': r1.ports['t2'], 'b': r2.ports['t2']})
 
 

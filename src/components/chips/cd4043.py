@@ -3,7 +3,7 @@ from typing import ClassVar
 from pydantic import validate_call
 
 from framework.chip import Chip
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
@@ -113,7 +113,7 @@ class CD4043(Chip):
         # Shared OE: one fan-out wire from oe.internal to all 4 buffer enables.
         wire(oe.internal, *(b.ports['oe'] for b in self._buf_q))
 
-        cells: list[FactorNode] = []
+        cells: list[Part] = []
         cells.extend(self._latches)
         cells.extend(self._buf_q)
         super().__init__(

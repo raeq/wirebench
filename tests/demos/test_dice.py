@@ -22,7 +22,7 @@ def test_bom_present(dice):
     from framework.refdes import RefdesBearing
     parts = {
         f"{type(fn).__name__}.{fn.refdes}"
-        for fn in dice._factor_nodes
+        for fn in dice.parts
         if isinstance(fn, RefdesBearing)
     }
     # Two ICs.

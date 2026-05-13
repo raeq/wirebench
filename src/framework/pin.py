@@ -4,7 +4,7 @@ from pydantic import Field, validate_call
 from pydantic.dataclasses import dataclass
 
 from framework.errors import PortContentionError, UnknownPortError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain
 from framework.port import Port, Direction
 
@@ -31,7 +31,7 @@ class PinId:
         return f"pin {self.number} ({self.name})"
 
 
-class Pin(FactorNode):
+class Pin(Part):
     """A chip pin or connector contact: the bonded wire that bridges
     silicon (or PCB trace) and the outside world.
 
@@ -154,7 +154,7 @@ class Pin(FactorNode):
         # responsibility, not the pin's.
         #
         # Keys are the ports' own names — same convention as every other
-        # FactorNode. This keeps Circuit._validate's error messages
+        # Part. This keeps Circuit._validate's error messages
         # honest ('Pin.oe' instead of 'Pin.external').
         return {self._external.name: self._external,
                 self._internal.name: self._internal}

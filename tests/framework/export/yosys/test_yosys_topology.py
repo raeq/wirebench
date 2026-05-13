@@ -24,7 +24,7 @@ from framework.chip import Chip
 from framework.circuit import Circuit
 from framework.connector import Connector
 from framework.export import export_to_string
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.pin import Pin
 
 from components.passives.rail import Rail
@@ -44,7 +44,7 @@ def _expected_node_map(design) -> dict[tuple[str, str], int]:
     every refdes-bearing component's connected ports."""
     out: dict[tuple[str, str], int] = {}
 
-    def visit(n: FactorNode) -> None:
+    def visit(n: Part) -> None:
         if isinstance(n, (Pin, Rail)):
             return
         if isinstance(n, (Chip, Connector)):
@@ -54,7 +54,7 @@ def _expected_node_map(design) -> dict[tuple[str, str], int]:
                 out[(n.refdes, name)] = id(port.node)
             return
         if isinstance(n, Circuit):
-            for c in n._factor_nodes:
+            for c in n.parts:
                 visit(c)
             return
         rd = getattr(n, 'refdes', None)

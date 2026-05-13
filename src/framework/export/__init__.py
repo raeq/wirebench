@@ -25,7 +25,7 @@ from typing import Any
 from pydantic import validate_call
 
 from framework.errors import UnknownFormatError
-from framework.factor import FactorNode
+from framework.part import Part
 
 from framework.export.base import ExportConfig, ExporterContext
 from framework.export.nets import LogicalNet, compute_logical_nets
@@ -54,7 +54,7 @@ def _load_adapter(format: str) -> Any:
 
 @validate_call(config={'arbitrary_types_allowed': True})
 def export(
-    design: FactorNode,
+    design: Part,
     format: str,
     path: Path | str,
     config: ExportConfig | None = None,
@@ -66,7 +66,7 @@ def export(
 
 @validate_call(config={'arbitrary_types_allowed': True})
 def export_to_string(
-    design: FactorNode,
+    design: Part,
     format: str,
     config: ExportConfig | None = None,
 ) -> str:

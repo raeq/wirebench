@@ -15,17 +15,17 @@ class Direction(Enum):
 
 
 class Port:
-    """A typed connection point on a factor node.
+    """A typed connection point on a part.
 
     mandatory   — if True, the port must be connected before the circuit evaluates
     signal_type — the Python type this port carries (e.g. bool, float); wire()
                   enforces that all connected ports share the same type
 
-    _owner      — back-reference to the FactorNode that "owns" this port at
+    _owner      — back-reference to the Part that "owns" this port at
                   the physical level (e.g. a Pin for Pin.external / Pin.internal).
                   Used by Circuit._validate's logical-net walker to find the
                   IS_CONDUCTOR property and the other_face() bridge.  Optional;
-                  if None, the validator falls back to whichever factor-node
+                  if None, the validator falls back to whichever part
                   iteration produced this port.
     """
 

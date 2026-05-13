@@ -3,7 +3,7 @@ from typing import Annotated, ClassVar
 from pydantic import Field, validate_call
 
 from framework.errors import PartParameterError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.registry import register
@@ -11,7 +11,7 @@ from framework.signals import Analog, Digital
 
 
 @register('FanController')
-class FanController(FactorNode):
+class FanController(Part):
     """Hysteretic temperature-switch + fan-driver cell.
 
     Models the macroscopic behaviour of a TMP302-style temperature

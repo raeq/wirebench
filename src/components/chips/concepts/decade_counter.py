@@ -1,6 +1,6 @@
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Digital
@@ -13,7 +13,7 @@ _CO_NAME  = 'co'
 _IN_NAMES = ('clk', 'inhibit', 'reset')
 
 
-class DecadeCounter(FactorNode):
+class DecadeCounter(Part):
     """Edge-triggered Johnson decade counter cell (CD4017 internals).
 
     Ten one-hot decoded outputs plus a divide-by-ten carry.  Counting

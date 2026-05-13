@@ -1,6 +1,6 @@
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.circuit import Circuit
 from framework.pin import Pin, PinId
 from framework.chip import Chip

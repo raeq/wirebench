@@ -99,7 +99,7 @@ def test_in_pin_undriven_external_propagates_none():
 # --- ports surface ---
 
 def test_pin_ports_dict_keyed_by_port_name():
-    # Convention: every FactorNode's ports dict keys match the port name.
+    # Convention: every Part's ports dict keys match the port name.
     # For Pin, that means {'a': external, 'a_inner': internal} for an IN
     # pin called 'a' — not {'external': ..., 'internal': ...}.
     p = Pin(PinId(1, 'a'), Direction.IN, ELECTRICAL, signal_type=Digital)

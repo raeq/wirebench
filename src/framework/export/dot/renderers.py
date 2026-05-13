@@ -9,7 +9,7 @@ from framework.board import Board
 from framework.chip import Chip
 from framework.connector import Connector
 from framework.diode import Diode
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.transistor import Transistor
 
 from framework.export.base import ExporterContext, register_renderer
@@ -105,6 +105,6 @@ def render_diode(d: Diode, ctx: ExporterContext) -> str:
     return f'{d.refdes} [label="{_dot_label(label)}"];'
 
 
-@register_renderer(FactorNode, format='dot')
-def render_factor_node(fn: FactorNode, ctx: ExporterContext) -> str:
+@register_renderer(Part, format='dot')
+def render_part(fn: Part, ctx: ExporterContext) -> str:
     return ""   # concept / firmware-stand-in cells; not graph nodes

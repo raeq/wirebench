@@ -1,12 +1,12 @@
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Analog, Digital
 
 
-class DarlingtonChannel(FactorNode):
+class DarlingtonChannel(Part):
     """One channel of a high-current open-collector Darlington driver.
 
     The cell that the ULN2003A and ULN2803 are built from.  A Darlington

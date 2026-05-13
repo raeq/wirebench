@@ -56,11 +56,11 @@ def _expected_bom_rows(design) -> set[tuple[str, str]]:
             return
         if isinstance(node, Board):
             out.add((node.refdes, parent))
-            for c in node._factor_nodes:
+            for c in node.parts:
                 visit(c, node.refdes)
             return
         if isinstance(node, Circuit):
-            for c in node._factor_nodes:
+            for c in node.parts:
                 visit(c, parent)
             return
         rd = getattr(node, 'refdes', None)

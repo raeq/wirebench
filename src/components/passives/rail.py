@@ -2,7 +2,7 @@ from typing import ClassVar
 
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Digital
@@ -10,7 +10,7 @@ from framework.registry import register
 
 
 @register('Rail')
-class Rail(FactorNode):
+class Rail(Part):
     """Constant logic rail.  Drives `out` to a fixed level (HIGH or LOW).
 
     Use to tie unused CMOS inputs to Vcc or GND — leaving them floating

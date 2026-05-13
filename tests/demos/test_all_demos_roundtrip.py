@@ -6,7 +6,7 @@ save its design through `save_wirebench` and reload it with
 `load_wirebench`.  This module proves that every top-level construct
 in `demos/*.py` roundtrips structurally:
 
-    - same number of factor_nodes
+    - same number of parts
     - same set of refdes strings on refdes-bearing children
     - second `save_wirebench` produces a byte-identical file (proves
       determinism — the JSON output is canonical)
@@ -53,7 +53,7 @@ def _silent(fn, *a, **kw):
 
 
 def _refdes_set(c) -> set[str]:
-    return {fn.refdes for fn in c._factor_nodes if isinstance(fn, RefdesBearing)}
+    return {fn.refdes for fn in c.parts if isinstance(fn, RefdesBearing)}
 
 
 # Each entry is (label, callable returning the live demo construct).
@@ -99,9 +99,9 @@ def test_demo_roundtrips_structurally(label, factory, tmp_path):
     _silent(save_wirebench, original, p1)
     loaded = _silent(load_wirebench, p1)
 
-    assert len(loaded._factor_nodes) == len(original._factor_nodes), (
-        f"{label}: loaded has {len(loaded._factor_nodes)} factor_nodes, "
-        f"original has {len(original._factor_nodes)}"
+    assert len(loaded.parts) == len(original.parts), (
+        f"{label}: loaded has {len(loaded.parts)} parts, "
+        f"original has {len(original.parts)}"
     )
     assert _refdes_set(loaded) == _refdes_set(original), (
         f"{label}: refdes set diverges"

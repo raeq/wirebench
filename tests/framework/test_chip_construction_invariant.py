@@ -16,7 +16,7 @@ import pytest
 
 from framework.chip import Chip
 from framework.errors import PartConfigurationError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction, Port
@@ -24,8 +24,8 @@ from framework.signals import Digital
 from framework.wire import wire
 
 
-class _PassiveDriver(FactorNode):
-    """Tiny FactorNode that drives one OUT port to False — just
+class _PassiveDriver(Part):
+    """Tiny Part that drives one OUT port to False — just
     enough to satisfy the invariant for a "fixed" chip."""
 
     __slots__ = ('_ports',)

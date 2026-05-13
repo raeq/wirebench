@@ -120,7 +120,7 @@ def test_call_drives_all_four_channels_independently():
 
 def test_has_four_internal_buffer_cells():
     ic = TRS3122E(refdes_number=1)
-    buffers = [fn for fn in ic._factor_nodes if isinstance(fn, Buffer)]
+    buffers = [fn for fn in ic.parts if isinstance(fn, Buffer)]
     assert len(buffers) == 4
 
 

@@ -118,16 +118,16 @@ def test_component_roundtrip(name, tmp_path):
     # Expose the part's ports as the wrapper's surface so any mandatory
     # ports are considered "boundary" by Circuit._validate. Without this,
     # parts like LED (mandatory anode) fail unconnected-port validation.
-    wrapper = Circuit(factor_nodes=[part], ports=dict(part.ports))
+    wrapper = Circuit(parts=[part], ports=dict(part.ports))
 
     p1 = tmp_path / 'a.wirebench'
     _silently(save_wirebench, wrapper, p1)
     loaded = _silently(load_wirebench, p1)
 
-    assert len(loaded._factor_nodes) == 1, (
-        f"{name}: loaded circuit has {len(loaded._factor_nodes)} components, "
+    assert len(loaded.parts) == 1, (
+        f"{name}: loaded circuit has {len(loaded.parts)} components, "
         f"expected 1")
-    loaded_part = loaded._factor_nodes[0]
+    loaded_part = loaded.parts[0]
     assert type(loaded_part).__name__ == name, (
         f"{name}: loaded component is {type(loaded_part).__name__}")
 

@@ -28,7 +28,7 @@ from framework.circuit import Circuit
 from framework.connector import Connector
 from framework.export import export_to_string
 from framework.export.base import pin_number_of
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.pin import Pin
 
 from components.passives.rail import Rail
@@ -49,7 +49,7 @@ def _expected_node_to_net(design) -> dict[tuple[str, int], int]:
     text by intersecting with the parser's mapping."""
     out: dict[tuple[str, int], int] = {}
 
-    def visit(stack: list[Board], node: FactorNode) -> None:
+    def visit(stack: list[Board], node: Part) -> None:
         if isinstance(node, (Pin, Rail)):
             return
         if isinstance(node, Chip) or isinstance(node, Connector):
@@ -64,11 +64,11 @@ def _expected_node_to_net(design) -> dict[tuple[str, int], int]:
                 out[(qrd, pn)] = id(port.node)
             return
         if isinstance(node, Board):
-            for c in node._factor_nodes:
+            for c in node.parts:
                 visit(stack + [node], c)
             return
         if isinstance(node, Circuit):
-            for c in node._factor_nodes:
+            for c in node.parts:
                 visit(stack, c)
             return
         rd = getattr(node, 'refdes', None)

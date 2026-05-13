@@ -1,6 +1,6 @@
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.registry import register
@@ -8,7 +8,7 @@ from framework.signals import Digital
 
 
 @register('Inverter')
-class Inverter(FactorNode):
+class Inverter(Part):
     """A single NOT gate cell. Pin a is input, pin y is output: y = NOT(a).
 
     This is a logic-level building block — chips like the SN74HC04 (hex

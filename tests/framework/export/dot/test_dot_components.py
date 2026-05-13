@@ -46,7 +46,7 @@ def test_dot_resistor_node_declaration():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[r, vcc, gnd], ports={}), 'dot')
+    text = export_to_string(Circuit(parts=[r, vcc, gnd], ports={}), 'dot')
     assert re.search(r'^\s*R1 \[label="R1\\\\n330Ω"\];', text, flags=re.M)
 
 
@@ -55,20 +55,20 @@ def test_dot_led_node_includes_color():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], d.ports['anode'])
     wire(d.ports['cathode'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[d, vcc, gnd], ports={}), 'dot')
+    text = export_to_string(Circuit(parts=[d, vcc, gnd], ports={}), 'dot')
     assert re.search(r'D1 \[label="D1\\\\nred LED"\];', text)
 
 
 def test_dot_chip_node_uses_class_name():
     u = SN74HC04(refdes_number=1)
-    text = export_to_string(Circuit(factor_nodes=[u], ports={}), 'dot')
+    text = export_to_string(Circuit(parts=[u], ports={}), 'dot')
     assert re.search(r'U1 \[label="U1\\\\nSN74HC04"\];', text)
 
 
 def test_dot_connectors_emit_no_node():
     """Per §5.2: connectors are conductors, collapsed into nets."""
     j = Header2xNFemale(pin_count=2, pitch_mm=2.54, refdes_number=1)
-    text = export_to_string(Circuit(factor_nodes=[j], ports={}), 'dot')
+    text = export_to_string(Circuit(parts=[j], ports={}), 'dot')
     assert 'J1 [label=' not in text
 
 
@@ -78,7 +78,7 @@ def test_dot_rail_emits_no_node():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[r, vcc, gnd], ports={}), 'dot')
+    text = export_to_string(Circuit(parts=[r, vcc, gnd], ports={}), 'dot')
     # No Rail box; 'vcc' and 'gnd' appear only as nets in the circle line.
     assert 'Rail' not in text
     assert 'vcc' in text and 'gnd' in text
@@ -86,7 +86,7 @@ def test_dot_rail_emits_no_node():
 
 def test_dot_header_directives_present():
     text = export_to_string(
-        Circuit(factor_nodes=[Resistor(100, refdes_number=1)], ports={}),
+        Circuit(parts=[Resistor(100, refdes_number=1)], ports={}),
         'dot')
     assert text.startswith('digraph "')
     assert 'rankdir=LR;' in text
@@ -98,7 +98,7 @@ def test_dot_nets_emitted_as_circle_nodes():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[r, vcc, gnd], ports={}), 'dot')
+    text = export_to_string(Circuit(parts=[r, vcc, gnd], ports={}), 'dot')
     assert 'node [shape=circle' in text
     assert 'vcc' in text
     assert 'gnd' in text
@@ -109,7 +109,7 @@ def test_dot_edges_have_port_taillabels():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], d.ports['anode'])
     wire(d.ports['cathode'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[d, vcc, gnd], ports={}), 'dot')
+    text = export_to_string(Circuit(parts=[d, vcc, gnd], ports={}), 'dot')
     # Edge from D1 with taillabel "anode" or "cathode".
     assert re.search(r'D1 -> \S+ \[taillabel="anode"\];', text)
     assert re.search(r'D1 -> \S+ \[taillabel="cathode"\];', text)
@@ -122,7 +122,7 @@ def test_dot_board_becomes_subgraph_cluster():
     wire(r.ports['t2'], gnd.ports['out'])
     b = Board(name='Tiny', revision='A',
               components=[r, vcc, gnd], refdes_number=1)
-    asm = Circuit(factor_nodes=[b], ports={})
+    asm = Circuit(parts=[b], ports={})
     text = export_to_string(asm, 'dot')
     assert 'subgraph cluster_A1' in text
     assert 'Tiny' in text
@@ -137,7 +137,7 @@ def test_dot_chip_pin_edge_uses_chip_port_name():
     wire(gnd.ports['out'], u.ports['a_1'])
     wire(u.ports['y_1'], d.ports['anode'])
     wire(d.ports['cathode'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[u, d, gnd], ports={}), 'dot')
+    text = export_to_string(Circuit(parts=[u, d, gnd], ports={}), 'dot')
     assert re.search(r'U1 -> \S+ \[taillabel="a_1"\];', text)
     assert re.search(r'U1 -> \S+ \[taillabel="y_1"\];', text)
 

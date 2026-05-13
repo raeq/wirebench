@@ -167,7 +167,7 @@ def _main() -> None:
     print("Bill of materials (per board):")
     for board in (asm.sensor, asm.controller):
         print(f"  {board.refdes} ({board.name}, rev {board.revision}):")
-        for fn in board._factor_nodes:
+        for fn in board.parts:
             if isinstance(fn, RefdesBearing):
                 print(f"    {fn.refdes:5s} {type(fn).__name__}")
     print()

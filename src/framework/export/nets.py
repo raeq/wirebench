@@ -15,7 +15,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from framework.circuit import Circuit
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.port import Port
 
 
@@ -35,33 +35,33 @@ class LogicalNet:
     """
     id: int
     nodes: frozenset[int]
-    ports: tuple[tuple[FactorNode, Port], ...]
+    ports: tuple[tuple[Part, Port], ...]
 
 
-def _collect_components(roots: list[FactorNode]) -> list[FactorNode]:
+def _collect_components(roots: list[Part]) -> list[Part]:
     """Recursively flatten Circuit composites so Pins buried inside chips
     and connectors are visible to the net walker."""
-    result: list[FactorNode] = []
-    stack: list[FactorNode] = list(roots)
+    result: list[Part] = []
+    stack: list[Part] = list(roots)
     while stack:
         fn = stack.pop()
         result.append(fn)
         if isinstance(fn, Circuit):
-            stack.extend(fn._factor_nodes)
+            stack.extend(fn.parts)
     return result
 
 
 def _build_node_index(
-    components: list[FactorNode],
-) -> dict[int, list[tuple[FactorNode, Port]]]:
+    components: list[Part],
+) -> dict[int, list[tuple[Part, Port]]]:
     """Index every connected Port by `id(node)`.
 
     For ports owned by a Pin (back-referenced via Port._owner), the
     recorded owner is the Pin — so the walker can call IS_CONDUCTOR
     and other_face on it.  Otherwise the recorded owner is the
-    iterating factor-node.
+    iterating part.
     """
-    index: dict[int, list[tuple[FactorNode, Port]]] = {}
+    index: dict[int, list[tuple[Part, Port]]] = {}
     seen_ports: set[int] = set()
     for fn in components:
         for port in fn.ports.values():
@@ -77,7 +77,7 @@ def _build_node_index(
 
 def _walk_logical_net(
     start_nid: int,
-    index: dict[int, list[tuple[FactorNode, Port]]],
+    index: dict[int, list[tuple[Part, Port]]],
 ) -> set[int]:
     """All Node ids reachable from `start_nid` through IS_CONDUCTOR
     components.  Stepping through `conductor.other_face(port)` jumps
@@ -100,16 +100,16 @@ def _walk_logical_net(
     return net
 
 
-def _port_sort_key(owner: FactorNode, port: Port) -> tuple[str, str]:
+def _port_sort_key(owner: Part, port: Port) -> tuple[str, str]:
     refdes = getattr(owner, 'refdes', '')
     return (str(refdes), port.name)
 
 
-def compute_logical_nets(design: FactorNode) -> list[LogicalNet]:
+def compute_logical_nets(design: Part) -> list[LogicalNet]:
     """Walk `design` and return one LogicalNet per electrical net.
 
     The walker descends recursively through Circuit / Board / Chip
-    composites and treats every FactorNode with IS_CONDUCTOR=True as a
+    composites and treats every Part with IS_CONDUCTOR=True as a
     pass-through. Each returned LogicalNet contains:
 
       - the set of underlying Node ids that compose it;
@@ -117,7 +117,7 @@ def compute_logical_nets(design: FactorNode) -> list[LogicalNet]:
         deterministic emission.
     """
     if isinstance(design, Circuit):
-        roots = list(design._factor_nodes)
+        roots = list(design.parts)
     else:
         roots = [design]
     components = _collect_components(roots)
@@ -137,7 +137,7 @@ def compute_logical_nets(design: FactorNode) -> list[LogicalNet]:
             membership = _walk_logical_net(nid, index)
             visited |= membership
 
-            real_ports: list[tuple[FactorNode, Port]] = []
+            real_ports: list[tuple[Part, Port]] = []
             seen_port_ids: set[int] = set()
             for member_nid in membership:
                 for owner, p in index.get(member_nid, []):

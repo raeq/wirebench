@@ -26,13 +26,13 @@ from typing import ClassVar
 
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Analog, Digital
 
 
-class RS232Driver(FactorNode):
+class RS232Driver(Part):
     """One TX / RX channel pair for an RS-232 line driver.
 
     Ports

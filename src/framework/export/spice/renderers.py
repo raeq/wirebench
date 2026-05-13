@@ -14,14 +14,14 @@ from framework.chip import Chip
 from framework.circuit import Circuit
 from framework.connector import Connector
 from framework.diode import Diode
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.transistor import Transistor
 
 from framework.export.base import (
     ExporterContext, SpiceExportConfig, lookup_renderer, register_renderer,
 )
 
-from framework.factor import FactorNode
+from framework.part import Part
 
 from components.passives.capacitor import Capacitor
 from components.passives.cell import Cell
@@ -145,11 +145,11 @@ def render_diode(d: Diode, ctx: ExporterContext) -> str:
     return f"{d.refdes} {anode} {cathode} {model_name}"
 
 
-@register_renderer(FactorNode, format='spice')
-def render_factor_node(fn: FactorNode, ctx: ExporterContext) -> str:
+@register_renderer(Part, format='spice')
+def render_part(fn: Part, ctx: ExporterContext) -> str:
     # Concept cells (DiodeOR, FanController, etc.) hold Python-level
     # state without a SPICE primitive equivalent.  Catch-all on
-    # FactorNode keeps the netlist clean; specific renderers above
+    # Part keeps the netlist clean; specific renderers above
     # always win via MRO.
     return ""
 
@@ -180,7 +180,7 @@ def render_board(b: Board, ctx: ExporterContext) -> str:
     surface_str = ' '.join(surface_nets)
 
     body: list[str] = [f".SUBCKT {subckt_name} {surface_str}"]
-    for child in b._factor_nodes:
+    for child in b.parts:
         if isinstance(child, Board):
             # Nested board — recurse via its renderer (rare).
             body.append(render_board(child, ctx))

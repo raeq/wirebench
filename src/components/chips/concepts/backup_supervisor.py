@@ -3,7 +3,7 @@ from math import exp
 
 from pydantic import Field, validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.registry import register
@@ -11,7 +11,7 @@ from framework.signals import Analog, Digital
 
 
 @register('BackupSupervisor')
-class BackupSupervisor(FactorNode):
+class BackupSupervisor(Part):
     """System-level supervisor that models the TIDA-03031 power path.
 
     A voltage-only steady-state graph cannot solve the switching-

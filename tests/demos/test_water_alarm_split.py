@@ -39,9 +39,9 @@ def test_split_matches_single_board(single, split, label, low, high):
 
 def test_refdes_scoping_per_board(split):
     # Sensor and controller both have a U1 — distinct, per-board namespace.
-    sensor_chips = {fn.refdes for fn in split.sensor._factor_nodes
+    sensor_chips = {fn.refdes for fn in split.sensor.parts
                     if hasattr(fn, 'refdes')}
-    controller_chips = {fn.refdes for fn in split.controller._factor_nodes
+    controller_chips = {fn.refdes for fn in split.controller.parts
                         if hasattr(fn, 'refdes')}
     assert 'U1' in sensor_chips
     assert 'U1' in controller_chips

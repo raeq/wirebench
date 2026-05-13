@@ -65,7 +65,7 @@ if str(_SRC) not in sys.path:
 from pydantic import validate_call
 
 from wirebench import (
-    Chip, Circuit, Direction, FactorNode, Pin, PinId,
+    Chip, Circuit, Direction, Part, Pin, PinId,
     GroundDomain, ELECTRICAL, RefdesNumber, validate_refdes,
     wire,
     BC548, Q2N3904, D1N4007, LED, Rail, Resistor, Capacitor, Relay_SPDT,
@@ -127,7 +127,7 @@ class NE555_Monostable(NE555):
         wire(by_name['RESET'].internal, self._monostable.ports['reset'])
         wire(self._monostable.ports['out'], by_name['OUT'].internal)
 
-        # Lay out factor_nodes so IN pins are first (so external→internal
+        # Lay out parts so IN pins are first (so external→internal
         # propagation happens before the cell reads), then the cell,
         # then OUT pins (so internal→external happens after the cell
         # drives), then everything else.  Mirrors the trick CD4017 uses
@@ -142,12 +142,12 @@ class NE555_Monostable(NE555):
 
         self._ports_by_number = {pin.id.number: pin.external for pin in pins}
         self._port_map = PortMap(self._ports_by_number)
-        ordered: list[FactorNode] = [
+        ordered: list[Part] = [
             *in_pins, self._monostable, *out_pins, *other_pins,
         ]
         Circuit.__init__(
             self,
-            factor_nodes=ordered,
+            parts=ordered,
             ports=dict(self._port_map.items()),
         )
 

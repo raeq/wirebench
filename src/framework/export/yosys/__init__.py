@@ -18,7 +18,7 @@ from framework.chip import Chip
 from framework.circuit import Circuit
 from framework.connector import Connector
 from framework.errors import RendererNotFoundError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.node import Node
 from framework.port import Direction, Port
 
@@ -47,7 +47,7 @@ def _direction(d: Direction) -> str:
     return 'inout'
 
 
-def render(design: FactorNode, ctx: ExporterContext) -> str:
+def render(design: Part, ctx: ExporterContext) -> str:
     """Assemble a complete Yosys JSON document for `design`."""
     from framework.connector import Connector
     from framework.pin import Pin
@@ -77,11 +77,11 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
             return nc_alloc[key]
         return int(name_yosys_net(_node_to_net(ctx, port.node), ctx))
 
-    def is_skip(n: FactorNode) -> bool:
+    def is_skip(n: Part) -> bool:
         return isinstance(n, (Pin, Rail))
 
-    def build_module(name: str, owner: FactorNode,
-                     top_components: list[FactorNode]) -> dict[str, Any]:
+    def build_module(name: str, owner: Part,
+                     top_components: list[Part]) -> dict[str, Any]:
         module: dict[str, Any] = {
             'ports': {},
             'cells': {},
@@ -117,12 +117,12 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
                 }
         return module
 
-    def gather_top_components(root: FactorNode) -> list[FactorNode]:
+    def gather_top_components(root: Part) -> list[Part]:
         """Refdes-bearing direct children, skipping pins/rails and
         descending into non-Chip / non-Board Circuit containers."""
-        out: list[FactorNode] = []
+        out: list[Part] = []
 
-        def visit(node: FactorNode) -> None:
+        def visit(node: Part) -> None:
             if is_skip(node):
                 return
             if isinstance(node, Chip):
@@ -137,13 +137,13 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
             if isinstance(node, Circuit) and getattr(node, 'refdes', None):
                 out.append(node); return
             if isinstance(node, Circuit):
-                for c in node._factor_nodes:
+                for c in node.parts:
                     visit(c)
                 return
             if getattr(node, 'refdes', None):
                 out.append(node)
 
-        for c in (root._factor_nodes if isinstance(root, Circuit) else [root]):
+        for c in (root.parts if isinstance(root, Circuit) else [root]):
             visit(c)
         return out
 
@@ -151,7 +151,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
     # top-level module instantiating them as cells. Otherwise just one
     # top-level module.
     if isinstance(design, Circuit):
-        boards = [c for c in design._factor_nodes if isinstance(c, Board)]
+        boards = [c for c in design.parts if isinstance(c, Board)]
     else:
         boards = []
 
@@ -198,7 +198,7 @@ def _net_label(net: LogicalNet, ctx: ExporterContext) -> str:
 
 
 def _cell_record(
-    comp: FactorNode,
+    comp: Part,
     bit_of: Callable[[Port], int],
 ) -> dict[str, Any] | None:
     """Build the per-cell JSON record for one component. Returns None

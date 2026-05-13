@@ -20,8 +20,8 @@ import components.passives  # noqa: F401
 import components.transistors  # noqa: F401
 import components.connectors  # noqa: F401
 
-from framework.factor import (
-    FactorNode,
+from framework.part import (
+    Part,
     _footprint_is_through_hole,
     _footprint_is_smd,
 )
@@ -95,7 +95,7 @@ def test_per_class_property_override_wins() -> None:
     """A subclass that overrides `is_through_hole` via `@property`
     sticks even though its FOOTPRINT marker would yield the opposite
     default."""
-    class _FakeSMD(FactorNode):
+    class _FakeSMD(Part):
         FOOTPRINT = 'Package_SO:SOIC-8'   # would default to SMD only
 
         @property
@@ -135,7 +135,7 @@ def test_resistor_class_override_is_through_hole_despite_smd_footprint() -> None
 AUDIT_PATH = Path(__file__).resolve().parents[2] / '.plans' / 'substrate-compatibility-audit.md'
 
 
-def _construct_any(cls: type[FactorNode]) -> FactorNode | None:
+def _construct_any(cls: type[Part]) -> Part | None:
     """Best-effort registry-sweep instantiation — mirrors the helper
     used in the format roundtrip sweep test."""
     from typing import Any, cast
@@ -161,15 +161,15 @@ def _construct_any(cls: type[FactorNode]) -> FactorNode | None:
             elif name == 'ISOW7841':
                 from framework.ground import GroundDomain
                 kwargs['iso_domain'] = GroundDomain('iso_sweep')
-            inst: FactorNode = factory(**kwargs)
+            inst: Part = factory(**kwargs)
             return inst
         if cls.__name__ == 'Rail':
-            return cast(FactorNode, factory(level=True))
+            return cast(Part, factory(level=True))
         if cls.__name__ == 'DiodeOR':
-            return cast(FactorNode, factory(input_names=('a',)))
+            return cast(Part, factory(input_names=('a',)))
         if cls.__name__ == 'Monostable':
-            return cast(FactorNode, factory(duration_ms=1.0))
-        return cast(FactorNode, factory())
+            return cast(Part, factory(duration_ms=1.0))
+        return cast(Part, factory())
     except Exception:
         return None
 

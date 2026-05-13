@@ -1,6 +1,6 @@
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Digital
@@ -12,7 +12,7 @@ _SEGMENT_NAMES = ('seg_a', 'seg_b', 'seg_c', 'seg_d',
                   'seg_e', 'seg_f', 'seg_g', 'seg_dp')
 
 
-class SegmentMatrix(FactorNode):
+class SegmentMatrix(Part):
     """4-digit × 8-segment common-anode LED matrix cell.
 
     Each LED is lit when its digit anode is HIGH (sourcing current) and

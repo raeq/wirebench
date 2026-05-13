@@ -2,7 +2,7 @@ from typing import Annotated
 
 from pydantic import Field, validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Analog, Digital
@@ -10,7 +10,7 @@ from framework.signals import Analog, Digital
 from components.passives.cell import soc_from_ocv
 
 
-class FuelGauge(FactorNode):
+class FuelGauge(Part):
     """Steady-state state-of-charge estimator for a 1S Li-Ion pack.
 
     The real BQ27546-G1 estimates state-of-charge with TI's patented

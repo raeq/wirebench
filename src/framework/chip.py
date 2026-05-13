@@ -7,7 +7,7 @@ from pydantic import validate_call
 
 from framework.circuit import Circuit
 from framework.errors import PartConfigurationError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.pin import Pin
 from framework.port import Direction, Port
 from framework.port_map import PortMap
@@ -42,7 +42,7 @@ class Chip(Circuit):
     `BARE_FIRMWARE_DRIVEN = True` for chips whose OUT pins are driven
     by user firmware injected via subclassing (MCUs are the canonical
     case).  Cells follow the pattern in
-    `src/components/chips/concepts/`: a `FactorNode` with input ports
+    `src/components/chips/concepts/`: a `Part` with input ports
     matching the chip's IN pins and an OUT port wired to the chip's
     OUT-pin internal face.
     """
@@ -57,7 +57,7 @@ class Chip(Circuit):
     __slots__ = ('_ports_by_number', '_port_map')
 
     @validate_call(config={'arbitrary_types_allowed': True})
-    def __init__(self, *, pins: Sequence[Pin], cells: Sequence[FactorNode]) -> None:
+    def __init__(self, *, pins: Sequence[Pin], cells: Sequence[Part]) -> None:
         by_number = {pin.id.number: pin.external for pin in pins}
         self._ports_by_number = by_number
         self._port_map = PortMap(by_number)
@@ -65,7 +65,7 @@ class Chip(Circuit):
         # name-keyed dict — keeps Circuit._validate iteration, save/load
         # port references, and toposort working without special-casing.
         super().__init__(
-            factor_nodes=list(pins) + list(cells),
+            parts=list(pins) + list(cells),
             ports=dict(self._port_map.items()),
         )
         if not self.BARE_FIRMWARE_DRIVEN:
@@ -139,9 +139,9 @@ class Chip(Circuit):
         """The chip's package pins, in declaration order. Exporters
         rely on this to enumerate the surface in datasheet-pin-number
         order via `sorted(chip.pins, key=lambda p: p.id.number)`."""
-        return tuple(fn for fn in self._factor_nodes if isinstance(fn, Pin))
+        return tuple(fn for fn in self._parts if isinstance(fn, Pin))
 
-    # _assert_no_inputs_wired is inherited from FactorNode — every node
+    # _assert_no_inputs_wired is inherited from Part — every node
     # with input ports has the same silent-overwrite hazard.
 
     @abstractmethod

@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Iterator
 
 from framework.circuit import Circuit
-from framework.factor import FactorNode
+from framework.part import Part
 
 
 @dataclass(frozen=True, slots=True)
@@ -33,14 +33,14 @@ class Path:
         return self.qualified_refdes() or '<root>'
 
 
-def _is_composite(fn: FactorNode) -> bool:
+def _is_composite(fn: Part) -> bool:
     """Composites get .SUBCKT-like brackets in hierarchical outputs."""
     return isinstance(fn, Circuit)
 
 
 def walk_hierarchy(
-    design: FactorNode,
-    visitor: Callable[[FactorNode, Path], None],
+    design: Part,
+    visitor: Callable[[Part, Path], None],
 ) -> None:
     """Depth-first walk of composite components.
 
@@ -52,10 +52,10 @@ def walk_hierarchy(
     Leaf components (passives, connectors) are not visited — adapters
     handle them through per-component renderers.
     """
-    def descend(node: FactorNode, path: Path) -> None:
+    def descend(node: Part, path: Path) -> None:
         visitor(node, path)
         if isinstance(node, Circuit):
-            for child in node._factor_nodes:
+            for child in node.parts:
                 if _is_composite(child):
                     child_refdes = getattr(child, 'refdes', None)
                     child_path = (
@@ -67,8 +67,8 @@ def walk_hierarchy(
     descend(design, Path.empty())
 
 
-def iter_composites(design: FactorNode) -> Iterator[tuple[FactorNode, Path]]:
+def iter_composites(design: Part) -> Iterator[tuple[Part, Path]]:
     """Generator form of `walk_hierarchy`."""
-    items: list[tuple[FactorNode, Path]] = []
+    items: list[tuple[Part, Path]] = []
     walk_hierarchy(design, lambda c, p: items.append((c, p)))
     return iter(items)

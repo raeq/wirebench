@@ -143,7 +143,7 @@ def test_topological_order_is_respected():
     wire(chip.ports['y_1'], led.ports['anode'])
 
     circuit = Circuit(
-        factor_nodes=[led, chip],   # deliberately wrong order — circuit must fix it
+        parts=[led, chip],   # deliberately wrong order — circuit must fix it
         ports={'sig': chip.ports['a_1'], 'out': chip.ports['y_1']},
     )
 
@@ -192,7 +192,7 @@ def test_circuit_rejects_unconnected_mandatory_port():
     # s is mandatory, unconnected, and not declared as a boundary port → must raise
     with pytest.raises(UnconnectedPinError, match="Unconnected mandatory port"):
         Circuit(
-            factor_nodes=[chip, latch],
+            parts=[chip, latch],
             ports={'a': chip.ports['a_1'], 'q': latch.ports['q']},
         )
 
@@ -207,7 +207,7 @@ def test_circuit_rejects_short_circuit():
     b.ports['y_1'].connect(shared)
     with pytest.raises(ShortCircuitError, match="Short circuit"):
         Circuit(
-            factor_nodes=[a, b],
+            parts=[a, b],
             ports={'a_in': a.ports['a_1'], 'b_in': b.ports['a_1'],
                    'out':  a.ports['y_1']},
         )
@@ -227,7 +227,7 @@ def test_circuit_rejects_two_bidir_drivers_with_no_out():
     r2.ports['t1'].connect(shared)
     with pytest.raises(FloatingNetError, match="Floating logical net"):
         Circuit(
-            factor_nodes=[r1, r2],
+            parts=[r1, r2],
             ports={'a': r1.ports['t2'], 'b': r2.ports['t2']},
         )
 
@@ -248,7 +248,7 @@ def test_circuit_with_cycle_warns_and_falls_back():
 
     with warnings.catch_warnings(record=True) as caught:
         warnings.simplefilter('always')
-        circuit = Circuit(factor_nodes=[a, b], ports={})
+        circuit = Circuit(parts=[a, b], ports={})
 
     cycle_warnings = [w for w in caught if issubclass(w.category, RuntimeWarning)
                       and 'feedback loop' in str(w.message)]

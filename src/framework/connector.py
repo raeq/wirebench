@@ -10,14 +10,14 @@ _PositiveInt = Annotated[int, Field(gt=0, strict=True)]
 _PositiveFloat = Annotated[float, Field(gt=0, strict=True)]
 
 from framework.errors import PartConfigurationError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction, Port
 from framework.refdes import RefdesNumber, validate_refdes
 
 
-class Connector(FactorNode):
+class Connector(Part):
     """A physical connector — a housing with a fixed set of named contacts.
 
     Each contact is a `Pin`, with an external face that mates with the

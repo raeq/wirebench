@@ -1,13 +1,13 @@
 from pydantic import validate_call
 
 from framework.errors import ForbiddenStateError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Digital
 
 
-class NORLatch(FactorNode):
+class NORLatch(Part):
     """NOR-based SR latch (set-dominant-undefined).
 
     Inputs:  s (set), r (reset)

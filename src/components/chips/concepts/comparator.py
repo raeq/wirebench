@@ -1,12 +1,12 @@
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Analog, Digital
 
 
-class Comparator(FactorNode):
+class Comparator(Part):
     """A single voltage comparator cell.
 
     Output is HIGH when V+ exceeds V−, LOW when V+ ≤ V−, and undefined

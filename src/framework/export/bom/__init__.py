@@ -11,7 +11,7 @@ naming the enclosing board.
 """
 from __future__ import annotations
 
-from framework.factor import FactorNode
+from framework.part import Part
 
 from framework.export.base import (
     ExporterContext, lookup_renderer, register_net_namer,
@@ -41,7 +41,7 @@ def _sort_key(refdes: str) -> tuple[str, int]:
     return (prefix, int(number_part) if number_part else 0)
 
 
-def render(design: FactorNode, ctx: ExporterContext) -> str:
+def render(design: Part, ctx: ExporterContext) -> str:
     """Assemble a complete BOM CSV for `design`."""
     from framework.board import Board
     from framework.chip import Chip
@@ -51,7 +51,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
 
     rows: list[tuple[str, str]] = []  # (refdes_for_sort, csv_line)
 
-    def visit(node: FactorNode, parent_refdes: str) -> None:
+    def visit(node: Part, parent_refdes: str) -> None:
         if isinstance(node, (Pin, Rail)):
             return
         # Chip is a Circuit subclass but is a *part*, not a hierarchy
@@ -68,7 +68,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
             line = lookup_renderer(type(node), 'bom')(node, ctx, parent_refdes)
             if line:
                 rows.append((node.refdes, line))
-            for child in node._factor_nodes:
+            for child in node.parts:
                 visit(child, node.refdes)
             return
         # Refdes-bearing Circuit that isn't a Chip or Board — a
@@ -83,7 +83,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
         if isinstance(node, Circuit):
             # Non-refdes raw Circuit composite — transparent: recurse
             # into children, attribute them to the same parent.
-            for child in node._factor_nodes:
+            for child in node.parts:
                 visit(child, parent_refdes)
             return
         # Leaf: passive or connector.

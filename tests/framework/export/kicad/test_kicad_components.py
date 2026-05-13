@@ -43,7 +43,7 @@ def test_kicad_header_directives():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[r, vcc, gnd], ports={}), 'kicad')
+    text = export_to_string(Circuit(parts=[r, vcc, gnd], ports={}), 'kicad')
     assert text.startswith('(export (version "E")')
     assert '(tool "wirebench' in text
     assert text.rstrip().endswith(')')
@@ -54,7 +54,7 @@ def test_kicad_resistor_comp_record():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[r, vcc, gnd], ports={}), 'kicad')
+    text = export_to_string(Circuit(parts=[r, vcc, gnd], ports={}), 'kicad')
     assert '(ref "R1")' in text
     assert '(value "330")' in text
     assert '(footprint "Resistor_SMD:R_0603_1608Metric")' in text
@@ -66,7 +66,7 @@ def test_kicad_led_comp_record_uses_color_as_value():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], d.ports['anode'])
     wire(d.ports['cathode'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[d, vcc, gnd], ports={}), 'kicad')
+    text = export_to_string(Circuit(parts=[d, vcc, gnd], ports={}), 'kicad')
     assert '(ref "D1")' in text
     assert '(value "red")' in text
     assert '(libsource (lib "Device") (part "LED")' in text
@@ -74,7 +74,7 @@ def test_kicad_led_comp_record_uses_color_as_value():
 
 def test_kicad_chip_comp_uses_dip_footprint():
     u = SN74HC04(refdes_number=1)
-    text = export_to_string(Circuit(factor_nodes=[u], ports={}), 'kicad')
+    text = export_to_string(Circuit(parts=[u], ports={}), 'kicad')
     assert '(ref "U1")' in text
     assert '(value "SN74HC04")' in text
     assert '(footprint "Package_DIP:DIP-14_W7.62mm")' in text
@@ -82,7 +82,7 @@ def test_kicad_chip_comp_uses_dip_footprint():
 
 def test_kicad_connector_comp_is_present():
     j = Header2xNFemale(pin_count=4, pitch_mm=2.54, refdes_number=1)
-    text = export_to_string(Circuit(factor_nodes=[j], ports={}), 'kicad')
+    text = export_to_string(Circuit(parts=[j], ports={}), 'kicad')
     assert '(ref "J1")' in text
     assert 'Header2xNFemale_4' in text
     assert 'PinHeader_2x02_P2.54mm_Vertical' in text
@@ -93,7 +93,7 @@ def test_kicad_rails_emit_no_comp():
     vcc = Rail(True); gnd = Rail(False)
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
-    text = export_to_string(Circuit(factor_nodes=[r, vcc, gnd], ports={}), 'kicad')
+    text = export_to_string(Circuit(parts=[r, vcc, gnd], ports={}), 'kicad')
     # No (comp ...) record with value "Rail" or refdes Rail.
     assert 'value "Rail"' not in text
 

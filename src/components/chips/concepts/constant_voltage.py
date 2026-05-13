@@ -15,13 +15,13 @@ from __future__ import annotations
 
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Analog
 
 
-class ConstantVoltage(FactorNode):
+class ConstantVoltage(Part):
     """Drives `out` to a fixed analog voltage set at construction.
 
     Ports

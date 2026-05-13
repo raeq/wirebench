@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import warnings
+from collections.abc import Sequence
 
 import networkx as nx  # type: ignore[import-untyped]
 
@@ -10,14 +11,14 @@ from framework.errors import (
     CompositeShapeError, FloatingNetError, OrphanWireError, RefdesError,
     ShortCircuitError, UnconnectedPinError,
 )
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.pin import Pin
 from framework.port import Direction, Port
 from framework.refdes import RefdesBearing
 
 
-class Circuit(FactorNode):
-    """A composite factor node: a set of factor nodes wired together.
+class Circuit(Part):
+    """A composite part: a set of parts wired together.
 
     Nodes are implicit — they are created by wire() when ports are connected.
     `ports` is the boundary surface: a single dict of name → Port. Each
@@ -29,47 +30,51 @@ class Circuit(FactorNode):
     future extension.
     """
 
-    __slots__ = ('_factor_nodes', '_ports', '_eval_order')
+    __slots__ = ('_parts', '_ports', '_eval_order')
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(
         self,
-        factor_nodes: list[FactorNode] | None = None,
+        parts: list[Part] | None = None,
         ports: dict[str, Port] | None = None,
     ) -> None:
         # Auto-collect: if the subclass omits __slots__ and just assigns
         # parts to `self.x = Y(...)` in its __init__ before calling
-        # super().__init__(), `factor_nodes=None` scans `self.__dict__`
-        # for FactorNode-typed values (one level of tuple / list / dict
+        # super().__init__(), `parts=None` scans `self.__dict__`
+        # for Part-typed values (one level of tuple / list / dict
         # unpacking, so a grouped `self.diodes = (d1, …, d6)` still
         # works).  Insertion order in the dict becomes the order in
-        # `_factor_nodes`, which the topological-sort fallback relies
+        # `_parts`, which the topological-sort fallback relies
         # on when a circuit has a feedback cycle — assign parts in
         # dataflow order if you have one.
         # Distinguish "user asked for an empty circuit" (explicit []) from
         # "auto-collect ran and found nothing" (None → []).  Only the
         # second case triggers Rule 1; the first is a legitimate
         # opt-out used in framework-level tests.
-        if factor_nodes is None:
-            factor_nodes = self._auto_collect_factor_nodes()
-            if not factor_nodes:
+        if parts is None:
+            parts = self._auto_collect_parts()
+            if not parts:
                 raise CompositeShapeError(self._empty_circuit_message())
         if ports is None:
             ports = {}
-        self._factor_nodes = factor_nodes
+        self._parts = parts
         self._ports        = ports
-        self._validate(factor_nodes)
-        # Rule 2 runs regardless of how factor_nodes was obtained: an
+        self._validate(parts)
+        # Rule 2 runs regardless of how parts was obtained: an
         # incomplete explicit list is just as wrong as a silently-empty
         # auto-collected one.
-        self._validate_no_orphan_ports(factor_nodes)
-        self._eval_order   = self._topological_sort(factor_nodes)
+        self._validate_no_orphan_ports(parts)
+        self._eval_order   = self._topological_sort(parts)
+
+    @property
+    def parts(self) -> tuple[Part, ...]:
+        return tuple(self._parts)
 
     def _empty_circuit_message(self) -> str:
         """Teaching message for the empty-auto-collect (Rule 1) case."""
         cls = type(self).__name__
         return (
-            f"{cls} has no factor_nodes after auto-collection. "
+            f"{cls} has no parts after auto-collection. "
             f"Did you forget to store components as `self.<name>` "
             f"attributes? The canonical pattern is:\n\n"
             f"    class {cls}(Circuit):\n"
@@ -79,17 +84,17 @@ class Circuit(FactorNode):
             f"            wire(self.r1.t1, …)\n"
             f"            super().__init__()\n\n"
             f"If you really wanted an empty circuit, pass "
-            f"`factor_nodes=[]` explicitly."
+            f"`parts=[]` explicitly."
         )
 
-    def _validate_no_orphan_ports(self, factor_nodes: list[FactorNode]) -> None:
+    def _validate_no_orphan_ports(self, parts: list[Part]) -> None:
         """Rule 2: every port wired to a port we know about must itself
-        belong to a factor_node we know about.
+        belong to a part we know about.
 
         Catches the case where the developer used `self.x` for some
         components and local variables for others, leaving wires that
         span the framework's awareness boundary.  Runs whether
-        `factor_nodes` was auto-collected or passed explicitly — an
+        `parts` was auto-collected or passed explicitly — an
         explicit-but-incomplete list is just as broken as a
         silently-incomplete auto-collected one.
         """
@@ -98,7 +103,7 @@ class Circuit(FactorNode):
         # connectors, so a port we know about may belong to a Pin
         # transitively).
         known_ports: set[int] = set()
-        for fn in factor_nodes:
+        for fn in parts:
             for port in fn.ports.values():
                 known_ports.add(id(port))
             # Pin's external port is what user code sees; the internal
@@ -107,7 +112,7 @@ class Circuit(FactorNode):
                 known_ports.add(id(pin.external))
                 known_ports.add(id(pin.internal))
 
-        for fn in factor_nodes:
+        for fn in parts:
             for port_name, port in fn.ports.items():
                 if port.node is None:
                     continue
@@ -119,20 +124,20 @@ class Circuit(FactorNode):
                     raise OrphanWireError(
                         f"Port '{sibling.name}' is wired into this "
                         f"{type(self).__name__} but its owning component "
-                        f"is not in factor_nodes.  The wire joins this "
+                        f"is not in parts.  The wire joins this "
                         f"orphan to '{port_name}' on {refdes}.  Store "
                         f"the orphan as `self.<name> = …` so the "
                         f"framework auto-collects it, or pass "
-                        f"`factor_nodes=[…]` explicitly listing every "
+                        f"`parts=[…]` explicitly listing every "
                         f"part."
                     )
 
-    def _auto_collect_factor_nodes(self) -> list[FactorNode]:
-        """Collect FactorNode-typed attributes from `self.__dict__`.
+    def _auto_collect_parts(self) -> list[Part]:
+        """Collect Part-typed attributes from `self.__dict__`.
 
         Subclasses that omit `__slots__` can rely on this to populate
-        `_factor_nodes` automatically.  Visits each instance attribute
-        in insertion order: a FactorNode value is added directly;
+        `_parts` automatically.  Visits each instance attribute
+        in insertion order: a Part value is added directly;
         tuples, lists, and dicts have their elements (or values for
         dicts) scanned one level deep so that grouped collections
         still contribute their parts.  Duplicates (same `id`) are
@@ -142,21 +147,21 @@ class Circuit(FactorNode):
             instance_dict = self.__dict__
         except AttributeError:
             raise CompositeShapeError(
-                f"{type(self).__name__}.__init__: factor_nodes=None "
+                f"{type(self).__name__}.__init__: parts=None "
                 "requires an instance __dict__ — omit __slots__ on "
-                "composite Circuit subclasses, or pass factor_nodes "
+                "composite Circuit subclasses, or pass parts "
                 "explicitly."
             )
-        collected: list[FactorNode] = []
+        collected: list[Part] = []
         seen: set[int] = set()
 
         def _add(obj: object) -> None:
-            if isinstance(obj, FactorNode) and id(obj) not in seen:
+            if isinstance(obj, Part) and id(obj) not in seen:
                 seen.add(id(obj))
                 collected.append(obj)
 
         for value in instance_dict.values():
-            if isinstance(value, FactorNode):
+            if isinstance(value, Part):
                 _add(value)
             elif isinstance(value, (list, tuple)):
                 for item in value:
@@ -172,15 +177,15 @@ class Circuit(FactorNode):
     # Validation
     # -----------------------------------------------------------------
 
-    def _validate(self, factor_nodes: list[FactorNode]) -> None:
+    def _validate(self, parts: list[Part]) -> None:
         boundary = set(id(p) for p in self._ports.values())
 
         # A6: mandatory ports must be connected (boundary ports are exempt).
-        # Only direct factor_nodes — child Circuits validated their own
+        # Only direct parts — child Circuits validated their own
         # internals at construction.
         unconnected = [
             f"'{type(fn).__name__}.{name}'"
-            for fn in factor_nodes
+            for fn in parts
             for name, port in fn.ports.items()
             if port.mandatory and not port.connected and id(port) not in boundary
         ]
@@ -221,11 +226,11 @@ class Circuit(FactorNode):
             )
 
         # Duplicate-refdes detection. Walks only refdes-bearing children
-        # of the *direct* factor_nodes — child Boards/Circuits manage
+        # of the *direct* parts — child Boards/Circuits manage
         # their own internal refdes namespace.
         seen: dict[tuple[str, int], str] = {}
         collisions: list[str] = []
-        for fn in factor_nodes:
+        for fn in parts:
             if not isinstance(fn, RefdesBearing):
                 continue
             key = (fn.REFDES_PREFIX, fn.refdes_number)
@@ -247,7 +252,7 @@ class Circuit(FactorNode):
         for fn in self._eval_order:
             fn.evaluate()
 
-    def _flatten_for_toposort(self, factor_nodes: list[FactorNode]) -> list[FactorNode]:
+    def _flatten_for_toposort(self, parts: Sequence[Part]) -> list[Part]:
         """Recursively expand Circuit composites and IS_TRANSPARENT
         components (connectors) into their leaf sub-components, so the
         toposort operates at pin-and-cell granularity.
@@ -258,35 +263,35 @@ class Circuit(FactorNode):
         dependency graph and form false cycles.  Real EDA tools flatten
         the netlist; this is the framework's equivalent.
         """
-        flat: list[FactorNode] = []
-        for fn in factor_nodes:
+        flat: list[Part] = []
+        for fn in parts:
             if isinstance(fn, Circuit):
-                flat.extend(self._flatten_for_toposort(fn._factor_nodes))
+                flat.extend(self._flatten_for_toposort(fn.parts))
             elif getattr(fn, 'IS_TRANSPARENT', False):
                 flat.extend(getattr(fn, '_pins', ()))
             else:
                 flat.append(fn)
         return flat
 
-    def _topological_sort(self, factor_nodes: list[FactorNode]) -> list[FactorNode]:
+    def _topological_sort(self, parts: list[Part]) -> list[Part]:
         # Flatten transparent composites (connectors) and Circuit
         # composites (chips, boards) into their leaf sub-components so
         # the dependency graph operates at pin-and-cell granularity.
-        factor_nodes = self._flatten_for_toposort(factor_nodes)
-        fn_by_id = {id(fn): fn for fn in factor_nodes}
+        parts = self._flatten_for_toposort(parts)
+        fn_by_id = {id(fn): fn for fn in parts}
 
         g = nx.DiGraph()
-        g.add_nodes_from(id(fn) for fn in factor_nodes)
+        g.add_nodes_from(id(fn) for fn in parts)
 
         # Per node: collect OUT, BIDIR, IN port owners.
-        # The owner recorded is the factor_node from `factor_nodes` (Pin /
+        # The owner recorded is the part from `parts` (Pin /
         # cell / passive); Pins' ports back-reference their owning Pin
         # via Port._owner.
-        node_index: dict[int, list[tuple[FactorNode, Port]]] = {}
+        node_index: dict[int, list[tuple[Part, Port]]] = {}
         node_outs:   dict[int, set[int]] = {}
-        node_bidirs: dict[int, list[tuple[FactorNode, Port]]] = {}
+        node_bidirs: dict[int, list[tuple[Part, Port]]] = {}
         node_ins:    dict[int, set[int]] = {}
-        for fn in factor_nodes:
+        for fn in parts:
             for port in fn.ports.values():
                 if port.node is None:
                     continue
@@ -299,7 +304,7 @@ class Circuit(FactorNode):
                 else:
                     node_ins.setdefault(nid, set()).add(id(fn))
 
-        def conductor_role(start_port: Port, source_owner: FactorNode) -> str:
+        def conductor_role(start_port: Port, source_owner: Part) -> str:
             """Walk through conductor chains from `start_port` to find
             the closest non-conductor port and classify the original
             position as 'writer' (downstream of an OUT) or 'reader'
@@ -311,7 +316,7 @@ class Circuit(FactorNode):
             if start_port.node is None:
                 return 'unknown'
             visited: set[int] = {id(start_port.node)}
-            frontier: list[tuple[Port, FactorNode]] = [(start_port, source_owner)]
+            frontier: list[tuple[Port, Part]] = [(start_port, source_owner)]
             while frontier:
                 face, prev_owner = frontier.pop()
                 for next_owner, next_port in node_index.get(id(face.node), []):
@@ -408,6 +413,6 @@ class Circuit(FactorNode):
                 RuntimeWarning,
                 stacklevel=4,
             )
-            return factor_nodes
+            return parts
 
         return [fn_by_id[fn_id] for fn_id in nx.topological_sort(g)]

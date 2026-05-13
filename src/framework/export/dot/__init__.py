@@ -14,7 +14,7 @@ from __future__ import annotations
 from framework.board import Board
 from framework.chip import Chip
 from framework.circuit import Circuit
-from framework.factor import FactorNode
+from framework.part import Part
 
 from framework.export.base import (
     ExporterContext, lookup_renderer, pin_number_of, register_net_namer,
@@ -47,7 +47,7 @@ def _dot_string(s: str) -> str:
     return s.replace('\\', '\\\\').replace('"', '\\"')
 
 
-def render(design: FactorNode, ctx: ExporterContext) -> str:
+def render(design: Part, ctx: ExporterContext) -> str:
     """Assemble a complete DOT graph for `design`."""
     from framework.pin import Pin
     from framework.connector import Connector
@@ -65,17 +65,17 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
     # become DOT subgraph clusters; their internal components are
     # rendered inside.
     boards: list[Board] = []
-    top_components: list[FactorNode] = []
-    board_components: dict[str, list[FactorNode]] = {}
+    top_components: list[Part] = []
+    board_components: dict[str, list[Part]] = {}
 
-    def is_box_leaf(node: FactorNode) -> bool:
+    def is_box_leaf(node: Part) -> bool:
         # Skip conductors (Pin, Connector), Rails, and anything
         # without a refdes. Chips, Resistors, LEDs qualify.
         if isinstance(node, (Pin, Connector, Rail)):
             return False
         return getattr(node, 'refdes', None) is not None and not isinstance(node, Circuit)
 
-    def collect(parent_board: str, node: FactorNode) -> None:
+    def collect(parent_board: str, node: Part) -> None:
         if isinstance(node, Chip):
             target = (board_components.setdefault(parent_board, [])
                       if parent_board else top_components)
@@ -84,7 +84,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
         if isinstance(node, Board):
             boards.append(node)
             board_components.setdefault(node.refdes, [])
-            for c in node._factor_nodes:
+            for c in node.parts:
                 collect(node.refdes, c)
             return
         # Refdes-bearing composite — emit as a single box, don't
@@ -95,7 +95,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
             target.append(node)
             return
         if isinstance(node, Circuit):
-            for c in node._factor_nodes:
+            for c in node.parts:
                 collect(parent_board, c)
             return
         if is_box_leaf(node):
@@ -105,10 +105,10 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
 
     if isinstance(design, Board):
         boards.append(design)
-        for c in design._factor_nodes:
+        for c in design.parts:
             collect(design.refdes, c)
     else:
-        for c in (design._factor_nodes if isinstance(design, Circuit)
+        for c in (design.parts if isinstance(design, Circuit)
                   else [design]):
             collect("", c)
 

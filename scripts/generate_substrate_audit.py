@@ -24,11 +24,11 @@ import components.passives  # noqa: F401, E402
 import components.transistors  # noqa: F401, E402
 import components.connectors  # noqa: F401, E402
 
-from framework.factor import FactorNode  # noqa: E402
+from framework.part import Part  # noqa: E402
 from framework.registry import _REGISTRY  # noqa: E402
 
 
-def _construct(cls: type) -> FactorNode | None:
+def _construct(cls: type) -> Part | None:
     """Same registry-sweep helper used by the audit test."""
     try:
         if hasattr(cls, 'REFDES_PREFIX'):

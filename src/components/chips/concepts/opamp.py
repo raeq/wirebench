@@ -29,13 +29,13 @@ from __future__ import annotations
 
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Analog
 
 
-class OpAmp(FactorNode):
+class OpAmp(Part):
     """Rail-to-rail saturating op-amp behaviour.
 
     Ports

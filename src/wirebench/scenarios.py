@@ -58,7 +58,7 @@ def print_bom(
 ) -> None:
     """Print the refdes-bearing parts of `circuit` as a BOM.
 
-    Walks `circuit._factor_nodes`, picks out the parts with refdes,
+    Walks `circuit.parts`, picks out the parts with refdes,
     and emits one line per part: ``  R1    Resistor  (220 Ω)``.
     Use `value_annotators` to override or extend the default
     per-class value suffix (Resistor → ohms, Capacitor → farads,
@@ -68,7 +68,7 @@ def print_bom(
     if value_annotators:
         annotators.update(value_annotators)
     print("Bill of materials:")
-    for fn in circuit._factor_nodes:
+    for fn in circuit.parts:
         if not isinstance(fn, RefdesBearing):
             continue
         cls = type(fn).__name__

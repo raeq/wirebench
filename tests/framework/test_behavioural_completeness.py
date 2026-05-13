@@ -34,7 +34,7 @@ import components.transistors  # noqa: F401
 import framework.board         # noqa: F401
 
 from framework.errors import WirebenchError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.registry import _REGISTRY
 
 
@@ -46,7 +46,7 @@ _LEGITIMATE_SKIPS: dict[str, str] = {
 }
 
 
-def _construct_any(cls: type[FactorNode]) -> FactorNode | None:
+def _construct_any(cls: type[Part]) -> Part | None:
     """Best-effort registry-sweep instantiation."""
     from typing import cast
     factory = cast(Any, cls)
@@ -71,14 +71,14 @@ def _construct_any(cls: type[FactorNode]) -> FactorNode | None:
             elif name == 'ISOW7841':
                 from framework.ground import GroundDomain
                 kwargs['iso_domain'] = GroundDomain('iso_audit')
-            return cast(FactorNode, factory(**kwargs))
+            return cast(Part, factory(**kwargs))
         if cls.__name__ == 'Rail':
-            return cast(FactorNode, factory(level=True))
+            return cast(Part, factory(level=True))
         if cls.__name__ == 'DiodeOR':
-            return cast(FactorNode, factory(input_names=('a',)))
+            return cast(Part, factory(input_names=('a',)))
         if cls.__name__ == 'Monostable':
-            return cast(FactorNode, factory(duration_ms=1.0))
-        return cast(FactorNode, factory())
+            return cast(Part, factory(duration_ms=1.0))
+        return cast(Part, factory())
     except Exception:
         return None
 

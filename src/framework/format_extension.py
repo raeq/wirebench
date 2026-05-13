@@ -23,7 +23,7 @@ from __future__ import annotations
 from typing import Any, ClassVar, get_type_hints
 
 from framework.errors import SaveError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain
 
 
@@ -32,7 +32,7 @@ from framework.ground import GroundDomain
 _MISSING = object()
 
 
-def serialize_kwargs(instance: FactorNode) -> dict[str, Any]:
+def serialize_kwargs(instance: Part) -> dict[str, Any]:
     """Read the SERIALIZE_KWARGS values back off a live instance and
     encode each for JSON storage.
 
@@ -63,7 +63,7 @@ def serialize_kwargs(instance: FactorNode) -> dict[str, Any]:
 
 
 def deserialize_kwargs(
-    cls: type[FactorNode],
+    cls: type[Part],
     payload: dict[str, Any],
 ) -> dict[str, Any]:
     """Decode the kwargs payload back into Python values suitable for
@@ -86,7 +86,7 @@ def deserialize_kwargs(
 
 # ---------------------------------------------------------------- helpers
 
-def _read_kwarg(instance: FactorNode, name: str) -> Any:
+def _read_kwarg(instance: Part, name: str) -> Any:
     """Find the live value of `name` on `instance`.  See module
     docstring for the lookup order.
 

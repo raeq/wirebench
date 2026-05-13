@@ -42,7 +42,7 @@ def test_resistor_renders_to_R_line():
     gnd = Rail(False)
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
-    design = Circuit(factor_nodes=[r, vcc, gnd], ports={})
+    design = Circuit(parts=[r, vcc, gnd], ports={})
 
     text = export_to_string(design, 'spice')
     assert re.search(r'^R1\s+vcc\s+0\s+330(\.0)?$', text, flags=re.M)
@@ -54,7 +54,7 @@ def test_led_renders_with_D_LED_model():
     gnd = Rail(False)
     wire(vcc.ports['out'], d.ports['anode'])
     wire(d.ports['cathode'], gnd.ports['out'])
-    design = Circuit(factor_nodes=[d, vcc, gnd], ports={})
+    design = Circuit(parts=[d, vcc, gnd], ports={})
 
     text = export_to_string(design, 'spice')
     assert re.search(r'^D1\s+vcc\s+0\s+D_LED$', text, flags=re.M)
@@ -67,7 +67,7 @@ def test_rail_true_emits_voltage_source():
     r = Resistor(1000, refdes_number=1)
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
-    design = Circuit(factor_nodes=[vcc, gnd, r], ports={})
+    design = Circuit(parts=[vcc, gnd, r], ports={})
 
     text = export_to_string(design, 'spice')
     assert re.search(r'^V_\S+\s+vcc\s+0\s+DC\s+5(\.0)?$', text, flags=re.M)
@@ -79,7 +79,7 @@ def test_rail_false_emits_no_source():
     vcc = Rail(True)
     wire(vcc.ports['out'], r.ports['t1'])
     wire(r.ports['t2'], gnd.ports['out'])
-    design = Circuit(factor_nodes=[gnd, r, vcc], ports={})
+    design = Circuit(parts=[gnd, r, vcc], ports={})
 
     text = export_to_string(design, 'spice')
     # Exactly one V_* source (for vcc).
@@ -92,7 +92,7 @@ def test_rail_false_emits_no_source():
 
 def test_chip_renders_as_X_instance_with_ordered_pins():
     u = SN74HC04(refdes_number=1)
-    design = Circuit(factor_nodes=[u], ports={})
+    design = Circuit(parts=[u], ports={})
 
     text = export_to_string(design, 'spice')
     # X-instance line: refdes, then 12 pin nets (datasheet pins
@@ -113,7 +113,7 @@ def test_connector_emits_nothing():
     gnd = Rail(False)
     wire(vcc.ports['out'], conn.pins[0].internal)
     wire(gnd.ports['out'], conn.pins[1].internal)
-    design = Circuit(factor_nodes=[conn, vcc, gnd], ports={})
+    design = Circuit(parts=[conn, vcc, gnd], ports={})
 
     text = export_to_string(design, 'spice')
     # No 'J1' or per-pin line referencing the connector refdes.
@@ -137,7 +137,7 @@ def test_board_emits_SUBCKT_and_X_instance():
         components=[r, vcc, gnd, conn],
         refdes_number=1,
     )
-    assembly = Circuit(factor_nodes=[board], ports={})
+    assembly = Circuit(parts=[board], ports={})
 
     text = export_to_string(assembly, 'spice')
     assert re.search(r'^\.SUBCKT\s+A1_SUBCKT\b', text, flags=re.M)

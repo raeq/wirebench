@@ -5,7 +5,7 @@ chip classes pull in to avoid repeating the same boilerplate.
 """
 from __future__ import annotations
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain
 from framework.pin import Pin
 from framework.port import Direction
@@ -18,7 +18,7 @@ from .idle_driver import IdleDriver
 def wire_idle_drivers(
     pins: list[Pin],
     domain: GroundDomain,
-) -> list[FactorNode]:
+) -> list[Part]:
     """Attach an `IdleDriver` to every OUT-direction pin in `pins`.
 
     For chips whose actual behaviour is too complex to model
@@ -36,7 +36,7 @@ def wire_idle_drivers(
     Returns the list of `IdleDriver` cells in pin order — pass it
     to `super().__init__(pins=pins, cells=…)`.
     """
-    drivers: list[FactorNode] = []
+    drivers: list[Part] = []
     for pin in pins:
         if pin._role is not Direction.OUT:
             continue

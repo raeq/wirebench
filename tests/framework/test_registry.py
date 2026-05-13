@@ -8,7 +8,7 @@ import components.connectors  # noqa: F401
 import framework.board  # noqa: F401
 
 from framework.errors import DuplicateRegistrationError, UnknownPartError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.registry import lookup, register, registered_names
 
 from components.passives.resistor import Resistor
@@ -24,7 +24,7 @@ def test_unknown_name_raises_keyerror():
 
 
 def test_duplicate_registration_raises():
-    class _Dummy(FactorNode):
+    class _Dummy(Part):
         @property
         def ports(self):
             return {}
@@ -34,7 +34,7 @@ def test_duplicate_registration_raises():
     register("DuplicateRegistrationTestDummy")(_Dummy)
     with pytest.raises(DuplicateRegistrationError, match="already registered"):
         # Different class with same name.
-        class _AnotherDummy(FactorNode):
+        class _AnotherDummy(Part):
             @property
             def ports(self):
                 return {}

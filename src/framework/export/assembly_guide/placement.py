@@ -33,7 +33,7 @@ from dataclasses import dataclass
 from typing import Iterable
 
 from framework.chip import Chip
-from framework.factor import FactorNode
+from framework.part import Part
 
 
 # Single position number where the first chip's pin 1 lands.
@@ -71,7 +71,7 @@ class PinPlacement:
 @dataclass(frozen=True, slots=True)
 class ComponentPlacement:
     """The full placement of one component's pins."""
-    component: FactorNode
+    component: Part
     pins: tuple[tuple[str, PinPlacement], ...]   # (pin_name, placement)
 
     def pin(self, name: str) -> PinPlacement | None:
@@ -144,7 +144,7 @@ def _place_chips(chips: list[Chip]) -> tuple[list[ComponentPlacement], int]:
 
 
 def _place_2lead_part(
-    component: FactorNode,
+    component: Part,
     start_pos: int,
     spacing: int,
 ) -> tuple[ComponentPlacement, int]:
@@ -162,7 +162,7 @@ def _place_2lead_part(
 
 def place(
     chips: Iterable[Chip],
-    passives_2lead: Iterable[FactorNode],
+    passives_2lead: Iterable[Part],
 ) -> tuple[ComponentPlacement, ...]:
     """Deterministically place every component.
 

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from collections.abc import Sequence
 from typing import Any, cast
 
 from pydantic import ValidationError, validate_call
@@ -17,7 +18,7 @@ from pydantic import ValidationError, validate_call
 from framework.board import Board
 from framework.circuit import Circuit
 from framework.connector import Connector
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.port import Port
 from framework.refdes import RefdesBearing
 from framework.errors import LoadError, SaveError
@@ -37,7 +38,7 @@ CURRENT_FORMAT_VERSION = '1.0.0'
 # Saving
 # -----------------------------------------------------------------
 
-def _component_id(component: FactorNode, rail_ids: dict[int, str]) -> str:
+def _component_id(component: Part, rail_ids: dict[int, str]) -> str:
     """Local id for port references: refdes if the component is
     refdes-bearing, otherwise a stable synthesised id (Rail_0,
     Rail_1, …) captured in rail_ids by identity."""
@@ -49,7 +50,7 @@ def _component_id(component: FactorNode, rail_ids: dict[int, str]) -> str:
 
 
 def _component_to_record(
-    component: FactorNode,
+    component: Part,
     rail_ids: dict[int, str],
 ) -> ComponentRecord:
     """Build a per-type record from a live component."""
@@ -130,7 +131,7 @@ def _component_to_record(
 
 
 def _component_to_extension_record(
-    component: FactorNode,
+    component: Part,
     rail_ids: dict[int, str],
     cls_name: str,
 ) -> ComponentRecord:
@@ -170,7 +171,7 @@ def _port_ref(component_id: str, port_name: str) -> str:
 
 
 def _collect_wires(
-    components: list[FactorNode],
+    components: Sequence[Part],
     rail_ids: dict[int, str],
 ) -> list[WireRecord]:
     """Walk every component's ports, group by Node id, emit one
@@ -203,7 +204,7 @@ def _circuit_components_and_wires(
     circuit: Circuit,
 ) -> tuple[list[ComponentRecord], list[WireRecord], dict[int, str]]:
     """Build component records + wire records for a Circuit's direct
-    factor_nodes.  Components without a refdes (Rails, and any concept
+    parts.  Components without a refdes (Rails, and any concept
     cell wired at the top level) are given synthesised local IDs
     assigned in encounter order — `Rail_0`, `Rail_1`, …, then
     `DiodeOR_0`, `FanController_0`, etc., keyed by class name so each
@@ -211,7 +212,7 @@ def _circuit_components_and_wires(
     saved JSON."""
     rail_ids: dict[int, str] = {}
     counters: dict[str, int] = {}
-    for component in circuit._factor_nodes:
+    for component in circuit.parts:
         if isinstance(component, RefdesBearing):
             continue
         cls_name = type(component).__name__
@@ -219,13 +220,13 @@ def _circuit_components_and_wires(
         rail_ids[id(component)] = f'{cls_name}_{n}'
         counters[cls_name] = n + 1
     component_records = [
-        _component_to_record(c, rail_ids) for c in circuit._factor_nodes
+        _component_to_record(c, rail_ids) for c in circuit.parts
     ]
     # Sort component records by refdes / id (deterministic output).
     def sort_key(r: ComponentRecord) -> str:
         return str(getattr(r, 'refdes', None) or getattr(r, 'id', '') or '')
     component_records.sort(key=sort_key)
-    wire_records = _collect_wires(circuit._factor_nodes, rail_ids)
+    wire_records = _collect_wires(circuit.parts, rail_ids)
     return component_records, wire_records, rail_ids
 
 
@@ -233,8 +234,8 @@ def _circuit_to_record(circuit: Circuit) -> CircuitRecord:
     components, wires, rail_ids = _circuit_components_and_wires(circuit)
     surface_ports: dict[str, str] = {}
     for name, port in circuit._ports.items():
-        # Find which factor_node owns this port.
-        ref = _find_port_ref(port, circuit._factor_nodes, rail_ids)
+        # Find which part owns this port.
+        ref = _find_port_ref(port, circuit.parts, rail_ids)
         if ref is None:
             raise SaveError(
                 f"Cannot resolve surface port {name!r} to a component"
@@ -259,11 +260,11 @@ def _board_to_record(board: Board) -> BoardRecord:
 
 
 def _assembly_to_record(circuit: Circuit) -> AssemblyRecord:
-    """A Circuit whose factor_nodes are all Boards — i.e. a stacked
+    """A Circuit whose parts are all Boards — i.e. a stacked
     assembly.  Boards' connectors that share nodes are emitted as
     MateRecords."""
-    boards = [fn for fn in circuit._factor_nodes if isinstance(fn, Board)]
-    if len(boards) != len(circuit._factor_nodes):
+    boards = [fn for fn in circuit.parts if isinstance(fn, Board)]
+    if len(boards) != len(circuit.parts):
         raise SaveError(
             "Assembly Circuit must contain only Boards; found other types"
         )
@@ -315,7 +316,7 @@ def _connectors_mated(a: Connector, b: Connector) -> bool:
 
 def _find_port_ref(
     port: Port,
-    components: list[FactorNode],
+    components: Sequence[Part],
     rail_ids: dict[int, str],
 ) -> str | None:
     for component in components:
@@ -335,14 +336,14 @@ def _find_assembly_port_ref(port: Port, boards: list[Board]) -> str | None:
 
 
 def _looks_like_assembly(circuit: Circuit) -> bool:
-    """Heuristic: a Circuit is an assembly iff its factor_nodes are
+    """Heuristic: a Circuit is an assembly iff its parts are
     all Boards."""
-    if not circuit._factor_nodes:
+    if not circuit.parts:
         return False
-    return all(isinstance(fn, Board) for fn in circuit._factor_nodes)
+    return all(isinstance(fn, Board) for fn in circuit.parts)
 
 
-def _to_record(root: FactorNode) -> AssemblyRecord | BoardRecord | CircuitRecord:
+def _to_record(root: Part) -> AssemblyRecord | BoardRecord | CircuitRecord:
     if isinstance(root, Board):
         return _board_to_record(root)
     if isinstance(root, Circuit):
@@ -356,7 +357,7 @@ def _to_record(root: FactorNode) -> AssemblyRecord | BoardRecord | CircuitRecord
 
 
 @validate_call(config={'arbitrary_types_allowed': True})
-def save_wirebench(root: FactorNode, path: Path | str) -> None:
+def save_wirebench(root: Part, path: Path | str) -> None:
     """Serialise a Circuit / Board / Assembly to a `.wirebench` file."""
     record = _to_record(root)
     file = CircuitryFile(format_version=CURRENT_FORMAT_VERSION, root=record)
@@ -382,8 +383,8 @@ def _refdes_number_from_refdes(refdes: str) -> int:
     return int(m.group(1))
 
 
-def _build_component(record: Any) -> FactorNode:
-    """Instantiate a live FactorNode from a record."""
+def _build_component(record: Any) -> Part:
+    """Instantiate a live Part from a record."""
     if record.type == 'Extension':
         return _build_extension_component(record)
     cls = lookup(record.type)
@@ -416,8 +417,8 @@ def _build_component(record: Any) -> FactorNode:
     return cls(**kwargs)
 
 
-def _build_extension_component(record: Any) -> FactorNode:
-    """Instantiate a FactorNode from a generic ExtensionRecord.
+def _build_extension_component(record: Any) -> Part:
+    """Instantiate a Part from a generic ExtensionRecord.
 
     Class lookup goes through the registry the same way dedicated
     records do — the registry is still the security boundary.  Kwargs
@@ -444,7 +445,7 @@ def _build_extension_component(record: Any) -> FactorNode:
 
 def _resolve_port(
     ref: str,
-    components_by_id: dict[str, FactorNode],
+    components_by_id: dict[str, Part],
 ) -> Port:
     """Parse a port reference like 'U1.out_1' and return the live Port."""
     head, _, tail = ref.partition('.')
@@ -463,7 +464,7 @@ def _resolve_port(
 
 def _rebuild_circuit_components(
     component_records: list[Any],
-) -> tuple[list[FactorNode], dict[str, FactorNode]]:
+) -> tuple[list[Part], dict[str, Part]]:
     """Build components from records; return (ordered list, id→component map).
 
     Records may carry a `refdes` (for RefdesBearing classes), an `id`
@@ -472,8 +473,8 @@ def _rebuild_circuit_components(
     optional and uses whichever applies).  Try refdes first, fall
     through to id; reject if neither is set.
     """
-    components: list[FactorNode] = []
-    by_id: dict[str, FactorNode] = {}
+    components: list[Part] = []
+    by_id: dict[str, Part] = {}
     for rec in component_records:
         c = _build_component(rec)
         components.append(c)
@@ -498,7 +499,7 @@ def _from_circuit_record(record: CircuitRecord) -> Circuit:
         name: _resolve_port(ref, by_id)
         for name, ref in record.surface_ports.items()
     }
-    return Circuit(factor_nodes=components, ports=surface_ports)
+    return Circuit(parts=components, ports=surface_ports)
 
 
 def _from_board_record(record: BoardRecord) -> Board:
@@ -549,10 +550,10 @@ def _from_assembly_record(record: AssemblyRecord) -> Circuit:
             )
         surface_ports[name] = board._ports[rest]
 
-    return Circuit(factor_nodes=list(boards), ports=surface_ports)
+    return Circuit(parts=list(boards), ports=surface_ports)
 
 
-def _from_record(record: Any) -> FactorNode:
+def _from_record(record: Any) -> Part:
     if isinstance(record, AssemblyRecord):
         return _from_assembly_record(record)
     if isinstance(record, BoardRecord):
@@ -574,7 +575,7 @@ def _check_format_version(version: str) -> None:
 
 
 @validate_call(config={'arbitrary_types_allowed': True})
-def load_wirebench(path: Path | str) -> FactorNode:
+def load_wirebench(path: Path | str) -> Part:
     """Load a `.wirebench` file and reconstruct the in-memory model.
 
     Raises:

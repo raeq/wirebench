@@ -6,7 +6,7 @@ import framework.export.spice  # noqa: F401
 
 from framework.connector import Connector
 from framework.errors import DuplicateRendererError, RendererNotFoundError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.export.base import (
     lookup_renderer, register_renderer,
 )
@@ -27,7 +27,7 @@ def test_unknown_format_raises_with_hint():
 
 
 def test_duplicate_registration_raises():
-    class _Dummy(FactorNode):
+    class _Dummy(Part):
         __slots__ = ()
         def __init__(self): pass
         @property

@@ -27,12 +27,12 @@ from typing import Any
 
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 
 
-class IdleDriver(FactorNode):
+class IdleDriver(Part):
     """Drives `out` to a fixed value (or None for "undriven").
 
     Ports

@@ -29,7 +29,7 @@ def test_bom_present(board):
     from framework.refdes import RefdesBearing
     parts = {
         f"{type(fn).__name__}.{fn.refdes}"
-        for fn in board._factor_nodes
+        for fn in board.parts
         if isinstance(fn, RefdesBearing)
     }
     assert "Uno_BLDCCommutator.U1"   in parts
@@ -148,7 +148,7 @@ def test_system_gates_match_sector(system):
 
 
 def test_system_exposes_controller_and_motor(system):
-    """Both subordinate factor-nodes are reachable as public
+    """Both subordinate parts are reachable as public
     attributes on the assembly — same pattern WaterAlarmAssembly
     and CooledSystem use."""
     from bldc_motor import BLDCControllerBoard

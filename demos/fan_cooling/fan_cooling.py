@@ -88,7 +88,7 @@ class FanCoolingBoard(Board):
 
     Omits __slots__ so `Board.__init__` auto-collects every part from
     `self.__dict__` (Capacitor / Inductor / Resistor / Diode / Chip /
-    Connector / FactorNode are all picked up).
+    Connector / Part are all picked up).
     """
 
     REFDES_PREFIX = 'A'

@@ -55,7 +55,7 @@ def test_pin_directions_match_datasheet():
 
 def test_has_one_internal_fuel_gauge_cell():
     ic = BQ27546G1(refdes_number=1)
-    gauges = [fn for fn in ic._factor_nodes if isinstance(fn, FuelGauge)]
+    gauges = [fn for fn in ic.parts if isinstance(fn, FuelGauge)]
     assert len(gauges) == 1
 
 

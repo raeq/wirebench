@@ -11,7 +11,7 @@ def test_bom_present(supply):
     from framework.refdes import RefdesBearing
     parts = {
         f"{type(fn).__name__}.{fn.refdes}"
-        for fn in supply._factor_nodes
+        for fn in supply.parts
         if isinstance(fn, RefdesBearing)
     }
     # The three TI ICs.

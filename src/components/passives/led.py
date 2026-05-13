@@ -2,7 +2,7 @@ from typing import Annotated, Any, ClassVar
 
 from pydantic import Field, validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.refdes import RefdesNumber, validate_refdes
@@ -12,7 +12,7 @@ from framework.registry import register
 
 
 @register('LED')
-class LED(FactorNode):
+class LED(Part):
     """Light-emitting diode.
 
     A real LED has two terminals (anode +, cathode −) and only conducts once

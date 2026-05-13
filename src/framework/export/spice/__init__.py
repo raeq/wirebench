@@ -10,7 +10,7 @@ Adapter entry point: `render(design, ctx)` — called by the top-level
 from __future__ import annotations
 
 from framework.circuit import Circuit
-from framework.factor import FactorNode
+from framework.part import Part
 
 from framework.export.base import (
     ExporterContext, SpiceExportConfig, lookup_renderer, register_net_namer,
@@ -58,7 +58,7 @@ def _spice_config(ctx: ExporterContext) -> SpiceExportConfig:
     return SpiceExportConfig(**cfg.model_dump())
 
 
-def render(design: FactorNode, ctx: ExporterContext) -> str:
+def render(design: Part, ctx: ExporterContext) -> str:
     """Assemble a complete SPICE deck for `design`."""
     cfg = _spice_config(ctx)
 
@@ -75,7 +75,7 @@ def render(design: FactorNode, ctx: ExporterContext) -> str:
     # its registered renderer. Boards emit .SUBCKT blocks inline; chips
     # emit X instances and rely on .SUBCKT defs in the model library.
     children = (
-        list(design._factor_nodes) if isinstance(design, Circuit) else [design]
+        list(design.parts) if isinstance(design, Circuit) else [design]
     )
     for fn in children:
         try:

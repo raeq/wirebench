@@ -87,7 +87,7 @@ def test_empty_components_list_legal(tmp_path: Path):
         "root": {"type": "Circuit", "components": [], "wires": []},
     })
     circuit = load_wirebench(p)
-    assert len(circuit._factor_nodes) == 0
+    assert len(circuit.parts) == 0
 
 
 def test_format_version_pattern_enforced(tmp_path: Path):

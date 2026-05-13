@@ -1,4 +1,4 @@
-"""Component registry — maps registered class names to FactorNode subclasses.
+"""Component registry — maps registered class names to Part subclasses.
 
 The `.wirebench` deserialiser looks up component classes by name in this
 registry rather than importing arbitrary modules at runtime.  This is
@@ -7,7 +7,7 @@ the framework's security boundary: a malicious or accidental
 registered at import time by the codebase itself.  No `eval`,
 `importlib.import_module`, or pickle-style arbitrary-code surface.
 
-Convention: every concrete FactorNode subclass that may appear in a
+Convention: every concrete Part subclass that may appear in a
 `.wirebench` file decorates itself with `@register("ClassName")`
 (bare class name).  Uniqueness is checked at registration; collisions
 raise at import time.
@@ -17,15 +17,15 @@ from __future__ import annotations
 from typing import Callable, TypeVar
 
 from framework.errors import DuplicateRegistrationError, UnknownPartError
-from framework.factor import FactorNode
+from framework.part import Part
 
-T = TypeVar('T', bound=FactorNode)
+T = TypeVar('T', bound=Part)
 
-_REGISTRY: dict[str, type[FactorNode]] = {}
+_REGISTRY: dict[str, type[Part]] = {}
 
 
 def register(name: str) -> Callable[[type[T]], type[T]]:
-    """Class decorator: register a FactorNode subclass under `name`.
+    """Class decorator: register a Part subclass under `name`.
 
     Names must be unique across the codebase.  Use the bare class name
     by convention.
@@ -41,7 +41,7 @@ def register(name: str) -> Callable[[type[T]], type[T]]:
     return decorator
 
 
-def lookup(name: str) -> type[FactorNode]:
+def lookup(name: str) -> type[Part]:
     """Look up a component class by registered name.  Used by the
     `.wirebench` loader.  Raises UnknownPartError (a KeyError
     subclass) if the name is unknown."""
@@ -62,6 +62,6 @@ def registered_names() -> list[str]:
     return sorted(_REGISTRY)
 
 
-def is_registered(cls: type[FactorNode]) -> bool:
+def is_registered(cls: type[Part]) -> bool:
     """True if `cls` (or one of its parents) is in the registry."""
     return cls in _REGISTRY.values()

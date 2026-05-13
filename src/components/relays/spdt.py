@@ -2,7 +2,7 @@ from typing import Annotated, ClassVar
 
 from pydantic import Field, validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.refdes import RefdesNumber, validate_refdes
@@ -12,7 +12,7 @@ from framework.units import Volts
 
 
 @register('Relay_SPDT')
-class Relay_SPDT(FactorNode):
+class Relay_SPDT(Part):
     """SPDT electromechanical relay — single coil drives one common
     contact between a normally-open and a normally-closed throw.
 

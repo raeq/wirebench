@@ -3,7 +3,7 @@ from typing import Annotated, ClassVar
 from pydantic import Field, validate_call
 
 from framework.errors import PartParameterError
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.refdes import RefdesNumber, validate_refdes
@@ -73,7 +73,7 @@ def soc_from_ocv(voltage: float) -> float:
 
 
 @register('Cell')
-class Cell(FactorNode):
+class Cell(Part):
     """Single-cell Li-Ion battery, modelled as a voltage source.
 
     A real Li-Ion cell stores chemical energy and presents a terminal

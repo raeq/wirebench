@@ -25,7 +25,7 @@ adapter for consistency, but doesn't reference net names in its
 output."""
 from __future__ import annotations
 
-from framework.factor import FactorNode
+from framework.part import Part
 
 from framework.export.base import ExporterContext, register_net_namer
 from framework.export.nets import LogicalNet
@@ -42,6 +42,6 @@ def name_assembly_guide_net(net: LogicalNet, ctx: ExporterContext) -> str:
 register_net_namer('assembly_guide', name_assembly_guide_net)
 
 
-def render(design: FactorNode, ctx: ExporterContext) -> str:
+def render(design: Part, ctx: ExporterContext) -> str:
     """Produce the full assembly-guide Markdown for `design`."""
     return build_recipe(design)

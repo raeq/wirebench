@@ -1,6 +1,6 @@
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Digital
@@ -56,7 +56,7 @@ _INPUT_NAMES  = ('ha', 'hb', 'hc')
 _OUTPUT_NAMES = ('ah', 'al', 'bh', 'bl', 'ch', 'cl', 'en_a', 'en_b', 'en_c')
 
 
-class Commutator(FactorNode):
+class Commutator(Part):
     """Six-step BLDC commutation table — Hall-pattern → gate drive.
 
     Reads three Hall-sensor signals and writes six gate-command

@@ -111,7 +111,7 @@ def test_duplicate_refdes_within_composite_rejected():
     r1 = Resistor(330, refdes_number=1)
     r2 = Resistor(330, refdes_number=1)
     with pytest.raises(RefdesError, match="Duplicate refdes"):
-        Circuit(factor_nodes=[r1, r2], ports={})
+        Circuit(parts=[r1, r2], ports={})
 
 
 def test_distinct_prefixes_with_same_number_do_not_collide():
@@ -119,7 +119,7 @@ def test_distinct_prefixes_with_same_number_do_not_collide():
     from framework.circuit import Circuit
     r = Resistor(330, refdes_number=1)
     u = SN74HC04(refdes_number=1)
-    Circuit(factor_nodes=[r, u], ports={})   # must not raise
+    Circuit(parts=[r, u], ports={})   # must not raise
 
 
 # --- __repr__ surfaces refdes ---

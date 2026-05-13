@@ -29,13 +29,13 @@ from typing import ClassVar
 
 from pydantic import validate_call
 
-from framework.factor import FactorNode
+from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.port import Port, Direction
 from framework.signals import Analog
 
 
-class LinearRegulator(FactorNode):
+class LinearRegulator(Part):
     """Steady-state behavioural model of a fixed-output linear regulator.
 
     Ports
