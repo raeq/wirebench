@@ -1,0 +1,179 @@
+{
+  "creator": "circuitry 0.x",
+  "modules": {
+    "Uno_BLDCCommutator": {
+      "cells": {},
+      "netnames": {},
+      "ports": {
+        "AREF": {
+          "bits": [
+            34
+          ],
+          "direction": "input"
+        },
+        "AVCC": {
+          "bits": [
+            33
+          ],
+          "direction": "input"
+        },
+        "GND_1": {
+          "bits": [
+            21
+          ],
+          "direction": "input"
+        },
+        "GND_2": {
+          "bits": [
+            35
+          ],
+          "direction": "input"
+        },
+        "PB0": {
+          "bits": [
+            27
+          ],
+          "direction": "inout"
+        },
+        "PB1": {
+          "bits": [
+            28
+          ],
+          "direction": "inout"
+        },
+        "PB2": {
+          "bits": [
+            29
+          ],
+          "direction": "inout"
+        },
+        "PB3": {
+          "bits": [
+            30
+          ],
+          "direction": "inout"
+        },
+        "PB4": {
+          "bits": [
+            31
+          ],
+          "direction": "inout"
+        },
+        "PB5": {
+          "bits": [
+            32
+          ],
+          "direction": "inout"
+        },
+        "PB6": {
+          "bits": [
+            22
+          ],
+          "direction": "inout"
+        },
+        "PB7": {
+          "bits": [
+            23
+          ],
+          "direction": "inout"
+        },
+        "PC0": {
+          "bits": [
+            36
+          ],
+          "direction": "inout"
+        },
+        "PC1": {
+          "bits": [
+            37
+          ],
+          "direction": "inout"
+        },
+        "PC2": {
+          "bits": [
+            38
+          ],
+          "direction": "inout"
+        },
+        "PC3": {
+          "bits": [
+            39
+          ],
+          "direction": "inout"
+        },
+        "PC4": {
+          "bits": [
+            40
+          ],
+          "direction": "inout"
+        },
+        "PC5": {
+          "bits": [
+            41
+          ],
+          "direction": "inout"
+        },
+        "PC6": {
+          "bits": [
+            14
+          ],
+          "direction": "inout"
+        },
+        "PD0": {
+          "bits": [
+            15
+          ],
+          "direction": "inout"
+        },
+        "PD1": {
+          "bits": [
+            16
+          ],
+          "direction": "inout"
+        },
+        "PD2": {
+          "bits": [
+            17
+          ],
+          "direction": "inout"
+        },
+        "PD3": {
+          "bits": [
+            18
+          ],
+          "direction": "inout"
+        },
+        "PD4": {
+          "bits": [
+            19
+          ],
+          "direction": "inout"
+        },
+        "PD5": {
+          "bits": [
+            24
+          ],
+          "direction": "inout"
+        },
+        "PD6": {
+          "bits": [
+            25
+          ],
+          "direction": "inout"
+        },
+        "PD7": {
+          "bits": [
+            26
+          ],
+          "direction": "inout"
+        },
+        "VCC": {
+          "bits": [
+            20
+          ],
+          "direction": "input"
+        }
+      }
+    }
+  }
+}

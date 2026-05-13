@@ -1,0 +1,3 @@
+.TITLE Power Source
+V_Rail_0 vcc 0 DC 5.0
+.END

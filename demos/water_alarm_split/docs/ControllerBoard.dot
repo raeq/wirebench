@@ -1,8 +1,8 @@
 digraph "Controller Board" {
   rankdir=TB;
   node [shape=box, fontname="monospace"];
-  subgraph cluster_A2 {
-    label="A2: Controller Board Rev A";
+  subgraph cluster_A1 {
+    label="A1: Controller Board Rev A";
     style=rounded;
     U1 [label="U1\\nSN74HC04"];
     U2 [label="U2\\nCD4069"];

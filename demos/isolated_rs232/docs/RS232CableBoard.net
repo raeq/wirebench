@@ -1,0 +1,12 @@
+(export (version "E")
+  (design
+    (source "RS-232 Cable")
+    (tool "circuitry 0.x"))
+  (components
+    (comp (ref "A1_P2")
+      (value "Header1xNMale_4") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical") (libsource (lib "Connector") (part "Header1xNMale") (description "Header1xNMale"))
+      (sheetpath (names "/A1/") (tstamps "/9e6cdb43/")))
+  )
+  (nets
+  )
+)

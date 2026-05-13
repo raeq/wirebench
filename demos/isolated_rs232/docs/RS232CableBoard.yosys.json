@@ -1,0 +1,69 @@
+{
+  "creator": "circuitry 0.x",
+  "modules": {
+    "RS-232 Cable": {
+      "cells": {
+        "P2": {
+          "connections": {
+            "p1": [
+              3
+            ],
+            "p2": [
+              4
+            ],
+            "p3": [
+              5
+            ],
+            "p4": [
+              6
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p2": "inout",
+            "p3": "inout",
+            "p4": "inout"
+          },
+          "type": "Header1xNMale"
+        }
+      },
+      "netnames": {
+        "GND": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {
+        "P2.p1": {
+          "bits": [
+            3
+          ],
+          "direction": "inout"
+        },
+        "P2.p2": {
+          "bits": [
+            4
+          ],
+          "direction": "inout"
+        },
+        "P2.p3": {
+          "bits": [
+            5
+          ],
+          "direction": "inout"
+        },
+        "P2.p4": {
+          "bits": [
+            6
+          ],
+          "direction": "inout"
+        }
+      }
+    }
+  }
+}

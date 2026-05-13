@@ -1,10 +1,11 @@
 """Generate the per-demo `docs/` artefacts.
 
-For every top-level construct in `demos/<name>/<name>.py`, exports
-all seven formats (bom, dot, kicad, mermaid, spice, yosys,
-assembly_guide) into `demos/<name>/docs/<Class>.<ext>`, and
-additionally renders the Graphviz output as a top-to-bottom SVG using
-the real `dot` binary.
+Auto-discovers every demo by walking `demos/<subdir>/*.py`, importing
+each module, and finding every `Circuit` subclass *defined in* that
+module.  For each such class, exports all seven formats (bom, dot,
+kicad, mermaid, spice, yosys, assembly_guide) into
+`demos/<subdir>/docs/<Class>.<ext>`, and additionally renders the
+Graphviz output as a top-to-bottom SVG using the real `dot` binary.
 
 The `assembly_guide` format refuses SMD and multi-board designs by
 raising `BreadboardIncompatibleError`; for those, the script writes a
@@ -18,14 +19,19 @@ Run from the repo root:
 Re-run any time a demo's structure changes — the script overwrites
 existing artefacts in place so the docs/ directory always matches
 the current source.
+
+Adding a new demo: drop a folder under `demos/` containing a
+top-level Python file with one or more `Circuit` subclasses; the
+script will pick them up next run without any registration here.
 """
 from __future__ import annotations
 
+import importlib
 import subprocess
 import sys
 import warnings
 from pathlib import Path
-from typing import Callable
+from typing import Iterator
 
 _REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_REPO / 'src'))
@@ -33,7 +39,7 @@ for _d in sorted((_REPO / 'demos').iterdir()):
     if _d.is_dir():
         sys.path.insert(0, str(_d))
 
-# Trigger every component / demo registration.
+# Trigger every component registration.
 import components.chips           # noqa: F401, E402
 import components.passives        # noqa: F401, E402
 import components.connectors      # noqa: F401, E402
@@ -48,8 +54,9 @@ import framework.export.spice            # noqa: F401, E402
 import framework.export.yosys            # noqa: F401, E402
 import framework.export.assembly_guide   # noqa: F401, E402
 
+from framework.circuit import Circuit                # noqa: E402
 from framework.errors import BreadboardIncompatibleError  # noqa: E402
-from framework.export import export_to_string
+from framework.export import export_to_string         # noqa: E402
 
 
 # Per-format file extension.  Conventions match each format's
@@ -66,62 +73,60 @@ EXTENSIONS = {
 }
 
 
-def _constructs() -> dict[str, list[tuple[str, Callable]]]:
-    """Map demo-directory name → list of (class_name, factory)."""
-    from hello_led import HelloLED
-    from water_alarm import WaterAlarm
-    from water_alarm_split import (
-        SensorBoard, ControllerBoard, WaterAlarmAssembly,
-    )
-    from dice import Dice
-    from digital_thermometer import DigitalThermometer
-    from doorbell_protector import DoorbellProtector
-    from backup_power import BackupPower
-    from fan_cooling import FanCoolingBoard, CooledSystem
-    from bldc_motor import BLDCControllerBoard, BLDCSystem
-    from isolated_rs232 import IsolatedRS232Board, IsolatedRS232Link
-    from li_ion_fuel_gauge import BatteryPackBoard
+def _discover() -> Iterator[tuple[str, str, type]]:
+    """Walk every `demos/<subdir>/*.py` and yield each `Circuit`
+    subclass *defined in* the imported module.
 
-    return {
-        'hello_led': [
-            ('HelloLED', lambda: HelloLED()),
-        ],
-        'water_alarm': [
-            ('WaterAlarm', lambda: WaterAlarm()),
-        ],
-        'water_alarm_split': [
-            ('SensorBoard',          lambda: SensorBoard(refdes_number=1)),
-            ('ControllerBoard',      lambda: ControllerBoard(refdes_number=2)),
-            ('WaterAlarmAssembly',   lambda: WaterAlarmAssembly()),
-        ],
-        'dice': [
-            ('Dice', lambda: Dice()),
-        ],
-        'digital_thermometer': [
-            ('DigitalThermometer', lambda: DigitalThermometer()),
-        ],
-        'doorbell_protector': [
-            ('DoorbellProtector', lambda: DoorbellProtector()),
-        ],
-        'backup_power': [
-            ('BackupPower', lambda: BackupPower()),
-        ],
-        'fan_cooling': [
-            ('FanCoolingBoard', lambda: FanCoolingBoard(refdes_number=1)),
-            ('CooledSystem',    lambda: CooledSystem()),
-        ],
-        'bldc_motor': [
-            ('BLDCControllerBoard', lambda: BLDCControllerBoard(refdes_number=1)),
-            ('BLDCSystem',          lambda: BLDCSystem()),
-        ],
-        'isolated_rs232': [
-            ('IsolatedRS232Board', lambda: IsolatedRS232Board(refdes_number=1)),
-            ('IsolatedRS232Link',  lambda: IsolatedRS232Link()),
-        ],
-        'li_ion_fuel_gauge': [
-            ('BatteryPackBoard', lambda: BatteryPackBoard(refdes_number=1)),
-        ],
-    }
+    The `obj.__module__ == mod_name` guard prevents yielding classes
+    that were imported into the module from elsewhere (so e.g.
+    `from circuitry import Circuit` doesn't inject Circuit itself
+    into the rendering list).  Files whose name starts with `_` are
+    skipped — that's the convention for private modules; same for
+    subdirectories beginning with `_`."""
+    demos_root = _REPO / 'demos'
+    for demo_dir in sorted(demos_root.iterdir()):
+        if not demo_dir.is_dir() or demo_dir.name.startswith('_'):
+            continue
+        for py_file in sorted(demo_dir.glob('*.py')):
+            if py_file.name.startswith('_'):
+                continue
+            mod_name = py_file.stem
+            try:
+                mod = importlib.import_module(mod_name)
+            except Exception as exc:
+                print(f"  ! skipping {demo_dir.name}/{py_file.name}: "
+                      f"import failed ({exc!r})")
+                continue
+            for name in sorted(dir(mod)):
+                obj = getattr(mod, name)
+                if (isinstance(obj, type)
+                        and issubclass(obj, Circuit)
+                        and obj.__module__ == mod_name):
+                    yield demo_dir.name, name, obj
+
+
+def _construct(cls: type) -> Circuit | None:
+    """Best-effort instantiation.
+
+    Demo top-level classes typically construct one of two ways:
+    `cls()` for free-standing Circuits, or `cls(refdes_number=1)` for
+    Board subclasses.  Try both unconditionally — the first call may
+    fail with `TypeError`, `pydantic.ValidationError`, or any other
+    'missing required arg' shape; we don't try to distinguish.  If
+    both fail, the class needs per-class glue and is skipped."""
+    from typing import Any, cast
+    factory = cast(Any, cls)
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        try:
+            inst: Circuit = factory()
+            return inst
+        except Exception:
+            pass
+        try:
+            return cast(Circuit, factory(refdes_number=1))
+        except Exception:
+            return None
 
 
 def _refusal_stub(class_name: str, error: BreadboardIncompatibleError) -> str:
@@ -186,42 +191,48 @@ def _render_svg(dot_path: Path, svg_path: Path) -> None:
 
 
 def main() -> None:
-    constructs = _constructs()
-    total = 0
-    for demo, cells in constructs.items():
+    total_files = 0
+    rendered = 0
+    skipped = 0
+    seen_demos: set[str] = set()
+    for demo, class_name, cls in _discover():
+        seen_demos.add(demo)
+        circuit = _construct(cls)
+        if circuit is None:
+            print(f"  - {demo}/{class_name}: skipped (cannot construct)")
+            skipped += 1
+            continue
         docs = _REPO / 'demos' / demo / 'docs'
         docs.mkdir(parents=True, exist_ok=True)
-        for class_name, factory in cells:
-            with warnings.catch_warnings():
-                warnings.simplefilter('ignore')
-                circuit = factory()
-            for fmt, ext in EXTENSIONS.items():
-                path = docs / f"{class_name}.{ext}"
-                try:
-                    with warnings.catch_warnings():
-                        warnings.simplefilter('ignore')
-                        out = export_to_string(circuit, fmt)
-                except BreadboardIncompatibleError as e:
-                    # Only the assembly_guide refuses on substrate
-                    # grounds — preserve the refusal as a stub doc.
-                    out = _refusal_stub(class_name, e)
-                path.write_text(out)
-                total += 1
-            # Rewrite the saved .dot and .mmd to top-to-bottom layout
-            # — the library currently emits left-to-right by default,
-            # but the docs/ artefacts are saved as TB / TD so the
-            # eyes that read them get vertical signal flow.
-            dot_path = docs / f"{class_name}.dot"
-            mmd_path = docs / f"{class_name}.mmd"
-            _retarget_dot_to_tb(dot_path)
-            _retarget_mermaid_to_td(mmd_path)
-            # Render the (now TB) DOT to an SVG using the real
-            # graphviz binary.
-            svg_path = docs / f"{class_name}.svg"
-            _render_svg(dot_path, svg_path)
-            total += 1
-            print(f"  {demo}/{class_name}: 8 artefacts")
-    print(f"\nWrote {total} files across {len(constructs)} demos.")
+        for fmt, ext in EXTENSIONS.items():
+            path = docs / f"{class_name}.{ext}"
+            try:
+                with warnings.catch_warnings():
+                    warnings.simplefilter('ignore')
+                    out = export_to_string(circuit, fmt)
+            except BreadboardIncompatibleError as e:
+                # Only the assembly_guide refuses on substrate grounds —
+                # preserve the refusal as a stub doc.
+                out = _refusal_stub(class_name, e)
+            path.write_text(out)
+            total_files += 1
+        # Rewrite the saved .dot and .mmd to top-to-bottom layout —
+        # the library currently emits left-to-right by default, but
+        # the docs/ artefacts are saved as TB / TD so the eyes that
+        # read them get vertical signal flow.
+        dot_path = docs / f"{class_name}.dot"
+        mmd_path = docs / f"{class_name}.mmd"
+        _retarget_dot_to_tb(dot_path)
+        _retarget_mermaid_to_td(mmd_path)
+        svg_path = docs / f"{class_name}.svg"
+        _render_svg(dot_path, svg_path)
+        total_files += 1
+        rendered += 1
+        print(f"  + {demo}/{class_name}: 8 artefacts")
+
+    print(f"\nWrote {total_files} files for {rendered} classes "
+          f"across {len(seen_demos)} demos "
+          f"({skipped} classes skipped).")
 
 
 if __name__ == '__main__':

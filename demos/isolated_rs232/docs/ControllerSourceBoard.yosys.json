@@ -1,0 +1,76 @@
+{
+  "creator": "circuitry 0.x",
+  "modules": {
+    "Controller Plug": {
+      "cells": {
+        "P1": {
+          "connections": {
+            "p1": [
+              4
+            ],
+            "p2": [
+              5
+            ],
+            "p3": [
+              6
+            ],
+            "p4": [
+              7
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "p1": "inout",
+            "p2": "inout",
+            "p3": "inout",
+            "p4": "inout"
+          },
+          "type": "Header1xNMale"
+        }
+      },
+      "netnames": {
+        "GND": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "vcc": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {
+        "P1.p1": {
+          "bits": [
+            4
+          ],
+          "direction": "inout"
+        },
+        "P1.p2": {
+          "bits": [
+            5
+          ],
+          "direction": "inout"
+        },
+        "P1.p3": {
+          "bits": [
+            6
+          ],
+          "direction": "inout"
+        },
+        "P1.p4": {
+          "bits": [
+            7
+          ],
+          "direction": "inout"
+        }
+      }
+    }
+  }
+}

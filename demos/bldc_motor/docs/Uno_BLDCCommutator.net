@@ -1,0 +1,9 @@
+(export (version "E")
+  (design
+    (source "Uno_BLDCCommutator")
+    (tool "circuitry 0.x"))
+  (components
+  )
+  (nets
+  )
+)

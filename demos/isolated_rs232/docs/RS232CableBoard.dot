@@ -1,0 +1,10 @@
+digraph "RS-232 Cable" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  subgraph cluster_A1 {
+    label="A1: RS-232 Cable Rev A";
+    style=rounded;
+  }
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+}

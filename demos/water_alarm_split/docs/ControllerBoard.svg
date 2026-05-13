@@ -10,9 +10,9 @@
 <title>Controller Board</title>
 <polygon fill="white" stroke="none" points="-4,4 -4,-127.3 652,-127.3 652,4 -4,4"/>
 <g id="clust1" class="cluster">
-<title>cluster_A2</title>
+<title>cluster_A1</title>
 <path fill="none" stroke="black" d="M20,-38.8C20,-38.8 628,-38.8 628,-38.8 634,-38.8 640,-44.8 640,-50.8 640,-50.8 640,-103.3 640,-103.3 640,-109.3 634,-115.3 628,-115.3 628,-115.3 20,-115.3 20,-115.3 14,-115.3 8,-109.3 8,-103.3 8,-103.3 8,-50.8 8,-50.8 8,-44.8 14,-38.8 20,-38.8"/>
-<text xml:space="preserve" text-anchor="middle" x="324" y="-98" font-family="Times,serif" font-size="14.00">A2: Controller Board Rev A</text>
+<text xml:space="preserve" text-anchor="middle" x="324" y="-98" font-family="Times,serif" font-size="14.00">A1: Controller Board Rev A</text>
 </g>
 <!-- U1 -->
 <g id="node1" class="node">
