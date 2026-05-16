@@ -39,6 +39,167 @@ Push-button electronic dice on a single board.
 
 Also: a standard 830-pin solderless breadboard, an assortment of jumper wires (red for the positive rail, black for ground rail, any colour for signals), and a 5 V supply.
 
+## Layout
+
+Each part below is drawn the way it sits on the breadboard, with every pin labelled. Chips run left-to-right with the notch at the left; pin 1 is the top-left pin (closest to the notch). Sensors and modules are shown as a single horizontal row of pins. 2-lead passives are drawn axially with the value in line.
+
+### C1 — Capacitor
+
+```
+t1 ─┤├─ t2   [10 nF]
+```
+
+### C2 — Capacitor
+
+```
+t1 ─┤├─ t2   [100 nF]
+```
+
+### D1 — D1N4148
+
+```
+anode ─▶├─ cathode   [D1N4148]
+```
+
+### D2 — D1N4148
+
+```
+anode ─▶├─ cathode   [D1N4148]
+```
+
+### D3 — D1N4148
+
+```
+anode ─▶├─ cathode   [D1N4148]
+```
+
+### D4 — D1N4148
+
+```
+anode ─▶├─ cathode   [D1N4148]
+```
+
+### D5 — D1N4148
+
+```
+anode ─▶├─ cathode   [D1N4148]
+```
+
+### D6 — D1N4148
+
+```
+anode ─▶├─ cathode   [D1N4148]
+```
+
+### D7 — LED
+
+```
+anode (+, long lead) ─▶├─ cathode (−, short lead)   [red, 5 mm]
+```
+
+### D8 — LED
+
+```
+anode (+, long lead) ─▶├─ cathode (−, short lead)   [red, 5 mm]
+```
+
+### D9 — LED
+
+```
+anode (+, long lead) ─▶├─ cathode (−, short lead)   [red, 5 mm]
+```
+
+### D10 — LED
+
+```
+anode (+, long lead) ─▶├─ cathode (−, short lead)   [red, 5 mm]
+```
+
+### D11 — LED
+
+```
+anode (+, long lead) ─▶├─ cathode (−, short lead)   [red, 5 mm]
+```
+
+### D12 — LED
+
+```
+anode (+, long lead) ─▶├─ cathode (−, short lead)   [red, 5 mm]
+```
+
+### D13 — LED
+
+```
+anode (+, long lead) ─▶├─ cathode (−, short lead)   [red, 5 mm]
+```
+
+### R1 — Resistor
+
+```
+t1 ─┤▮ 470 Ω ▮├─ t2
+```
+
+### R2 — Resistor
+
+```
+t1 ─┤▮ 330 Ω ▮├─ t2
+```
+
+### R3 — Resistor
+
+```
+t1 ─┤▮ 330 Ω ▮├─ t2
+```
+
+### R4 — Resistor
+
+```
+t1 ─┤▮ 330 Ω ▮├─ t2
+```
+
+### R5 — Resistor
+
+```
+t1 ─┤▮ 10000 Ω ▮├─ t2
+```
+
+### R6 — Resistor
+
+```
+t1 ─┤▮ 10000 Ω ▮├─ t2
+```
+
+### R7 — Resistor
+
+```
+t1 ─┤▮ 10000 Ω ▮├─ t2
+```
+
+### U1 — NE555
+
+```
+        1      2      3      4   
+       GND   TRIG    OUT   RESET 
+    ┌────────────────────────────┐
+  U │           NE555            │
+    └────────────────────────────┘
+       VCC   DISCH  THRES  CONT  
+        8      7      6      5   
+```
+
+### U2 — CD4017
+
+```
+       1    2    3    4    5    6    7    8  
+      Q5   Q1   Q0   Q2   Q6   Q7   Q3   VSS 
+    ┌────────────────────────────────────────┐
+  U │                 CD4017                 │
+    └────────────────────────────────────────┘
+      VDD  RST  CLK  CE   CO   Q9   Q4   Q8  
+      16   15   14   13   12   11   10    9  
+```
+
+
 ## How to verify
 
 Before you start wiring, take five minutes to confirm each part actually works. A multimeter on the diode-test and resistance settings catches most pre-install failures: dead LEDs, mis-bagged parts, transistors damaged in shipping, batteries below their safe-discharge limit. The checks below cover what you can verify with a basic multimeter; chips and complex modules generally need a working test rig instead, so they're not listed here.

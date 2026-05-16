@@ -11,6 +11,10 @@ The document structure is:
     ## Parts
     <parts table + free-form prose for non-electronic items>
 
+    ## Layout
+    <per-part ASCII pinout diagram so the builder can orient each
+     component before wiring it>
+
     ## How to verify
     <generic intro paragraph, then per-component multimeter checks
      so DOA parts are caught before they go on the breadboard>
@@ -42,6 +46,7 @@ from framework.pin import Pin
 from framework.port import Port
 
 from framework.export.assembly_guide.general_gotchas import general_gotchas
+from framework.export.assembly_guide.layout import part_layout
 from framework.export.assembly_guide.placement import (
     ComponentPlacement, chip_pin_count, place,
 )
@@ -227,6 +232,47 @@ def _ingredients_section(parts: list[Part]) -> str:
         "any colour for signals), and a 5 V supply."
     )
     return '\n'.join(lines)
+
+
+# ----------------------------------------------------------------- layout
+
+
+def _layout_section(parts: list[Part]) -> str:
+    """Build the Layout section: one ASCII pinout per placeable part.
+
+    Sorted by refdes (alphabetical prefix, numeric suffix) so the
+    output is deterministic for the goldens.  Rails contribute no
+    diagram and are filtered out."""
+    lines: list[str] = [
+        "## Layout", "",
+        "Each part below is drawn the way it sits on the breadboard, "
+        "with every pin labelled. Chips run left-to-right with the "
+        "notch at the left; pin 1 is the top-left pin (closest to the "
+        "notch). Sensors and modules are shown as a single horizontal "
+        "row of pins. 2-lead passives are drawn axially with the value "
+        "in line.",
+        "",
+    ]
+
+    def sort_key(p: Part) -> tuple[str, int]:
+        rd = p.refdes
+        prefix = rd.rstrip('0123456789')
+        n = rd[len(prefix):]
+        return (prefix, int(n) if n else 0)
+
+    placeable = [p for p in parts if not _is_rail(p)]
+    for part in sorted(placeable, key=sort_key):
+        diagram = part_layout(part, _value_for_bom(part))
+        if not diagram:
+            continue
+        cls = type(part).__name__
+        lines.append(f"### {part.refdes} — {cls}")
+        lines.append("")
+        lines.append("```")
+        lines.append(diagram)
+        lines.append("```")
+        lines.append("")
+    return '\n'.join(lines).rstrip() + '\n'
 
 
 # ----------------------------------------------------------------- method
@@ -558,6 +604,8 @@ def build_recipe(design: Part) -> str:
     sections.append(_safety_section())
     sections.append("")
     sections.append(_ingredients_section(placeable))
+    sections.append("")
+    sections.append(_layout_section(placeable))
     sections.append("")
     sections.append(_verify_section(placeable))
     sections.append("")

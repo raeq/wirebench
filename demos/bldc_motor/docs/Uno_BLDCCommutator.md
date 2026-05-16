@@ -16,6 +16,23 @@ ATmega328P running the Hall-driven six-step commutation loop.
 
 Also: a standard 830-pin solderless breadboard, an assortment of jumper wires (red for the positive rail, black for ground rail, any colour for signals), and a 5 V supply.
 
+## Layout
+
+Each part below is drawn the way it sits on the breadboard, with every pin labelled. Chips run left-to-right with the notch at the left; pin 1 is the top-left pin (closest to the notch). Sensors and modules are shown as a single horizontal row of pins. 2-lead passives are drawn axially with the value in line.
+
+### U1 — Uno_BLDCCommutator
+
+```
+        1     2     3     4     5     6     7     8     9    10    11    12    13    14  
+       PC6   PD0   PD1   PD2   PD3   PD4   VCC   GND   PB6   PB7   PD5   PD6   PD7   PB0 
+    ┌────────────────────────────────────────────────────────────────────────────────────┐
+  U │                                 Uno_BLDCCommutator                                 │
+    └────────────────────────────────────────────────────────────────────────────────────┘
+       PC5   PC4   PC3   PC2   PC1   PC0   GND  AREF  AVCC   PB5   PB4   PB3   PB2   PB1 
+       28    27    26    25    24    23    22    21    20    19    18    17    16    15  
+```
+
+
 ## How to verify
 
 Before you start wiring, take five minutes to confirm each part actually works. A multimeter on the diode-test and resistance settings catches most pre-install failures: dead LEDs, mis-bagged parts, transistors damaged in shipping, batteries below their safe-discharge limit. The checks below cover what you can verify with a basic multimeter; chips and complex modules generally need a working test rig instead, so they're not listed here.
