@@ -446,24 +446,46 @@ def _jumper_steps(
             for p in ps
         ))
 
-    for nid in sorted(node_to_ports.keys(), key=_net_key):
-        ports = node_to_ports[nid]
+    def _emit_subnet(sub_ports: list[Port]) -> None:
+        """Emit jumper steps for one logical sub-net.  A sub-net is
+        either a true net (no internal passive bridge) or one half of
+        a net that's been split at a 2-lead passive's terminals."""
         rail_polarity: bool | None = None
-        for p in ports:
+        for p in sub_ports:
             owner = port_owner.get(id(p))
             if isinstance(owner, Rail):
                 rail_polarity = bool(owner.level)
                 break
-        # Endpoints split by where the wire actually lands.  On-board
-        # endpoints carry a tie-strip coordinate; Uno-header endpoints
-        # don't (the Uno sits beside the breadboard, not on it).
+        # For 2-lead passives where BOTH terminals appear in this
+        # sub-net, the body of the passive already bridges t1 ↔ t2 —
+        # emitting a jumper between them would be redundant (and
+        # readers spot it immediately as a bench error).  Collapse
+        # both terminals to one "canonical" port (the
+        # alphabetically-first name, typically t1 / anode) so the
+        # downstream rail / chain logic sees just one endpoint per
+        # bridging passive.
+        seen_ids = {id(p) for p in sub_ports}
+        keep: set[int] = set()
+        for p in sub_ports:
+            owner = port_owner.get(id(p))
+            if owner is None or isinstance(owner, (Pin, Chip, Rail)):
+                keep.add(id(p))
+                continue
+            terms = list(owner.ports.values())
+            if len(terms) != 2 or not all(id(t) in seen_ids for t in terms):
+                keep.add(id(p))
+                continue
+            canonical = min(terms, key=lambda t: t.name)
+            if id(p) == id(canonical):
+                keep.add(id(p))
         bb_endpoints: list[tuple[str, str]] = sorted({
             (port_to_endpoint[id(p)], port_to_label[id(p)])
-            for p in ports if id(p) in port_to_endpoint
+            for p in sub_ports
+            if id(p) in port_to_endpoint and id(p) in keep
         })
         uno_endpoints: list[str] = sorted({
             port_to_uno_endpoint[id(p)]
-            for p in ports if id(p) in port_to_uno_endpoint
+            for p in sub_ports if id(p) in port_to_uno_endpoint
         })
         if rail_polarity is not None and (bb_endpoints or uno_endpoints):
             rail_name = "top `+` rail" if rail_polarity else "top `-` rail"
@@ -474,12 +496,10 @@ def _jumper_steps(
             for ep in uno_endpoints:
                 steps.append(f"Run a jumper from {ep} to the {rail_name}.")
         else:
-            # Signal net — chain endpoints together.  When an Uno
-            # endpoint and a breadboard endpoint share a net, emit
-            # one jumper per Uno↔breadboard pair (no breadboard coord
-            # on the Uno side).  Two breadboard endpoints chain as
-            # before; two Uno endpoints (rare) chain with no coords
-            # either way.
+            # Signal sub-net — chain endpoints together.  Uno↔breadboard
+            # pairs emit no breadboard coord on the Uno side; pure-bb
+            # chains emit coords on both sides; pure-Uno chains emit
+            # neither.
             for uno_ep in uno_endpoints:
                 for bb_ep, bb_pos in bb_endpoints:
                     steps.append(
@@ -499,6 +519,60 @@ def _jumper_steps(
                         f"Run a jumper from {uno_endpoints[i]} "
                         f"to {uno_endpoints[i + 1]}."
                     )
+
+    def _bridging_passive(net_ports: list[Port]) -> Part | None:
+        """Return the 2-lead passive whose BOTH terminals appear in
+        `net_ports`, or None.
+
+        Demos sometimes wire a passive's two terminals into the same
+        logical net (e.g. `wire(arduino.PD3, r1.t1, r1.t2, display.DIG_1)`
+        so the simulator's voltage-only solver can propagate through
+        the resistor as a 0-Ω passthrough).  At the bench the resistor's
+        body provides the connection between its leads — no jumper goes
+        across t1↔t2 — so the assembly guide must split such a net
+        into two sub-nets, one per terminal.
+
+        Restricted to nets with exactly one such fully-internal
+        passive; nets with two parallel passives fall through to the
+        default chain logic."""
+        seen_ids = {id(p) for p in net_ports}
+        candidates: list[Part] = []
+        for p in net_ports:
+            owner = port_owner.get(id(p))
+            if owner is None or owner in candidates:
+                continue
+            if isinstance(owner, (Pin, Chip, Rail)):
+                continue
+            terminal_ports = list(owner.ports.values())
+            if len(terminal_ports) != 2:
+                continue
+            if all(id(t) in seen_ids for t in terminal_ports):
+                candidates.append(owner)
+        return candidates[0] if len(candidates) == 1 else None
+
+    for nid in sorted(node_to_ports.keys(), key=_net_key):
+        ports = node_to_ports[nid]
+        bridge = _bridging_passive(ports)
+        if bridge is None:
+            _emit_subnet(ports)
+            continue
+        # Split the net at the passive's two terminals.  Non-passive
+        # ports are sorted deterministically and distributed half-half
+        # across the two terminals — without semantic direction info
+        # (the wire() call merges everything onto one node), an even
+        # split is the most defensible choice and lets the body of
+        # the passive carry the current in series between the two
+        # sides.
+        terminals = list(bridge.ports.values())
+        t1, t2 = terminals[0], terminals[1]
+        non_passive = [p for p in ports if port_owner.get(id(p)) is not bridge]
+        non_passive.sort(key=lambda p: (
+            getattr(port_owner.get(id(p)), 'refdes', '') or '',
+            p.name,
+        ))
+        half = (len(non_passive) + 1) // 2
+        _emit_subnet(non_passive[:half] + [t1])
+        _emit_subnet(non_passive[half:] + [t2])
     return steps
 
 

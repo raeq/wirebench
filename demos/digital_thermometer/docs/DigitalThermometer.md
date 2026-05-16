@@ -99,35 +99,33 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    position 27 (any of 27A–27E).
 6. Run a jumper from R1 t1 at position 24 (any of 24A–24E) to U1 D3 (Arduino
    Uno header).
-7. Run a jumper from R1 t2 at position 27 (any of 27A–27E) to U1 D3 (Arduino
-   Uno header).
-8. Run a jumper from U3 pin 12 at position 10 (any of 10F–10J) to U1 D3
-   (Arduino Uno header).
-9. Run a jumper from U3 pin 6 at position 15 (any of 15A–15E) to the top `-`
+7. Run a jumper from R1 t2 to U3 pin 12 — position 27 (any of 27A–27E) to
+   position 10 (any of 10F–10J).
+8. Run a jumper from U3 pin 6 at position 15 (any of 15A–15E) to the top `-`
    rail.
-10. Run a jumper from U3 pin 4 at position 13 (any of 13A–13E) to U1 D8
+9. Run a jumper from U3 pin 4 at position 13 (any of 13A–13E) to U1 D8
    (Arduino Uno header).
-11. Run a jumper from U3 pin 2 at position 11 (any of 11A–11E) to U1 D9
+10. Run a jumper from U3 pin 2 at position 11 (any of 11A–11E) to U1 D9
    (Arduino Uno header).
-12. Run a jumper from U3 pin 1 at position 10 (any of 10A–10E) to U1 D10
+11. Run a jumper from U3 pin 1 at position 10 (any of 10A–10E) to U1 D10
    (Arduino Uno header).
-13. Run a jumper from U3 pin 10 at position 12 (any of 12F–12J) to U1 D11
+12. Run a jumper from U3 pin 10 at position 12 (any of 12F–12J) to U1 D11
    (Arduino Uno header).
-14. Run a jumper from U3 pin 5 at position 14 (any of 14A–14E) to U1 D12
+13. Run a jumper from U3 pin 5 at position 14 (any of 14A–14E) to U1 D12
    (Arduino Uno header).
-15. Run a jumper from U3 pin 3 at position 12 (any of 12A–12E) to U1 D13
+14. Run a jumper from U3 pin 3 at position 12 (any of 12A–12E) to U1 D13
    (Arduino Uno header).
-16. Run a jumper from U2 pin 2 at position 19 (any of 19A–19E) to U1 D2
+15. Run a jumper from U2 pin 2 at position 19 (any of 19A–19E) to U1 D2
    (Arduino Uno header).
-17. Run a jumper from U3 pin 9 at position 13 (any of 13F–13J) to U1 D4
+16. Run a jumper from U3 pin 9 at position 13 (any of 13F–13J) to U1 D4
    (Arduino Uno header).
-18. Run a jumper from U3 pin 8 at position 14 (any of 14F–14J) to U1 D5
+17. Run a jumper from U3 pin 8 at position 14 (any of 14F–14J) to U1 D5
    (Arduino Uno header).
-19. Run a jumper from U3 pin 11 at position 11 (any of 11F–11J) to U1 D6
+18. Run a jumper from U3 pin 11 at position 11 (any of 11F–11J) to U1 D6
    (Arduino Uno header).
-20. Run a jumper from U3 pin 7 at position 15 (any of 15F–15J) to U1 D7
+19. Run a jumper from U3 pin 7 at position 15 (any of 15F–15J) to U1 D7
    (Arduino Uno header).
-21. Verify nothing is shorted by inspecting the rails with a multimeter
+20. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.
 

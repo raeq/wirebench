@@ -269,71 +269,63 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    position 11 (any of 11A–11E).
 27. Run a jumper from D1 cathode to D2 cathode — position 29 (any of 29A–29E)
    to position 32 (any of 32A–32E).
-28. Run a jumper from D2 cathode to D3 cathode — position 32 (any of 32A–32E)
-   to position 35 (any of 35A–35E).
+28. Run a jumper from D2 cathode to R1 t1 — position 32 (any of 32A–32E) to
+   position 46 (any of 46A–46E).
 29. Run a jumper from D3 cathode to D7 anode — position 35 (any of 35A–35E) to
    position 87 (any of 87A–87E).
-30. Run a jumper from D7 anode to R1 t1 — position 87 (any of 87A–87E) to
-   position 46 (any of 46A–46E).
-31. Run a jumper from R1 t1 to R1 t2 — position 46 (any of 46A–46E) to
+30. Run a jumper from D7 anode to R1 t2 — position 87 (any of 87A–87E) to
    position 49 (any of 49A–49E).
-32. Run a jumper from D10 anode to D11 anode — position 96 (any of 96A–96E) to
+31. Run a jumper from D10 anode to D11 anode — position 96 (any of 96A–96E) to
    position 99 (any of 99A–99E).
-33. Run a jumper from D11 anode to D4 cathode — position 99 (any of 99A–99E)
+32. Run a jumper from D11 anode to D4 cathode — position 99 (any of 99A–99E)
    to position 38 (any of 38A–38E).
-34. Run a jumper from D4 cathode to D5 cathode — position 38 (any of 38A–38E)
-   to position 41 (any of 41A–41E).
-35. Run a jumper from D5 cathode to D6 cathode — position 41 (any of 41A–41E)
-   to position 44 (any of 44A–44E).
-36. Run a jumper from D6 cathode to R3 t1 — position 44 (any of 44A–44E) to
+33. Run a jumper from D4 cathode to R3 t1 — position 38 (any of 38A–38E) to
    position 56 (any of 56A–56E).
-37. Run a jumper from R3 t1 to R3 t2 — position 56 (any of 56A–56E) to
+34. Run a jumper from D5 cathode to D6 cathode — position 41 (any of 41A–41E)
+   to position 44 (any of 44A–44E).
+35. Run a jumper from D6 cathode to R3 t2 — position 44 (any of 44A–44E) to
    position 59 (any of 59A–59E).
-38. Run a jumper from D10 cathode at position 97 (any of 97A–97E) to the top
+36. Run a jumper from D10 cathode at position 97 (any of 97A–97E) to the top
    `-` rail.
-39. Run a jumper from D11 cathode at position 100 (any of 100A–100E) to the
+37. Run a jumper from D11 cathode at position 100 (any of 100A–100E) to the
    top `-` rail.
-40. Run a jumper from D12 cathode at position 103 (any of 103A–103E) to the
+38. Run a jumper from D12 cathode at position 103 (any of 103A–103E) to the
    top `-` rail.
-41. Run a jumper from D13 cathode at position 106 (any of 106A–106E) to the
+39. Run a jumper from D13 cathode at position 106 (any of 106A–106E) to the
    top `-` rail.
-42. Run a jumper from D7 cathode at position 88 (any of 88A–88E) to the top
+40. Run a jumper from D7 cathode at position 88 (any of 88A–88E) to the top
    `-` rail.
-43. Run a jumper from D8 cathode at position 91 (any of 91A–91E) to the top
+41. Run a jumper from D8 cathode at position 91 (any of 91A–91E) to the top
    `-` rail.
-44. Run a jumper from D9 cathode at position 94 (any of 94A–94E) to the top
+42. Run a jumper from D9 cathode at position 94 (any of 94A–94E) to the top
    `-` rail.
-45. Run a jumper from D12 anode to D13 anode — position 102 (any of 102A–102E)
+43. Run a jumper from D12 anode to D13 anode — position 102 (any of 102A–102E)
    to position 105 (any of 105A–105E).
-46. Run a jumper from D13 anode to D6 anode — position 105 (any of 105A–105E)
-   to position 43 (any of 43A–43E).
-47. Run a jumper from D6 anode to R4 t1 — position 43 (any of 43A–43E) to
+44. Run a jumper from D13 anode to R4 t1 — position 105 (any of 105A–105E) to
    position 61 (any of 61A–61E).
-48. Run a jumper from R4 t1 to R4 t2 — position 61 (any of 61A–61E) to
+45. Run a jumper from D6 anode to R4 t2 — position 43 (any of 43A–43E) to
    position 64 (any of 64A–64E).
-49. Run a jumper from R4 t2 to U2 pin 10 — position 64 (any of 64A–64E) to
+46. Run a jumper from R4 t2 to U2 pin 10 — position 64 (any of 64A–64E) to
    position 16 (any of 16F–16J).
-50. Run a jumper from D2 anode to D5 anode — position 31 (any of 31A–31E) to
+47. Run a jumper from D2 anode to D5 anode — position 31 (any of 31A–31E) to
    position 40 (any of 40A–40E).
-51. Run a jumper from D5 anode to U2 pin 7 — position 40 (any of 40A–40E) to
+48. Run a jumper from D5 anode to U2 pin 7 — position 40 (any of 40A–40E) to
    position 16 (any of 16A–16E).
-52. Run a jumper from D3 anode to U2 pin 1 — position 34 (any of 34A–34E) to
+49. Run a jumper from D3 anode to U2 pin 1 — position 34 (any of 34A–34E) to
    position 10 (any of 10A–10E).
-53. Run a jumper from D4 anode to U2 pin 4 — position 37 (any of 37A–37E) to
+50. Run a jumper from D4 anode to U2 pin 4 — position 37 (any of 37A–37E) to
    position 13 (any of 13A–13E).
-54. Run a jumper from D8 anode to D9 anode — position 90 (any of 90A–90E) to
+51. Run a jumper from D8 anode to D9 anode — position 90 (any of 90A–90E) to
    position 93 (any of 93A–93E).
-55. Run a jumper from D9 anode to R2 t1 — position 93 (any of 93A–93E) to
+52. Run a jumper from D9 anode to R2 t1 — position 93 (any of 93A–93E) to
    position 51 (any of 51A–51E).
-56. Run a jumper from R2 t1 to R2 t2 — position 51 (any of 51A–51E) to
-   position 54 (any of 54A–54E).
-57. Run a jumper from R2 t2 to U2 pin 12 — position 54 (any of 54A–54E) to
+53. Run a jumper from R2 t2 to U2 pin 12 — position 54 (any of 54A–54E) to
    position 14 (any of 14F–14J).
-58. Run a jumper from U1 pin 4 at position 23 (any of 23A–23E) to the top `+`
+54. Run a jumper from U1 pin 4 at position 23 (any of 23A–23E) to the top `+`
    rail.
-59. Run a jumper from U2 pin 15 to U2 pin 5 — position 11 (any of 11F–11J) to
+55. Run a jumper from U2 pin 15 to U2 pin 5 — position 11 (any of 11F–11J) to
    position 14 (any of 14A–14E).
-60. Verify nothing is shorted by inspecting the rails with a multimeter
+56. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.
 
