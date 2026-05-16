@@ -119,3 +119,9 @@ also_copy = [
 [tool.mypy]
 mypy_path = ["src", "demos"]
 strict = true
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.409",
+    "ruff>=0.15.13",
+]

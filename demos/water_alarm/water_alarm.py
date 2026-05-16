@@ -18,7 +18,7 @@ _SRC = Path(__file__).resolve().parent.parent.parent / 'src'
 if str(_SRC) not in sys.path:
     sys.path.insert(0, str(_SRC))
 
-from wirebench import (
+from wirebench import (  # noqa: E402  — import must follow the sys.path tweak above
     Circuit, wire,
     LED, Rail,
     ULN2003A, SN74HC04, CD4069, CD4043,
