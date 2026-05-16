@@ -21,6 +21,71 @@ Water level alarm.
 
 Also: a standard 830-pin solderless breadboard, an assortment of jumper wires (red for the positive rail, black for ground rail, any colour for signals), and a 5 V supply.
 
+## Layout
+
+Each part below is drawn the way it sits on the breadboard, with every pin labelled. Chips run left-to-right with the notch at the left; pin 1 is the top-left pin (closest to the notch). Sensors and modules are shown as a single horizontal row of pins. 2-lead passives are drawn axially with the value in line.
+
+### D1 — LED
+
+```
+anode (+, long lead) ─▶├─ cathode (−, short lead)   [red, 5 mm]
+```
+
+### D2 — LED
+
+```
+anode (+, long lead) ─▶├─ cathode (−, short lead)   [green, 5 mm]
+```
+
+### U1 — ULN2003A
+
+```
+        1      2      3      4      5      6      7      8   
+      in_1   in_2   in_3   in_4   in_5   in_6   in_7     —   
+    ┌────────────────────────────────────────────────────────┐
+  U │                        ULN2003A                        │
+    └────────────────────────────────────────────────────────┘
+      out_1  out_2  out_3  out_4  out_5  out_6  out_7    —   
+       16     15     14     13     12     11     10      9   
+```
+
+### U2 — SN74HC04
+
+```
+       1    2    3    4    5    6    7  
+      a_1  y_1  a_2  y_2  a_3  y_3   —  
+    ┌───────────────────────────────────┐
+  U │              SN74HC04             │
+    └───────────────────────────────────┘
+       —   a_6  y_6  a_5  y_5  a_4  y_4 
+      14   13   12   11   10    9    8  
+```
+
+### U3 — CD4069
+
+```
+       1    2    3    4    5    6    7  
+      a_1  y_1  a_2  y_2  a_3  y_3   —  
+    ┌───────────────────────────────────┐
+  U │               CD4069              │
+    └───────────────────────────────────┘
+       —   a_6  y_6  a_5  y_5  a_4  y_4 
+      14   13   12   11   10    9    8  
+```
+
+### U4 — CD4043
+
+```
+       1    2    3    4    5    6    7    8  
+      q_1  r_1  s_1  q_2  s_2  r_2  oe    —  
+    ┌────────────────────────────────────────┐
+  U │                 CD4043                 │
+    └────────────────────────────────────────┘
+       —    —   q_4  r_4  s_4  q_3  s_3  r_3 
+      16   15   14   13   12   11   10    9  
+```
+
+
 ## How to verify
 
 Before you start wiring, take five minutes to confirm each part actually works. A multimeter on the diode-test and resistance settings catches most pre-install failures: dead LEDs, mis-bagged parts, transistors damaged in shipping, batteries below their safe-discharge limit. The checks below cover what you can verify with a basic multimeter; chips and complex modules generally need a working test rig instead, so they're not listed here.

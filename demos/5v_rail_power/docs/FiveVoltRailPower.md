@@ -24,6 +24,69 @@
 
 Also: a standard 830-pin solderless breadboard, an assortment of jumper wires (red for the positive rail, black for ground rail, any colour for signals), and a 5 V supply.
 
+## Layout
+
+Each part below is drawn the way it sits on the breadboard, with every pin labelled. Chips run left-to-right with the notch at the left; pin 1 is the top-left pin (closest to the notch). Sensors and modules are shown as a single horizontal row of pins. 2-lead passives are drawn axially with the value in line.
+
+### BT1 — CR2032Stack
+
+```
+pos ─┤▮ CR2032Stack ▮├─ neg
+```
+
+### C1 — Capacitor
+
+```
+t1 ─┤├─ t2   [100 nF]
+```
+
+### C2 — Capacitor
+
+```
+t1 ─┤├─ t2   [10 µF]
+```
+
+### D1 — D1N5817
+
+```
+anode ─▶├─ cathode   [D1N5817]
+```
+
+### D2 — D1N4733A
+
+```
+anode ─▶├─ cathode   [D1N4733A]
+```
+
+### D3 — LED
+
+```
+anode (+, long lead) ─▶├─ cathode (−, short lead)   [green, 5 mm]
+```
+
+### P1 — Header1xNMale
+
+```
+p1 ─┤▮ Header1xNMale ▮├─ p1_inner
+```
+
+### R1 — Resistor
+
+```
+t1 ─┤▮ 470 Ω ▮├─ t2
+```
+
+### U1 — LM7805
+
+```
+┌────────────────────────┐
+│         LM7805         │
+└┬───────┬───────┬───────┘
+ 1       2       3
+NPUT    GND   OUTPUT
+```
+
+
 ## How to verify
 
 Before you start wiring, take five minutes to confirm each part actually works. A multimeter on the diode-test and resistance settings catches most pre-install failures: dead LEDs, mis-bagged parts, transistors damaged in shipping, batteries below their safe-discharge limit. The checks below cover what you can verify with a basic multimeter; chips and complex modules generally need a working test rig instead, so they're not listed here.

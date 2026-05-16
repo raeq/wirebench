@@ -17,6 +17,23 @@ A single LED with a current-limit resistor across the supply rails.
 
 Also: a standard 830-pin solderless breadboard, an assortment of jumper wires (red for the positive rail, black for ground rail, any colour for signals), and a 5 V supply.
 
+## Layout
+
+Each part below is drawn the way it sits on the breadboard, with every pin labelled. Chips run left-to-right with the notch at the left; pin 1 is the top-left pin (closest to the notch). Sensors and modules are shown as a single horizontal row of pins. 2-lead passives are drawn axially with the value in line.
+
+### D1 — LED
+
+```
+anode (+, long lead) ─▶├─ cathode (−, short lead)   [red, 5 mm]
+```
+
+### R1 — Resistor
+
+```
+t1 ─┤▮ 330 Ω ▮├─ t2
+```
+
+
 ## How to verify
 
 Before you start wiring, take five minutes to confirm each part actually works. A multimeter on the diode-test and resistance settings catches most pre-install failures: dead LEDs, mis-bagged parts, transistors damaged in shipping, batteries below their safe-discharge limit. The checks below cover what you can verify with a basic multimeter; chips and complex modules generally need a working test rig instead, so they're not listed here.
