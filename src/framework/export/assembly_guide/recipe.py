@@ -43,7 +43,7 @@ from framework.port import Port
 
 from framework.export.assembly_guide.general_gotchas import general_gotchas
 from framework.export.assembly_guide.placement import (
-    ComponentPlacement, PinPlacement, chip_pin_count, place,
+    ComponentPlacement, chip_pin_count, place,
 )
 
 
@@ -289,7 +289,7 @@ def _passive_step(placement: ComponentPlacement) -> str:
     cls = type(part).__name__
     if len(placement.pins) < 2:
         return f"Plug {part.refdes} ({cls}) into the breadboard."
-    (n1, p1), (n2, p2) = placement.pins[0], placement.pins[1]
+    (_, p1), (_, p2) = placement.pins[0], placement.pins[1]
     return (
         f"Plug {part.refdes} ({cls}): one lead at "
         f"{p1.tie_strip_label}, the other at {p2.tie_strip_label}."
@@ -314,7 +314,11 @@ def _jumper_steps(
     wires between them at the bench."""
     from components.passives.rail import Rail
     steps: list[str] = []
-    # Port → tie-strip label for placeable parts only.
+    # For each placeable port: the "U1 out_1" endpoint label (what to
+    # connect, logically) and the tie-strip label (where to find it on
+    # the board).  The logical endpoint leads in the emitted step;
+    # coordinates trail as the bench-side reference.
+    port_to_endpoint: dict[int, str] = {}
     port_to_label: dict[int, str] = {}
     for placement in placements.values():
         comp = placement.component
@@ -323,6 +327,7 @@ def _jumper_steps(
                 port = comp.ports[name]
             except (KeyError, TypeError):
                 continue
+            port_to_endpoint[id(port)] = f"{comp.refdes} {name}"
             port_to_label[id(port)] = pin_place.tie_strip_label
 
     # Build port → owner Part lookup so we can spot rail-owned
@@ -366,18 +371,24 @@ def _jumper_steps(
             if isinstance(owner, Rail):
                 rail_polarity = bool(owner.level)
                 break
-        labels = [port_to_label[id(p)] for p in ports if id(p) in port_to_label]
-        labels = sorted(set(labels))
-        if rail_polarity is not None and labels:
+        # (endpoint_label, position_label) for each placed port on this net.
+        endpoints: list[tuple[str, str]] = sorted({
+            (port_to_endpoint[id(p)], port_to_label[id(p)])
+            for p in ports if id(p) in port_to_endpoint
+        })
+        if rail_polarity is not None and endpoints:
             rail_name = "top `+` rail" if rail_polarity else "top `-` rail"
-            for label in labels:
+            for ep, pos in endpoints:
                 steps.append(
-                    f"Run a jumper from {label} to the {rail_name}."
+                    f"Run a jumper from {ep} at {pos} to the {rail_name}."
                 )
-        elif len(labels) >= 2:
-            for i in range(len(labels) - 1):
+        elif len(endpoints) >= 2:
+            for i in range(len(endpoints) - 1):
+                ep1, pos1 = endpoints[i]
+                ep2, pos2 = endpoints[i + 1]
                 steps.append(
-                    f"Run a jumper from {labels[i]} to {labels[i+1]}."
+                    f"Run a jumper from {ep1} to {ep2} "
+                    f"— {pos1} to {pos2}."
                 )
     return steps
 

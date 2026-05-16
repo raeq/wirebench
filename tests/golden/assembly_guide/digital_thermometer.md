@@ -41,35 +41,36 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    The chip's notch / dot marks pin 1 — make sure it lines up.
 5. Plug R1 (Resistor): one lead at position 40 (any of 40A–40E), the other at
    position 43 (any of 43A–43E).
-6. Run a jumper from position 14 (any of 14A–14E) to position 26 (any of
-   26F–26J).
-7. Run a jumper from position 26 (any of 26F–26J) to position 40 (any of
-   40A–40E).
-8. Run a jumper from position 40 (any of 40A–40E) to position 43 (any of
-   43A–43E).
-9. Run a jumper from position 31 (any of 31A–31E) to the top `-` rail.
-10. Run a jumper from position 23 (any of 23A–23E) to position 29 (any of
-   29A–29E).
-11. Run a jumper from position 23 (any of 23F–23J) to position 27 (any of
-   27A–27E).
-12. Run a jumper from position 22 (any of 22F–22J) to position 26 (any of
-   26A–26E).
-13. Run a jumper from position 21 (any of 21F–21J) to position 28 (any of
-   28F–28J).
-14. Run a jumper from position 20 (any of 20F–20J) to position 30 (any of
-   30A–30E).
-15. Run a jumper from position 19 (any of 19F–19J) to position 28 (any of
-   28A–28E).
-16. Run a jumper from position 13 (any of 13A–13E) to position 35 (any of
-   35A–35E).
-17. Run a jumper from position 15 (any of 15A–15E) to position 29 (any of
-   29F–29J).
-18. Run a jumper from position 20 (any of 20A–20E) to position 30 (any of
-   30F–30J).
-19. Run a jumper from position 21 (any of 21A–21E) to position 27 (any of
-   27F–27J).
-20. Run a jumper from position 22 (any of 22A–22E) to position 31 (any of
-   31F–31J).
+6. Run a jumper from R1 t1 to R1 t2 — position 40 (any of 40A–40E) to position
+   43 (any of 43A–43E).
+7. Run a jumper from R1 t2 to U1 PD3 — position 43 (any of 43A–43E) to
+   position 14 (any of 14A–14E).
+8. Run a jumper from U1 PD3 to U3 DIG_1 — position 14 (any of 14A–14E) to
+   position 26 (any of 26F–26J).
+9. Run a jumper from U3 DIG_4 at position 31 (any of 31A–31E) to the top `-`
+   rail.
+10. Run a jumper from U1 PB0 to U3 SEG_C — position 23 (any of 23A–23E) to
+   position 29 (any of 29A–29E).
+11. Run a jumper from U1 PB1 to U3 SEG_D — position 23 (any of 23F–23J) to
+   position 27 (any of 27A–27E).
+12. Run a jumper from U1 PB2 to U3 SEG_E — position 22 (any of 22F–22J) to
+   position 26 (any of 26A–26E).
+13. Run a jumper from U1 PB3 to U3 SEG_F — position 21 (any of 21F–21J) to
+   position 28 (any of 28F–28J).
+14. Run a jumper from U1 PB4 to U3 SEG_G — position 20 (any of 20F–20J) to
+   position 30 (any of 30A–30E).
+15. Run a jumper from U1 PB5 to U3 SEG_DP — position 19 (any of 19F–19J) to
+   position 28 (any of 28A–28E).
+16. Run a jumper from U1 PD2 to U2 DATA — position 13 (any of 13A–13E) to
+   position 35 (any of 35A–35E).
+17. Run a jumper from U1 PD4 to U3 DIG_2 — position 15 (any of 15A–15E) to
+   position 29 (any of 29F–29J).
+18. Run a jumper from U1 PD5 to U3 DIG_3 — position 20 (any of 20A–20E) to
+   position 30 (any of 30F–30J).
+19. Run a jumper from U1 PD6 to U3 SEG_A — position 21 (any of 21A–21E) to
+   position 27 (any of 27F–27J).
+20. Run a jumper from U1 PD7 to U3 SEG_B — position 22 (any of 22A–22E) to
+   position 31 (any of 31F–31J).
 21. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.
