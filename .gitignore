@@ -8,6 +8,11 @@ responses.md
 # file.
 .plans/
 
+# Local reference material (datasheets, manuals) — not part of the
+# repo's source.  Already covered by the `.*` rule below; explicit
+# for discoverability.
+.references/
+
 # Dotfiles and environment files
 .*
 !.gitignore
