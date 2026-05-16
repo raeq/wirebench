@@ -60,5 +60,8 @@ def test_rail_jumpers_emitted() -> None:
     instructions."""
     from hello_led import HelloLED
     text = export_to_string(HelloLED(), 'assembly_guide')
-    assert 'to the top `+` rail' in text
-    assert 'to the top `-` rail' in text
+    # The step text is paragraph-wrapped, so collapse whitespace before
+    # asserting the logical substring is present.
+    flat = ' '.join(text.split())
+    assert 'to the top `+` rail' in flat
+    assert 'to the top `-` rail' in flat

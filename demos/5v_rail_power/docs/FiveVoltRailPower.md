@@ -59,30 +59,30 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    position 36 (any of 36A–36E).
 10. Plug D3 (LED): one lead at position 38 (any of 38A–38E), the other at
    position 39 (any of 39A–39E).
-11. Run a jumper from position 11 (any of 11A–11E) to position 16 (any of
-   16A–16E).
-12. Run a jumper from position 16 (any of 16A–16E) to position 25 (any of
-   25A–25E).
-13. Run a jumper from position 25 (any of 25A–25E) to position 28 (any of
-   28A–28E).
-14. Run a jumper from position 28 (any of 28A–28E) to position 30 (any of
-   30A–30E).
-15. Run a jumper from position 30 (any of 30A–30E) to position 39 (any of
-   39A–39E).
-16. Run a jumper from position 15 (any of 15A–15E) to position 19 (any of
-   19A–19E).
-17. Run a jumper from position 10 (any of 10A–10E) to position 22 (any of
-   22A–22E).
-18. Run a jumper from position 22 (any of 22A–22E) to position 24 (any of
-   24A–24E).
-19. Run a jumper from position 11 (any of 11F–11J) to position 27 (any of
-   27A–27E).
-20. Run a jumper from position 27 (any of 27A–27E) to position 31 (any of
-   31A–31E).
-21. Run a jumper from position 31 (any of 31A–31E) to position 33 (any of
-   33A–33E).
-22. Run a jumper from position 36 (any of 36A–36E) to position 38 (any of
-   38A–38E).
+11. Run a jumper from BT1 neg to C1 t2 — position 16 (any of 16A–16E) to
+   position 25 (any of 25A–25E).
+12. Run a jumper from C1 t2 to C2 t2 — position 25 (any of 25A–25E) to
+   position 28 (any of 28A–28E).
+13. Run a jumper from C2 t2 to D2 anode — position 28 (any of 28A–28E) to
+   position 30 (any of 30A–30E).
+14. Run a jumper from D2 anode to D3 cathode — position 30 (any of 30A–30E) to
+   position 39 (any of 39A–39E).
+15. Run a jumper from D3 cathode to U1 GND — position 39 (any of 39A–39E) to
+   position 11 (any of 11A–11E).
+16. Run a jumper from BT1 pos to P1 p1_inner — position 15 (any of 15A–15E) to
+   position 19 (any of 19A–19E).
+17. Run a jumper from C1 t1 to D1 cathode — position 24 (any of 24A–24E) to
+   position 22 (any of 22A–22E).
+18. Run a jumper from D1 cathode to U1 INPUT — position 22 (any of 22A–22E) to
+   position 10 (any of 10A–10E).
+19. Run a jumper from C2 t1 to D2 cathode — position 27 (any of 27A–27E) to
+   position 31 (any of 31A–31E).
+20. Run a jumper from D2 cathode to R1 t1 — position 31 (any of 31A–31E) to
+   position 33 (any of 33A–33E).
+21. Run a jumper from R1 t1 to U1 OUTPUT — position 33 (any of 33A–33E) to
+   position 11 (any of 11F–11J).
+22. Run a jumper from D3 anode to R1 t2 — position 38 (any of 38A–38E) to
+   position 36 (any of 36A–36E).
 23. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.
