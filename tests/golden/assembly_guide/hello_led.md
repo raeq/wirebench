@@ -35,10 +35,12 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    position 15 (any of 15A–15E).
 3. Plug D1 (LED): one lead at position 17 (any of 17A–17E), the other at
    position 18 (any of 18A–18E).
-4. Run a jumper from position 15 (any of 15A–15E) to position 17 (any of
-   17A–17E).
-5. Run a jumper from position 18 (any of 18A–18E) to the top `-` rail.
-6. Run a jumper from position 12 (any of 12A–12E) to the top `+` rail.
+4. Run a jumper from D1 anode to R1 t2 — position 17 (any of 17A–17E) to
+   position 15 (any of 15A–15E).
+5. Run a jumper from D1 cathode at position 18 (any of 18A–18E) to the top `-`
+   rail.
+6. Run a jumper from R1 t1 at position 12 (any of 12A–12E) to the top `+`
+   rail.
 7. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.
