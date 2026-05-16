@@ -265,7 +265,7 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    position 103 (any of 103A–103E).
 25. Plug D13 (LED): one lead at position 105 (any of 105A–105E), the other at
    position 106 (any of 106A–106E).
-26. Run a jumper from D1 anode to U2 Q1 — position 28 (any of 28A–28E) to
+26. Run a jumper from D1 anode to U2 pin 2 — position 28 (any of 28A–28E) to
    position 11 (any of 11A–11E).
 27. Run a jumper from D1 cathode to D2 cathode — position 29 (any of 29A–29E)
    to position 32 (any of 32A–32E).
@@ -311,15 +311,15 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    position 61 (any of 61A–61E).
 48. Run a jumper from R4 t1 to R4 t2 — position 61 (any of 61A–61E) to
    position 64 (any of 64A–64E).
-49. Run a jumper from R4 t2 to U2 Q4 — position 64 (any of 64A–64E) to
+49. Run a jumper from R4 t2 to U2 pin 10 — position 64 (any of 64A–64E) to
    position 16 (any of 16F–16J).
 50. Run a jumper from D2 anode to D5 anode — position 31 (any of 31A–31E) to
    position 40 (any of 40A–40E).
-51. Run a jumper from D5 anode to U2 Q3 — position 40 (any of 40A–40E) to
+51. Run a jumper from D5 anode to U2 pin 7 — position 40 (any of 40A–40E) to
    position 16 (any of 16A–16E).
-52. Run a jumper from D3 anode to U2 Q5 — position 34 (any of 34A–34E) to
+52. Run a jumper from D3 anode to U2 pin 1 — position 34 (any of 34A–34E) to
    position 10 (any of 10A–10E).
-53. Run a jumper from D4 anode to U2 Q2 — position 37 (any of 37A–37E) to
+53. Run a jumper from D4 anode to U2 pin 4 — position 37 (any of 37A–37E) to
    position 13 (any of 13A–13E).
 54. Run a jumper from D8 anode to D9 anode — position 90 (any of 90A–90E) to
    position 93 (any of 93A–93E).
@@ -327,12 +327,12 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    position 51 (any of 51A–51E).
 56. Run a jumper from R2 t1 to R2 t2 — position 51 (any of 51A–51E) to
    position 54 (any of 54A–54E).
-57. Run a jumper from R2 t2 to U2 CO — position 54 (any of 54A–54E) to
+57. Run a jumper from R2 t2 to U2 pin 12 — position 54 (any of 54A–54E) to
    position 14 (any of 14F–14J).
-58. Run a jumper from U1 RESET at position 23 (any of 23A–23E) to the top `+`
+58. Run a jumper from U1 pin 4 at position 23 (any of 23A–23E) to the top `+`
    rail.
-59. Run a jumper from U2 Q6 to U2 RST — position 14 (any of 14A–14E) to
-   position 11 (any of 11F–11J).
+59. Run a jumper from U2 pin 15 to U2 pin 5 — position 11 (any of 11F–11J) to
+   position 14 (any of 14A–14E).
 60. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.

@@ -46,7 +46,9 @@ from framework.pin import Pin
 from framework.port import Port
 
 from framework.export.assembly_guide.general_gotchas import general_gotchas
-from framework.export.assembly_guide.layout import part_layout
+from framework.export.assembly_guide.layout import (
+    is_arduino_uno, part_layout, uno_header_label,
+)
 from framework.export.assembly_guide.placement import (
     ComponentPlacement, chip_pin_count, place,
 )
@@ -290,6 +292,13 @@ def _supply_step() -> str:
 def _chip_step(placement: ComponentPlacement) -> str:
     assert isinstance(placement.component, Chip)
     chip: Chip = placement.component
+    if is_arduino_uno(chip):
+        return (
+            f"Place {chip.refdes} (Arduino Uno R3) beside the breadboard. "
+            f"The board doesn't sit on the breadboard itself — its female "
+            f"headers receive the jumpers listed below. Power the Uno via "
+            f"its USB jack or a 7–12 V supply on the `Vin` header."
+        )
     package_pin_count = chip_pin_count(chip)
     # Some classes model only a subset of their package's pins (e.g.
     # ULN2003A skips GND/COMMON). The breadboard layout still spans
@@ -373,7 +382,18 @@ def _jumper_steps(
                 port = comp.ports[name]
             except (KeyError, TypeError):
                 continue
-            port_to_endpoint[id(port)] = f"{comp.refdes} {name}"
+            # Reference each pin by what the builder actually sees on
+            # the package.  Chips show only pin numbers on their
+            # plastic — `out_1` / `SEG_C` etc. are framework
+            # abstractions, useful for design code but invisible at
+            # the bench.  2-lead passives (Resistor / LED / etc.) have
+            # already-physical port names (t1, anode), so keep those.
+            if isinstance(comp, Chip):
+                num = _pin_number_for_name(comp, name)
+                ep = f"{comp.refdes} pin {num}" if num else f"{comp.refdes} {name}"
+            else:
+                ep = f"{comp.refdes} {name}"
+            port_to_endpoint[id(port)] = ep
             port_to_label[id(port)] = pin_place.tie_strip_label
 
     # Build port → owner Part lookup so we can spot rail-owned
@@ -385,6 +405,23 @@ def _jumper_steps(
             continue
         for port in part.ports.values():
             port_owner[id(port)] = part
+
+    # Ports on off-board Uno boards: build a separate endpoint label
+    # using the Arduino header silkscreen name (e.g. "U1 D3") instead
+    # of the chip-level pin name ("U1 PD3").  These ports have no
+    # breadboard coordinate; jumper steps will reference them by
+    # header only.
+    port_to_uno_endpoint: dict[int, str] = {}
+    for part in all_parts:
+        if isinstance(part, Pin):
+            continue
+        if not is_arduino_uno(part):
+            continue
+        for port in part.ports.values():
+            port_to_uno_endpoint[id(port)] = (
+                f"{part.refdes} {uno_header_label(port.name)} "
+                f"(Arduino Uno header)"
+            )
 
     # Collapse ports by Node — every port on the same node is on the
     # same logical net.  Include Rails so we can detect rail nets.
@@ -417,25 +454,51 @@ def _jumper_steps(
             if isinstance(owner, Rail):
                 rail_polarity = bool(owner.level)
                 break
-        # (endpoint_label, position_label) for each placed port on this net.
-        endpoints: list[tuple[str, str]] = sorted({
+        # Endpoints split by where the wire actually lands.  On-board
+        # endpoints carry a tie-strip coordinate; Uno-header endpoints
+        # don't (the Uno sits beside the breadboard, not on it).
+        bb_endpoints: list[tuple[str, str]] = sorted({
             (port_to_endpoint[id(p)], port_to_label[id(p)])
             for p in ports if id(p) in port_to_endpoint
         })
-        if rail_polarity is not None and endpoints:
+        uno_endpoints: list[str] = sorted({
+            port_to_uno_endpoint[id(p)]
+            for p in ports if id(p) in port_to_uno_endpoint
+        })
+        if rail_polarity is not None and (bb_endpoints or uno_endpoints):
             rail_name = "top `+` rail" if rail_polarity else "top `-` rail"
-            for ep, pos in endpoints:
+            for ep, pos in bb_endpoints:
                 steps.append(
                     f"Run a jumper from {ep} at {pos} to the {rail_name}."
                 )
-        elif len(endpoints) >= 2:
-            for i in range(len(endpoints) - 1):
-                ep1, pos1 = endpoints[i]
-                ep2, pos2 = endpoints[i + 1]
-                steps.append(
-                    f"Run a jumper from {ep1} to {ep2} "
-                    f"— {pos1} to {pos2}."
-                )
+            for ep in uno_endpoints:
+                steps.append(f"Run a jumper from {ep} to the {rail_name}.")
+        else:
+            # Signal net — chain endpoints together.  When an Uno
+            # endpoint and a breadboard endpoint share a net, emit
+            # one jumper per Uno↔breadboard pair (no breadboard coord
+            # on the Uno side).  Two breadboard endpoints chain as
+            # before; two Uno endpoints (rare) chain with no coords
+            # either way.
+            for uno_ep in uno_endpoints:
+                for bb_ep, bb_pos in bb_endpoints:
+                    steps.append(
+                        f"Run a jumper from {bb_ep} at {bb_pos} to {uno_ep}."
+                    )
+            if not uno_endpoints and len(bb_endpoints) >= 2:
+                for i in range(len(bb_endpoints) - 1):
+                    ep1, pos1 = bb_endpoints[i]
+                    ep2, pos2 = bb_endpoints[i + 1]
+                    steps.append(
+                        f"Run a jumper from {ep1} to {ep2} "
+                        f"— {pos1} to {pos2}."
+                    )
+            elif not bb_endpoints and len(uno_endpoints) >= 2:
+                for i in range(len(uno_endpoints) - 1):
+                    steps.append(
+                        f"Run a jumper from {uno_endpoints[i]} "
+                        f"to {uno_endpoints[i + 1]}."
+                    )
     return steps
 
 

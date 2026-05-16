@@ -126,10 +126,21 @@ def _place_chips(chips: list[Chip]) -> tuple[list[ComponentPlacement], int]:
     physical-package coordinate slot — so a chip that doesn't model
     every pad (e.g. ULN2003A omits GND/COMMON) gets the *modeled* pins
     at their datasheet positions, leaving the missing slots simply
-    unmentioned in the assembly steps."""
+    unmentioned in the assembly steps.
+
+    Off-board chips (Arduino Uno boards and similar) are placed with
+    an empty pin tuple: they don't occupy a breadboard position; their
+    headers receive jumpers but the board itself sits beside the
+    breadboard.  No `_CHIP_GAP` reservation either — the next on-board
+    chip starts at the same position the Uno would have used."""
+    from framework.export.assembly_guide.layout import is_arduino_uno
     placements: list[ComponentPlacement] = []
     next_pos = _FIRST_CHIP_POSITION
     for chip in chips:
+        if is_arduino_uno(chip):
+            # Off-board: no pin placements, no position reserved.
+            placements.append(ComponentPlacement(chip, ()))
+            continue
         pin_count = chip_pin_count(chip)
         coords = _place_dip(next_pos, pin_count)
         per_pin: list[tuple[str, PinPlacement]] = []

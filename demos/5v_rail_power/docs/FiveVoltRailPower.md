@@ -130,19 +130,19 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    position 30 (any of 30A–30E).
 14. Run a jumper from D2 anode to D3 cathode — position 30 (any of 30A–30E) to
    position 39 (any of 39A–39E).
-15. Run a jumper from D3 cathode to U1 GND — position 39 (any of 39A–39E) to
+15. Run a jumper from D3 cathode to U1 pin 2 — position 39 (any of 39A–39E) to
    position 11 (any of 11A–11E).
 16. Run a jumper from BT1 pos to P1 p1_inner — position 15 (any of 15A–15E) to
    position 19 (any of 19A–19E).
 17. Run a jumper from C1 t1 to D1 cathode — position 24 (any of 24A–24E) to
    position 22 (any of 22A–22E).
-18. Run a jumper from D1 cathode to U1 INPUT — position 22 (any of 22A–22E) to
+18. Run a jumper from D1 cathode to U1 pin 1 — position 22 (any of 22A–22E) to
    position 10 (any of 10A–10E).
 19. Run a jumper from C2 t1 to D2 cathode — position 27 (any of 27A–27E) to
    position 31 (any of 31A–31E).
 20. Run a jumper from D2 cathode to R1 t1 — position 31 (any of 31A–31E) to
    position 33 (any of 33A–33E).
-21. Run a jumper from R1 t1 to U1 OUTPUT — position 33 (any of 33A–33E) to
+21. Run a jumper from R1 t1 to U1 pin 3 — position 33 (any of 33A–33E) to
    position 11 (any of 11F–11J).
 22. Run a jumper from D3 anode to R1 t2 — position 38 (any of 38A–38E) to
    position 36 (any of 36A–36E).

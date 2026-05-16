@@ -245,13 +245,13 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    36 (any of 36A–36E).
 27. Run a jumper from R1 t1 to R1 t2 — position 36 (any of 36A–36E) to
    position 39 (any of 39A–39E).
-28. Run a jumper from R1 t2 to U1 OUT — position 39 (any of 39A–39E) to
+28. Run a jumper from R1 t2 to U1 pin 3 — position 39 (any of 39A–39E) to
    position 12 (any of 12A–12E).
-29. Run a jumper from U1 OUT to U2 TRIG — position 12 (any of 12A–12E) to
+29. Run a jumper from U1 pin 3 to U2 pin 2 — position 12 (any of 12A–12E) to
    position 17 (any of 17A–17E).
 30. Run a jumper from D1 cathode at position 31 (any of 31A–31E) to the top
    `+` rail.
-31. Run a jumper from U2 RESET at position 19 (any of 19A–19E) to the top `+`
+31. Run a jumper from U2 pin 4 at position 19 (any of 19A–19E) to the top `+`
    rail.
 32. Run a jumper from D2 cathode at position 34 (any of 34A–34E) to the top
    `-` rail.
@@ -259,13 +259,13 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    51 (any of 51A–51E).
 34. Run a jumper from R4 t1 to R4 t2 — position 51 (any of 51A–51E) to
    position 54 (any of 54A–54E).
-35. Run a jumper from R4 t2 to U2 OUT — position 54 (any of 54A–54E) to
+35. Run a jumper from R4 t2 to U2 pin 3 — position 54 (any of 54A–54E) to
    position 18 (any of 18A–18E).
 36. Run a jumper from Q2 c to R5 t1 — position 27 (any of 27A–27E) to position
    56 (any of 56A–56E).
 37. Run a jumper from R5 t1 to R5 t2 — position 56 (any of 56A–56E) to
    position 59 (any of 59A–59E).
-38. Run a jumper from R5 t2 to U1 RESET — position 59 (any of 59A–59E) to
+38. Run a jumper from R5 t2 to U1 pin 4 — position 59 (any of 59A–59E) to
    position 13 (any of 13A–13E).
 39. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the

@@ -39,6 +39,16 @@ t1 ─┤▮ 220 Ω ▮├─ t2
     └────────────────────────────────────────────────────────────────────────────────────┘
        PC5   PC4   PC3   PC2   PC1   PC0   GND  AREF  AVCC   PB5   PB4   PB3   PB2   PB1 
        28    27    26    25    24    23    22    21    20    19    18    17    16    15  
+
+Arduino Uno R3 header pinout (top-down view, USB jack on the left):
+
+         SCL  SDA  AREF GND  D13  D12  D11  D10  D9   D8       D7   D6   D5   D4   D3   D2   D1   D0
+                            (PB5)(PB4)(PB3)(PB2)(PB1)(PB0)   (PD7)(PD6)(PD5)(PD4)(PD3)(PD2)(TX) (RX)
+       ┌──────────────────────────────────────────────────────────────────────────────────────────────┐
+  USB ─┤                                       Arduino Uno R3                                         │
+       └──────────────────────────────────────────────────────────────────────────────────────────────┘
+        IOREF RST  3.3V 5V   GND  GND  Vin                     A0   A1   A2   A3   A4   A5
+                            (VCC)                            (PC0)(PC1)(PC2)(PC3)(SDA)(SCL)
 ```
 
 ### U2 — DHT11
@@ -77,45 +87,46 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    left-to-right through the middle. Connect your 5 V supply: the positive
    lead to the top `+` rail (positive rail), the negative lead to the top `-`
    rail (ground rail).
-2. Plug U1 (Uno_ThermometerSketch, DIP-28) straddling the trough: pin 1 at
-   10E, pin 28 at 10F. The chip's notch / dot marks pin 1 — make sure it lines
-   up.
-3. Plug U3 (Display5641AS, DIP-12) straddling the trough: pin 1 at 26E, pin 12
-   at 26F. The chip's notch / dot marks pin 1 — make sure it lines up.
-4. Plug U2 (DHT11, DIP-4) straddling the trough: pin 1 at 34E, pin 4 at 34F.
+2. Place U1 (Arduino Uno R3) beside the breadboard. The board doesn't sit on
+   the breadboard itself — its female headers receive the jumpers listed
+   below. Power the Uno via its USB jack or a 7–12 V supply on the `Vin`
+   header.
+3. Plug U3 (Display5641AS, DIP-12) straddling the trough: pin 1 at 10E, pin 12
+   at 10F. The chip's notch / dot marks pin 1 — make sure it lines up.
+4. Plug U2 (DHT11, DIP-4) straddling the trough: pin 1 at 18E, pin 4 at 18F.
    The chip's notch / dot marks pin 1 — make sure it lines up.
-5. Plug R1 (Resistor): one lead at position 40 (any of 40A–40E), the other at
-   position 43 (any of 43A–43E).
-6. Run a jumper from R1 t1 to R1 t2 — position 40 (any of 40A–40E) to position
-   43 (any of 43A–43E).
-7. Run a jumper from R1 t2 to U1 PD3 — position 43 (any of 43A–43E) to
-   position 14 (any of 14A–14E).
-8. Run a jumper from U1 PD3 to U3 DIG_1 — position 14 (any of 14A–14E) to
-   position 26 (any of 26F–26J).
-9. Run a jumper from U3 DIG_4 at position 31 (any of 31A–31E) to the top `-`
-   rail.
-10. Run a jumper from U1 PB0 to U3 SEG_C — position 23 (any of 23A–23E) to
-   position 29 (any of 29A–29E).
-11. Run a jumper from U1 PB1 to U3 SEG_D — position 23 (any of 23F–23J) to
+5. Plug R1 (Resistor): one lead at position 24 (any of 24A–24E), the other at
    position 27 (any of 27A–27E).
-12. Run a jumper from U1 PB2 to U3 SEG_E — position 22 (any of 22F–22J) to
-   position 26 (any of 26A–26E).
-13. Run a jumper from U1 PB3 to U3 SEG_F — position 21 (any of 21F–21J) to
-   position 28 (any of 28F–28J).
-14. Run a jumper from U1 PB4 to U3 SEG_G — position 20 (any of 20F–20J) to
-   position 30 (any of 30A–30E).
-15. Run a jumper from U1 PB5 to U3 SEG_DP — position 19 (any of 19F–19J) to
-   position 28 (any of 28A–28E).
-16. Run a jumper from U1 PD2 to U2 DATA — position 13 (any of 13A–13E) to
-   position 35 (any of 35A–35E).
-17. Run a jumper from U1 PD4 to U3 DIG_2 — position 15 (any of 15A–15E) to
-   position 29 (any of 29F–29J).
-18. Run a jumper from U1 PD5 to U3 DIG_3 — position 20 (any of 20A–20E) to
-   position 30 (any of 30F–30J).
-19. Run a jumper from U1 PD6 to U3 SEG_A — position 21 (any of 21A–21E) to
-   position 27 (any of 27F–27J).
-20. Run a jumper from U1 PD7 to U3 SEG_B — position 22 (any of 22A–22E) to
-   position 31 (any of 31F–31J).
+6. Run a jumper from R1 t1 at position 24 (any of 24A–24E) to U1 D3 (Arduino
+   Uno header).
+7. Run a jumper from R1 t2 at position 27 (any of 27A–27E) to U1 D3 (Arduino
+   Uno header).
+8. Run a jumper from U3 pin 12 at position 10 (any of 10F–10J) to U1 D3
+   (Arduino Uno header).
+9. Run a jumper from U3 pin 6 at position 15 (any of 15A–15E) to the top `-`
+   rail.
+10. Run a jumper from U3 pin 4 at position 13 (any of 13A–13E) to U1 D8
+   (Arduino Uno header).
+11. Run a jumper from U3 pin 2 at position 11 (any of 11A–11E) to U1 D9
+   (Arduino Uno header).
+12. Run a jumper from U3 pin 1 at position 10 (any of 10A–10E) to U1 D10
+   (Arduino Uno header).
+13. Run a jumper from U3 pin 10 at position 12 (any of 12F–12J) to U1 D11
+   (Arduino Uno header).
+14. Run a jumper from U3 pin 5 at position 14 (any of 14A–14E) to U1 D12
+   (Arduino Uno header).
+15. Run a jumper from U3 pin 3 at position 12 (any of 12A–12E) to U1 D13
+   (Arduino Uno header).
+16. Run a jumper from U2 pin 2 at position 19 (any of 19A–19E) to U1 D2
+   (Arduino Uno header).
+17. Run a jumper from U3 pin 9 at position 13 (any of 13F–13J) to U1 D4
+   (Arduino Uno header).
+18. Run a jumper from U3 pin 8 at position 14 (any of 14F–14J) to U1 D5
+   (Arduino Uno header).
+19. Run a jumper from U3 pin 11 at position 11 (any of 11F–11J) to U1 D6
+   (Arduino Uno header).
+20. Run a jumper from U3 pin 7 at position 15 (any of 15F–15J) to U1 D7
+   (Arduino Uno header).
 21. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.
