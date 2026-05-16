@@ -35,6 +35,143 @@ Two-LM555 doorbell protector.
 
 Also: a standard 830-pin solderless breadboard, an assortment of jumper wires (red for the positive rail, black for ground rail, any colour for signals), and a 5 V supply.
 
+## Layout
+
+Each part below is drawn the way it sits on the breadboard, with every pin labelled. Chips run left-to-right with the notch at the left; pin 1 is the top-left pin (closest to the notch). Sensors and modules are shown as a single horizontal row of pins. 2-lead passives are drawn axially with the value in line.
+
+### C1 — Capacitor
+
+```
+t1 ─┤├─ t2   [100 nF]
+```
+
+### C2 — Capacitor
+
+```
+t1 ─┤├─ t2   [4.7 µF]
+```
+
+### C3 — Capacitor
+
+```
+t1 ─┤├─ t2   [100 nF]
+```
+
+### C4 — Capacitor
+
+```
+t1 ─┤├─ t2   [100 nF]
+```
+
+### C5 — Capacitor
+
+```
+t1 ─┤├─ t2   [47 µF]
+```
+
+### D1 — D1N4007
+
+```
+anode ─▶├─ cathode   [D1N4007]
+```
+
+### D2 — LED
+
+```
+anode (+, long lead) ─▶├─ cathode (−, short lead)   [red, 5 mm]
+```
+
+### K1 — Relay_SPDT
+
+```
+coil_plus ─┤▮ Relay_SPDT ▮├─ coil_minus
+```
+
+### Q1 — BC548
+
+```
+c ─┤▮ BC548 ▮├─ b
+```
+
+### Q2 — Q2N3904
+
+```
+c ─┤▮ Q2N3904 ▮├─ b
+```
+
+### R1 — Resistor
+
+```
+t1 ─┤▮ 1000 Ω ▮├─ t2
+```
+
+### R2 — Resistor
+
+```
+t1 ─┤▮ 1000000 Ω ▮├─ t2
+```
+
+### R3 — Resistor
+
+```
+t1 ─┤▮ 1000000 Ω ▮├─ t2
+```
+
+### R4 — Resistor
+
+```
+t1 ─┤▮ 1000 Ω ▮├─ t2
+```
+
+### R5 — Resistor
+
+```
+t1 ─┤▮ 10000 Ω ▮├─ t2
+```
+
+### R6 — Resistor
+
+```
+t1 ─┤▮ 1000000 Ω ▮├─ t2
+```
+
+### R7 — Resistor
+
+```
+t1 ─┤▮ 4700 Ω ▮├─ t2
+```
+
+### R8 — Resistor
+
+```
+t1 ─┤▮ 47000 Ω ▮├─ t2
+```
+
+### U1 — NE555_Monostable
+
+```
+        1      2      3      4   
+       GND   TRIG    OUT   RESET 
+    ┌────────────────────────────┐
+  U │      NE555_Monostable      │
+    └────────────────────────────┘
+       VCC   DISCH  THRES  CONT  
+        8      7      6      5   
+```
+
+### U2 — NE555_Monostable
+
+```
+        1      2      3      4   
+       GND   TRIG    OUT   RESET 
+    ┌────────────────────────────┐
+  U │      NE555_Monostable      │
+    └────────────────────────────┘
+       VCC   DISCH  THRES  CONT  
+        8      7      6      5   
+```
+
+
 ## How to verify
 
 Before you start wiring, take five minutes to confirm each part actually works. A multimeter on the diode-test and resistance settings catches most pre-install failures: dead LEDs, mis-bagged parts, transistors damaged in shipping, batteries below their safe-discharge limit. The checks below cover what you can verify with a basic multimeter; chips and complex modules generally need a working test rig instead, so they're not listed here.
