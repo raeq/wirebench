@@ -65,6 +65,7 @@ if str(_SRC) not in sys.path:
 from pydantic import validate_call
 
 from wirebench import (
+    Analog,
     Chip, Circuit, Direction, Part, Pin, PinId,
     GroundDomain, ELECTRICAL, RefdesNumber, validate_refdes,
     wire,
@@ -215,8 +216,13 @@ class DoorbellProtector(Circuit):
     def __init__(self) -> None:
         # Rails go first so they evaluate before anything that reads
         # them.  The supply rail also drives IC2.RESET (always HIGH).
-        self.gnd = Rail(False)
-        self.vcc = Rail(True)
+        # Digital pair for tie-offs / logic-level inputs; Analog pair
+        # for chip supply pins declared as Analog (NE555 VCC/GND).
+        # Physically these go to the same breadboard +/- rails.
+        self.gnd   = Rail(False)
+        self.vcc   = Rail(True)
+        self.vcc_a = Rail(True,  signal_type=Analog)
+        self.gnd_a = Rail(False, signal_type=Analog)
 
         # The two LM555s.  IC1 is the bell-duration timer; IC2 is the
         # lock-out timer.  IC1 must declare before IC2 so IC1.OUT
@@ -308,6 +314,11 @@ class DoorbellProtector(Circuit):
              self.led1.cathode,
              self.t1.e,
              self.t2.e)
+
+        # Chip supply pins.  Both NE555s declare VCC / GND as Analog,
+        # so they need the Analog-typed rails.
+        wire(self.vcc_a.out, self.ic1.VCC, self.ic2.VCC)
+        wire(self.gnd_a.out, self.ic1.GND, self.ic2.GND)
 
         super().__init__(
             ports={

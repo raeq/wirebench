@@ -111,12 +111,12 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    position 51 (any of 51A–51E).
 7. Plug D2 (LED): one lead at position 53 (any of 53A–53E), the other at
    position 54 (any of 54A–54E).
-8. Run a jumper from D1 anode to U3 pin 1 — position 50 (any of 50A–50E) to
-   position 39 (any of 39A–39E).
-9. Run a jumper from U3 pin 1 to U4 pin 1 — position 39 (any of 39A–39E) to
-   position 20 (any of 20A–20E).
-10. Run a jumper from D2 anode to U3 pin 2 — position 53 (any of 53A–53E) to
-   position 40 (any of 40A–40E).
+8. Run a jumper from U1 pin 15 to U2 pin 1 — position 11 (any of 11F–11J) to
+   position 30 (any of 30A–30E).
+9. Run a jumper from U1 pin 16 to U4 pin 3 — position 10 (any of 10F–10J) to
+   position 22 (any of 22A–22E).
+10. Run a jumper from U2 pin 2 to U4 pin 2 — position 31 (any of 31A–31E) to
+   position 21 (any of 21A–21E).
 11. Run a jumper from U2 pin 11 at position 33 (any of 33F–33J) to the top `-`
    rail.
 12. Run a jumper from U2 pin 13 at position 31 (any of 31F–31J) to the top `-`
@@ -149,14 +149,14 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    rail.
 26. Run a jumper from U4 pin 9 at position 27 (any of 27F–27J) to the top `-`
    rail.
-27. Run a jumper from U4 pin 7 at position 26 (any of 26A–26E) to the top `+`
+27. Run a jumper from D1 anode to U3 pin 1 — position 50 (any of 50A–50E) to
+   position 39 (any of 39A–39E).
+28. Run a jumper from U3 pin 1 to U4 pin 1 — position 39 (any of 39A–39E) to
+   position 20 (any of 20A–20E).
+29. Run a jumper from D2 anode to U3 pin 2 — position 53 (any of 53A–53E) to
+   position 40 (any of 40A–40E).
+30. Run a jumper from U4 pin 7 at position 26 (any of 26A–26E) to the top `+`
    rail.
-28. Run a jumper from U1 pin 16 to U4 pin 3 — position 10 (any of 10F–10J) to
-   position 22 (any of 22A–22E).
-29. Run a jumper from U1 pin 15 to U2 pin 1 — position 11 (any of 11F–11J) to
-   position 30 (any of 30A–30E).
-30. Run a jumper from U2 pin 2 to U4 pin 2 — position 31 (any of 31A–31E) to
-   position 21 (any of 21A–21E).
 31. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.

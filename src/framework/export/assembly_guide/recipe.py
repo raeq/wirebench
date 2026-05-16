@@ -317,6 +317,16 @@ def _chip_step(placement: ComponentPlacement) -> str:
     last_n = _pin_number_for_name(chip, last_modeled)
     if last is None or last_n is None:
         return f"Plug {chip.refdes} ({type(chip).__name__}) into the breadboard."
+    # SIPs (odd pin counts) sit entirely on one side of the trough
+    # — they can't straddle, so the wording differs.
+    if package_pin_count % 2 != 0:
+        return (
+            f"Plug {chip.refdes} ({type(chip).__name__}, "
+            f"{package_pin_count}-pin SIP) into the breadboard with all "
+            f"pins on the upper half: pin 1 at {pin1.label()}, "
+            f"pin {last_n} at {last.label()}. "
+            f"The lower-numbered position marks the pin-1 end."
+        )
     return (
         f"Plug {chip.refdes} ({type(chip).__name__}, DIP-{package_pin_count}) "
         f"straddling the trough: pin 1 at {pin1.label()}, "
@@ -434,17 +444,36 @@ def _jumper_steps(
                 continue
             node_to_ports.setdefault(id(port.node), []).append(port)
 
-    # Sort nets by a stable key derived from their ports — `id(node)`
-    # changes run-to-run, so we use (sorted port refdes, port name)
-    # tuples to deterministically order the emitted jumper steps.
-    def _net_key(nid: int) -> tuple[tuple[str, str], ...]:
+    # Sort nets so the bench builder works through each on-board chip
+    # in ascending pin-number order — the natural sequence when
+    # counting from the notch.  Each net's key is the lowest
+    # (refdes, pin-number) of any on-board chip pin in the net.  Uno
+    # endpoints are excluded from the key because they have no
+    # breadboard position; nets with no chip pins fall through to a
+    # passive-port key so they still sort deterministically.
+    def _net_key(nid: int) -> tuple[int, tuple[str, int] | tuple[str, str]]:
         ps = node_to_ports[nid]
-        return tuple(sorted(
-            (getattr(port_owner.get(id(p)), 'refdes', '') or
-             type(port_owner.get(id(p), object)).__name__,
-             p.name)
-            for p in ps
-        ))
+        chip_keys: list[tuple[str, int]] = []
+        other_keys: list[tuple[str, str]] = []
+        for p in ps:
+            owner = port_owner.get(id(p))
+            if owner is None or isinstance(owner, (Pin, Rail)):
+                continue
+            if isinstance(owner, Chip):
+                if is_arduino_uno(owner):
+                    continue
+                num = _pin_number_for_name(owner, p.name)
+                if num is not None:
+                    chip_keys.append((owner.refdes, num))
+            else:
+                other_keys.append(
+                    (getattr(owner, 'refdes', '') or '', p.name)
+                )
+        if chip_keys:
+            return (0, min(chip_keys))
+        if other_keys:
+            return (1, min(other_keys))
+        return (2, ('', ''))
 
     def _emit_subnet(sub_ports: list[Port]) -> None:
         """Emit jumper steps for one logical sub-net.  A sub-net is

@@ -142,8 +142,24 @@ def _place_chips(chips: list[Chip]) -> tuple[list[ComponentPlacement], int]:
             placements.append(ComponentPlacement(chip, ()))
             continue
         pin_count = chip_pin_count(chip)
+        if pin_count % 2 != 0:
+            # SIP: a single row of pins, all on the upper half of the
+            # breadboard.  Can't straddle the trough — there'd be
+            # no way to split an odd pin count evenly.  Pin 1 lands
+            # at `next_pos` row 'E'; subsequent pins march right
+            # along row 'E'.
+            per_pin: list[tuple[str, PinPlacement]] = []
+            for pin in sorted(chip.pins, key=lambda p: p.id.number):
+                idx = pin.id.number - 1
+                if 0 <= idx < pin_count:
+                    per_pin.append(
+                        (pin.id.name, PinPlacement(next_pos + idx, 'E'))
+                    )
+            placements.append(ComponentPlacement(chip, tuple(per_pin)))
+            next_pos = next_pos + pin_count + _CHIP_GAP
+            continue
         coords = _place_dip(next_pos, pin_count)
-        per_pin: list[tuple[str, PinPlacement]] = []
+        per_pin = []
         for pin in sorted(chip.pins, key=lambda p: p.id.number):
             idx = pin.id.number - 1
             if 0 <= idx < len(coords):

@@ -104,48 +104,49 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    left-to-right through the middle. Connect your 5 V supply: the positive
    lead to the top `+` rail (positive rail), the negative lead to the top `-`
    rail (ground rail).
-2. Plug U1 (LM7805, DIP-3) straddling the trough: pin 1 at 10E, pin 3 at 11F.
-   The chip's notch / dot marks pin 1 — make sure it lines up.
-3. Plug BT1 (CR2032Stack): one lead at position 15 (any of 15A–15E), the other
-   at position 16 (any of 16A–16E).
-4. Plug P1 (Header1xNMale): one lead at position 18 (any of 18A–18E), the
-   other at position 19 (any of 19A–19E).
-5. Plug D1 (D1N5817): one lead at position 21 (any of 21A–21E), the other at
-   position 22 (any of 22A–22E).
-6. Plug C1 (Capacitor): one lead at position 24 (any of 24A–24E), the other at
-   position 25 (any of 25A–25E).
-7. Plug C2 (Capacitor): one lead at position 27 (any of 27A–27E), the other at
-   position 28 (any of 28A–28E).
-8. Plug D2 (D1N4733A): one lead at position 30 (any of 30A–30E), the other at
-   position 31 (any of 31A–31E).
-9. Plug R1 (Resistor): one lead at position 33 (any of 33A–33E), the other at
-   position 36 (any of 36A–36E).
-10. Plug D3 (LED): one lead at position 38 (any of 38A–38E), the other at
-   position 39 (any of 39A–39E).
-11. Run a jumper from BT1 neg to C1 t2 — position 16 (any of 16A–16E) to
-   position 25 (any of 25A–25E).
-12. Run a jumper from C1 t2 to C2 t2 — position 25 (any of 25A–25E) to
-   position 28 (any of 28A–28E).
-13. Run a jumper from C2 t2 to D2 anode — position 28 (any of 28A–28E) to
+2. Plug U1 (LM7805, 3-pin SIP) into the breadboard with all pins on the upper
+   half: pin 1 at 10E, pin 3 at 12E. The lower-numbered position marks the
+   pin-1 end.
+3. Plug BT1 (CR2032Stack): one lead at position 17 (any of 17A–17E), the other
+   at position 18 (any of 18A–18E).
+4. Plug P1 (Header1xNMale): one lead at position 20 (any of 20A–20E), the
+   other at position 21 (any of 21A–21E).
+5. Plug D1 (D1N5817): one lead at position 23 (any of 23A–23E), the other at
+   position 24 (any of 24A–24E).
+6. Plug C1 (Capacitor): one lead at position 26 (any of 26A–26E), the other at
+   position 27 (any of 27A–27E).
+7. Plug C2 (Capacitor): one lead at position 29 (any of 29A–29E), the other at
    position 30 (any of 30A–30E).
-14. Run a jumper from D2 anode to D3 cathode — position 30 (any of 30A–30E) to
-   position 39 (any of 39A–39E).
-15. Run a jumper from D3 cathode to U1 pin 2 — position 39 (any of 39A–39E) to
-   position 11 (any of 11A–11E).
-16. Run a jumper from BT1 pos to P1 p1_inner — position 15 (any of 15A–15E) to
-   position 19 (any of 19A–19E).
-17. Run a jumper from C1 t1 to D1 cathode — position 24 (any of 24A–24E) to
-   position 22 (any of 22A–22E).
-18. Run a jumper from D1 cathode to U1 pin 1 — position 22 (any of 22A–22E) to
-   position 10 (any of 10A–10E).
-19. Run a jumper from C2 t1 to D2 cathode — position 27 (any of 27A–27E) to
-   position 31 (any of 31A–31E).
-20. Run a jumper from D2 cathode to R1 t1 — position 31 (any of 31A–31E) to
+8. Plug D2 (D1N4733A): one lead at position 32 (any of 32A–32E), the other at
    position 33 (any of 33A–33E).
-21. Run a jumper from R1 t1 to U1 pin 3 — position 33 (any of 33A–33E) to
-   position 11 (any of 11F–11J).
-22. Run a jumper from D3 anode to R1 t2 — position 38 (any of 38A–38E) to
-   position 36 (any of 36A–36E).
+9. Plug R1 (Resistor): one lead at position 35 (any of 35A–35E), the other at
+   position 38 (any of 38A–38E).
+10. Plug D3 (LED): one lead at position 40 (any of 40A–40E), the other at
+   position 41 (any of 41A–41E).
+11. Run a jumper from C1 t1 to D1 cathode — position 26 (any of 26A–26E) to
+   position 24 (any of 24A–24E).
+12. Run a jumper from D1 cathode to U1 pin 1 — position 24 (any of 24A–24E) to
+   position 10 (any of 10A–10E).
+13. Run a jumper from BT1 neg to C1 t2 — position 18 (any of 18A–18E) to
+   position 27 (any of 27A–27E).
+14. Run a jumper from C1 t2 to C2 t2 — position 27 (any of 27A–27E) to
+   position 30 (any of 30A–30E).
+15. Run a jumper from C2 t2 to D2 anode — position 30 (any of 30A–30E) to
+   position 32 (any of 32A–32E).
+16. Run a jumper from D2 anode to D3 cathode — position 32 (any of 32A–32E) to
+   position 41 (any of 41A–41E).
+17. Run a jumper from D3 cathode to U1 pin 2 — position 41 (any of 41A–41E) to
+   position 11 (any of 11A–11E).
+18. Run a jumper from C2 t1 to D2 cathode — position 29 (any of 29A–29E) to
+   position 33 (any of 33A–33E).
+19. Run a jumper from D2 cathode to R1 t1 — position 33 (any of 33A–33E) to
+   position 35 (any of 35A–35E).
+20. Run a jumper from R1 t1 to U1 pin 3 — position 35 (any of 35A–35E) to
+   position 12 (any of 12A–12E).
+21. Run a jumper from BT1 pos to P1 p1_inner — position 17 (any of 17A–17E) to
+   position 21 (any of 21A–21E).
+22. Run a jumper from D3 anode to R1 t2 — position 40 (any of 40A–40E) to
+   position 38 (any of 38A–38E).
 23. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.

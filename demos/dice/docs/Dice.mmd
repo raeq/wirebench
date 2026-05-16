@@ -69,7 +69,9 @@ flowchart TD
     R3 ---|"t2"| net_2
     R4 ---|"t1"| net_0
     R4 ---|"t2"| net_0
+    U1 ---|"GND"| gnd
     U1 ---|"RESET"| vcc
+    U1 ---|"VCC"| vcc
     U2 ---|"CO"| net_3
     U2 ---|"Q1"| net_8
     U2 ---|"Q2"| net_6
@@ -78,3 +80,5 @@ flowchart TD
     U2 ---|"Q5"| net_7
     U2 ---|"Q6"| net_9
     U2 ---|"RST"| net_9
+    U2 ---|"VDD"| vcc
+    U2 ---|"VSS"| gnd

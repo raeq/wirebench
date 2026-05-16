@@ -42,8 +42,12 @@ flowchart TD
     R4 ---|"t2"| net_2
     R5 ---|"t1"| net_1
     R5 ---|"t2"| net_1
+    U1 ---|"GND"| gnd
     U1 ---|"OUT"| net_0
     U1 ---|"RESET"| net_1
+    U1 ---|"VCC"| vcc
+    U2 ---|"GND"| gnd
     U2 ---|"OUT"| net_2
     U2 ---|"RESET"| vcc
     U2 ---|"TRIG"| net_0
+    U2 ---|"VCC"| vcc

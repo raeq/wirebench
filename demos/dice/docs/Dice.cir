@@ -1,7 +1,8 @@
 .TITLE Dice
 V_Rail_0 vcc 0 DC 5.0
-U1 nc_0 nc_1 nc_2 vcc nc_3 nc_4 nc_5 nc_6 NE555
-U2 net_7 net_8 nc_7 net_6 net_9 nc_8 net_5 nc_9 nc_10 net_0 nc_11 net_3 nc_12 nc_13 net_9 nc_14 CD4017
+V_Rail_1 vcc 0 DC 5.0
+U1 0 nc_0 nc_1 vcc nc_2 nc_3 nc_4 vcc NE555
+U2 net_7 net_8 nc_5 net_6 net_9 nc_6 net_5 0 nc_7 net_0 nc_8 net_3 nc_9 nc_10 net_9 vcc CD4017
 D1 net_8 net_4 D1N4148
 D2 net_5 net_4 D1N4148
 D3 net_7 net_4 D1N4148
@@ -12,11 +13,11 @@ R1 net_4 net_4 470.0
 R2 net_3 net_3 330.0
 R3 net_2 net_2 330.0
 R4 net_0 net_0 330.0
-R5 nc_15 nc_16 10000.0
-R6 nc_17 nc_18 10000.0
-R7 nc_19 nc_20 10000.0
-C1 nc_21 nc_22 1e-08
-C2 nc_23 nc_24 1e-07
+R5 nc_11 nc_12 10000.0
+R6 nc_13 nc_14 10000.0
+R7 nc_15 nc_16 10000.0
+C1 nc_17 nc_18 1e-08
+C2 nc_19 nc_20 1e-07
 D7 net_4 0 D_LED
 D8 net_3 0 D_LED
 D9 net_3 0 D_LED

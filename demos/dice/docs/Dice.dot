@@ -64,7 +64,9 @@ digraph "Dice" {
   R3 -> net_2 [taillabel="t2"];
   R4 -> net_0 [taillabel="t1"];
   R4 -> net_0 [taillabel="t2"];
+  U1 -> gnd [taillabel="GND"];
   U1 -> vcc [taillabel="RESET"];
+  U1 -> vcc [taillabel="VCC"];
   U2 -> net_3 [taillabel="CO"];
   U2 -> net_8 [taillabel="Q1"];
   U2 -> net_6 [taillabel="Q2"];
@@ -73,4 +75,6 @@ digraph "Dice" {
   U2 -> net_7 [taillabel="Q5"];
   U2 -> net_9 [taillabel="Q6"];
   U2 -> net_9 [taillabel="RST"];
+  U2 -> vcc [taillabel="VDD"];
+  U2 -> gnd [taillabel="VSS"];
 }

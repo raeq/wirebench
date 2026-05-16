@@ -79,6 +79,7 @@ if str(_SRC) not in sys.path:
 from pydantic import validate_call
 
 from wirebench import (
+    Analog,
     Circuit, wire,
     NE555, CD4017, D1N4148,
     Capacitor, LED, Rail, Resistor,
@@ -121,8 +122,15 @@ class Dice(Circuit):
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self) -> None:
         # Rails first — supplies are upstream of every signal path.
-        self.gnd = Rail(False)
-        self.vcc = Rail(True)
+        # Digital pair for logic-level tie-offs; Analog pair for chip
+        # supply pins declared as Analog (NE555 VCC/GND, CD4017
+        # VDD/VSS).  Physically these are the same breadboard
+        # rails — the framework distinction is only the signal-type
+        # compatibility check.
+        self.gnd   = Rail(False)
+        self.vcc   = Rail(True)
+        self.vcc_a = Rail(True,  signal_type=Analog)
+        self.gnd_a = Rail(False, signal_type=Analog)
 
         # 555 black-box + 4017 counter.  We rename CD4017 to
         # `self.counter` since it carries the dice face state.
@@ -249,6 +257,13 @@ class Dice(Circuit):
         # netlist — mirrors the hardware requirement that 555 RESET be
         # held HIGH for normal astable operation.
         wire(self.vcc.out, self.timer.RESET)
+
+        # Chip supply pins.  NE555 and CD4017 both declare their power
+        # pins as Analog (they're V_CC / V_DD, not logic), so they need
+        # the Analog-typed rails.  Physically these go to the same
+        # breadboard +/- rails as the Digital tie-offs above.
+        wire(self.vcc_a.out, self.timer.VCC,    self.counter.VDD)
+        wire(self.gnd_a.out, self.timer.GND,    self.counter.VSS)
 
         super().__init__(
             ports={

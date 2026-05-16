@@ -14,7 +14,7 @@ Single-board digital thermometer.
 |--------|------|--------------|----------|-------|
 | R1 | Resistor | 220 Ω | 1 | ¼ W carbon film is fine |
 | U1 | Uno_ThermometerSketch | Uno_ThermometerSketch | 1 |  |
-| U2 | DHT11 | DHT11 | 1 |  |
+| U2 | DHT11_Module | DHT11_Module | 1 |  |
 | U3 | Display5641AS | Display5641AS | 1 |  |
 
 Also: a standard 830-pin solderless breadboard, an assortment of jumper wires (red for the positive rail, black for ground rail, any colour for signals), and a 5 V supply.
@@ -51,14 +51,14 @@ Arduino Uno R3 header pinout (top-down view, USB jack on the left):
                             (VCC)                            (PC0)(PC1)(PC2)(PC3)(SDA)(SCL)
 ```
 
-### U2 — DHT11
+### U2 — DHT11_Module
 
 ```
-┌────────────────────────┐
-│         DHT11          │
-└┬─────┬─────┬─────┬─────┘
- 1     2     3     4
-VDD  DATA   NC    GND
+┌──────────────────┐
+│   DHT11_Module   │
+└┬─────┬─────┬─────┘
+ 1     2     3
+VCC  DATA   GND
 ```
 
 ### U3 — Display5641AS
@@ -93,39 +93,44 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    header.
 3. Plug U3 (Display5641AS, DIP-12) straddling the trough: pin 1 at 10E, pin 12
    at 10F. The chip's notch / dot marks pin 1 — make sure it lines up.
-4. Plug U2 (DHT11, DIP-4) straddling the trough: pin 1 at 18E, pin 4 at 18F.
-   The chip's notch / dot marks pin 1 — make sure it lines up.
-5. Plug R1 (Resistor): one lead at position 24 (any of 24A–24E), the other at
-   position 27 (any of 27A–27E).
-6. Run a jumper from R1 t1 at position 24 (any of 24A–24E) to U1 D3 (Arduino
-   Uno header).
-7. Run a jumper from R1 t2 to U3 pin 12 — position 27 (any of 27A–27E) to
-   position 10 (any of 10F–10J).
-8. Run a jumper from U3 pin 6 at position 15 (any of 15A–15E) to the top `-`
+4. Plug U2 (DHT11_Module, 3-pin SIP) into the breadboard with all pins on the
+   upper half: pin 1 at 18E, pin 3 at 20E. The lower-numbered position marks
+   the pin-1 end.
+5. Plug R1 (Resistor): one lead at position 25 (any of 25A–25E), the other at
+   position 28 (any of 28A–28E).
+6. Run a jumper from U2 pin 1 at position 18 (any of 18A–18E) to the top `+`
    rail.
-9. Run a jumper from U3 pin 4 at position 13 (any of 13A–13E) to U1 D8
+7. Run a jumper from U2 pin 2 at position 19 (any of 19A–19E) to U1 D2
+   (Arduino Uno header).
+8. Run a jumper from U2 pin 3 at position 20 (any of 20A–20E) to the top `-`
+   rail.
+9. Run a jumper from U3 pin 1 at position 10 (any of 10A–10E) to U1 D10
    (Arduino Uno header).
 10. Run a jumper from U3 pin 2 at position 11 (any of 11A–11E) to U1 D9
    (Arduino Uno header).
-11. Run a jumper from U3 pin 1 at position 10 (any of 10A–10E) to U1 D10
+11. Run a jumper from U3 pin 3 at position 12 (any of 12A–12E) to U1 D13
    (Arduino Uno header).
-12. Run a jumper from U3 pin 10 at position 12 (any of 12F–12J) to U1 D11
+12. Run a jumper from U3 pin 4 at position 13 (any of 13A–13E) to U1 D8
    (Arduino Uno header).
 13. Run a jumper from U3 pin 5 at position 14 (any of 14A–14E) to U1 D12
    (Arduino Uno header).
-14. Run a jumper from U3 pin 3 at position 12 (any of 12A–12E) to U1 D13
+14. Run a jumper from U3 pin 6 at position 15 (any of 15A–15E) to the top `-`
+   rail.
+15. Run a jumper from U3 pin 7 at position 15 (any of 15F–15J) to U1 D7
    (Arduino Uno header).
-15. Run a jumper from U2 pin 2 at position 19 (any of 19A–19E) to U1 D2
+16. Run a jumper from U3 pin 8 at position 14 (any of 14F–14J) to U1 D5
    (Arduino Uno header).
-16. Run a jumper from U3 pin 9 at position 13 (any of 13F–13J) to U1 D4
+17. Run a jumper from U3 pin 9 at position 13 (any of 13F–13J) to U1 D4
    (Arduino Uno header).
-17. Run a jumper from U3 pin 8 at position 14 (any of 14F–14J) to U1 D5
+18. Run a jumper from U3 pin 10 at position 12 (any of 12F–12J) to U1 D11
    (Arduino Uno header).
-18. Run a jumper from U3 pin 11 at position 11 (any of 11F–11J) to U1 D6
+19. Run a jumper from U3 pin 11 at position 11 (any of 11F–11J) to U1 D6
    (Arduino Uno header).
-19. Run a jumper from U3 pin 7 at position 15 (any of 15F–15J) to U1 D7
-   (Arduino Uno header).
-20. Verify nothing is shorted by inspecting the rails with a multimeter
+20. Run a jumper from R1 t1 at position 25 (any of 25A–25E) to U1 D3 (Arduino
+   Uno header).
+21. Run a jumper from R1 t2 to U3 pin 12 — position 28 (any of 28A–28E) to
+   position 10 (any of 10F–10J).
+22. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.
 
@@ -142,7 +147,7 @@ Before you start wiring, take five minutes to confirm each part actually works. 
 
 - **Read the DHT11 at most once per second.** The sensor only updates its internal reading about that often; polling faster just gives you the same number back, while heating the chip and shifting its temperature reading by ~1°C. Put the read in a one-second timer, not in your main loop.
 - **This is a teaching-grade sensor, not an instrument.** Expect ±2°C and ±5% relative humidity error — fine for 'is the room hot or humid?' projects, useless for anything that needs real accuracy. If your build cares about precision (a weather station, an HVAC monitor), swap in a BME280 or SHT31; both cost about twice as much and are ten times more accurate.
-- **The pin labelled NC really has nothing inside.** Looking at the side with the grille, the pins are V+, DATA, NC, GND. Some online tutorials show a pull-up resistor going to NC — that's wrong; the pull-up belongs on DATA. The NC pin should stay completely unconnected.
+- **The module already has its DATA pull-up on board.** Don't add another external resistor — two pull-ups in parallel stiffen the line and can drag the edges out of spec for the DHT11's bit-banged protocol.  The bare 4-pin sensor (see DHT11) does need an external 5 kΩ pull-up; the module does not.
 - **The DHT11's protocol is timing-sensitive, and the standard library reads disable interrupts for ~25 ms.** If your sketch also runs PWM, software-serial, or an interrupt-driven task, the DHT11 read can disrupt those. On RTOS-class boards (ESP32, RP2040 under MicroPython) prefer the BME280 — its I²C protocol is interrupt-friendly.
 - **This is the common-cathode version: pull a digit's cathode LOW to enable it, and drive segments HIGH to light them.** If you accidentally bought the 5641AH (common-anode), the polarity is reversed and code written for one will light all the wrong digits in the other. Check the part number on the device label before wiring.
 - **One current-limit resistor per segment, never one shared across segments.** Use ~330 Ω on each of the seven segment lines for a 5 V supply. Sharing a single resistor sounds frugal but the brightness changes with the digit's content — a '1' (two segments lit) glows twice as bright as a '8' (seven segments) because each segment gets half the current when shared with a partner.
