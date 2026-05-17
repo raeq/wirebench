@@ -4,6 +4,7 @@ from pydantic import validate_call
 
 from framework.chip import Chip
 from framework.circuit import Circuit
+from framework.drive_type import DriveType
 from framework.part import Part
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
@@ -50,6 +51,13 @@ class BQ27546G1(Chip):
     FOOTPRINT: ClassVar[str | None] = (
         "Package_BGA:Texas_S-PVQFN-N15_2.61x1.96mm_DSBGA"
     )
+    # I²C SDA and HDQ single-wire are both open-drain per protocol
+    # (datasheet comments inline in the pin table also note this).
+    # SCL is Direction.IN on this slave, so it carries no drive type.
+    PIN_DRIVE_TYPES: ClassVar[dict[str, "DriveType"]] = {
+        'SDA': DriveType.OPEN_DRAIN,
+        'HDQ': DriveType.OPEN_DRAIN,
+    }
 
     # Pin table per the BQ27546-G1 datasheet's Pin Functions section.
     # The pin "number" here is a 1-based ordinal that mirrors the

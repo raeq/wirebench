@@ -52,6 +52,7 @@ from framework.export.assembly_guide.layout import (
 from framework.export.assembly_guide.placement import (
     ComponentPlacement, chip_pin_count, place,
 )
+from framework.drive_type import DriveType
 from framework.pin_function import PinFunction
 
 if TYPE_CHECKING:
@@ -317,6 +318,96 @@ def _nc_predicate(pin: Pin, chip: Chip) -> bool:
     return pin.external.node is None
 
 
+def _make_open_drain_predicate(
+    rail_port_ids: "dict[int, Rail]",
+    port_owner: dict[int, Part],
+) -> _PinPredicate:
+    """OPEN_DRAIN / OPEN_COLLECTOR pin: must have an external pull-up
+    to a POWER rail, otherwise the line floats whenever the chip's
+    output transistor is off.  Accepted wiring:
+
+      - pin's net contains a Resistor terminal whose opposite terminal
+        sits on a net with a POWER Rail (the canonical pull-up to VCC)
+      - pin's net contains another OD / OC port (wired-AND with
+        another open-drain output sharing the same pull-up) — the
+        traversal still has to find the pull-up at some level, but
+        chained OD pins on one net are common in I²C
+      - pin is left unwired (lenient: an unwired OD pin does nothing,
+        not "fails open"; the user can decide whether unconnected is
+        intended without ERC second-guessing)
+
+    The "no driver" path is lenient because an OD output on a clean
+    bus segment shared with other OD outputs DOES count as wired-AND
+    even when the local chip's specific pin is the only OD pin on
+    that segment — the predicate doesn't need to verify that *this*
+    specific pin actively drives anything; it just needs to confirm
+    the bus segment has a path to a positive rail through a passive.
+    """
+    def pred(pin: Pin, chip: Chip) -> bool:
+        node = pin.external.node
+        if node is None:
+            # Unwired OD pin — equivalent to an unwired PUSH_PULL OUT
+            # pin, which the framework doesn't flag.  Be consistent.
+            return True
+        from components.passives.resistor import Resistor
+        # Walk every Resistor on the pin's net; check the other
+        # terminal's net for a POWER Rail.  This is the same one-hop
+        # walk used by the RESET predicate's pull-up case.
+        for face in node.ports:
+            if face is pin.external:
+                continue
+            owner = port_owner.get(id(face))
+            if not isinstance(owner, Resistor):
+                continue
+            for other_port in owner.ports.values():
+                if other_port is face:
+                    continue
+                other_node = other_port.node
+                if other_node is None:
+                    continue
+                for other_face in other_node.ports:
+                    other_rail = rail_port_ids.get(id(other_face))
+                    if other_rail is not None and bool(other_rail.level) is True:
+                        return True
+        return False
+    return pred
+
+
+def _check_chip_pin_drive_type(
+    parts: list[Part],
+    *,
+    drive_types: tuple[DriveType, ...],
+    predicate: _PinPredicate,
+    error_msg_prefix: str,
+    failure_hint: str,
+) -> None:
+    """Per-drive-type variant of `_check_chip_pin_function`.  Walks
+    every Chip's pins; for each whose declared `pin_drive_type` is in
+    `drive_types`, evaluates `predicate(pin, chip)` and collects
+    failures.  OPEN_DRAIN and OPEN_COLLECTOR share the same predicate
+    because they're electrically equivalent at the bench level — the
+    distinction is silicon technology, not user-facing wiring."""
+    failures: list[str] = []
+    for part in parts:
+        if not isinstance(part, Chip):
+            continue
+        if is_arduino_uno(part):
+            continue
+        for pin in part.pins:
+            dt = type(part).pin_drive_type(pin.id.name)
+            if dt not in drive_types:
+                continue
+            if not predicate(pin, part):
+                failures.append(
+                    f"  - {part.refdes} pin {pin.id.number} ({pin.id.name}) "
+                    f"[{dt.value}] — {failure_hint}"
+                )
+    if failures:
+        raise BreadboardIncompatibleError(
+            f"{error_msg_prefix}\n" + '\n'.join(failures)
+        )
+
+
 def _enforce_pin_function_rules(
     parts: list[Part], all_parts: list[Part] | None,
 ) -> None:
@@ -399,6 +490,19 @@ def _enforce_pin_function_rules(
             "`PIN_FUNCTIONS = {'NC1': None}` on the chip class:"
         ),
         failure_hint="this pin must not be connected",
+    )
+    _check_chip_pin_drive_type(
+        parts,
+        drive_types=(DriveType.OPEN_DRAIN, DriveType.OPEN_COLLECTOR),
+        predicate=_make_open_drain_predicate(rail_port_ids, port_owner),
+        error_msg_prefix=(
+            "Chips have open-drain / open-collector pins without a "
+            "pull-up resistor to the + rail — the line floats whenever "
+            "the chip's transistor is off and downstream logic reads "
+            "an undefined level. Add a pull-up Resistor from each pin "
+            "below to the + rail in the design source:"
+        ),
+        failure_hint="add a pull-up resistor to the + rail",
     )
 
 

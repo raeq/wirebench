@@ -3,6 +3,7 @@ from typing import ClassVar
 from pydantic import validate_call
 
 from framework.chip import Chip
+from framework.drive_type import DriveType
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
@@ -35,6 +36,14 @@ class LM393(Chip):
     CHANNELS: int = 2
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-8_W7.62mm"
+    # Both comparator outputs are open-collector — the silicon is an
+    # uncommitted NPN whose collector is the OUT pin, so the chip can
+    # sink LOW but cannot source HIGH on its own.  External pull-up
+    # to a positive rail is required (the gotcha above documents this).
+    PIN_DRIVE_TYPES: ClassVar[dict[str, "DriveType"]] = {
+        'out_1': DriveType.OPEN_COLLECTOR,
+        'out_2': DriveType.OPEN_COLLECTOR,
+    }
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Wire a pull-up resistor (~10 kΩ to Vcc) on each output — "

@@ -3,6 +3,7 @@ from typing import ClassVar
 from pydantic import validate_call
 
 from framework.chip import Chip
+from framework.drive_type import DriveType
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
@@ -26,6 +27,11 @@ class DS18B20(Chip):
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:TO-92_Inline"
+    # 1-Wire DQ is open-drain by protocol (the docstring + GOTCHAS
+    # below already document the 4.7 kΩ pull-up to VDD).
+    PIN_DRIVE_TYPES: ClassVar[dict[str, "DriveType"]] = {
+        'DQ': DriveType.OPEN_DRAIN,
+    }
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Wire a 4.7 kΩ resistor from DQ to + supply — every time, "

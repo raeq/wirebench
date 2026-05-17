@@ -3,6 +3,7 @@ from typing import ClassVar
 from pydantic import validate_call
 
 from framework.chip import Chip
+from framework.drive_type import DriveType
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
@@ -30,6 +31,14 @@ class MPU6050(Chip):
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Sensor_Motion:InvenSense_QFN-24_4x4mm_P0.5mm"
+    # I²C SDA — open-drain per protocol.  Pull-up to VCC (typically
+    # 2.2-4.7 kΩ for the 400 kHz fast mode the chip supports) required.
+    # AUX_DA is the auxiliary I²C SDA for the on-board master function;
+    # same drive type.
+    PIN_DRIVE_TYPES: ClassVar[dict[str, "DriveType"]] = {
+        'SDA':    DriveType.OPEN_DRAIN,
+        'AUX_DA': DriveType.OPEN_DRAIN,
+    }
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1,  'CLKIN',  Direction.IN,    Analog),

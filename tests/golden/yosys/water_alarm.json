@@ -6,7 +6,7 @@
         "D1": {
           "connections": {
             "anode": [
-              7
+              9
             ],
             "cathode": [
               65
@@ -25,7 +25,7 @@
         "D2": {
           "connections": {
             "anode": [
-              6
+              8
             ],
             "cathode": [
               66
@@ -40,6 +40,44 @@
             "cathode": "input"
           },
           "type": "LED"
+        },
+        "R1": {
+          "connections": {
+            "t1": [
+              7
+            ],
+            "t2": [
+              4
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "10000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "R2": {
+          "connections": {
+            "t1": [
+              6
+            ],
+            "t2": [
+              4
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "10000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
         },
         "U1": {
           "connections": {
@@ -68,10 +106,10 @@
               46
             ],
             "out_1": [
-              9
+              7
             ],
             "out_2": [
-              22
+              6
             ],
             "out_3": [
               51
@@ -119,7 +157,7 @@
               3
             ],
             "a_1": [
-              22
+              6
             ],
             "a_2": [
               5
@@ -137,7 +175,7 @@
               5
             ],
             "y_1": [
-              8
+              10
             ],
             "y_2": [
               52
@@ -184,7 +222,7 @@
               2
             ],
             "a_1": [
-              7
+              9
             ],
             "a_2": [
               5
@@ -202,7 +240,7 @@
               5
             ],
             "y_1": [
-              6
+              8
             ],
             "y_2": [
               57
@@ -252,7 +290,7 @@
               4
             ],
             "q_1": [
-              7
+              9
             ],
             "q_2": [
               62
@@ -264,7 +302,7 @@
               64
             ],
             "r_1": [
-              8
+              10
             ],
             "r_2": [
               5
@@ -276,7 +314,7 @@
               5
             ],
             "s_1": [
-              9
+              7
             ],
             "s_2": [
               5
@@ -318,13 +356,6 @@
           ],
           "hide_name": 0
         },
-        "net_20": {
-          "attributes": {},
-          "bits": [
-            22
-          ],
-          "hide_name": 0
-        },
         "net_4": {
           "attributes": {},
           "bits": [
@@ -353,6 +384,13 @@
           ],
           "hide_name": 0
         },
+        "net_8": {
+          "attributes": {},
+          "bits": [
+            10
+          ],
+          "hide_name": 0
+        },
         "vcc": {
           "attributes": {},
           "bits": [
@@ -376,7 +414,7 @@
         },
         "state": {
           "bits": [
-            7
+            9
           ],
           "direction": "output"
         }
