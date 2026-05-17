@@ -52,6 +52,7 @@ from framework.export.assembly_guide.layout import (
 from framework.export.assembly_guide.placement import (
     ComponentPlacement, chip_pin_count, place,
 )
+from framework.pin_function import PinFunction
 
 
 # ----------------------------------------------------------------- helpers
@@ -112,7 +113,10 @@ def _walk_top_parts(design: Part) -> list[Part]:
 # ------------------------------------------------------------- refusal
 
 
-def _check_breadboard_compatible(parts: list[Part], design: Part) -> None:
+def _check_breadboard_compatible(
+    parts: list[Part], design: Part,
+    *, all_parts: list[Part] | None = None,
+) -> None:
     """Raise `BreadboardIncompatibleError` if `parts` contains any
     SMD / multi-board / otherwise-unassemblable component.
 
@@ -155,6 +159,49 @@ def _check_breadboard_compatible(parts: list[Part], design: Part) -> None:
             "THT passives, 0.1\" headers)."
         )
         raise BreadboardIncompatibleError('\n'.join(lines))
+
+    # Power-pin ERC: every POWER / GROUND pin on every placed chip must
+    # be wired to a Rail of the matching polarity, or the build won't
+    # power up at the bench.  This catches demos that "forgot" to wire
+    # supplies — a silent class of bug because the simulator works
+    # fine on the rest of the netlist.  Runs after the SMD / Board
+    # refusals so the more fundamental "this can't go on a breadboard
+    # at all" message takes precedence.
+    from components.passives.rail import Rail
+    rail_port_ids: dict[int, Rail] = {}
+    for p in (all_parts or parts):
+        if isinstance(p, Rail):
+            rail_port_ids[id(p.ports['out'])] = p
+    unwired: list[str] = []
+    for part in parts:
+        if not isinstance(part, Chip):
+            continue
+        if is_arduino_uno(part):
+            continue   # off-board: powered by USB / Vin, not breadboard rails
+        for pin in part.pins:
+            fn = type(part).pin_function(pin.id.name)
+            if fn is None:
+                continue
+            node = pin.external.node
+            rails_on_net: list[Rail] = []
+            if node is not None:
+                for face in node.ports:
+                    rail = rail_port_ids.get(id(face))
+                    if rail is not None:
+                        rails_on_net.append(rail)
+            want_high = (fn is PinFunction.POWER)
+            if not any(bool(r.level) is want_high for r in rails_on_net):
+                wanted = '+ rail' if want_high else '− rail'
+                unwired.append(
+                    f"  - {part.refdes} pin {pin.id.number} ({pin.id.name}) "
+                    f"[{fn.value}] — wire to the {wanted}"
+                )
+    if unwired:
+        raise BreadboardIncompatibleError(
+            "Chips have unwired supply pins — the assembled circuit "
+            "won't power up. Wire each pin below to its rail in the "
+            "design source:\n" + '\n'.join(unwired)
+        )
 
 
 # ------------------------------------------------------------ ingredients
@@ -755,7 +802,7 @@ def build_recipe(design: Part) -> str:
     parts = _walk_top_parts(design)
     # Filter out Rails — they're nets, not physical parts.
     placeable = [p for p in parts if not _is_rail(p)]
-    _check_breadboard_compatible(placeable, design)
+    _check_breadboard_compatible(placeable, design, all_parts=parts)
 
     chips = [p for p in placeable if isinstance(p, Chip)]
     passives = [p for p in placeable if not isinstance(p, Chip)]

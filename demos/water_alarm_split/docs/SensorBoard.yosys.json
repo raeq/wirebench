@@ -174,6 +174,9 @@
         },
         "U1": {
           "connections": {
+            "GND": [
+              61
+            ],
             "in_1": [
               2
             ],
@@ -202,24 +205,25 @@
               5
             ],
             "out_3": [
-              65
+              66
             ],
             "out_4": [
-              64
+              65
             ],
             "out_5": [
-              63
+              64
             ],
             "out_6": [
-              62
+              63
             ],
             "out_7": [
-              61
+              62
             ]
           },
           "hide_name": 0,
           "parameters": {},
           "port_directions": {
+            "GND": "input",
             "in_1": "input",
             "in_2": "input",
             "in_3": "input",

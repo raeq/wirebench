@@ -1,15 +1,15 @@
 .TITLE WaterAlarmAssembly
 XA1 net_0 net_9 net_10 net_11 net_12 net_13 net_14 net_15 net_16 net_17 net_18 net_1 net_19 net_20 net_21 net_22 net_23 net_24 net_25 net_26 net_27 net_28 net_2 net_29 net_30 net_31 net_32 net_33 net_34 net_35 net_36 net_37 net_38 net_3 net_39 net_4 net_5 net_6 net_7 net_8 A1_SUBCKT
 .SUBCKT A1_SUBCKT net_0 net_9 net_10 net_11 net_12 net_13 net_14 net_15 net_16 net_17 net_18 net_1 net_19 net_20 net_21 net_22 net_23 net_24 net_25 net_26 net_27 net_28 net_2 net_29 net_30 net_31 net_32 net_33 net_34 net_35 net_36 net_37 net_38 net_3 net_39 net_4 net_5 net_6 net_7 net_8
-U1 net_2 net_3 nc_0 nc_1 nc_2 nc_3 nc_4 nc_5 nc_6 nc_7 nc_8 nc_9 net_5 net_4 ULN2003A
+U1 net_2 net_3 nc_0 nc_1 nc_2 nc_3 nc_4 nc_5 nc_6 nc_7 nc_8 nc_9 nc_10 net_5 net_4 ULN2003A
 .ENDS A1_SUBCKT
 XA2 net_0 net_9 net_10 net_11 net_12 net_13 net_14 net_15 net_16 net_17 net_18 net_1 net_19 net_20 net_21 net_22 net_23 net_24 net_25 net_26 net_27 net_28 net_2 net_29 net_30 net_31 net_32 net_33 net_34 net_35 net_36 net_37 net_38 net_3 net_39 net_4 net_5 net_6 net_7 net_8 A2_SUBCKT
 .SUBCKT A2_SUBCKT net_0 net_9 net_10 net_11 net_12 net_13 net_14 net_15 net_16 net_17 net_18 net_1 net_19 net_20 net_21 net_22 net_23 net_24 net_25 net_26 net_27 net_28 net_2 net_29 net_30 net_31 net_32 net_33 net_34 net_35 net_36 net_37 net_38 net_3 net_39 net_4 net_5 net_6 net_7 net_8
-U1 net_5 net_44 0 nc_10 0 nc_11 nc_12 0 nc_13 0 nc_14 0 SN74HC04
-U2 net_43 net_42 0 nc_15 0 nc_16 nc_17 0 nc_18 0 nc_19 0 CD4069
-U3 net_43 net_44 net_4 nc_20 0 0 vcc 0 0 nc_21 0 0 nc_22 CD4043
-D1 net_43 nc_23 D_LED
-D2 net_42 nc_24 D_LED
+U1 net_5 net_44 0 nc_11 0 nc_12 nc_13 nc_14 0 nc_15 0 nc_16 0 nc_17 SN74HC04
+U2 net_43 net_42 0 nc_18 0 nc_19 nc_20 nc_21 0 nc_22 0 nc_23 0 nc_24 CD4069
+U3 net_43 net_44 net_4 nc_25 0 0 vcc nc_26 0 0 nc_27 0 0 nc_28 nc_29 CD4043
+D1 net_43 nc_30 D_LED
+D2 net_42 nc_31 D_LED
 V_Rail_0 vcc 0 DC 5.0
 .ENDS A2_SUBCKT
 .LIB spice-models.lib

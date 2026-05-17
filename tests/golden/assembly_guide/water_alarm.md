@@ -41,7 +41,7 @@ anode (+, long lead) ─▶├─ cathode (−, short lead)   [green, 5 mm]
 
 ```
         1      2      3      4      5      6      7      8   
-      in_1   in_2   in_3   in_4   in_5   in_6   in_7     —   
+      in_1   in_2   in_3   in_4   in_5   in_6   in_7    GND  
     ┌────────────────────────────────────────────────────────┐
   U │                        ULN2003A                        │
     └────────────────────────────────────────────────────────┘
@@ -53,11 +53,11 @@ anode (+, long lead) ─▶├─ cathode (−, short lead)   [green, 5 mm]
 
 ```
        1    2    3    4    5    6    7  
-      a_1  y_1  a_2  y_2  a_3  y_3   —  
+      a_1  y_1  a_2  y_2  a_3  y_3  GND 
     ┌───────────────────────────────────┐
   U │              SN74HC04             │
     └───────────────────────────────────┘
-       —   a_6  y_6  a_5  y_5  a_4  y_4 
+      VCC  a_6  y_6  a_5  y_5  a_4  y_4 
       14   13   12   11   10    9    8  
 ```
 
@@ -65,11 +65,11 @@ anode (+, long lead) ─▶├─ cathode (−, short lead)   [green, 5 mm]
 
 ```
        1    2    3    4    5    6    7  
-      a_1  y_1  a_2  y_2  a_3  y_3   —  
+      a_1  y_1  a_2  y_2  a_3  y_3  VSS 
     ┌───────────────────────────────────┐
   U │               CD4069              │
     └───────────────────────────────────┘
-       —   a_6  y_6  a_5  y_5  a_4  y_4 
+      VDD  a_6  y_6  a_5  y_5  a_4  y_4 
       14   13   12   11   10    9    8  
 ```
 
@@ -77,11 +77,11 @@ anode (+, long lead) ─▶├─ cathode (−, short lead)   [green, 5 mm]
 
 ```
        1    2    3    4    5    6    7    8  
-      q_1  r_1  s_1  q_2  s_2  r_2  oe    —  
+      q_1  r_1  s_1  q_2  s_2  r_2  oe   VSS 
     ┌────────────────────────────────────────┐
   U │                 CD4043                 │
     └────────────────────────────────────────┘
-       —    —   q_4  r_4  s_4  q_3  s_3  r_3 
+      VDD   —   q_4  r_4  s_4  q_3  s_3  r_3 
       16   15   14   13   12   11   10    9  
 ```
 
@@ -101,63 +101,77 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    rail (ground rail).
 2. Plug U1 (ULN2003A, DIP-16) straddling the trough: pin 1 at 10E, pin 16 at
    10F. The chip's notch / dot marks pin 1 — make sure it lines up.
-3. Plug U4 (CD4043, DIP-16) straddling the trough: pin 1 at 20E, pin 14 at
-   22F. The chip's notch / dot marks pin 1 — make sure it lines up.
-4. Plug U2 (SN74HC04, DIP-14) straddling the trough: pin 1 at 30E, pin 13 at
-   31F. The chip's notch / dot marks pin 1 — make sure it lines up.
-5. Plug U3 (CD4069, DIP-14) straddling the trough: pin 1 at 39E, pin 13 at
-   40F. The chip's notch / dot marks pin 1 — make sure it lines up.
+3. Plug U4 (CD4043, DIP-16) straddling the trough: pin 1 at 20E, pin 16 at
+   20F. The chip's notch / dot marks pin 1 — make sure it lines up.
+4. Plug U2 (SN74HC04, DIP-14) straddling the trough: pin 1 at 30E, pin 14 at
+   30F. The chip's notch / dot marks pin 1 — make sure it lines up.
+5. Plug U3 (CD4069, DIP-14) straddling the trough: pin 1 at 39E, pin 14 at
+   39F. The chip's notch / dot marks pin 1 — make sure it lines up.
 6. Plug D1 (LED): one lead at position 50 (any of 50A–50E), the other at
    position 51 (any of 51A–51E).
 7. Plug D2 (LED): one lead at position 53 (any of 53A–53E), the other at
    position 54 (any of 54A–54E).
-8. Run a jumper from U1 pin 15 to U2 pin 1 — position 11 (any of 11F–11J) to
+8. Run a jumper from U1 pin 8 at position 17 (any of 17A–17E) to the top `-`
+   rail.
+9. Run a jumper from U2 pin 7 at position 36 (any of 36A–36E) to the top `-`
+   rail.
+10. Run a jumper from U3 pin 7 at position 45 (any of 45A–45E) to the top `-`
+   rail.
+11. Run a jumper from U4 pin 8 at position 27 (any of 27A–27E) to the top `-`
+   rail.
+12. Run a jumper from U1 pin 15 to U2 pin 1 — position 11 (any of 11F–11J) to
    position 30 (any of 30A–30E).
-9. Run a jumper from U1 pin 16 to U4 pin 3 — position 10 (any of 10F–10J) to
+13. Run a jumper from U1 pin 16 to U4 pin 3 — position 10 (any of 10F–10J) to
    position 22 (any of 22A–22E).
-10. Run a jumper from U2 pin 2 to U4 pin 2 — position 31 (any of 31A–31E) to
+14. Run a jumper from U2 pin 2 to U4 pin 2 — position 31 (any of 31A–31E) to
    position 21 (any of 21A–21E).
-11. Run a jumper from U2 pin 11 at position 33 (any of 33F–33J) to the top `-`
+15. Run a jumper from U2 pin 11 at position 33 (any of 33F–33J) to the top `-`
    rail.
-12. Run a jumper from U2 pin 13 at position 31 (any of 31F–31J) to the top `-`
+16. Run a jumper from U2 pin 13 at position 31 (any of 31F–31J) to the top `-`
    rail.
-13. Run a jumper from U2 pin 3 at position 32 (any of 32A–32E) to the top `-`
+17. Run a jumper from U2 pin 3 at position 32 (any of 32A–32E) to the top `-`
    rail.
-14. Run a jumper from U2 pin 5 at position 34 (any of 34A–34E) to the top `-`
+18. Run a jumper from U2 pin 5 at position 34 (any of 34A–34E) to the top `-`
    rail.
-15. Run a jumper from U2 pin 9 at position 35 (any of 35F–35J) to the top `-`
+19. Run a jumper from U2 pin 9 at position 35 (any of 35F–35J) to the top `-`
    rail.
-16. Run a jumper from U3 pin 11 at position 42 (any of 42F–42J) to the top `-`
+20. Run a jumper from U3 pin 11 at position 42 (any of 42F–42J) to the top `-`
    rail.
-17. Run a jumper from U3 pin 13 at position 40 (any of 40F–40J) to the top `-`
+21. Run a jumper from U3 pin 13 at position 40 (any of 40F–40J) to the top `-`
    rail.
-18. Run a jumper from U3 pin 3 at position 41 (any of 41A–41E) to the top `-`
+22. Run a jumper from U3 pin 3 at position 41 (any of 41A–41E) to the top `-`
    rail.
-19. Run a jumper from U3 pin 5 at position 43 (any of 43A–43E) to the top `-`
+23. Run a jumper from U3 pin 5 at position 43 (any of 43A–43E) to the top `-`
    rail.
-20. Run a jumper from U3 pin 9 at position 44 (any of 44F–44J) to the top `-`
+24. Run a jumper from U3 pin 9 at position 44 (any of 44F–44J) to the top `-`
    rail.
-21. Run a jumper from U4 pin 10 at position 26 (any of 26F–26J) to the top `-`
+25. Run a jumper from U4 pin 10 at position 26 (any of 26F–26J) to the top `-`
    rail.
-22. Run a jumper from U4 pin 12 at position 24 (any of 24F–24J) to the top `-`
+26. Run a jumper from U4 pin 12 at position 24 (any of 24F–24J) to the top `-`
    rail.
-23. Run a jumper from U4 pin 13 at position 23 (any of 23F–23J) to the top `-`
+27. Run a jumper from U4 pin 13 at position 23 (any of 23F–23J) to the top `-`
    rail.
-24. Run a jumper from U4 pin 5 at position 24 (any of 24A–24E) to the top `-`
+28. Run a jumper from U4 pin 5 at position 24 (any of 24A–24E) to the top `-`
    rail.
-25. Run a jumper from U4 pin 6 at position 25 (any of 25A–25E) to the top `-`
+29. Run a jumper from U4 pin 6 at position 25 (any of 25A–25E) to the top `-`
    rail.
-26. Run a jumper from U4 pin 9 at position 27 (any of 27F–27J) to the top `-`
+30. Run a jumper from U4 pin 9 at position 27 (any of 27F–27J) to the top `-`
    rail.
-27. Run a jumper from D1 anode to U3 pin 1 — position 50 (any of 50A–50E) to
+31. Run a jumper from U2 pin 14 at position 30 (any of 30F–30J) to the top `+`
+   rail.
+32. Run a jumper from U3 pin 14 at position 39 (any of 39F–39J) to the top `+`
+   rail.
+33. Run a jumper from U4 pin 16 at position 20 (any of 20F–20J) to the top `+`
+   rail.
+34. Run a jumper from D1 anode to U3 pin 1 — position 50 (any of 50A–50E) to
    position 39 (any of 39A–39E).
-28. Run a jumper from U3 pin 1 to U4 pin 1 — position 39 (any of 39A–39E) to
+35. Run a jumper from U3 pin 1 to U4 pin 1 — position 39 (any of 39A–39E) to
    position 20 (any of 20A–20E).
-29. Run a jumper from D2 anode to U3 pin 2 — position 53 (any of 53A–53E) to
+36. Run a jumper from D2 anode to U3 pin 2 — position 53 (any of 53A–53E) to
    position 40 (any of 40A–40E).
-30. Run a jumper from U4 pin 7 at position 26 (any of 26A–26E) to the top `+`
+37. Run a jumper from U4 pin 7 at position 26 (any of 26A–26E) to the top `+`
    rail.
-31. Verify nothing is shorted by inspecting the rails with a multimeter
+38. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.
 

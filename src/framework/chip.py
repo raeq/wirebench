@@ -9,6 +9,7 @@ from framework.circuit import Circuit
 from framework.errors import PartConfigurationError
 from framework.part import Part
 from framework.pin import Pin
+from framework.pin_function import PinFunction, infer_pin_function
 from framework.port import Direction, Port
 from framework.port_map import PortMap
 
@@ -54,7 +55,25 @@ class Chip(Circuit):
     # review — add a behavioural cell instead.
     BARE_FIRMWARE_DRIVEN: ClassVar[bool] = False
 
+    # Per-chip override of the name-based pin-function inference.  The
+    # framework infers POWER for `VCC` / `VDD` / `AVCC` / `VBUS` and
+    # GROUND for `GND` / `VSS` / `AGND` / `DGND`; chips whose silkscreen
+    # uses different names (or whose pin is mis-classified by the
+    # default regex) declare overrides here.  Pins not in this map fall
+    # back to the inference; pins mapped to `None` are treated as
+    # signals regardless of name.
+    PIN_FUNCTIONS: ClassVar[dict[str, PinFunction | None]] = {}
+
     __slots__ = ('_ports_by_number', '_port_map')
+
+    @classmethod
+    def pin_function(cls, pin_name: str) -> PinFunction | None:
+        """Return the function (POWER / GROUND / None) of a pin on
+        this chip.  Class-level `PIN_FUNCTIONS` overrides take
+        precedence over the name-based inference."""
+        if pin_name in cls.PIN_FUNCTIONS:
+            return cls.PIN_FUNCTIONS[pin_name]
+        return infer_pin_function(pin_name)
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, *, pins: Sequence[Pin], cells: Sequence[Part]) -> None:
