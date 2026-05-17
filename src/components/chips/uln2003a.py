@@ -3,6 +3,7 @@ from typing import ClassVar
 from pydantic import validate_call
 
 from framework.chip import Chip
+from framework.drive_type import DriveType
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
@@ -48,6 +49,14 @@ class ULN2003A(Chip):
     I_OUT_MAX:   float = 0.500   # A — maximum sink current per channel
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-16_W7.62mm"
+    # Every output is an open-collector Darlington — the chip sinks
+    # LOW when the channel's input is high and floats high-impedance
+    # otherwise.  External pull-up to the load supply required
+    # (datasheet figure 2; the docstring + GOTCHAS above already
+    # call this out as the canonical user mistake).
+    PIN_DRIVE_TYPES: ClassVar[dict[str, "DriveType"]] = {
+        f'out_{i}': DriveType.OPEN_COLLECTOR for i in range(1, 8)
+    }
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Wire your load between the + rail and the output pin — not "

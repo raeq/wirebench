@@ -3,6 +3,7 @@ from typing import ClassVar
 from pydantic import validate_call
 
 from framework.chip import Chip
+from framework.drive_type import DriveType
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
@@ -29,6 +30,14 @@ class LM339(Chip):
     CHANNELS: int = 4
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-14_W7.62mm"
+    # All four comparator outputs are open-collector — external pull-up
+    # to a positive rail required (datasheet figures 1 and 11).
+    PIN_DRIVE_TYPES: ClassVar[dict[str, "DriveType"]] = {
+        'OUT1': DriveType.OPEN_COLLECTOR,
+        'OUT2': DriveType.OPEN_COLLECTOR,
+        'OUT3': DriveType.OPEN_COLLECTOR,
+        'OUT4': DriveType.OPEN_COLLECTOR,
+    }
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1,  'OUT2', Direction.OUT, Analog),

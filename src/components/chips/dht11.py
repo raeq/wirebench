@@ -3,6 +3,7 @@ from typing import ClassVar
 from pydantic import validate_call
 
 from framework.chip import Chip
+from framework.drive_type import DriveType
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
@@ -28,6 +29,14 @@ class DHT11(Chip):
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_THT:DHT11"
+    # The bare DHT11's DATA line is open-drain (the docstring + GOTCHAS
+    # below explicitly say a 5 kΩ pull-up to VDD is required).
+    # `DHT11_Module` is the breakout-board variant with an on-board
+    # pull-up; it intentionally stays PUSH_PULL so demos using the
+    # module don't also need to add an external pull-up.
+    PIN_DRIVE_TYPES: ClassVar[dict[str, "DriveType"]] = {
+        'DATA': DriveType.OPEN_DRAIN,
+    }
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Read the DHT11 at most once per second.** The sensor only "

@@ -3,6 +3,7 @@ from typing import ClassVar
 from pydantic import validate_call
 
 from framework.chip import Chip
+from framework.drive_type import DriveType
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
@@ -28,6 +29,14 @@ class DS1307(Chip):
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-8_W7.62mm"
+    # I²C SDA is open-drain by protocol (the docstring above already
+    # calls out that SDA/SCL need external pull-ups).  SCL is
+    # Direction.IN on this slave-only chip, so it has no drive type.
+    # SQW/OUT is also open-drain (pin 7) — datasheet section 7.4.
+    PIN_DRIVE_TYPES: ClassVar[dict[str, "DriveType"]] = {
+        'SDA':     DriveType.OPEN_DRAIN,
+        'SQW_OUT': DriveType.OPEN_DRAIN,
+    }
 
     GOTCHAS: ClassVar[tuple[str, ...]] = (
         "**Solder a 32.768 kHz watch crystal directly between pins 1 "

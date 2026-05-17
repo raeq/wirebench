@@ -21,7 +21,7 @@ if str(_SRC) not in sys.path:
 from wirebench import (  # noqa: E402  — import must follow the sys.path tweak above
     Analog,
     Circuit, wire,
-    LED, Rail,
+    LED, Rail, Resistor,
     ULN2003A, SN74HC04, CD4069, CD4043,
     run_scenarios,
 )
@@ -70,15 +70,29 @@ class WaterAlarm(Circuit):
         self.cd4043    = CD4043(refdes_number=4)
         self.red_led   = LED('red',   refdes_number=1)
         self.green_led = LED('green', refdes_number=2)
+        # Pull-ups for the two ULN2003A open-collector outputs we use.
+        # Without them, the line floats whenever the channel transistor
+        # is off (probe dry) and downstream CMOS reads an undefined
+        # level.  10 kΩ is the standard CMOS-loading pull-up value;
+        # 4.7 kΩ would also work and switch slightly faster.
+        self.r_pu1     = Resistor(10_000, refdes_number=1)
+        self.r_pu2     = Resistor(10_000, refdes_number=2)
         self.gnd       = Rail(False)   # GND tie for unused CMOS inputs and unused latch cells
-        self.vcc       = Rail(True)    # Vcc tie for the CD4043's OE pin
+        self.vcc       = Rail(True)    # Vcc tie for the CD4043's OE pin and the OC pull-ups
         # Analog rails for the chip supply pins (declared as Analog so
         # the assembly-guide ERC catches the unwired case).
         self.vcc_a     = Rail(True,  signal_type=Analog)
         self.gnd_a     = Rail(False, signal_type=Analog)
 
-        wire(self.sensor.out_1,   self.cd4043.s_1)
-        wire(self.sensor.out_2,   self.sn74hc04.a_1)
+        # ULN2003A's outputs are open-collector — they need pull-ups
+        # to the + rail to register HIGH (probe dry).  Each output
+        # net contains the OC source, the downstream sink, and one
+        # terminal of the pull-up resistor; the other resistor terminal
+        # ties to the Digital VCC rail.
+        wire(self.sensor.out_1,   self.cd4043.s_1, self.r_pu1.ports['t1'])
+        wire(self.r_pu1.ports['t2'], self.vcc.out)
+        wire(self.sensor.out_2,   self.sn74hc04.a_1, self.r_pu2.ports['t1'])
+        wire(self.r_pu2.ports['t2'], self.vcc.out)
         wire(self.sn74hc04.y_1,   self.cd4043.r_1)
         wire(self.cd4043.q_1,     self.red_led.anode)
         # /Q is not a CD4043 package pin — derive it via gate 1 of the CD4069.

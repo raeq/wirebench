@@ -14,6 +14,8 @@ Water level alarm.
 |--------|------|--------------|----------|-------|
 | D1 | LED | red, 5 mm | 1 | Longer lead is the anode (+) |
 | D2 | LED | green, 5 mm | 1 | Longer lead is the anode (+) |
+| R1 | Resistor | 10000 Ω | 1 | ¼ W carbon film is fine |
+| R2 | Resistor | 10000 Ω | 1 | ¼ W carbon film is fine |
 | U1 | ULN2003A | ULN2003A | 1 |  |
 | U2 | SN74HC04 | SN74HC04 | 1 |  |
 | U3 | CD4069 | CD4069 | 1 |  |
@@ -35,6 +37,18 @@ anode (+, long lead) ─▶├─ cathode (−, short lead)   [red, 5 mm]
 
 ```
 anode (+, long lead) ─▶├─ cathode (−, short lead)   [green, 5 mm]
+```
+
+### R1 — Resistor
+
+```
+t1 ─┤▮ 10000 Ω ▮├─ t2
+```
+
+### R2 — Resistor
+
+```
+t1 ─┤▮ 10000 Ω ▮├─ t2
 ```
 
 ### U1 — ULN2003A
@@ -91,6 +105,7 @@ anode (+, long lead) ─▶├─ cathode (−, short lead)   [green, 5 mm]
 Before you start wiring, take five minutes to confirm each part actually works. A multimeter on the diode-test and resistance settings catches most pre-install failures: dead LEDs, mis-bagged parts, transistors damaged in shipping, batteries below their safe-discharge limit. The checks below cover what you can verify with a basic multimeter; chips and complex modules generally need a working test rig instead, so they're not listed here.
 
 - **Set your multimeter to diode-test mode and probe the LED's leads.** Put the red probe on the long lead (anode +) and the black probe on the short lead (cathode −). A healthy LED lights up dimly — the meter is forcing a tiny current through it — and the reading shows the forward voltage (around 1.8 V for red, 2 V for yellow, 3.2 V for blue/white). Reverse the probes and the LED should stay dark with the meter reading OL. If both directions show OL the LED is open / dead; if both directions light the LED it has failed as a short. This also tells you which lead is the anode, useful if the leads were trimmed.
+- **Measure the resistance with your multimeter before installing.** Set the meter to the Ω (ohms) range, probe one lead, then the other; the reading should match the value printed on the part (or decoded from its colour bands) to within a few percent. A reading of OL (open / infinity) means the resistor is broken inside; a value wildly different from what's marked usually means someone has swapped parts in the bin and you've grabbed the wrong one.
 
 
 ## Method
@@ -111,67 +126,79 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    position 51 (any of 51A–51E).
 7. Plug D2 (LED): one lead at position 53 (any of 53A–53E), the other at
    position 54 (any of 54A–54E).
-8. Run a jumper from U1 pin 8 at position 17 (any of 17A–17E) to the top `-`
+8. Plug R1 (Resistor): one lead at position 56 (any of 56A–56E), the other at
+   position 59 (any of 59A–59E).
+9. Plug R2 (Resistor): one lead at position 61 (any of 61A–61E), the other at
+   position 64 (any of 64A–64E).
+10. Run a jumper from U1 pin 8 at position 17 (any of 17A–17E) to the top `-`
    rail.
-9. Run a jumper from U2 pin 7 at position 36 (any of 36A–36E) to the top `-`
+11. Run a jumper from U2 pin 7 at position 36 (any of 36A–36E) to the top `-`
    rail.
-10. Run a jumper from U3 pin 7 at position 45 (any of 45A–45E) to the top `-`
+12. Run a jumper from U3 pin 7 at position 45 (any of 45A–45E) to the top `-`
    rail.
-11. Run a jumper from U4 pin 8 at position 27 (any of 27A–27E) to the top `-`
+13. Run a jumper from U4 pin 8 at position 27 (any of 27A–27E) to the top `-`
    rail.
-12. Run a jumper from U1 pin 15 to U2 pin 1 — position 11 (any of 11F–11J) to
+14. Run a jumper from R2 t1 to U1 pin 15 — position 61 (any of 61A–61E) to
+   position 11 (any of 11F–11J).
+15. Run a jumper from U1 pin 15 to U2 pin 1 — position 11 (any of 11F–11J) to
    position 30 (any of 30A–30E).
-13. Run a jumper from U1 pin 16 to U4 pin 3 — position 10 (any of 10F–10J) to
+16. Run a jumper from R1 t1 to U1 pin 16 — position 56 (any of 56A–56E) to
+   position 10 (any of 10F–10J).
+17. Run a jumper from U1 pin 16 to U4 pin 3 — position 10 (any of 10F–10J) to
    position 22 (any of 22A–22E).
-14. Run a jumper from U2 pin 2 to U4 pin 2 — position 31 (any of 31A–31E) to
+18. Run a jumper from U2 pin 2 to U4 pin 2 — position 31 (any of 31A–31E) to
    position 21 (any of 21A–21E).
-15. Run a jumper from U2 pin 11 at position 33 (any of 33F–33J) to the top `-`
+19. Run a jumper from U2 pin 11 at position 33 (any of 33F–33J) to the top `-`
    rail.
-16. Run a jumper from U2 pin 13 at position 31 (any of 31F–31J) to the top `-`
+20. Run a jumper from U2 pin 13 at position 31 (any of 31F–31J) to the top `-`
    rail.
-17. Run a jumper from U2 pin 3 at position 32 (any of 32A–32E) to the top `-`
+21. Run a jumper from U2 pin 3 at position 32 (any of 32A–32E) to the top `-`
    rail.
-18. Run a jumper from U2 pin 5 at position 34 (any of 34A–34E) to the top `-`
+22. Run a jumper from U2 pin 5 at position 34 (any of 34A–34E) to the top `-`
    rail.
-19. Run a jumper from U2 pin 9 at position 35 (any of 35F–35J) to the top `-`
+23. Run a jumper from U2 pin 9 at position 35 (any of 35F–35J) to the top `-`
    rail.
-20. Run a jumper from U3 pin 11 at position 42 (any of 42F–42J) to the top `-`
+24. Run a jumper from U3 pin 11 at position 42 (any of 42F–42J) to the top `-`
    rail.
-21. Run a jumper from U3 pin 13 at position 40 (any of 40F–40J) to the top `-`
+25. Run a jumper from U3 pin 13 at position 40 (any of 40F–40J) to the top `-`
    rail.
-22. Run a jumper from U3 pin 3 at position 41 (any of 41A–41E) to the top `-`
+26. Run a jumper from U3 pin 3 at position 41 (any of 41A–41E) to the top `-`
    rail.
-23. Run a jumper from U3 pin 5 at position 43 (any of 43A–43E) to the top `-`
+27. Run a jumper from U3 pin 5 at position 43 (any of 43A–43E) to the top `-`
    rail.
-24. Run a jumper from U3 pin 9 at position 44 (any of 44F–44J) to the top `-`
+28. Run a jumper from U3 pin 9 at position 44 (any of 44F–44J) to the top `-`
    rail.
-25. Run a jumper from U4 pin 10 at position 26 (any of 26F–26J) to the top `-`
+29. Run a jumper from U4 pin 10 at position 26 (any of 26F–26J) to the top `-`
    rail.
-26. Run a jumper from U4 pin 12 at position 24 (any of 24F–24J) to the top `-`
+30. Run a jumper from U4 pin 12 at position 24 (any of 24F–24J) to the top `-`
    rail.
-27. Run a jumper from U4 pin 13 at position 23 (any of 23F–23J) to the top `-`
+31. Run a jumper from U4 pin 13 at position 23 (any of 23F–23J) to the top `-`
    rail.
-28. Run a jumper from U4 pin 5 at position 24 (any of 24A–24E) to the top `-`
+32. Run a jumper from U4 pin 5 at position 24 (any of 24A–24E) to the top `-`
    rail.
-29. Run a jumper from U4 pin 6 at position 25 (any of 25A–25E) to the top `-`
+33. Run a jumper from U4 pin 6 at position 25 (any of 25A–25E) to the top `-`
    rail.
-30. Run a jumper from U4 pin 9 at position 27 (any of 27F–27J) to the top `-`
+34. Run a jumper from U4 pin 9 at position 27 (any of 27F–27J) to the top `-`
    rail.
-31. Run a jumper from U2 pin 14 at position 30 (any of 30F–30J) to the top `+`
+35. Run a jumper from U2 pin 14 at position 30 (any of 30F–30J) to the top `+`
    rail.
-32. Run a jumper from U3 pin 14 at position 39 (any of 39F–39J) to the top `+`
+36. Run a jumper from U3 pin 14 at position 39 (any of 39F–39J) to the top `+`
    rail.
-33. Run a jumper from U4 pin 16 at position 20 (any of 20F–20J) to the top `+`
+37. Run a jumper from U4 pin 16 at position 20 (any of 20F–20J) to the top `+`
    rail.
-34. Run a jumper from D1 anode to U3 pin 1 — position 50 (any of 50A–50E) to
+38. Run a jumper from D1 anode to U3 pin 1 — position 50 (any of 50A–50E) to
    position 39 (any of 39A–39E).
-35. Run a jumper from U3 pin 1 to U4 pin 1 — position 39 (any of 39A–39E) to
+39. Run a jumper from U3 pin 1 to U4 pin 1 — position 39 (any of 39A–39E) to
    position 20 (any of 20A–20E).
-36. Run a jumper from D2 anode to U3 pin 2 — position 53 (any of 53A–53E) to
+40. Run a jumper from D2 anode to U3 pin 2 — position 53 (any of 53A–53E) to
    position 40 (any of 40A–40E).
-37. Run a jumper from U4 pin 7 at position 26 (any of 26A–26E) to the top `+`
+41. Run a jumper from R1 t2 at position 59 (any of 59A–59E) to the top `+`
    rail.
-38. Verify nothing is shorted by inspecting the rails with a multimeter
+42. Run a jumper from R2 t2 at position 64 (any of 64A–64E) to the top `+`
+   rail.
+43. Run a jumper from U4 pin 7 at position 26 (any of 26A–26E) to the top `+`
+   rail.
+44. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.
 
