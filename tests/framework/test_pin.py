@@ -1,5 +1,5 @@
 import pytest
-from framework.errors import PortContentionError, UnknownPortError
+from framework.errors import PartParameterError, PortContentionError, UnknownPortError
 from framework.ground import ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
@@ -120,19 +120,82 @@ def test_pin_carries_signal_type_to_both_faces():
 # --- PinId metadata exposed on Pin ---
 
 def test_pin_exposes_id_number_name():
-    p = Pin(PinId(7, 'GND'), Direction.IN, ELECTRICAL, signal_type=Digital)
+    # GND is a canonical ground pin; the framework requires Analog
+    # signal_type for power/ground pins (see test_pin_function_invariant).
+    p = Pin(PinId(7, 'GND'), Direction.IN, ELECTRICAL, signal_type=Analog)
     assert p.id == PinId(7, 'GND')
     assert p.number == 7
     assert p.name == 'GND'
 
 
 def test_pin_repr_includes_pin_id():
-    p = Pin(PinId(7, 'GND'), Direction.IN, ELECTRICAL, signal_type=Digital)
+    p = Pin(PinId(7, 'GND'), Direction.IN, ELECTRICAL, signal_type=Analog)
     assert 'pin 7 (GND)' in repr(p)
 
 
 def test_pin_external_port_carries_pin_name():
     # The underlying Port keeps the name that wiring code uses today.
-    p = Pin(PinId(7, 'GND'), Direction.IN, ELECTRICAL, signal_type=Digital)
+    p = Pin(PinId(7, 'GND'), Direction.IN, ELECTRICAL, signal_type=Analog)
     assert p.external.name == 'GND'
     assert p.internal.name == 'GND_inner'
+
+
+# --- pin-function invariant: POWER / GROUND pins must be Analog ---
+
+POWER_NAMES = ['VCC', 'VDD', 'AVCC', 'VBUS']
+GROUND_NAMES = ['GND', 'VSS', 'AGND', 'DGND']
+SUPPLY_NAMES = POWER_NAMES + GROUND_NAMES
+
+
+@pytest.mark.parametrize('name', SUPPLY_NAMES)
+def test_supply_pin_with_digital_signal_type_raises(name):
+    # Canonical power / ground names with Digital signal_type are a
+    # category error — these pins carry continuous voltages, not
+    # logic levels.  The framework refuses at construction time.
+    with pytest.raises(PartParameterError, match=r"power and ground pins"):
+        Pin(PinId(1, name), Direction.IN, ELECTRICAL, signal_type=Digital)
+
+
+@pytest.mark.parametrize('name', SUPPLY_NAMES)
+def test_supply_pin_with_analog_signal_type_constructs(name):
+    p = Pin(PinId(1, name), Direction.IN, ELECTRICAL, signal_type=Analog)
+    assert p.name == name
+    assert p.external.signal_type is Analog
+
+
+@pytest.mark.parametrize('name', ['vcc', 'Vdd', 'gnd', 'Vss', 'AVcc'])
+def test_supply_pin_name_match_is_case_insensitive(name):
+    # The regex is case-insensitive, so the invariant fires regardless
+    # of how the datasheet capitalises the pin name.
+    with pytest.raises(PartParameterError, match=r"power and ground pins"):
+        Pin(PinId(1, name), Direction.IN, ELECTRICAL, signal_type=Digital)
+
+
+@pytest.mark.parametrize('name', ['IN', 'OUT', 'CLK', 'V_REF', 'VDD_SENSE', 'a_1'])
+def test_signal_pin_with_digital_does_not_raise(name):
+    # Pins whose names don't match the supply/ground regex are signal
+    # pins; Digital is a valid declaration for them.
+    p = Pin(PinId(1, name), Direction.IN, ELECTRICAL, signal_type=Digital)
+    assert p.external.signal_type is Digital
+
+
+def test_supply_pin_error_message_names_the_pin_and_function():
+    with pytest.raises(PartParameterError) as exc_info:
+        Pin(PinId(14, 'VCC'), Direction.IN, ELECTRICAL, signal_type=Digital)
+    msg = str(exc_info.value)
+    assert 'pin 14 (VCC)' in msg
+    assert 'power' in msg
+    assert 'Digital' in msg
+
+
+def test_invariant_applies_to_out_and_bidir_pins_too():
+    # The invariant is about the pin's role (POWER / GROUND), not its
+    # direction.  An OUT or BIDIR supply pin (think USB-C VBUS, which
+    # is BIDIR) is still subject to the rule.
+    with pytest.raises(PartParameterError, match=r"power and ground pins"):
+        Pin(PinId(1, 'VBUS'), Direction.OUT, ELECTRICAL, signal_type=Digital)
+    with pytest.raises(PartParameterError, match=r"power and ground pins"):
+        Pin(PinId(1, 'VBUS'), Direction.BIDIR, ELECTRICAL, signal_type=Digital)
+    # Analog is fine for either direction.
+    Pin(PinId(1, 'VBUS'), Direction.OUT,   ELECTRICAL, signal_type=Analog)
+    Pin(PinId(1, 'VBUS'), Direction.BIDIR, ELECTRICAL, signal_type=Analog)

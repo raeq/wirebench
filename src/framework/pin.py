@@ -3,10 +3,12 @@ from typing import Annotated, ClassVar
 from pydantic import Field, validate_call
 from pydantic.dataclasses import dataclass
 
-from framework.errors import PortContentionError, UnknownPortError
+from framework.errors import PartParameterError, PortContentionError, UnknownPortError
 from framework.part import Part
 from framework.ground import GroundDomain
+from framework.pin_function import infer_pin_function
 from framework.port import Port, Direction
+from framework.signals import Analog
 
 
 @dataclass(frozen=True, slots=True, config={"arbitrary_types_allowed": False})
@@ -80,6 +82,7 @@ class Pin(Part):
         mandatory: bool = True,
         signal_type: type,
     ) -> None:
+        self._assert_signal_type_matches_pin_function(id_, signal_type)
         self._id   = id_
         self._role = direction
         if direction is Direction.IN:
@@ -125,6 +128,35 @@ class Pin(Part):
         # to find a real driver/reader.  Treated as the effective role
         # at evaluate-time, overriding the declared BIDIR ambiguity.
         self._effective_role: Direction | None = None
+
+    @staticmethod
+    def _assert_signal_type_matches_pin_function(
+        id_: PinId, signal_type: type,
+    ) -> None:
+        """Power and ground pins carry continuous voltages by definition;
+        declaring them as Digital is a category error the framework
+        refuses at construction time.  Inference is name-based — pins
+        whose names match the canonical supply/ground regex
+        (`framework.pin_function.infer_pin_function`) get this check;
+        signal pins are unaffected.
+
+        Chips that use non-canonical silkscreen for their supply pins
+        (the `PIN_FUNCTIONS = {'PWR': PinFunction.POWER}` override case)
+        are not caught here — the Pin sees only the name and trusts the
+        chip-level metadata to handle the rest.  Those overrides are
+        the rare exception; the regex catches the >95% case at the
+        cheapest enforcement point.
+        """
+        fn = infer_pin_function(id_.name)
+        if fn is None:
+            return
+        if isinstance(signal_type, type) and issubclass(signal_type, Analog):
+            return
+        raise PartParameterError(
+            f"{id_} has pin function {fn.value!r} but signal_type is "
+            f"{signal_type.__name__}; power and ground pins carry "
+            f"continuous voltages and must be declared Analog."
+        )
 
     @property
     def id(self) -> PinId:
