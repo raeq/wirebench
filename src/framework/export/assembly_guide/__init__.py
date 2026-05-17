@@ -25,6 +25,8 @@ adapter for consistency, but doesn't reference net names in its
 output."""
 from __future__ import annotations
 
+__all__ = ['render', 'name_assembly_guide_net']
+
 from framework.part import Part
 
 from framework.export.base import ExporterContext, register_net_namer

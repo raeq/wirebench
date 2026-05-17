@@ -11,6 +11,8 @@ naming the enclosing board.
 """
 from __future__ import annotations
 
+__all__ = ['render', 'name_bom_net']
+
 from framework.part import Part
 
 from framework.export.base import (

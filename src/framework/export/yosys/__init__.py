@@ -10,6 +10,8 @@ integer starting at 2 (Yosys reserves 0/1 for constants).
 """
 from __future__ import annotations
 
+__all__ = ['render', 'name_yosys_net']
+
 import json
 from typing import Any, Callable
 
