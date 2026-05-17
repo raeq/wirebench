@@ -6,6 +6,7 @@ from typing import Any, ClassVar, Sequence
 from pydantic import validate_call
 
 from framework.circuit import Circuit
+from framework.drive_type import DriveType
 from framework.errors import PartConfigurationError
 from framework.part import Part
 from framework.pin import Pin
@@ -74,6 +75,16 @@ class Chip(Circuit):
     # signals regardless of name.
     PIN_FUNCTIONS: ClassVar[dict[str, PinFunction | None]] = {}
 
+    # Per-chip override of the per-pin output-stage drive type.  The
+    # framework has no name-based inference for drive type — there's
+    # no canonical silkscreen convention for "this pin is open-drain"
+    # the way VCC / GND mark supplies.  Chips declare each non-default
+    # drive explicitly here, keyed by pin name.  Pins not in this map
+    # default to PUSH_PULL.  Consulted by the assembly-guide ERC and
+    # by any future analysis that needs to know whether a pin can
+    # source HIGH or only sink LOW.
+    PIN_DRIVE_TYPES: ClassVar[dict[str, DriveType]] = {}
+
     __slots__ = ('_ports_by_number', '_port_map')
 
     @classmethod
@@ -84,6 +95,14 @@ class Chip(Circuit):
         if pin_name in cls.PIN_FUNCTIONS:
             return cls.PIN_FUNCTIONS[pin_name]
         return infer_pin_function(pin_name)
+
+    @classmethod
+    def pin_drive_type(cls, pin_name: str) -> DriveType:
+        """Return the output-stage drive type of a pin.  Defaults to
+        `DriveType.PUSH_PULL` for any pin not listed in
+        `PIN_DRIVE_TYPES`.  No name-based inference — the chip class
+        is the only source of truth here."""
+        return cls.PIN_DRIVE_TYPES.get(pin_name, DriveType.PUSH_PULL)
 
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, *, pins: Sequence[Pin], cells: Sequence[Part]) -> None:
@@ -99,6 +118,7 @@ class Chip(Circuit):
         )
         if not self.BARE_FIRMWARE_DRIVEN:
             self._assert_every_out_pin_is_internally_driven(list(pins))
+        self._assert_drive_type_declarations_are_valid(list(pins))
 
     def _assert_every_out_pin_is_internally_driven(
         self, pins: list[Pin],
@@ -141,6 +161,42 @@ class Chip(Circuit):
             )
             if not has_real_driver:
                 self._raise_undriven(pin)
+
+    def _assert_drive_type_declarations_are_valid(
+        self, pins: list[Pin],
+    ) -> None:
+        """Refuse a chip whose `PIN_DRIVE_TYPES` lies about its pins.
+
+        Two checks:
+          1. Every name in the map must correspond to a real Pin on
+             this chip (catches typos in the override declaration).
+          2. A non-PUSH_PULL drive type requires the pin's direction
+             to be OUT or BIDIR.  An IN pin has nothing to drive, so
+             declaring it OPEN_DRAIN / OPEN_COLLECTOR / TRI_STATE is
+             a category error.  BIDIR is essential for I²C — every
+             SDA / SCL pin on every I²C peripheral in the catalogue is
+             `Direction.BIDIR` AND open-drain, and the I²C protocol
+             literally requires it.
+        """
+        pins_by_name = {pin.id.name: pin for pin in pins}
+        for name, drive_type in type(self).PIN_DRIVE_TYPES.items():
+            pin = pins_by_name.get(name)
+            if pin is None:
+                raise PartConfigurationError(
+                    f"{type(self).__name__} declares PIN_DRIVE_TYPES "
+                    f"entry {name!r}={drive_type.value!r} but no pin "
+                    f"has that name on this chip."
+                )
+            if drive_type is DriveType.PUSH_PULL:
+                continue
+            if pin._role not in (Direction.OUT, Direction.BIDIR):
+                raise PartConfigurationError(
+                    f"{type(self).__name__} declares pin {name!r} as "
+                    f"{drive_type.value!r} but its direction is "
+                    f"{pin._role.value!r}; non-PUSH_PULL drive types "
+                    f"require OUT or BIDIR direction (an IN pin has "
+                    f"nothing to drive)."
+                )
 
     def _raise_undriven(self, pin: Pin) -> None:
         raise PartConfigurationError(

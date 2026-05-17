@@ -3,6 +3,7 @@ from typing import ClassVar
 from pydantic import validate_call
 
 from framework.chip import Chip
+from framework.drive_type import DriveType
 from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
@@ -27,6 +28,12 @@ class TLV3401(Chip):
 
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_TO_SOT_SMD:SOT-23-5"
+    # Datasheet specifies an open-drain output stage; external pull-up
+    # to VCC required for HIGH levels.  The cell drives rail-to-rail
+    # for simulation purposes (the bench needs the pull-up).
+    PIN_DRIVE_TYPES: ClassVar[dict[str, "DriveType"]] = {
+        'OUT': DriveType.OPEN_DRAIN,
+    }
 
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         (1, 'OUT', Direction.OUT, Analog),

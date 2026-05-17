@@ -1,6 +1,8 @@
 Refdes,Value,Footprint,Quantity,Parent,Description
 D1,red LED,LED_SMD:LED_0805,1,,Light-emitting diode
 D2,green LED,LED_SMD:LED_0805,1,,Light-emitting diode
+R1,10000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R2,10000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
 U1,ULN2003A,Package_DIP:DIP-16_W7.62mm,1,,ULN2003A
 U2,SN74HC04,Package_DIP:DIP-14_W7.62mm,1,,SN74HC04
 U3,CD4069,Package_DIP:DIP-14_W7.62mm,1,,CD4069
