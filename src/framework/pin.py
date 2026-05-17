@@ -6,9 +6,32 @@ from pydantic.dataclasses import dataclass
 from framework.errors import PartParameterError, PortContentionError, UnknownPortError
 from framework.part import Part
 from framework.ground import GroundDomain
-from framework.pin_function import infer_pin_function
+from framework.pin_function import PinFunction, infer_pin_function
 from framework.port import Port, Direction
-from framework.signals import Analog
+from framework.signals import Analog, Digital
+
+
+# Per-PinFunction construction-time signal_type constraint.
+# An entry of `None` means "no constraint — either signal_type is
+# legal for this role" (currently CLOCK_IN and NC: clocks can be
+# either analog RC-driven inputs like the NE555's or digital
+# square-wave inputs; NC's signal_type is moot because the pin
+# shouldn't be wired to anything anyway).
+#
+# The invariant runs at Pin.__init__ time and uses name-based
+# inference (`framework.pin_function.infer_pin_function`). Chips
+# that declare non-canonical pin names via the `PIN_FUNCTIONS`
+# ClassVar override on Chip aren't caught here — their override
+# metadata is a labelling concern for ERC / assembly-guide
+# consumers, not a structural claim about the pin's encoding.
+_REQUIRED_SIGNAL_TYPES: dict[PinFunction, type | None] = {
+    PinFunction.POWER:     Analog,
+    PinFunction.GROUND:    Analog,
+    PinFunction.REFERENCE: Analog,
+    PinFunction.RESET:     Digital,
+    PinFunction.CLOCK_IN:  None,
+    PinFunction.NC:        None,
+}
 
 
 @dataclass(frozen=True, slots=True, config={"arbitrary_types_allowed": False})
@@ -83,6 +106,7 @@ class Pin(Part):
         signal_type: type,
     ) -> None:
         self._assert_signal_type_matches_pin_function(id_, signal_type)
+        self._assert_nc_pin_is_not_mandatory(id_, mandatory)
         self._id   = id_
         self._role = direction
         if direction is Direction.IN:
@@ -133,30 +157,48 @@ class Pin(Part):
     def _assert_signal_type_matches_pin_function(
         id_: PinId, signal_type: type,
     ) -> None:
-        """Power and ground pins carry continuous voltages by definition;
-        declaring them as Digital is a category error the framework
-        refuses at construction time.  Inference is name-based — pins
-        whose names match the canonical supply/ground regex
-        (`framework.pin_function.infer_pin_function`) get this check;
-        signal pins are unaffected.
+        """Refuse pin declarations whose `signal_type` contradicts the
+        pin's name-inferred function: a `VCC` pin declared Digital, an
+        `AREF` declared Digital, a `RESET` declared Analog.  Each
+        PinFunction's required signal_type is data in
+        `_REQUIRED_SIGNAL_TYPES`; functions whose entry is `None`
+        (CLOCK_IN, NC) accept either signal_type because real chips
+        legitimately go both ways.
 
-        Chips that use non-canonical silkscreen for their supply pins
-        (the `PIN_FUNCTIONS = {'PWR': PinFunction.POWER}` override case)
-        are not caught here — the Pin sees only the name and trusts the
-        chip-level metadata to handle the rest.  Those overrides are
-        the rare exception; the regex catches the >95% case at the
-        cheapest enforcement point.
+        Inference is name-based via
+        `framework.pin_function.infer_pin_function`.  Chips with
+        non-canonical pin names that use the `PIN_FUNCTIONS` ClassVar
+        override are not caught here — the Pin sees only the name and
+        trusts chip-level metadata to drive ERC / assembly-guide
+        decisions, not this structural check.
         """
         fn = infer_pin_function(id_.name)
         if fn is None:
             return
-        if isinstance(signal_type, type) and issubclass(signal_type, Analog):
+        required = _REQUIRED_SIGNAL_TYPES.get(fn)
+        if required is None:
+            return
+        if isinstance(signal_type, type) and issubclass(signal_type, required):
             return
         raise PartParameterError(
             f"{id_} has pin function {fn.value!r} but signal_type is "
-            f"{signal_type.__name__}; power and ground pins carry "
-            f"continuous voltages and must be declared Analog."
+            f"{signal_type.__name__}; {fn.value} pins must be "
+            f"{required.__name__}."
         )
+
+    @staticmethod
+    def _assert_nc_pin_is_not_mandatory(id_: PinId, mandatory: bool) -> None:
+        """An NC (no-connect) pin that is declared `mandatory=True` is
+        a contradiction: the framework requires it to be wired, while
+        its function says it must not be.  Refuse the declaration.
+        Wired-NC enforcement at evaluate time is a separate ERC concern
+        and lives outside the Pin constructor.
+        """
+        if infer_pin_function(id_.name) is PinFunction.NC and mandatory:
+            raise PartParameterError(
+                f"{id_} is a no-connect pin but declared mandatory=True; "
+                f"NC pins must not be required to wire."
+            )
 
     @property
     def id(self) -> PinId:
