@@ -9,6 +9,8 @@ board's refdes: `A1.U1` becomes `A1_U1` in the emitted refdes.
 """
 from __future__ import annotations
 
+__all__ = ['render', 'name_kicad_net']
+
 import hashlib
 
 from framework.board import Board

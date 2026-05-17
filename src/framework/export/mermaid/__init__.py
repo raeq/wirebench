@@ -7,6 +7,8 @@ double-circle nodes, edges with port-name labels.
 """
 from __future__ import annotations
 
+__all__ = ['render', 'name_mermaid_net']
+
 from framework.board import Board
 from framework.chip import Chip
 from framework.circuit import Circuit

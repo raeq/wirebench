@@ -11,6 +11,8 @@ from.
 """
 from __future__ import annotations
 
+__all__ = ['render', 'name_dot_net']
+
 from framework.board import Board
 from framework.chip import Chip
 from framework.circuit import Circuit

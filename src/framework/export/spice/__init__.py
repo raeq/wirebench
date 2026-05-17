@@ -9,6 +9,8 @@ Adapter entry point: `render(design, ctx)` — called by the top-level
 """
 from __future__ import annotations
 
+__all__ = ['render', 'name_spice_net']
+
 from framework.circuit import Circuit
 from framework.part import Part
 
