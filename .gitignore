@@ -73,3 +73,10 @@ MANIFEST
 
 # macOS
 .DS_Store
+
+# SKiDL ERC artifacts — `ERC()` writes <script>.erc and <script>.log
+# into the current working directory. The prevention-benchmark
+# reproducers under .plans/prevention-benchmark/skidl/ trigger these
+# at the repo root when the user runs them; they're not source.
+*.erc
+*.log
