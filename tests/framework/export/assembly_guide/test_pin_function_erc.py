@@ -92,9 +92,9 @@ class _ClkChip(Chip):
 
 
 class _ClkChipInternal(_ClkChip):
-    """Same as `_ClkChip` but declares the internal oscillator is OK,
-    so the CLOCK_IN pin may be left unwired."""
-    INTERNAL_CLOCK_OK: ClassVar[bool] = True
+    """Same as `_ClkChip` but declares the chip has an internal
+    oscillator, so the CLOCK_IN pin may be left unwired."""
+    INTERNAL_OSCILLATOR: ClassVar[bool] = True
 
 
 class _NCChip(Chip):
@@ -329,11 +329,11 @@ def test_clock_in_rule_refuses_floating_clkin() -> None:
     msg = str(exc_info.value)
     assert 'unwired clock-input pins' in msg
     assert 'CLKIN' in msg
-    assert 'INTERNAL_CLOCK_OK' in msg
+    assert 'INTERNAL_OSCILLATOR' in msg
 
 
 class _ClkChipInternalFloatingCLKIN(Circuit):
-    """Same as `_ClkChipFloatingCLKIN` but with INTERNAL_CLOCK_OK on
+    """Same as `_ClkChipFloatingCLKIN` but with INTERNAL_OSCILLATOR on
     the chip class — the rule accepts a floating CLKIN."""
     def __init__(self) -> None:
         self.vcc_a = Rail(True,  signal_type=Analog)

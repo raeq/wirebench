@@ -56,15 +56,15 @@ class Chip(Circuit):
     # review — add a behavioural cell instead.
     BARE_FIRMWARE_DRIVEN: ClassVar[bool] = False
 
-    # Opt-out flag for chips whose declared CLOCK_IN pin (CLKIN /
-    # EXTCLK / OSCIN / CLK_IN) is allowed to be left unwired because
-    # the chip has a usable internal oscillator (most modern MCUs).
-    # Without this flag, the assembly-guide ERC refuses to build any
-    # design that leaves a CLOCK_IN pin floating, which would be
-    # correct for purely externally-clocked parts (e.g. the MPU-6050
-    # synchronisation input) but wrong for chips like an STM32 running
-    # on its HSI RC oscillator.  Default False — opt in explicitly.
-    INTERNAL_CLOCK_OK: ClassVar[bool] = False
+    # True if the chip has an internal RC oscillator that runs without
+    # an external clock source (most modern MCUs — STM32's HSI, AVR's
+    # internal RC, RP2040's ROSC).  When True, the assembly-guide ERC
+    # accepts a declared CLOCK_IN pin (CLKIN / EXTCLK / OSCIN /
+    # CLK_IN) left unwired, because the silicon will clock itself
+    # internally.  Default False — purely externally-clocked parts
+    # (e.g. the MPU-6050 synchronisation input) leave it alone and
+    # ERC catches a floating clock pin.
+    INTERNAL_OSCILLATOR: ClassVar[bool] = False
 
     # Per-chip override of the name-based pin-function inference.  The
     # framework infers POWER for `VCC` / `VDD` / `AVCC` / `VBUS` and

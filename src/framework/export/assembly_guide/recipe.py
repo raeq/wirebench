@@ -288,12 +288,12 @@ def _make_reset_predicate(
 
 def _make_clock_in_predicate() -> _PinPredicate:
     """CLOCK_IN: net must contain a driver, OR the chip declares
-    `INTERNAL_CLOCK_OK = True` (parallel to BARE_FIRMWARE_DRIVEN: an
-    explicit opt-out for chips whose internal oscillator runs without
-    an external clock).
+    `INTERNAL_OSCILLATOR = True` (the physical fact that the chip
+    has an internal RC oscillator and clocks itself without an
+    external source).
     """
     def pred(pin: Pin, chip: Chip) -> bool:
-        if getattr(type(chip), 'INTERNAL_CLOCK_OK', False):
+        if getattr(type(chip), 'INTERNAL_OSCILLATOR', False):
             return True
         node = pin.external.node
         if node is None:
@@ -472,8 +472,8 @@ def _enforce_pin_function_rules(
             "Chips have unwired clock-input pins — the chip won't "
             "oscillate without an external clock. Wire each pin below "
             "to an oscillator / clock-output source in the design "
-            "source, or set INTERNAL_CLOCK_OK = True on the chip class "
-            "if its internal RC oscillator is acceptable for this use:"
+            "source, or set INTERNAL_OSCILLATOR = True on the chip class "
+            "if its internal RC oscillator is sufficient for this use:"
         ),
         failure_hint="wire to an external clock source",
     )
