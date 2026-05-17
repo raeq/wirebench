@@ -57,7 +57,7 @@ def test_pin_directions_match_datasheet():
     ic = ESP8266_12F(refdes_number=1)
     by_number = {p.id.number: p for p in ic.pins}
     for number, _, direction in EXPECTED_PINS:
-        assert by_number[number]._role is direction
+        assert by_number[number].direction is direction
 
 
 def test_ports_keyed_by_pin_name():

@@ -38,7 +38,7 @@ def wire_idle_drivers(
     """
     drivers: list[Part] = []
     for pin in pins:
-        if pin._role is not Direction.OUT:
+        if pin.direction is not Direction.OUT:
             continue
         signal_type = pin.external.signal_type
         idle_value: object

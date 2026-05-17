@@ -66,7 +66,7 @@ def test_pin_numbers_and_names_match_datasheet(chip):
 def test_pin_directions_match_datasheet(chip):
     by_number = {p.id.number: p for p in chip.pins}
     for number, _, direction, *_ in EXPECTED_PINS:
-        assert by_number[number]._role is direction
+        assert by_number[number].direction is direction
 
 
 def test_pin_domains_match_side(chip, iso_domain):

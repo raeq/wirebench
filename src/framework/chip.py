@@ -143,7 +143,7 @@ class Chip(Circuit):
         legitimate for firmware-driven parts).
         """
         for pin in pins:
-            if pin._role is not Direction.OUT:
+            if pin.direction is not Direction.OUT:
                 continue
             internal = pin.internal
             node = internal.node
@@ -189,11 +189,11 @@ class Chip(Circuit):
                 )
             if drive_type is DriveType.PUSH_PULL:
                 continue
-            if pin._role not in (Direction.OUT, Direction.BIDIR):
+            if pin.direction not in (Direction.OUT, Direction.BIDIR):
                 raise PartConfigurationError(
                     f"{type(self).__name__} declares pin {name!r} as "
                     f"{drive_type.value!r} but its direction is "
-                    f"{pin._role.value!r}; non-PUSH_PULL drive types "
+                    f"{pin.direction.value!r}; non-PUSH_PULL drive types "
                     f"require OUT or BIDIR direction (an IN pin has "
                     f"nothing to drive)."
                 )

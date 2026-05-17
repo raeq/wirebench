@@ -50,7 +50,7 @@ def test_pin_directions():
     ic = DRV8313(refdes_number=1)
     by_number = {p.id.number: p for p in ic.pins}
     for number, _, direction in EXPECTED_PINS:
-        assert by_number[number]._role is direction
+        assert by_number[number].direction is direction
 
 
 def test_three_half_bridges_have_six_gate_inputs():
