@@ -36,7 +36,7 @@ def test_pin_directions():
     ic = TMP302(refdes_number=1)
     by_number = {p.id.number: p for p in ic.pins}
     for number, _, direction in EXPECTED_PINS:
-        assert by_number[number]._role is direction
+        assert by_number[number].direction is direction
 
 
 def test_call_is_noop():

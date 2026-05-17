@@ -60,7 +60,7 @@ def test_pin_directions_match_datasheet():
     ic = TRS3122E(refdes_number=1)
     by_number = {p.id.number: p for p in ic.pins}
     for number, _, direction, _ in EXPECTED_PINS:
-        assert by_number[number]._role is direction
+        assert by_number[number].direction is direction
 
 
 def test_all_pins_in_single_domain():

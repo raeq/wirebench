@@ -213,6 +213,24 @@ class Pin(Part):
         return self._id.name
 
     @property
+    def direction(self) -> Direction:
+        """The pin's declared direction (IN / OUT / BIDIR) — the physical
+        role of the package pin, equivalent to `self.external.direction`.
+
+        Read-only.  Set once at construction and exposed here so external
+        code (tests, downstream analysis, custom ERC) can ask "which way
+        does this pin face?" without reaching into the private slot.
+
+        Distinct from the runtime BIDIR-resolution state
+        (`_effective_role`), which the topological sort fills in for
+        BIDIR pins once it can walk the surrounding conductors and
+        decide which way the signal actually flows.  That state stays
+        internal — the resolution is an implementation detail of
+        evaluate().
+        """
+        return self._role
+
+    @property
     def external(self) -> Port:
         return self._external
 
