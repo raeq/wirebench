@@ -35,7 +35,7 @@ from __future__ import annotations
 
 import textwrap
 from collections import OrderedDict
-from typing import Iterable
+from typing import TYPE_CHECKING, Callable, Iterable
 
 from framework.board import Board
 from framework.chip import Chip
@@ -43,7 +43,7 @@ from framework.circuit import Circuit
 from framework.errors import BreadboardIncompatibleError
 from framework.part import Part
 from framework.pin import Pin
-from framework.port import Port
+from framework.port import Direction, Port
 
 from framework.export.assembly_guide.general_gotchas import general_gotchas
 from framework.export.assembly_guide.layout import (
@@ -53,6 +53,9 @@ from framework.export.assembly_guide.placement import (
     ComponentPlacement, chip_pin_count, place,
 )
 from framework.pin_function import PinFunction
+
+if TYPE_CHECKING:
+    from components.passives.rail import Rail
 
 
 # ----------------------------------------------------------------- helpers
@@ -110,6 +113,295 @@ def _walk_top_parts(design: Part) -> list[Part]:
     return parts
 
 
+# ----------------------------------------------- pin-function ERC helpers
+
+
+def _build_rail_port_index(
+    all_parts: Iterable[Part],
+) -> "dict[int, Rail]":
+    """Map `id(rail.ports['out'])` → the Rail itself.  The id is the
+    cheap key the walker uses to detect "this face on the net is a
+    Rail's drive port" without isinstance() checks inside the hot path.
+    """
+    from components.passives.rail import Rail
+    return {id(p.ports['out']): p for p in all_parts if isinstance(p, Rail)}
+
+
+def _build_port_owner_index(
+    all_parts: Iterable[Part],
+) -> dict[int, Part]:
+    """Map `id(port)` → the leaf `Part` that owns the port.  Used by
+    the RESET predicate to walk from a pin's net through a passive
+    Resistor to the resistor's opposite terminal."""
+    owner: dict[int, Part] = {}
+    for p in all_parts:
+        ports = getattr(p, 'ports', None)
+        if ports is None:
+            continue
+        # ports may be a PortMap, dict, or other Mapping-shaped thing
+        # exposing values().  Both real shapes are iterable that way.
+        try:
+            for port in ports.values():
+                owner[id(port)] = p
+        except AttributeError:
+            continue
+    return owner
+
+
+# A pin-function predicate decides "is this pin acceptably wired?".
+# False means the pin fails the role's rule and a failure-message line
+# will be emitted.  True means the rule is satisfied for this pin.
+_PinPredicate = Callable[[Pin, Chip], bool]
+
+
+def _check_chip_pin_function(
+    parts: list[Part],
+    *,
+    function: PinFunction,
+    predicate: _PinPredicate,
+    error_msg_prefix: str,
+    failure_hint: str,
+) -> None:
+    """Walk every Chip in `parts`; for each pin classified as
+    `function`, evaluate `predicate(pin, chip)`. Collect failures and
+    raise `BreadboardIncompatibleError` if any.
+
+    Off-board parts (Arduino Uno) are skipped — their pins aren't
+    wired to breadboard rails, they're powered through USB / Vin.
+    """
+    failures: list[str] = []
+    for part in parts:
+        if not isinstance(part, Chip):
+            continue
+        if is_arduino_uno(part):
+            continue
+        for pin in part.pins:
+            if type(part).pin_function(pin.id.name) is not function:
+                continue
+            if not predicate(pin, part):
+                failures.append(
+                    f"  - {part.refdes} pin {pin.id.number} ({pin.id.name}) "
+                    f"[{function.value}] — {failure_hint}"
+                )
+    if failures:
+        raise BreadboardIncompatibleError(
+            f"{error_msg_prefix}\n" + '\n'.join(failures)
+        )
+
+
+def _make_rail_predicate(
+    rail_port_ids: "dict[int, Rail]", *, want_high: bool,
+) -> _PinPredicate:
+    """The POWER / GROUND rule: the pin's net must contain a Rail port
+    at the matching polarity.  Direct wiring only — Rails feeding
+    through passives don't count here (a power pin "behind" a
+    series resistor would have unmodelled current limits).
+    """
+    def pred(pin: Pin, chip: Chip) -> bool:
+        node = pin.external.node
+        if node is None:
+            return False
+        for face in node.ports:
+            rail = rail_port_ids.get(id(face))
+            if rail is not None and bool(rail.level) is want_high:
+                return True
+        return False
+    return pred
+
+
+def _make_reference_predicate(
+    rail_port_ids: "dict[int, Rail]",
+) -> _PinPredicate:
+    """REFERENCE pin (AREF / VREF / VBG / BG_REF): the net must contain
+    a stable analog source.  Accepted sources:
+      - any Rail (POWER or GROUND — tying AREF directly to a supply
+        rail is the simplest reference configuration)
+      - any external OUT-direction port (regulator output, divider
+        tap, another chip's REF_OUT) on the same net
+    """
+    def pred(pin: Pin, chip: Chip) -> bool:
+        node = pin.external.node
+        if node is None:
+            return False
+        for face in node.ports:
+            if face is pin.external:
+                continue
+            if id(face) in rail_port_ids:
+                return True
+            if face.direction is Direction.OUT:
+                return True
+        return False
+    return pred
+
+
+def _make_reset_predicate(
+    rail_port_ids: "dict[int, Rail]",
+    port_owner: dict[int, Part],
+) -> _PinPredicate:
+    """RESET pin: at steady state the line must be defined.  Accepted:
+      - a driver port on the same net (something actively asserts /
+        deasserts the line)
+      - direct wiring to a POWER Rail (tied to VCC = "never reset")
+      - a path through a passive Resistor whose opposite terminal sits
+        on a net containing a POWER Rail (pull-up).  This handles the
+        canonical RC reset network: the R-to-VCC leg holds the pin
+        defined at steady state; the parallel C-to-GND leg sits on a
+        different net and is irrelevant to this static check.
+
+    The "wire to ground via a resistor" case (active-high reset chips)
+    is symmetric but rare; if it surfaces, add the mirror walk.
+    """
+    def pred(pin: Pin, chip: Chip) -> bool:
+        node = pin.external.node
+        if node is None:
+            return False
+        for face in node.ports:
+            if face is pin.external:
+                continue
+            # Direct driver.
+            if face.direction is Direction.OUT:
+                return True
+            # Direct POWER-rail wiring.
+            rail = rail_port_ids.get(id(face))
+            if rail is not None and bool(rail.level) is True:
+                return True
+            # Pull-up: face belongs to a Resistor; walk to its other
+            # terminal and check the net there for a POWER Rail.
+            from components.passives.resistor import Resistor
+            owner = port_owner.get(id(face))
+            if not isinstance(owner, Resistor):
+                continue
+            for other_port in owner.ports.values():
+                if other_port is face:
+                    continue
+                other_node = other_port.node
+                if other_node is None:
+                    continue
+                for other_face in other_node.ports:
+                    other_rail = rail_port_ids.get(id(other_face))
+                    if other_rail is not None and bool(other_rail.level) is True:
+                        return True
+        return False
+    return pred
+
+
+def _make_clock_in_predicate() -> _PinPredicate:
+    """CLOCK_IN: net must contain a driver, OR the chip declares
+    `INTERNAL_CLOCK_OK = True` (parallel to BARE_FIRMWARE_DRIVEN: an
+    explicit opt-out for chips whose internal oscillator runs without
+    an external clock).
+    """
+    def pred(pin: Pin, chip: Chip) -> bool:
+        if getattr(type(chip), 'INTERNAL_CLOCK_OK', False):
+            return True
+        node = pin.external.node
+        if node is None:
+            return False
+        for face in node.ports:
+            if face is pin.external:
+                continue
+            if face.direction is Direction.OUT:
+                return True
+        return False
+    return pred
+
+
+def _nc_predicate(pin: Pin, chip: Chip) -> bool:
+    """NC: strictly unwired.  An NC pin with anything on its net fails
+    — datasheets that document "tie NC to GND for layout convenience"
+    should declare the pin as a signal (`PIN_FUNCTIONS = {'NCx': None}`)
+    rather than NC, because the framework can't tell which kind of NC
+    each datasheet means.  Strict default; lenient interpretation is
+    a future refinement only if a real demo trips this.
+    """
+    return pin.external.node is None
+
+
+def _enforce_pin_function_rules(
+    parts: list[Part], all_parts: list[Part] | None,
+) -> None:
+    """Run every PinFunction's ERC rule on the design.  Each rule
+    raises `BreadboardIncompatibleError` on the first role that fails;
+    the user fixes one role at a time."""
+    universe = list(all_parts or parts)
+    rail_port_ids = _build_rail_port_index(universe)
+    port_owner    = _build_port_owner_index(universe)
+
+    _check_chip_pin_function(
+        parts,
+        function=PinFunction.POWER,
+        predicate=_make_rail_predicate(rail_port_ids, want_high=True),
+        error_msg_prefix=(
+            "Chips have unwired supply pins — the assembled circuit "
+            "won't power up. Wire each pin below to its rail in the "
+            "design source:"
+        ),
+        failure_hint="wire to the + rail",
+    )
+    _check_chip_pin_function(
+        parts,
+        function=PinFunction.GROUND,
+        predicate=_make_rail_predicate(rail_port_ids, want_high=False),
+        error_msg_prefix=(
+            "Chips have unwired supply pins — the assembled circuit "
+            "won't power up. Wire each pin below to its rail in the "
+            "design source:"
+        ),
+        failure_hint="wire to the − rail",
+    )
+    _check_chip_pin_function(
+        parts,
+        function=PinFunction.REFERENCE,
+        predicate=_make_reference_predicate(rail_port_ids),
+        error_msg_prefix=(
+            "Chips have undriven reference pins — the ADC / comparator "
+            "will read garbage without a stable source. Wire each pin "
+            "below to a Rail, a regulator output, or a divider tap in "
+            "the design source:"
+        ),
+        failure_hint="wire to a stable reference source",
+    )
+    _check_chip_pin_function(
+        parts,
+        function=PinFunction.RESET,
+        predicate=_make_reset_predicate(rail_port_ids, port_owner),
+        error_msg_prefix=(
+            "Chips have floating reset pins — the line is undefined at "
+            "steady state and the chip will behave unpredictably. Wire "
+            "each pin below either to a driver or through a pull-up "
+            "resistor to the + rail in the design source:"
+        ),
+        failure_hint="wire to a driver or pull-up to + rail",
+    )
+    _check_chip_pin_function(
+        parts,
+        function=PinFunction.CLOCK_IN,
+        predicate=_make_clock_in_predicate(),
+        error_msg_prefix=(
+            "Chips have unwired clock-input pins — the chip won't "
+            "oscillate without an external clock. Wire each pin below "
+            "to an oscillator / clock-output source in the design "
+            "source, or set INTERNAL_CLOCK_OK = True on the chip class "
+            "if its internal RC oscillator is acceptable for this use:"
+        ),
+        failure_hint="wire to an external clock source",
+    )
+    _check_chip_pin_function(
+        parts,
+        function=PinFunction.NC,
+        predicate=_nc_predicate,
+        error_msg_prefix=(
+            "Chips have no-connect pins wired to something — the "
+            "datasheet says these must remain unconnected. Remove the "
+            "wiring in the design source, or — if the datasheet actually "
+            "permits tying the pin to GND for layout convenience — "
+            "declare it as a signal pin via "
+            "`PIN_FUNCTIONS = {'NC1': None}` on the chip class:"
+        ),
+        failure_hint="this pin must not be connected",
+    )
+
+
 # ------------------------------------------------------------- refusal
 
 
@@ -160,54 +452,18 @@ def _check_breadboard_compatible(
         )
         raise BreadboardIncompatibleError('\n'.join(lines))
 
-    # Power-pin ERC: every POWER / GROUND pin on every placed chip must
-    # be wired to a Rail of the matching polarity, or the build won't
-    # power up at the bench.  This catches demos that "forgot" to wire
-    # supplies — a silent class of bug because the simulator works
-    # fine on the rest of the netlist.  Runs after the SMD / Board
-    # refusals so the more fundamental "this can't go on a breadboard
-    # at all" message takes precedence.
-    from components.passives.rail import Rail
-    rail_port_ids: dict[int, Rail] = {}
-    for p in (all_parts or parts):
-        if isinstance(p, Rail):
-            rail_port_ids[id(p.ports['out'])] = p
-    unwired: list[str] = []
-    for part in parts:
-        if not isinstance(part, Chip):
-            continue
-        if is_arduino_uno(part):
-            continue   # off-board: powered by USB / Vin, not breadboard rails
-        for pin in part.pins:
-            fn = type(part).pin_function(pin.id.name)
-            # This walker only enforces the POWER / GROUND rail-wiring
-            # rule.  Other PinFunction members (REFERENCE / RESET /
-            # CLOCK_IN / NC) classify legitimate pins but need
-            # different ERC predicates that Stage B will add.  Until
-            # then, ignore them — the existing behaviour is to leave
-            # those pins to whoever wires the design.
-            if fn not in (PinFunction.POWER, PinFunction.GROUND):
-                continue
-            node = pin.external.node
-            rails_on_net: list[Rail] = []
-            if node is not None:
-                for face in node.ports:
-                    rail = rail_port_ids.get(id(face))
-                    if rail is not None:
-                        rails_on_net.append(rail)
-            want_high = (fn is PinFunction.POWER)
-            if not any(bool(r.level) is want_high for r in rails_on_net):
-                wanted = '+ rail' if want_high else '− rail'
-                unwired.append(
-                    f"  - {part.refdes} pin {pin.id.number} ({pin.id.name}) "
-                    f"[{fn.value}] — wire to the {wanted}"
-                )
-    if unwired:
-        raise BreadboardIncompatibleError(
-            "Chips have unwired supply pins — the assembled circuit "
-            "won't power up. Wire each pin below to its rail in the "
-            "design source:\n" + '\n'.join(unwired)
-        )
+    # Pin-function ERC: each PinFunction member has its own rule for
+    # what "correctly wired" looks like on the bench.  POWER and GROUND
+    # need a matching-level Rail on the net; REFERENCE needs a stable
+    # analog source; RESET needs a driver or pull-up to a power rail;
+    # CLOCK_IN needs a driver (unless the chip can use its internal
+    # oscillator); NC must not be wired at all.  Each rule is a
+    # separate _check_chip_pin_function call so the failure messages
+    # stay role-specific.
+    #
+    # Runs after the SMD / Board refusals so the more fundamental
+    # "this can't go on a breadboard at all" message takes precedence.
+    _enforce_pin_function_rules(parts, all_parts)
 
 
 # ------------------------------------------------------------ ingredients
