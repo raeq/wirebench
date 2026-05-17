@@ -7,7 +7,7 @@ from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
-from framework.signals import Digital
+from framework.signals import Analog, Digital
 from framework.wire import wire
 from framework.registry import register
 from .concepts.inverter import Inverter
@@ -70,7 +70,10 @@ class SN74HC04(Chip):
         self._refdes_number = refdes_number
         self._gates = tuple(Inverter(domain) for _ in range(self.CHANNELS))
 
-        # 14-pin DIP datasheet pinout: pins 7 (GND) and 14 (VCC) omitted.
+        # 14-pin DIP datasheet pinout: pins 7 (GND) and 14 (VCC) modelled
+        # as Analog supply pins so the assembly-guide ERC can verify
+        # they're wired.  No cell consumes them — the gates are powered
+        # implicitly by the framework's voltage-only graph.
         a_pin_numbers = (1, 3, 5, 9, 11, 13)
         y_pin_numbers = (2, 4, 6, 8, 10, 12)
         a_pins, y_pins = [], []
@@ -79,12 +82,19 @@ class SN74HC04(Chip):
                               Direction.IN,  domain, mandatory=False, signal_type=Digital))
             y_pins.append(Pin(PinId(y_pin_numbers[i], f'y_{i+1}'),
                               Direction.OUT, domain, mandatory=False, signal_type=Digital))
+        gnd_pin = Pin(PinId(7,  'GND'), Direction.IN, domain,
+                      mandatory=False, signal_type=Analog)
+        vcc_pin = Pin(PinId(14, 'VCC'), Direction.IN, domain,
+                      mandatory=False, signal_type=Analog)
 
         for i, gate in enumerate(self._gates):
             wire(a_pins[i].internal, gate.ports['a'])
             wire(gate.ports['y'],    y_pins[i].internal)
 
-        super().__init__(pins=a_pins + y_pins, cells=list(self._gates))
+        super().__init__(
+            pins=a_pins + y_pins + [gnd_pin, vcc_pin],
+            cells=list(self._gates),
+        )
 
     @property
     def refdes(self) -> str:

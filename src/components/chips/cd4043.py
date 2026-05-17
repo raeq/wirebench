@@ -8,7 +8,7 @@ from framework.ground import GroundDomain, ELECTRICAL
 from framework.pin import Pin, PinId
 from framework.port import Direction
 from framework.refdes import RefdesNumber, validate_refdes
-from framework.signals import Digital
+from framework.signals import Analog, Digital
 from framework.wire import wire
 from framework.registry import register
 from .concepts.nor_latch import NORLatch
@@ -83,8 +83,9 @@ class CD4043(Chip):
         self._buf_q   = tuple(TriStateBuffer(domain) for _ in range(self.CHANNELS))
 
         # --- Pins: the chip's external surface ---
-        # 16-pin DIP datasheet pinout: pin 8 (VSS), pin 15 (NC), pin 16
-        # (VDD) omitted from the model.
+        # 16-pin DIP datasheet pinout — VSS (pin 8) and VDD (pin 16)
+        # modelled as Analog supply pins so the assembly-guide ERC can
+        # verify they're wired.  Pin 15 (NC) is omitted as before.
         #   ch 1: q_1=1, r_1=2, s_1=3
         #   ch 2: q_2=4, s_2=5, r_2=6
         #   oe=7
@@ -93,7 +94,12 @@ class CD4043(Chip):
         s_numbers = (3, 5, 10, 12)
         r_numbers = (2, 6, 9, 13)
         q_numbers = (1, 4, 11, 14)
-        oe = Pin(PinId(7, 'oe'), Direction.IN, domain, mandatory=False, signal_type=Digital)
+        oe  = Pin(PinId(7,  'oe'),  Direction.IN, domain,
+                  mandatory=False, signal_type=Digital)
+        vss = Pin(PinId(8,  'VSS'), Direction.IN, domain,
+                  mandatory=False, signal_type=Analog)
+        vdd = Pin(PinId(16, 'VDD'), Direction.IN, domain,
+                  mandatory=False, signal_type=Analog)
         s_pins, r_pins, q_pins = [], [], []
         for i in range(self.CHANNELS):
             s_pins.append(Pin(PinId(s_numbers[i], f's_{i+1}'),
@@ -117,7 +123,7 @@ class CD4043(Chip):
         cells.extend(self._latches)
         cells.extend(self._buf_q)
         super().__init__(
-            pins=[oe] + s_pins + r_pins + q_pins,
+            pins=[oe, vss, vdd] + s_pins + r_pins + q_pins,
             cells=cells,
         )
 

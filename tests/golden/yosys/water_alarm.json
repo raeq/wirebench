@@ -6,10 +6,10 @@
         "D1": {
           "connections": {
             "anode": [
-              5
+              7
             ],
             "cathode": [
-              63
+              65
             ]
           },
           "hide_name": 0,
@@ -25,10 +25,10 @@
         "D2": {
           "connections": {
             "anode": [
-              4
+              6
             ],
             "cathode": [
-              64
+              66
             ]
           },
           "hide_name": 0,
@@ -43,52 +43,56 @@
         },
         "U1": {
           "connections": {
+            "GND": [
+              2
+            ],
             "in_1": [
-              38
-            ],
-            "in_2": [
-              39
-            ],
-            "in_3": [
               40
             ],
-            "in_4": [
+            "in_2": [
               41
             ],
-            "in_5": [
+            "in_3": [
               42
             ],
-            "in_6": [
+            "in_4": [
               43
             ],
-            "in_7": [
+            "in_5": [
               44
             ],
-            "out_1": [
-              7
+            "in_6": [
+              45
             ],
-            "out_2": [
-              20
-            ],
-            "out_3": [
-              49
-            ],
-            "out_4": [
-              48
-            ],
-            "out_5": [
-              47
-            ],
-            "out_6": [
+            "in_7": [
               46
             ],
+            "out_1": [
+              9
+            ],
+            "out_2": [
+              22
+            ],
+            "out_3": [
+              51
+            ],
+            "out_4": [
+              50
+            ],
+            "out_5": [
+              49
+            ],
+            "out_6": [
+              48
+            ],
             "out_7": [
-              45
+              47
             ]
           },
           "hide_name": 0,
           "parameters": {},
           "port_directions": {
+            "GND": "input",
             "in_1": "input",
             "in_2": "input",
             "in_3": "input",
@@ -108,46 +112,54 @@
         },
         "U2": {
           "connections": {
+            "GND": [
+              2
+            ],
+            "VCC": [
+              3
+            ],
             "a_1": [
-              20
+              22
             ],
             "a_2": [
-              3
+              5
             ],
             "a_3": [
-              3
+              5
             ],
             "a_4": [
-              3
+              5
             ],
             "a_5": [
-              3
+              5
             ],
             "a_6": [
-              3
+              5
             ],
             "y_1": [
-              6
+              8
             ],
             "y_2": [
-              50
-            ],
-            "y_3": [
-              51
-            ],
-            "y_4": [
               52
             ],
-            "y_5": [
+            "y_3": [
               53
             ],
-            "y_6": [
+            "y_4": [
               54
+            ],
+            "y_5": [
+              55
+            ],
+            "y_6": [
+              56
             ]
           },
           "hide_name": 0,
           "parameters": {},
           "port_directions": {
+            "GND": "input",
+            "VCC": "input",
             "a_1": "input",
             "a_2": "input",
             "a_3": "input",
@@ -165,46 +177,54 @@
         },
         "U3": {
           "connections": {
+            "VDD": [
+              3
+            ],
+            "VSS": [
+              2
+            ],
             "a_1": [
-              5
+              7
             ],
             "a_2": [
-              3
+              5
             ],
             "a_3": [
-              3
+              5
             ],
             "a_4": [
-              3
+              5
             ],
             "a_5": [
-              3
+              5
             ],
             "a_6": [
-              3
+              5
             ],
             "y_1": [
-              4
+              6
             ],
             "y_2": [
-              55
-            ],
-            "y_3": [
-              56
-            ],
-            "y_4": [
               57
             ],
-            "y_5": [
+            "y_3": [
               58
             ],
-            "y_6": [
+            "y_4": [
               59
+            ],
+            "y_5": [
+              60
+            ],
+            "y_6": [
+              61
             ]
           },
           "hide_name": 0,
           "parameters": {},
           "port_directions": {
+            "VDD": "input",
+            "VSS": "input",
             "a_1": "input",
             "a_2": "input",
             "a_3": "input",
@@ -222,49 +242,57 @@
         },
         "U4": {
           "connections": {
-            "oe": [
+            "VDD": [
+              3
+            ],
+            "VSS": [
               2
             ],
+            "oe": [
+              4
+            ],
             "q_1": [
-              5
-            ],
-            "q_2": [
-              60
-            ],
-            "q_3": [
-              61
-            ],
-            "q_4": [
-              62
-            ],
-            "r_1": [
-              6
-            ],
-            "r_2": [
-              3
-            ],
-            "r_3": [
-              3
-            ],
-            "r_4": [
-              3
-            ],
-            "s_1": [
               7
             ],
+            "q_2": [
+              62
+            ],
+            "q_3": [
+              63
+            ],
+            "q_4": [
+              64
+            ],
+            "r_1": [
+              8
+            ],
+            "r_2": [
+              5
+            ],
+            "r_3": [
+              5
+            ],
+            "r_4": [
+              5
+            ],
+            "s_1": [
+              9
+            ],
             "s_2": [
-              3
+              5
             ],
             "s_3": [
-              3
+              5
             ],
             "s_4": [
-              3
+              5
             ]
           },
           "hide_name": 0,
           "parameters": {},
           "port_directions": {
+            "VDD": "input",
+            "VSS": "input",
             "oe": "input",
             "q_1": "output",
             "q_2": "output",
@@ -286,28 +314,14 @@
         "GND": {
           "attributes": {},
           "bits": [
-            3
-          ],
-          "hide_name": 0
-        },
-        "net_18": {
-          "attributes": {},
-          "bits": [
-            20
-          ],
-          "hide_name": 0
-        },
-        "net_2": {
-          "attributes": {},
-          "bits": [
-            4
-          ],
-          "hide_name": 0
-        },
-        "net_3": {
-          "attributes": {},
-          "bits": [
             5
+          ],
+          "hide_name": 0
+        },
+        "net_20": {
+          "attributes": {},
+          "bits": [
+            22
           ],
           "hide_name": 0
         },
@@ -325,10 +339,24 @@
           ],
           "hide_name": 0
         },
+        "net_6": {
+          "attributes": {},
+          "bits": [
+            8
+          ],
+          "hide_name": 0
+        },
+        "net_7": {
+          "attributes": {},
+          "bits": [
+            9
+          ],
+          "hide_name": 0
+        },
         "vcc": {
           "attributes": {},
           "bits": [
-            2
+            4
           ],
           "hide_name": 0
         }
@@ -336,19 +364,19 @@
       "ports": {
         "high_probe": {
           "bits": [
-            39
+            41
           ],
           "direction": "input"
         },
         "low_probe": {
           "bits": [
-            38
+            40
           ],
           "direction": "input"
         },
         "state": {
           "bits": [
-            5
+            7
           ],
           "direction": "output"
         }

@@ -30,6 +30,16 @@ Each part below is drawn the way it sits on the breadboard, with every pin label
     └────────────────────────────────────────────────────────────────────────────────────┘
        PC5   PC4   PC3   PC2   PC1   PC0   GND  AREF  AVCC   PB5   PB4   PB3   PB2   PB1 
        28    27    26    25    24    23    22    21    20    19    18    17    16    15  
+
+Arduino Uno R3 header pinout (top-down view, USB jack on the left):
+
+         SCL  SDA  AREF GND  D13  D12  D11  D10  D9   D8       D7   D6   D5   D4   D3   D2   D1   D0
+                            (PB5)(PB4)(PB3)(PB2)(PB1)(PB0)   (PD7)(PD6)(PD5)(PD4)(PD3)(PD2)(TX) (RX)
+       ┌──────────────────────────────────────────────────────────────────────────────────────────────┐
+  USB ─┤                                       Arduino Uno R3                                         │
+       └──────────────────────────────────────────────────────────────────────────────────────────────┘
+        IOREF RST  3.3V 5V   GND  GND  Vin                     A0   A1   A2   A3   A4   A5
+                            (VCC)                            (PC0)(PC1)(PC2)(PC3)(SDA)(SCL)
 ```
 
 
@@ -46,8 +56,10 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    left-to-right through the middle. Connect your 5 V supply: the positive
    lead to the top `+` rail (positive rail), the negative lead to the top `-`
    rail (ground rail).
-2. Plug U1 (Uno_BLDCCommutator, DIP-28) straddling the trough: pin 1 at 10E,
-   pin 28 at 10F. The chip's notch / dot marks pin 1 — make sure it lines up.
+2. Place U1 (Arduino Uno R3) beside the breadboard. The board doesn't sit on
+   the breadboard itself — its female headers receive the jumpers listed
+   below. Power the Uno via its USB jack or a 7–12 V supply on the `Vin`
+   header.
 3. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.

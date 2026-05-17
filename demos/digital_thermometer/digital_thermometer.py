@@ -46,8 +46,8 @@ from wirebench import (
     Direction, Port, Pin, PinId,
     GroundDomain, ELECTRICAL,
     RefdesNumber, validate_refdes,
-    Digital, wire,
-    ATmega328P, DHT11, Display5641AS, Resistor, Rail,
+    Analog, Digital, wire,
+    ATmega328P, DHT11_Module, Display5641AS, Resistor, Rail,
     run_scenarios,
 )
 from framework.registry import register
@@ -289,14 +289,25 @@ class DigitalThermometer(Circuit):
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self) -> None:
         self.arduino = Uno_ThermometerSketch(refdes_number=1)
-        self.dht11   = DHT11(refdes_number=2)
+        self.dht11   = DHT11_Module(refdes_number=2)
         self.display = Display5641AS(refdes_number=3)
         self.r1      = Resistor(220, refdes_number=1)
-        self.vcc     = Rail(True)    # GND tie for unused 4th-digit anode
-        self.gnd     = Rail(False)   # GND tie for unused 4th-digit anode
+        # Digital rail — used to tie the unused 4th-digit anode of the
+        # display (a digital input) LOW.
+        self.gnd     = Rail(False)
+        # Analog rails — the DHT11 module declares its VCC / GND pins
+        # as Analog (supply pins, not logic), so they need an
+        # Analog-typed Rail for the simulator's port-compatibility
+        # check.  Physically these are the same breadboard +/- rails;
+        # the assembly-guide exporter recognises every Rail as a
+        # logical rail regardless of signal type.
+        self.vcc_a   = Rail(True,  signal_type=Analog)
+        self.gnd_a   = Rail(False, signal_type=Analog)
 
-        # DHT11 single-bus on Arduino D2 (ATmega PD2).
+        # DHT11 module: power and single-bus data.
         wire(self.dht11.DATA, self.arduino.PD2)
+        wire(self.vcc_a.out,  self.dht11.VCC)
+        wire(self.gnd_a.out,  self.dht11.GND)
 
         # Digit 1 common via the 220 Ω current limiter.  Both R1
         # terminals share the node with the source and sink — R1 is in

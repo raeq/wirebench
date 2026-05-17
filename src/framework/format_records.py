@@ -78,6 +78,12 @@ class RailRecord(_Record):
     # in the same domain it was saved from.  Defaults to None, which
     # the loader interprets as ELECTRICAL — keeps old files loading.
     domain: str | None = None
+    # The Rail's port signal type.  Defaults to None (interpreted by
+    # the loader as Digital, matching the framework's default) so
+    # older files still load.  When set, accepts the short class name
+    # ('Digital' / 'Analog') of a signal type registered in
+    # framework.signals.
+    signal_type: str | None = None
 
 
 class CellRecord(_Record):

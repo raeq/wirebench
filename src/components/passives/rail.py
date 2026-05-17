@@ -16,9 +16,17 @@ class Rail(Part):
     Use to tie unused CMOS inputs to Vcc or GND — leaving them floating
     is forbidden in real hardware.
 
-        gnd = Rail(False)            # GND tie
-        vcc = Rail(True)             # Vcc tie
+        gnd = Rail(False)                       # GND tie (Digital pins)
+        vcc = Rail(True)                        # Vcc tie (Digital pins)
+        avcc = Rail(True, signal_type=Analog)   # supply for Analog pins
         wire(gnd.ports['out'], chip.ports['unused_in'])
+
+    The default `signal_type=Digital` matches how rails are used in
+    pure-logic designs (CMOS tie-offs, sense inputs).  Some chips
+    declare their power pins as `Analog` (sensors, op-amps); to wire
+    those, instantiate with `signal_type=Analog`.  Physically there's
+    one breadboard rail per polarity — the framework distinction is
+    only for the simulator's port-type compatibility check.
     """
 
     __slots__ = ('_level', '_ports')
@@ -28,10 +36,12 @@ class Rail(Part):
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'out': 1}
 
     @validate_call(config={'arbitrary_types_allowed': True})
-    def __init__(self, level: bool, domain: GroundDomain = ELECTRICAL) -> None:
+    def __init__(self, level: bool, domain: GroundDomain = ELECTRICAL,
+                 *, signal_type: type = Digital) -> None:
         self._level = bool(level)
         self._ports = {
-            'out': Port('out', Direction.OUT, domain, mandatory=False, signal_type=Digital),
+            'out': Port('out', Direction.OUT, domain,
+                        mandatory=False, signal_type=signal_type),
         }
 
     @property

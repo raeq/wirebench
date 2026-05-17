@@ -80,22 +80,32 @@ class ULN2003A(Chip):
         self._refdes_number = refdes_number
         self._channels = tuple(DarlingtonChannel(domain) for _ in range(self.CHANNELS))
 
-        # 16-pin DIP datasheet pinout: pin 8 (GND) and pin 9 (COM)
-        # omitted. Inputs in_1..in_7 are pins 1..7; outputs are reverse-
-        # numbered for routing convenience: out_i is at pin (17 - i),
-        # so out_1=16, out_2=15, ..., out_7=10.
+        # 16-pin DIP datasheet pinout: pin 8 (GND) modelled as an
+        # Analog ground pin so the assembly-guide ERC catches forgetting
+        # to wire it.  Pin 9 (COM) — the inductive-load freewheel
+        # return — is omitted: it's not a power / ground pin and is
+        # only used when driving inductive loads, so leaving it
+        # unwired is legitimate for resistive-load builds.  Inputs
+        # in_1..in_7 are pins 1..7; outputs are reverse-numbered for
+        # routing convenience: out_i is at pin (17 - i), so out_1=16,
+        # out_2=15, ..., out_7=10.
         in_pins, out_pins = [], []
         for i in range(1, self.CHANNELS + 1):
             in_pins .append(Pin(PinId(i, f'in_{i}'),
                                 Direction.IN,  domain, mandatory=False, signal_type=Analog))
             out_pins.append(Pin(PinId(17 - i, f'out_{i}'),
                                 Direction.OUT, domain, mandatory=False, signal_type=Digital))
+        gnd_pin = Pin(PinId(8, 'GND'), Direction.IN, domain,
+                      mandatory=False, signal_type=Analog)
 
         for i, channel in enumerate(self._channels):
             wire(in_pins[i].internal,  channel.ports['b'])
             wire(channel.ports['out'], out_pins[i].internal)
 
-        super().__init__(pins=in_pins + out_pins, cells=list(self._channels))
+        super().__init__(
+            pins=in_pins + out_pins + [gnd_pin],
+            cells=list(self._channels),
+        )
 
     @property
     def refdes(self) -> str:

@@ -95,9 +95,11 @@ def test_chip_renders_as_X_instance_with_ordered_pins():
     design = Circuit(parts=[u], ports={})
 
     text = export_to_string(design, 'spice')
-    # X-instance line: refdes, then 12 pin nets (datasheet pins
-    # excluding GND/VCC), then model name.
-    m = re.search(r'^U1\s+((?:\S+\s+){12})SN74HC04$', text, flags=re.M)
+    # X-instance line: refdes, then 14 pin nets (the full DIP-14
+    # pinout including GND on pin 7 and VCC on pin 14, both modelled
+    # as Analog supply pins so the assembly-guide ERC can verify
+    # they're wired), then model name.
+    m = re.search(r'^U1\s+((?:\S+\s+){14})SN74HC04$', text, flags=re.M)
     assert m, f"SN74HC04 X-instance not found in:\n{text}"
 
 

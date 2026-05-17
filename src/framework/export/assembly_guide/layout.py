@@ -28,6 +28,62 @@ from framework.part import Part
 from framework.export.assembly_guide.placement import chip_pin_count
 
 
+# Standard Arduino Uno R3 header layout — used when a Uno-prefixed
+# chip subclass is encountered.  Pin names mirror the silkscreen on
+# a real board; parenthesised names show the underlying ATmega328P
+# pin so the builder can cross-reference jumper instructions that
+# call out chip-level names elsewhere in the doc.
+_UNO_HEADER_PANEL = """\
+Arduino Uno R3 header pinout (top-down view, USB jack on the left):
+
+         SCL  SDA  AREF GND  D13  D12  D11  D10  D9   D8       D7   D6   D5   D4   D3   D2   D1   D0
+                            (PB5)(PB4)(PB3)(PB2)(PB1)(PB0)   (PD7)(PD6)(PD5)(PD4)(PD3)(PD2)(TX) (RX)
+       ┌──────────────────────────────────────────────────────────────────────────────────────────────┐
+  USB ─┤                                       Arduino Uno R3                                         │
+       └──────────────────────────────────────────────────────────────────────────────────────────────┘
+        IOREF RST  3.3V 5V   GND  GND  Vin                     A0   A1   A2   A3   A4   A5
+                            (VCC)                            (PC0)(PC1)(PC2)(PC3)(SDA)(SCL)"""
+
+
+# ATmega328P chip pin → Arduino Uno R3 header label.  When a jumper
+# step lands on a Uno-prefixed chip, the framework's chip-level pin
+# names (PD3, PB5, …) are translated to the labels the builder reads
+# on the physical board (3, 13, …) so the instructions match the
+# silkscreen.
+_ATMEGA_TO_UNO_HEADER: dict[str, str] = {
+    'PC6':  'RESET',
+    'PD0':  'D0',  'PD1':  'D1',  'PD2':  'D2',  'PD3':  'D3',
+    'PD4':  'D4',  'PD5':  'D5',  'PD6':  'D6',  'PD7':  'D7',
+    'PB0':  'D8',  'PB1':  'D9',  'PB2':  'D10', 'PB3':  'D11',
+    'PB4':  'D12', 'PB5':  'D13',
+    'PC0':  'A0',  'PC1':  'A1',  'PC2':  'A2',  'PC3':  'A3',
+    'PC4':  'A4',  'PC5':  'A5',
+    'VCC':  '5V',  'AVCC': '5V',
+    'GND':  'GND',
+    'AREF': 'AREF',
+}
+
+
+def is_arduino_uno(part: Part) -> bool:
+    """True if `part` is an Arduino Uno board (Uno-prefixed ATmega328P).
+
+    The convention in this repo is to subclass `ATmega328P` with a
+    `Uno_` class-name prefix when the design's intent is "the chip
+    sits on an Arduino Uno board" rather than "the chip sits on a
+    breadboard."  That distinction matters for assembly: the bare
+    DIP plugs into the breadboard, but the Uno board doesn't fit —
+    it sits beside the breadboard, with jumpers running into its
+    header sockets."""
+    return type(part).__name__.startswith('Uno_')
+
+
+def uno_header_label(mcu_pin_name: str) -> str:
+    """Map an ATmega328P pin name to its Arduino Uno header label.
+
+    Unknown pins fall back to the MCU name unchanged."""
+    return _ATMEGA_TO_UNO_HEADER.get(mcu_pin_name, mcu_pin_name)
+
+
 def _dip_size_from_footprint(footprint: str | None) -> int | None:
     """Return N if FOOTPRINT names a DIP-N package, else None.
 
@@ -171,7 +227,14 @@ def part_layout(part: Part, value: str) -> str:
                 # mechanically DIP-like, so route them through DIP.
                 if 'Display' not in fp:
                     return _sip_diagram(part, pin_count)
-            return _dip_diagram(part, pin_count)
+            dip = _dip_diagram(part, pin_count)
+            if is_arduino_uno(part):
+                # The chip-level DIP is still informative (so the
+                # user can find a pin by datasheet name), but the
+                # builder is wiring into Uno headers — append a
+                # second panel showing those headers directly.
+                return dip + "\n\n" + _UNO_HEADER_PANEL
+            return dip
         return _sip_diagram(part, pin_count)
 
     return _two_lead_diagram(part, value)

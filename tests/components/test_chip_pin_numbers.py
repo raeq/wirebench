@@ -32,9 +32,11 @@ def test_sn74hc04_pin_numbers_match_datasheet():
         (1, 'a_1'), (2, 'y_1'),
         (3, 'a_2'), (4, 'y_2'),
         (5, 'a_3'), (6, 'y_3'),
+        (7, 'GND'),
         (8, 'y_4'), (9, 'a_4'),
         (10, 'y_5'), (11, 'a_5'),
         (12, 'y_6'), (13, 'a_6'),
+        (14, 'VCC'),
     }
     assert _pin_set(chip) == expected
 
@@ -47,9 +49,11 @@ def test_cd4069_pin_numbers_match_datasheet():
         (1, 'a_1'), (2, 'y_1'),
         (3, 'a_2'), (4, 'y_2'),
         (5, 'a_3'), (6, 'y_3'),
+        (7, 'VSS'),
         (8, 'y_4'), (9, 'a_4'),
         (10, 'y_5'), (11, 'a_5'),
         (12, 'y_6'), (13, 'a_6'),
+        (14, 'VDD'),
     }
     assert _pin_set(chip) == expected
 
@@ -77,8 +81,10 @@ def test_cd4043_pin_numbers_match_datasheet():
         (1, 'q_1'), (2, 'r_1'), (3, 's_1'),
         (4, 'q_2'), (5, 's_2'), (6, 'r_2'),
         (7, 'oe'),
+        (8, 'VSS'),
         (9, 'r_3'), (10, 's_3'), (11, 'q_3'),
         (12, 's_4'), (13, 'r_4'), (14, 'q_4'),
+        (16, 'VDD'),
     }
     assert _pin_set(chip) == expected
 
@@ -87,10 +93,12 @@ def test_cd4043_pin_numbers_match_datasheet():
 
 def test_uln2003a_pin_numbers_match_datasheet():
     chip = ULN2003A(refdes_number=1)
-    # in_i at pin i; out_i at pin (17 - i) — outputs reversed.
+    # in_i at pin i; out_i at pin (17 - i) — outputs reversed.  Pin 8
+    # (GND) is modelled; pin 9 (COM, inductive-load freewheel) is not.
     expected = {
         (1, 'in_1'), (2, 'in_2'), (3, 'in_3'), (4, 'in_4'),
         (5, 'in_5'), (6, 'in_6'), (7, 'in_7'),
+        (8, 'GND'),
         (16, 'out_1'), (15, 'out_2'), (14, 'out_3'), (13, 'out_4'),
         (12, 'out_5'), (11, 'out_6'), (10, 'out_7'),
     }

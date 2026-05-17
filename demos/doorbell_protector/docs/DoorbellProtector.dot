@@ -43,9 +43,13 @@ digraph "DoorbellProtector" {
   R4 -> net_2 [taillabel="t2"];
   R5 -> net_1 [taillabel="t1"];
   R5 -> net_1 [taillabel="t2"];
+  U1 -> gnd [taillabel="GND"];
   U1 -> net_0 [taillabel="OUT"];
   U1 -> net_1 [taillabel="RESET"];
+  U1 -> vcc [taillabel="VCC"];
+  U2 -> gnd [taillabel="GND"];
   U2 -> net_2 [taillabel="OUT"];
   U2 -> vcc [taillabel="RESET"];
   U2 -> net_0 [taillabel="TRIG"];
+  U2 -> vcc [taillabel="VCC"];
 }

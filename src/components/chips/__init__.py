@@ -83,7 +83,8 @@ from .tmp302      import TMP302
 from .bmp280      import BMP280
 from .mpu6050     import MPU6050
 from .hcsr04      import HCSR04
-from .dht11       import DHT11
+from .dht11        import DHT11
+from .dht11_module import DHT11_Module
 
 # Single-gate logic.
 from .sn74ahc1g14 import SN74AHC1G14
@@ -133,7 +134,7 @@ __all__ = [
     # Specialty
     'NE555', 'LM386', 'DS18B20', 'DS1307', 'MAX7219', 'Display5641AS',
     # Sensors
-    'TMP36', 'TMP302', 'BMP280', 'MPU6050', 'HCSR04', 'DHT11',
+    'TMP36', 'TMP302', 'BMP280', 'MPU6050', 'HCSR04', 'DHT11', 'DHT11_Module',
     # Single-gate logic
     'SN74AHC1G14',
     # Power/interface

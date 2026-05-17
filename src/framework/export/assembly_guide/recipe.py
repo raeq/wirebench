@@ -46,10 +46,13 @@ from framework.pin import Pin
 from framework.port import Port
 
 from framework.export.assembly_guide.general_gotchas import general_gotchas
-from framework.export.assembly_guide.layout import part_layout
+from framework.export.assembly_guide.layout import (
+    is_arduino_uno, part_layout, uno_header_label,
+)
 from framework.export.assembly_guide.placement import (
     ComponentPlacement, chip_pin_count, place,
 )
+from framework.pin_function import PinFunction
 
 
 # ----------------------------------------------------------------- helpers
@@ -110,7 +113,10 @@ def _walk_top_parts(design: Part) -> list[Part]:
 # ------------------------------------------------------------- refusal
 
 
-def _check_breadboard_compatible(parts: list[Part], design: Part) -> None:
+def _check_breadboard_compatible(
+    parts: list[Part], design: Part,
+    *, all_parts: list[Part] | None = None,
+) -> None:
     """Raise `BreadboardIncompatibleError` if `parts` contains any
     SMD / multi-board / otherwise-unassemblable component.
 
@@ -153,6 +159,49 @@ def _check_breadboard_compatible(parts: list[Part], design: Part) -> None:
             "THT passives, 0.1\" headers)."
         )
         raise BreadboardIncompatibleError('\n'.join(lines))
+
+    # Power-pin ERC: every POWER / GROUND pin on every placed chip must
+    # be wired to a Rail of the matching polarity, or the build won't
+    # power up at the bench.  This catches demos that "forgot" to wire
+    # supplies — a silent class of bug because the simulator works
+    # fine on the rest of the netlist.  Runs after the SMD / Board
+    # refusals so the more fundamental "this can't go on a breadboard
+    # at all" message takes precedence.
+    from components.passives.rail import Rail
+    rail_port_ids: dict[int, Rail] = {}
+    for p in (all_parts or parts):
+        if isinstance(p, Rail):
+            rail_port_ids[id(p.ports['out'])] = p
+    unwired: list[str] = []
+    for part in parts:
+        if not isinstance(part, Chip):
+            continue
+        if is_arduino_uno(part):
+            continue   # off-board: powered by USB / Vin, not breadboard rails
+        for pin in part.pins:
+            fn = type(part).pin_function(pin.id.name)
+            if fn is None:
+                continue
+            node = pin.external.node
+            rails_on_net: list[Rail] = []
+            if node is not None:
+                for face in node.ports:
+                    rail = rail_port_ids.get(id(face))
+                    if rail is not None:
+                        rails_on_net.append(rail)
+            want_high = (fn is PinFunction.POWER)
+            if not any(bool(r.level) is want_high for r in rails_on_net):
+                wanted = '+ rail' if want_high else '− rail'
+                unwired.append(
+                    f"  - {part.refdes} pin {pin.id.number} ({pin.id.name}) "
+                    f"[{fn.value}] — wire to the {wanted}"
+                )
+    if unwired:
+        raise BreadboardIncompatibleError(
+            "Chips have unwired supply pins — the assembled circuit "
+            "won't power up. Wire each pin below to its rail in the "
+            "design source:\n" + '\n'.join(unwired)
+        )
 
 
 # ------------------------------------------------------------ ingredients
@@ -290,6 +339,13 @@ def _supply_step() -> str:
 def _chip_step(placement: ComponentPlacement) -> str:
     assert isinstance(placement.component, Chip)
     chip: Chip = placement.component
+    if is_arduino_uno(chip):
+        return (
+            f"Place {chip.refdes} (Arduino Uno R3) beside the breadboard. "
+            f"The board doesn't sit on the breadboard itself — its female "
+            f"headers receive the jumpers listed below. Power the Uno via "
+            f"its USB jack or a 7–12 V supply on the `Vin` header."
+        )
     package_pin_count = chip_pin_count(chip)
     # Some classes model only a subset of their package's pins (e.g.
     # ULN2003A skips GND/COMMON). The breadboard layout still spans
@@ -308,6 +364,16 @@ def _chip_step(placement: ComponentPlacement) -> str:
     last_n = _pin_number_for_name(chip, last_modeled)
     if last is None or last_n is None:
         return f"Plug {chip.refdes} ({type(chip).__name__}) into the breadboard."
+    # SIPs (odd pin counts) sit entirely on one side of the trough
+    # — they can't straddle, so the wording differs.
+    if package_pin_count % 2 != 0:
+        return (
+            f"Plug {chip.refdes} ({type(chip).__name__}, "
+            f"{package_pin_count}-pin SIP) into the breadboard with all "
+            f"pins on the upper half: pin 1 at {pin1.label()}, "
+            f"pin {last_n} at {last.label()}. "
+            f"The lower-numbered position marks the pin-1 end."
+        )
     return (
         f"Plug {chip.refdes} ({type(chip).__name__}, DIP-{package_pin_count}) "
         f"straddling the trough: pin 1 at {pin1.label()}, "
@@ -373,7 +439,18 @@ def _jumper_steps(
                 port = comp.ports[name]
             except (KeyError, TypeError):
                 continue
-            port_to_endpoint[id(port)] = f"{comp.refdes} {name}"
+            # Reference each pin by what the builder actually sees on
+            # the package.  Chips show only pin numbers on their
+            # plastic — `out_1` / `SEG_C` etc. are framework
+            # abstractions, useful for design code but invisible at
+            # the bench.  2-lead passives (Resistor / LED / etc.) have
+            # already-physical port names (t1, anode), so keep those.
+            if isinstance(comp, Chip):
+                num = _pin_number_for_name(comp, name)
+                ep = f"{comp.refdes} pin {num}" if num else f"{comp.refdes} {name}"
+            else:
+                ep = f"{comp.refdes} {name}"
+            port_to_endpoint[id(port)] = ep
             port_to_label[id(port)] = pin_place.tie_strip_label
 
     # Build port → owner Part lookup so we can spot rail-owned
@@ -386,6 +463,23 @@ def _jumper_steps(
         for port in part.ports.values():
             port_owner[id(port)] = part
 
+    # Ports on off-board Uno boards: build a separate endpoint label
+    # using the Arduino header silkscreen name (e.g. "U1 D3") instead
+    # of the chip-level pin name ("U1 PD3").  These ports have no
+    # breadboard coordinate; jumper steps will reference them by
+    # header only.
+    port_to_uno_endpoint: dict[int, str] = {}
+    for part in all_parts:
+        if isinstance(part, Pin):
+            continue
+        if not is_arduino_uno(part):
+            continue
+        for port in part.ports.values():
+            port_to_uno_endpoint[id(port)] = (
+                f"{part.refdes} {uno_header_label(port.name)} "
+                f"(Arduino Uno header)"
+            )
+
     # Collapse ports by Node — every port on the same node is on the
     # same logical net.  Include Rails so we can detect rail nets.
     node_to_ports: dict[int, list[Port]] = {}
@@ -397,45 +491,164 @@ def _jumper_steps(
                 continue
             node_to_ports.setdefault(id(port.node), []).append(port)
 
-    # Sort nets by a stable key derived from their ports — `id(node)`
-    # changes run-to-run, so we use (sorted port refdes, port name)
-    # tuples to deterministically order the emitted jumper steps.
-    def _net_key(nid: int) -> tuple[tuple[str, str], ...]:
+    # Sort nets so the bench builder works through each on-board chip
+    # in ascending pin-number order — the natural sequence when
+    # counting from the notch.  Each net's key is the lowest
+    # (refdes, pin-number) of any on-board chip pin in the net.  Uno
+    # endpoints are excluded from the key because they have no
+    # breadboard position; nets with no chip pins fall through to a
+    # passive-port key so they still sort deterministically.
+    def _net_key(nid: int) -> tuple[int, tuple[str, int] | tuple[str, str]]:
         ps = node_to_ports[nid]
-        return tuple(sorted(
-            (getattr(port_owner.get(id(p)), 'refdes', '') or
-             type(port_owner.get(id(p), object)).__name__,
-             p.name)
-            for p in ps
-        ))
+        chip_keys: list[tuple[str, int]] = []
+        other_keys: list[tuple[str, str]] = []
+        for p in ps:
+            owner = port_owner.get(id(p))
+            if owner is None or isinstance(owner, (Pin, Rail)):
+                continue
+            if isinstance(owner, Chip):
+                if is_arduino_uno(owner):
+                    continue
+                num = _pin_number_for_name(owner, p.name)
+                if num is not None:
+                    chip_keys.append((owner.refdes, num))
+            else:
+                other_keys.append(
+                    (getattr(owner, 'refdes', '') or '', p.name)
+                )
+        if chip_keys:
+            return (0, min(chip_keys))
+        if other_keys:
+            return (1, min(other_keys))
+        return (2, ('', ''))
 
-    for nid in sorted(node_to_ports.keys(), key=_net_key):
-        ports = node_to_ports[nid]
+    def _emit_subnet(sub_ports: list[Port]) -> None:
+        """Emit jumper steps for one logical sub-net.  A sub-net is
+        either a true net (no internal passive bridge) or one half of
+        a net that's been split at a 2-lead passive's terminals."""
         rail_polarity: bool | None = None
-        for p in ports:
+        for p in sub_ports:
             owner = port_owner.get(id(p))
             if isinstance(owner, Rail):
                 rail_polarity = bool(owner.level)
                 break
-        # (endpoint_label, position_label) for each placed port on this net.
-        endpoints: list[tuple[str, str]] = sorted({
+        # For 2-lead passives where BOTH terminals appear in this
+        # sub-net, the body of the passive already bridges t1 ↔ t2 —
+        # emitting a jumper between them would be redundant (and
+        # readers spot it immediately as a bench error).  Collapse
+        # both terminals to one "canonical" port (the
+        # alphabetically-first name, typically t1 / anode) so the
+        # downstream rail / chain logic sees just one endpoint per
+        # bridging passive.
+        seen_ids = {id(p) for p in sub_ports}
+        keep: set[int] = set()
+        for p in sub_ports:
+            owner = port_owner.get(id(p))
+            if owner is None or isinstance(owner, (Pin, Chip, Rail)):
+                keep.add(id(p))
+                continue
+            terms = list(owner.ports.values())
+            if len(terms) != 2 or not all(id(t) in seen_ids for t in terms):
+                keep.add(id(p))
+                continue
+            canonical = min(terms, key=lambda t: t.name)
+            if id(p) == id(canonical):
+                keep.add(id(p))
+        bb_endpoints: list[tuple[str, str]] = sorted({
             (port_to_endpoint[id(p)], port_to_label[id(p)])
-            for p in ports if id(p) in port_to_endpoint
+            for p in sub_ports
+            if id(p) in port_to_endpoint and id(p) in keep
         })
-        if rail_polarity is not None and endpoints:
+        uno_endpoints: list[str] = sorted({
+            port_to_uno_endpoint[id(p)]
+            for p in sub_ports if id(p) in port_to_uno_endpoint
+        })
+        if rail_polarity is not None and (bb_endpoints or uno_endpoints):
             rail_name = "top `+` rail" if rail_polarity else "top `-` rail"
-            for ep, pos in endpoints:
+            for ep, pos in bb_endpoints:
                 steps.append(
                     f"Run a jumper from {ep} at {pos} to the {rail_name}."
                 )
-        elif len(endpoints) >= 2:
-            for i in range(len(endpoints) - 1):
-                ep1, pos1 = endpoints[i]
-                ep2, pos2 = endpoints[i + 1]
-                steps.append(
-                    f"Run a jumper from {ep1} to {ep2} "
-                    f"— {pos1} to {pos2}."
-                )
+            for ep in uno_endpoints:
+                steps.append(f"Run a jumper from {ep} to the {rail_name}.")
+        else:
+            # Signal sub-net — chain endpoints together.  Uno↔breadboard
+            # pairs emit no breadboard coord on the Uno side; pure-bb
+            # chains emit coords on both sides; pure-Uno chains emit
+            # neither.
+            for uno_ep in uno_endpoints:
+                for bb_ep, bb_pos in bb_endpoints:
+                    steps.append(
+                        f"Run a jumper from {bb_ep} at {bb_pos} to {uno_ep}."
+                    )
+            if not uno_endpoints and len(bb_endpoints) >= 2:
+                for i in range(len(bb_endpoints) - 1):
+                    ep1, pos1 = bb_endpoints[i]
+                    ep2, pos2 = bb_endpoints[i + 1]
+                    steps.append(
+                        f"Run a jumper from {ep1} to {ep2} "
+                        f"— {pos1} to {pos2}."
+                    )
+            elif not bb_endpoints and len(uno_endpoints) >= 2:
+                for i in range(len(uno_endpoints) - 1):
+                    steps.append(
+                        f"Run a jumper from {uno_endpoints[i]} "
+                        f"to {uno_endpoints[i + 1]}."
+                    )
+
+    def _bridging_passive(net_ports: list[Port]) -> Part | None:
+        """Return the 2-lead passive whose BOTH terminals appear in
+        `net_ports`, or None.
+
+        Demos sometimes wire a passive's two terminals into the same
+        logical net (e.g. `wire(arduino.PD3, r1.t1, r1.t2, display.DIG_1)`
+        so the simulator's voltage-only solver can propagate through
+        the resistor as a 0-Ω passthrough).  At the bench the resistor's
+        body provides the connection between its leads — no jumper goes
+        across t1↔t2 — so the assembly guide must split such a net
+        into two sub-nets, one per terminal.
+
+        Restricted to nets with exactly one such fully-internal
+        passive; nets with two parallel passives fall through to the
+        default chain logic."""
+        seen_ids = {id(p) for p in net_ports}
+        candidates: list[Part] = []
+        for p in net_ports:
+            owner = port_owner.get(id(p))
+            if owner is None or owner in candidates:
+                continue
+            if isinstance(owner, (Pin, Chip, Rail)):
+                continue
+            terminal_ports = list(owner.ports.values())
+            if len(terminal_ports) != 2:
+                continue
+            if all(id(t) in seen_ids for t in terminal_ports):
+                candidates.append(owner)
+        return candidates[0] if len(candidates) == 1 else None
+
+    for nid in sorted(node_to_ports.keys(), key=_net_key):
+        ports = node_to_ports[nid]
+        bridge = _bridging_passive(ports)
+        if bridge is None:
+            _emit_subnet(ports)
+            continue
+        # Split the net at the passive's two terminals.  Non-passive
+        # ports are sorted deterministically and distributed half-half
+        # across the two terminals — without semantic direction info
+        # (the wire() call merges everything onto one node), an even
+        # split is the most defensible choice and lets the body of
+        # the passive carry the current in series between the two
+        # sides.
+        terminals = list(bridge.ports.values())
+        t1, t2 = terminals[0], terminals[1]
+        non_passive = [p for p in ports if port_owner.get(id(p)) is not bridge]
+        non_passive.sort(key=lambda p: (
+            getattr(port_owner.get(id(p)), 'refdes', '') or '',
+            p.name,
+        ))
+        half = (len(non_passive) + 1) // 2
+        _emit_subnet(non_passive[:half] + [t1])
+        _emit_subnet(non_passive[half:] + [t2])
     return steps
 
 
@@ -589,7 +802,7 @@ def build_recipe(design: Part) -> str:
     parts = _walk_top_parts(design)
     # Filter out Rails — they're nets, not physical parts.
     placeable = [p for p in parts if not _is_rail(p)]
-    _check_breadboard_compatible(placeable, design)
+    _check_breadboard_compatible(placeable, design, all_parts=parts)
 
     chips = [p for p in placeable if isinstance(p, Chip)]
     passives = [p for p in placeable if not isinstance(p, Chip)]

@@ -87,12 +87,21 @@ def _component_to_record(
         ))
     if cls_name == 'Rail':
         rail_domain = component.ports['out'].domain
+        # Only serialise signal_type when it differs from the framework
+        # default (Digital), so existing files that don't carry the
+        # field continue to round-trip byte-identically.
+        from framework.signals import Digital as _Digital
+        port_signal_type = component.ports['out'].signal_type
         return cast(ComponentRecord, RailRecord(
             id=rail_ids[id(component)],
             level=bool(component._level),
             domain=(
                 None if rail_domain.name == 'electrical'
                 else rail_domain.name
+            ),
+            signal_type=(
+                None if port_signal_type is _Digital
+                else port_signal_type.__name__
             ),
         ))
     # Refdes-bearing chip / connector — class-specific args follow.
@@ -408,6 +417,12 @@ def _build_component(record: Any) -> Part:
         if getattr(record, 'domain', None) is not None:
             from framework.ground import GroundDomain
             kwargs['domain'] = GroundDomain(record.domain)
+        # signal_type is optional too — absent means Digital, which is
+        # what the Rail constructor defaults to.
+        st_name = getattr(record, 'signal_type', None)
+        if st_name is not None:
+            from framework import signals
+            kwargs['signal_type'] = getattr(signals, st_name)
     elif record.type == 'Cell':
         kwargs['initial_state_of_charge'] = record.initial_state_of_charge
     if hasattr(record, 'pin_count') and record.pin_count is not None:

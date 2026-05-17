@@ -9,7 +9,7 @@
               7
             ],
             "cathode": [
-              79
+              85
             ]
           },
           "hide_name": 0,
@@ -28,7 +28,7 @@
               6
             ],
             "cathode": [
-              80
+              86
             ]
           },
           "hide_name": 0,
@@ -212,6 +212,12 @@
         },
         "U1": {
           "connections": {
+            "GND": [
+              68
+            ],
+            "VCC": [
+              72
+            ],
             "a_1": [
               3
             ],
@@ -240,18 +246,20 @@
               67
             ],
             "y_4": [
-              68
-            ],
-            "y_5": [
               69
             ],
-            "y_6": [
+            "y_5": [
               70
+            ],
+            "y_6": [
+              71
             ]
           },
           "hide_name": 0,
           "parameters": {},
           "port_directions": {
+            "GND": "input",
+            "VCC": "input",
             "a_1": "input",
             "a_2": "input",
             "a_3": "input",
@@ -269,6 +277,12 @@
         },
         "U2": {
           "connections": {
+            "VDD": [
+              79
+            ],
+            "VSS": [
+              75
+            ],
             "a_1": [
               7
             ],
@@ -291,24 +305,26 @@
               6
             ],
             "y_2": [
-              71
-            ],
-            "y_3": [
-              72
-            ],
-            "y_4": [
               73
             ],
-            "y_5": [
+            "y_3": [
               74
             ],
+            "y_4": [
+              76
+            ],
+            "y_5": [
+              77
+            ],
             "y_6": [
-              75
+              78
             ]
           },
           "hide_name": 0,
           "parameters": {},
           "port_directions": {
+            "VDD": "input",
+            "VSS": "input",
             "a_1": "input",
             "a_2": "input",
             "a_3": "input",
@@ -326,6 +342,12 @@
         },
         "U3": {
           "connections": {
+            "VDD": [
+              84
+            ],
+            "VSS": [
+              81
+            ],
             "oe": [
               4
             ],
@@ -333,13 +355,13 @@
               7
             ],
             "q_2": [
-              76
+              80
             ],
             "q_3": [
-              77
+              82
             ],
             "q_4": [
-              78
+              83
             ],
             "r_1": [
               8
@@ -369,6 +391,8 @@
           "hide_name": 0,
           "parameters": {},
           "port_directions": {
+            "VDD": "input",
+            "VSS": "input",
             "oe": "input",
             "q_1": "output",
             "q_2": "output",

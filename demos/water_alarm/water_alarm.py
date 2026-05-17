@@ -19,6 +19,7 @@ if str(_SRC) not in sys.path:
     sys.path.insert(0, str(_SRC))
 
 from wirebench import (  # noqa: E402  — import must follow the sys.path tweak above
+    Analog,
     Circuit, wire,
     LED, Rail,
     ULN2003A, SN74HC04, CD4069, CD4043,
@@ -71,6 +72,10 @@ class WaterAlarm(Circuit):
         self.green_led = LED('green', refdes_number=2)
         self.gnd       = Rail(False)   # GND tie for unused CMOS inputs and unused latch cells
         self.vcc       = Rail(True)    # Vcc tie for the CD4043's OE pin
+        # Analog rails for the chip supply pins (declared as Analog so
+        # the assembly-guide ERC catches the unwired case).
+        self.vcc_a     = Rail(True,  signal_type=Analog)
+        self.gnd_a     = Rail(False, signal_type=Analog)
 
         wire(self.sensor.out_1,   self.cd4043.s_1)
         wire(self.sensor.out_2,   self.sn74hc04.a_1)
@@ -92,6 +97,14 @@ class WaterAlarm(Circuit):
              self.cd4043.s_2, self.cd4043.r_2,
              self.cd4043.s_3, self.cd4043.r_3,
              self.cd4043.s_4, self.cd4043.r_4)
+
+        # Chip supply pins.  Power: SN74HC04 VCC, CD4069 VDD, CD4043 VDD.
+        # Ground: ULN2003A GND, SN74HC04 GND, CD4069 VSS, CD4043 VSS.
+        wire(self.vcc_a.out,
+             self.sn74hc04.VCC, self.cd4069.VDD, self.cd4043.VDD)
+        wire(self.gnd_a.out,
+             self.sensor.GND, self.sn74hc04.GND,
+             self.cd4069.VSS, self.cd4043.VSS)
 
         super().__init__(
             ports={'low_probe':  self.sensor.in_1,

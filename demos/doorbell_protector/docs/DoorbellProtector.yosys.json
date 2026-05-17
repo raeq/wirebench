@@ -6,6 +6,23 @@
         "C1": {
           "connections": {
             "t1": [
+              29
+            ],
+            "t2": [
+              30
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C2": {
+          "connections": {
+            "t1": [
               31
             ],
             "t2": [
@@ -20,30 +37,13 @@
           },
           "type": "Capacitor"
         },
-        "C2": {
+        "C3": {
           "connections": {
             "t1": [
               33
             ],
             "t2": [
               34
-            ]
-          },
-          "hide_name": 0,
-          "parameters": {},
-          "port_directions": {
-            "t1": "inout",
-            "t2": "inout"
-          },
-          "type": "Capacitor"
-        },
-        "C3": {
-          "connections": {
-            "t1": [
-              35
-            ],
-            "t2": [
-              36
             ]
           },
           "hide_name": 0,
@@ -74,10 +74,10 @@
         "C5": {
           "connections": {
             "t1": [
-              37
+              35
             ],
             "t2": [
-              38
+              36
             ]
           },
           "hide_name": 0,
@@ -91,7 +91,7 @@
         "D1": {
           "connections": {
             "anode": [
-              20
+              18
             ],
             "cathode": [
               6
@@ -127,19 +127,19 @@
         "K1": {
           "connections": {
             "coil_minus": [
-              39
+              37
             ],
             "coil_plus": [
               2
             ],
             "com": [
-              40
+              38
             ],
             "nc": [
-              42
+              40
             ],
             "no": [
-              41
+              39
             ]
           },
           "hide_name": 0,
@@ -159,7 +159,7 @@
               2
             ],
             "c": [
-              19
+              17
             ],
             "e": [
               5
@@ -217,10 +217,10 @@
         "R2": {
           "connections": {
             "t1": [
-              21
+              19
             ],
             "t2": [
-              22
+              20
             ]
           },
           "hide_name": 0,
@@ -236,10 +236,10 @@
         "R3": {
           "connections": {
             "t1": [
-              23
+              21
             ],
             "t2": [
-              24
+              22
             ]
           },
           "hide_name": 0,
@@ -293,10 +293,10 @@
         "R6": {
           "connections": {
             "t1": [
-              25
+              23
             ],
             "t2": [
-              26
+              24
             ]
           },
           "hide_name": 0,
@@ -312,10 +312,10 @@
         "R7": {
           "connections": {
             "t1": [
-              27
+              25
             ],
             "t2": [
-              28
+              26
             ]
           },
           "hide_name": 0,
@@ -331,10 +331,10 @@
         "R8": {
           "connections": {
             "t1": [
-              29
+              27
             ],
             "t2": [
-              30
+              28
             ]
           },
           "hide_name": 0,
@@ -350,13 +350,13 @@
         "U1": {
           "connections": {
             "CONT": [
-              10
+              11
             ],
             "DISCH": [
-              12
+              13
             ],
             "GND": [
-              9
+              7
             ],
             "OUT": [
               2
@@ -365,13 +365,13 @@
               3
             ],
             "THRES": [
-              11
+              12
             ],
             "TRIG": [
-              8
+              10
             ],
             "VCC": [
-              13
+              8
             ]
           },
           "hide_name": 0,
@@ -391,13 +391,13 @@
         "U2": {
           "connections": {
             "CONT": [
-              15
+              14
             ],
             "DISCH": [
-              17
+              16
             ],
             "GND": [
-              14
+              7
             ],
             "OUT": [
               4
@@ -406,13 +406,13 @@
               6
             ],
             "THRES": [
-              16
+              15
             ],
             "TRIG": [
               2
             ],
             "VCC": [
-              18
+              8
             ]
           },
           "hide_name": 0,
@@ -470,7 +470,7 @@
       "ports": {
         "button": {
           "bits": [
-            8
+            10
           ],
           "direction": "input"
         }

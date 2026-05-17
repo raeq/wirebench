@@ -17,7 +17,7 @@ def test_bom_present(thermometer):
         if isinstance(fn, RefdesBearing)
     }
     assert "Uno_ThermometerSketch.U1" in parts
-    assert "DHT11.U2"                   in parts
+    assert "DHT11_Module.U2"            in parts
     assert "Display5641AS.U3"           in parts
     assert "Resistor.R1"                in parts
 
