@@ -90,23 +90,6 @@ class PortContentionError(SignalError, ValueError):
     wire, one from outside the chip and one from inside."""
 
 
-# --------------------------------------------------- Polarity ---
-
-class PolarityError(CircuitError, ValueError):
-    """A polarised component has its terminals reversed: electrolytic
-    capacitor with + and − swapped, LED with anode and cathode
-    swapped, rectifier diode pointing the wrong way, battery or cell
-    inserted backwards.
-
-    No current raise site detects this — the framework's voltage-only
-    graph can't solve steady-state currents, and the wire list alone
-    can't tell whether `led.anode` is intended to land on the supply
-    rail or the ground rail.  The class exists so a future polarity-
-    detection pass (or a component-level evaluate-time check, e.g.
-    a `Cell` whose `pos` and `neg` voltages contradict its declared
-    state of charge) has the right place to land.
-    """
-
 
 # -------------------------------------------------- ForbiddenState ---
 

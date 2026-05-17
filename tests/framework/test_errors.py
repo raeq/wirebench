@@ -22,7 +22,6 @@ from wirebench import (
     UnconnectedPinError, NodeMergeError, EmptyWireError,
     SignalError, SignalTypeMismatchError, DomainCrossingError,
     PortContentionError,
-    PolarityError,
     ForbiddenStateError,
     PartError, RefdesError, DuplicateRegistrationError, UnknownPartError,
     PartConfigurationError, PartParameterError,
@@ -51,8 +50,6 @@ MRO_TABLE: list[tuple[type, tuple[type, ...]]] = [
     (SignalTypeMismatchError, (SignalError, CircuitError, TypeError)),
     (DomainCrossingError,     (SignalError, CircuitError, ValueError)),
     (PortContentionError,     (SignalError, CircuitError, ValueError)),
-    # --- Polarity (sibling of Wiring; no leaves yet — class itself) ---
-    (PolarityError,           (CircuitError, ValueError)),
     # --- ForbiddenState (no leaves yet — class itself) ---
     (ForbiddenStateError,     (CircuitError, ValueError)),
     # --- Part family ---
