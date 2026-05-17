@@ -180,7 +180,13 @@ def _check_breadboard_compatible(
             continue   # off-board: powered by USB / Vin, not breadboard rails
         for pin in part.pins:
             fn = type(part).pin_function(pin.id.name)
-            if fn is None:
+            # This walker only enforces the POWER / GROUND rail-wiring
+            # rule.  Other PinFunction members (REFERENCE / RESET /
+            # CLOCK_IN / NC) classify legitimate pins but need
+            # different ERC predicates that Stage B will add.  Until
+            # then, ignore them — the existing behaviour is to leave
+            # those pins to whoever wires the design.
+            if fn not in (PinFunction.POWER, PinFunction.GROUND):
                 continue
             node = pin.external.node
             rails_on_net: list[Rail] = []

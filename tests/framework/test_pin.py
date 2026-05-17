@@ -152,7 +152,7 @@ def test_supply_pin_with_digital_signal_type_raises(name):
     # Canonical power / ground names with Digital signal_type are a
     # category error — these pins carry continuous voltages, not
     # logic levels.  The framework refuses at construction time.
-    with pytest.raises(PartParameterError, match=r"power and ground pins"):
+    with pytest.raises(PartParameterError, match=r"must be Analog"):
         Pin(PinId(1, name), Direction.IN, ELECTRICAL, signal_type=Digital)
 
 
@@ -167,7 +167,7 @@ def test_supply_pin_with_analog_signal_type_constructs(name):
 def test_supply_pin_name_match_is_case_insensitive(name):
     # The regex is case-insensitive, so the invariant fires regardless
     # of how the datasheet capitalises the pin name.
-    with pytest.raises(PartParameterError, match=r"power and ground pins"):
+    with pytest.raises(PartParameterError, match=r"must be Analog"):
         Pin(PinId(1, name), Direction.IN, ELECTRICAL, signal_type=Digital)
 
 
@@ -186,16 +186,140 @@ def test_supply_pin_error_message_names_the_pin_and_function():
     assert 'pin 14 (VCC)' in msg
     assert 'power' in msg
     assert 'Digital' in msg
+    assert 'Analog' in msg
 
 
 def test_invariant_applies_to_out_and_bidir_pins_too():
     # The invariant is about the pin's role (POWER / GROUND), not its
     # direction.  An OUT or BIDIR supply pin (think USB-C VBUS, which
     # is BIDIR) is still subject to the rule.
-    with pytest.raises(PartParameterError, match=r"power and ground pins"):
+    with pytest.raises(PartParameterError, match=r"must be Analog"):
         Pin(PinId(1, 'VBUS'), Direction.OUT, ELECTRICAL, signal_type=Digital)
-    with pytest.raises(PartParameterError, match=r"power and ground pins"):
+    with pytest.raises(PartParameterError, match=r"must be Analog"):
         Pin(PinId(1, 'VBUS'), Direction.BIDIR, ELECTRICAL, signal_type=Digital)
     # Analog is fine for either direction.
     Pin(PinId(1, 'VBUS'), Direction.OUT,   ELECTRICAL, signal_type=Analog)
     Pin(PinId(1, 'VBUS'), Direction.BIDIR, ELECTRICAL, signal_type=Analog)
+
+
+# --- REFERENCE pins (AREF / VREF / VBG / BG_REF) must be Analog ---
+
+REFERENCE_NAMES = ['AREF', 'VREF', 'VBG', 'BG_REF']
+
+
+@pytest.mark.parametrize('name', REFERENCE_NAMES)
+def test_reference_pin_with_digital_raises(name):
+    with pytest.raises(PartParameterError, match=r"must be Analog"):
+        Pin(PinId(1, name), Direction.IN, ELECTRICAL, signal_type=Digital)
+
+
+@pytest.mark.parametrize('name', REFERENCE_NAMES)
+def test_reference_pin_with_analog_constructs(name):
+    p = Pin(PinId(1, name), Direction.IN, ELECTRICAL, signal_type=Analog)
+    assert p.external.signal_type is Analog
+
+
+def test_reference_pin_error_message_says_reference():
+    with pytest.raises(PartParameterError) as exc_info:
+        Pin(PinId(21, 'AREF'), Direction.IN, ELECTRICAL, signal_type=Digital)
+    msg = str(exc_info.value)
+    assert 'pin 21 (AREF)' in msg
+    assert 'reference' in msg
+    assert 'Digital' in msg
+    assert 'Analog' in msg
+
+
+# --- RESET pins (RESET / RST / NRST / NRESET / RST_N / RESET_B) must be Digital ---
+
+RESET_NAMES = ['RESET', 'RST', 'NRST', 'NRESET', 'RST_N', 'RESET_B']
+
+
+@pytest.mark.parametrize('name', RESET_NAMES)
+def test_reset_pin_with_analog_raises(name):
+    with pytest.raises(PartParameterError, match=r"must be Digital"):
+        Pin(PinId(1, name), Direction.IN, ELECTRICAL, signal_type=Analog)
+
+
+@pytest.mark.parametrize('name', RESET_NAMES)
+def test_reset_pin_with_digital_constructs(name):
+    p = Pin(PinId(1, name), Direction.IN, ELECTRICAL, signal_type=Digital)
+    assert p.external.signal_type is Digital
+
+
+def test_reset_pin_error_message_says_reset():
+    with pytest.raises(PartParameterError) as exc_info:
+        Pin(PinId(7, 'NRST'), Direction.IN, ELECTRICAL, signal_type=Analog)
+    msg = str(exc_info.value)
+    assert 'pin 7 (NRST)' in msg
+    assert 'reset' in msg
+    assert 'Analog' in msg
+    assert 'Digital' in msg
+
+
+# --- CLOCK_IN pins (CLKIN / EXTCLK / OSCIN / CLK_IN) accept either type ---
+
+CLOCK_IN_NAMES = ['CLKIN', 'EXTCLK', 'OSCIN', 'CLK_IN']
+
+
+@pytest.mark.parametrize('name', CLOCK_IN_NAMES)
+def test_clock_in_pin_with_digital_constructs(name):
+    # A 74-series counter's clock input is logic-level Digital.
+    p = Pin(PinId(1, name), Direction.IN, ELECTRICAL, signal_type=Digital)
+    assert p.external.signal_type is Digital
+
+
+@pytest.mark.parametrize('name', CLOCK_IN_NAMES)
+def test_clock_in_pin_with_analog_constructs(name):
+    # The NE555's CLKIN is an RC-network-driven analog input; both
+    # signal_types are legal for CLOCK_IN.  No invariant fires.
+    p = Pin(PinId(1, name), Direction.IN, ELECTRICAL, signal_type=Analog)
+    assert p.external.signal_type is Analog
+
+
+# --- NC pins must declare mandatory=False ---
+
+NC_NAMES = ['NC', 'N.C.', 'DNC']
+
+
+@pytest.mark.parametrize('name', NC_NAMES)
+def test_nc_pin_with_mandatory_true_raises(name):
+    with pytest.raises(PartParameterError, match=r"no-connect.*mandatory"):
+        Pin(PinId(1, name), Direction.IN, ELECTRICAL,
+            mandatory=True, signal_type=Digital)
+
+
+@pytest.mark.parametrize('name', NC_NAMES)
+def test_nc_pin_with_mandatory_false_constructs(name):
+    # NC pin, mandatory=False, signal_type is moot (either is legal).
+    p = Pin(PinId(1, name), Direction.IN, ELECTRICAL,
+            mandatory=False, signal_type=Digital)
+    assert p.name == name
+    p2 = Pin(PinId(2, name), Direction.IN, ELECTRICAL,
+             mandatory=False, signal_type=Analog)
+    assert p2.name == name
+
+
+def test_nc_pin_error_message_names_the_pin():
+    with pytest.raises(PartParameterError) as exc_info:
+        Pin(PinId(4, 'NC'), Direction.IN, ELECTRICAL,
+            mandatory=True, signal_type=Digital)
+    msg = str(exc_info.value)
+    assert 'pin 4 (NC)' in msg
+    assert 'no-connect' in msg
+
+
+# --- Anchoring: a near-miss must not fire the invariant ---
+
+@pytest.mark.parametrize('name', [
+    'VDD_SENSE',     # POWER prefix, not POWER
+    'RESET_PULSE',   # RESET prefix, not RESET
+    'CLKOUT',        # CLK prefix, not CLOCK_IN
+    'AREFB',         # AREF prefix, not REFERENCE
+    'NCSEL',         # NC prefix, not NC
+])
+def test_near_miss_names_are_not_constrained(name):
+    # A pin whose name almost matches a function regex must NOT be
+    # subjected to that function's signal_type invariant.  Anchoring
+    # is what keeps this honest; if it breaks, this test fires.
+    p = Pin(PinId(1, name), Direction.IN, ELECTRICAL, signal_type=Digital)
+    assert p.external.signal_type is Digital
