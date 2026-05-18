@@ -45,6 +45,7 @@ The `docs/` folder beside this README has the design's pre-generated exports:
 - [`WaterAlarm.bom.csv`](docs/WaterAlarm.bom.csv) — parts list
 - [`WaterAlarm.md`](docs/WaterAlarm.md) — breadboard assembly guide
 - [`WaterAlarm.net`](docs/WaterAlarm.net) — KiCad netlist
+- [`WaterAlarm.kicad_sch`](docs/WaterAlarm.kicad_sch) — KiCad schematic, open in Eeschema 9.x
 - [`WaterAlarm.cir`](docs/WaterAlarm.cir) — SPICE deck
 - [`WaterAlarm.svg`](docs/WaterAlarm.svg) — rendered schematic
 - [`WaterAlarm.dot`](docs/WaterAlarm.dot) — Graphviz source for the schematic

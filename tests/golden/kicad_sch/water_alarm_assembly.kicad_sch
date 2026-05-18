@@ -1,0 +1,42 @@
+(kicad_sch
+  (version 20250114)
+  (generator "wirebench")
+  (generator_version "0.2")
+  (uuid "85458722-dd9e-9306-7f82-a0e73480fcd5")
+  (paper "A4")
+  (sheet
+    (at 30 30)
+    (size 80 50)
+    (fields_autoplaced yes)
+    (stroke (width 0.0006) (type default))
+    (fill (color 0 0 0 0.0000))
+    (uuid "97b65748-6272-6260-5d59-dab6e9c80134")
+    (property "Sheetname" "SensorBoard"
+      (at 30 28.5 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "WaterAlarmAssembly__SensorBoard.kicad_sch"
+      (at 30 81 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+  )
+  (sheet
+    (at 150 30)
+    (size 80 50)
+    (fields_autoplaced yes)
+    (stroke (width 0.0006) (type default))
+    (fill (color 0 0 0 0.0000))
+    (uuid "f47a0d87-e730-dd09-da69-0dbed13ef3b8")
+    (property "Sheetname" "ControllerBoard"
+      (at 150 28.5 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "WaterAlarmAssembly__ControllerBoard.kicad_sch"
+      (at 150 81 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+  )
+  (sheet_instances
+    (path "/" (page "1"))
+  )
+)

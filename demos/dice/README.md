@@ -44,6 +44,7 @@ The `docs/` folder beside this README has the design's pre-generated exports:
 - [`Dice.bom.csv`](docs/Dice.bom.csv) — parts list
 - [`Dice.md`](docs/Dice.md) — breadboard assembly guide
 - [`Dice.net`](docs/Dice.net) — KiCad netlist
+- [`Dice.kicad_sch`](docs/Dice.kicad_sch) — KiCad schematic, open in Eeschema 9.x
 - [`Dice.cir`](docs/Dice.cir) — SPICE deck
 - [`Dice.svg`](docs/Dice.svg) — rendered schematic
 - [`Dice.dot`](docs/Dice.dot) — Graphviz source for the schematic
