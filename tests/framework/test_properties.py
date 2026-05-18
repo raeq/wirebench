@@ -17,7 +17,7 @@ import pytest
 from hypothesis import assume, given, settings, strategies as st
 from pydantic import ValidationError
 
-from framework.errors import AmbiguousPinNameError
+from framework.errors import AmbiguousPinNameError, PartConfigurationError
 
 import components.chips        # noqa: F401  (trigger registration)
 import components.connectors   # noqa: F401
@@ -271,12 +271,8 @@ def test_portmap_rejects_disambiguation_collision():
     auto-generated `_<ordinal>` disambiguation key fails PortMap
     construction loudly rather than silently overwriting one of the
     two pins."""
-    import pytest as _pytest
-
-    from framework.errors import PartConfigurationError
-
     pins = [(1, 'B'), (2, 'B'), (3, 'B_1')]
-    with _pytest.raises(PartConfigurationError, match=r"PortMap key collision"):
+    with pytest.raises(PartConfigurationError, match=r"PortMap key collision"):
         _make_portmap(pins)
 
 
