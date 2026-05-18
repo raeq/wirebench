@@ -111,7 +111,7 @@ def test_emit_top_level_parses():
     from water_alarm_split import WaterAlarmAssembly
     asm = _silently(WaterAlarmAssembly)
     boards = collect_boards(asm)
-    text = emit_top_level(asm, boards, 'WaterAlarmAssembly')
+    text = emit_top_level(boards, 'WaterAlarmAssembly')
     tree = _parse(text)
     assert isinstance(tree, list)
     assert tree[0] == 'kicad_sch'
@@ -121,7 +121,7 @@ def test_emit_top_level_has_sheet_blocks():
     from water_alarm_split import WaterAlarmAssembly
     asm = _silently(WaterAlarmAssembly)
     boards = collect_boards(asm)
-    text = emit_top_level(asm, boards, 'WaterAlarmAssembly')
+    text = emit_top_level(boards, 'WaterAlarmAssembly')
     tree = _parse(text)
     sheet_blocks = [b for b in tree if isinstance(b, list) and b and b[0] == 'sheet']
     assert len(sheet_blocks) == len(boards)
@@ -131,7 +131,7 @@ def test_emit_top_level_sheetnames():
     from water_alarm_split import WaterAlarmAssembly
     asm = _silently(WaterAlarmAssembly)
     boards = collect_boards(asm)
-    text = emit_top_level(asm, boards, 'WaterAlarmAssembly')
+    text = emit_top_level(boards, 'WaterAlarmAssembly')
     assert 'SensorBoard' in text
     assert 'ControllerBoard' in text
 
@@ -140,7 +140,7 @@ def test_emit_top_level_sheetfiles():
     from water_alarm_split import WaterAlarmAssembly
     asm = _silently(WaterAlarmAssembly)
     boards = collect_boards(asm)
-    text = emit_top_level(asm, boards, 'WaterAlarmAssembly')
+    text = emit_top_level(boards, 'WaterAlarmAssembly')
     assert 'WaterAlarmAssembly__SensorBoard.kicad_sch' in text
     assert 'WaterAlarmAssembly__ControllerBoard.kicad_sch' in text
 
@@ -149,7 +149,7 @@ def test_emit_top_level_no_symbol_instances():
     from water_alarm_split import WaterAlarmAssembly
     asm = _silently(WaterAlarmAssembly)
     boards = collect_boards(asm)
-    text = emit_top_level(asm, boards, 'WaterAlarmAssembly')
+    text = emit_top_level(boards, 'WaterAlarmAssembly')
     tree = _parse(text)
     top_symbols = [b for b in tree if isinstance(b, list) and b and b[0] == 'symbol']
     assert top_symbols == [], f"Top-level should have no symbol instances; got {top_symbols}"
@@ -175,20 +175,23 @@ def test_render_all_multi_board_returns_three_files():
 
 
 def test_render_all_sub_sheets_have_symbols():
-    from water_alarm_split import WaterAlarmAssembly
-    asm = _silently(WaterAlarmAssembly)
+    """Every sub-sheet must contain symbol instances.
+
+    Uses CooledSystem (FanCoolingBoard + PowerSourceBoard) where both boards
+    contain symbol-map-covered parts (Resistor, D1N4728A, SN74AHC1G14,
+    Header connector).  WaterAlarmAssembly is not used here because
+    ULN2003A has no vendored symbol yet.
+    """
+    from fan_cooling import CooledSystem
+    asm = _silently(CooledSystem)
     ctx = ExporterContext(asm, 'kicad_sch')
     files = render_all(asm, ctx)
     sub_sheets = {n: c for n, c in files.items() if '__' in n}
     assert sub_sheets, "No sub-sheets found"
-    sheets_with_symbols = 0
     for name, content in sub_sheets.items():
         tree = _parse(content)
         syms = [b for b in tree if isinstance(b, list) and b and b[0] == 'symbol']
-        if syms:
-            sheets_with_symbols += 1
-    assert sheets_with_symbols >= 1, \
-        f"At least one sub-sheet must have symbol instances; checked {list(sub_sheets)}"
+        assert syms, f"Sub-sheet {name} has no symbol instances"
 
 
 def test_render_all_top_level_is_not_giant():

@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import hashlib
 import math
+import warnings
 from collections import defaultdict
 from typing import Iterator
 
@@ -395,7 +396,7 @@ def render(design: Part, ctx: ExporterContext) -> str:
     from framework.export.kicad_sch.hierarchical import collect_boards, emit_top_level
     _boards = collect_boards(design)
     if len(_boards) > 1:
-        return emit_top_level(design, _boards, type(design).__name__)
+        return emit_top_level(_boards, type(design).__name__)
 
     logical_nets = compute_logical_nets(design)
 
@@ -496,8 +497,6 @@ def render_all(design: Part, ctx: ExporterContext) -> dict[str, str]:
     from framework.export.kicad_sch.hierarchical import (
         collect_boards, sub_sheet_filename, emit_top_level,
     )
-    import warnings
-    from framework.export.base import ExporterContext as _Ctx
 
     design_name = type(design).__name__
     boards = collect_boards(design)
@@ -505,12 +504,12 @@ def render_all(design: Part, ctx: ExporterContext) -> dict[str, str]:
         return {f'{design_name}.kicad_sch': render(design, ctx)}
 
     result: dict[str, str] = {}
-    result[f'{design_name}.kicad_sch'] = emit_top_level(design, boards, design_name)
+    result[f'{design_name}.kicad_sch'] = emit_top_level(boards, design_name)
     for board in boards:
         board_class_name = type(board).__name__
         filename = sub_sheet_filename(design_name, board_class_name)
         with warnings.catch_warnings():
             warnings.simplefilter('ignore')
-            board_ctx = _Ctx(board, 'kicad_sch', ctx.config)
+            board_ctx = ExporterContext(board, 'kicad_sch', ctx.config)
         result[filename] = render(board, board_ctx)
     return result

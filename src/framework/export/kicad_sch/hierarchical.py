@@ -24,6 +24,14 @@ _SHEET_W: float = 80.0
 _SHEET_H: float = 50.0
 _SHEET_GAP: float = 40.0
 _MARGIN: float = 30.0
+_LABEL_CLEARANCE_MM: float = 10.0   # headroom below box for the Sheetfile label
+
+_PAPER_SIZES: tuple[tuple[int, int, str], ...] = (
+    (297, 210, 'A4'),
+    (420, 297, 'A3'),
+    (594, 420, 'A2'),
+    (841, 594, 'A1'),
+)
 
 
 def collect_boards(design: Part) -> list[Board]:
@@ -45,22 +53,13 @@ def sub_sheet_filename(design_name: str, board_class_name: str) -> str:
 
 def _pick_paper(total_w: float, total_h: float) -> tuple[str, float, float]:
     """Pick the smallest A-series paper that fits `total_w x total_h`."""
-    for pw, ph in ((297, 210), (420, 297), (594, 420), (841, 594)):
+    for pw, ph, name in _PAPER_SIZES:
         if pw >= total_w and ph >= total_h:
-            return _paper_name(pw, ph), float(pw), float(ph)
+            return name, float(pw), float(ph)
     return 'User', total_w, total_h
 
 
-def _paper_name(w: int, h: int) -> str:
-    return {
-        (297, 210): 'A4',
-        (420, 297): 'A3',
-        (594, 420): 'A2',
-        (841, 594): 'A1',
-    }[(w, h)]
-
-
-def emit_top_level(design: Part, boards: list[Board], design_name: str) -> str:
+def emit_top_level(boards: list[Board], design_name: str) -> str:
     """Emit the top-level system schematic with one (sheet ...) block per Board."""
     from framework.export.kicad_sch.renderer import (
         _uuid, _q, _f, _xy, _effects, _SCH_VERSION,
@@ -68,7 +67,7 @@ def emit_top_level(design: Part, boards: list[Board], design_name: str) -> str:
 
     n = len(boards)
     total_w = 2 * _MARGIN + n * _SHEET_W + max(0, n - 1) * _SHEET_GAP
-    total_h = 2 * _MARGIN + _SHEET_H + 10.0
+    total_h = 2 * _MARGIN + _SHEET_H + _LABEL_CLEARANCE_MM
     paper, pw, ph = _pick_paper(total_w, total_h)
 
     lines: list[str] = []
