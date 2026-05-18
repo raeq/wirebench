@@ -73,7 +73,7 @@
             (hide yes)
           )
         )
-        (symbol "Connector_Generic:Conn_01x08_1_1"
+        (symbol "Conn_01x08_1_1"
           (rectangle
             (start -1.27 8.89)
             (end 1.27 -11.43)
@@ -385,7 +385,7 @@
             (hide yes)
           )
         )
-        (symbol "power:GND_0_1"
+        (symbol "GND_0_1"
           (polyline
             (pts
               (xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
@@ -399,7 +399,7 @@
             )
           )
         )
-        (symbol "power:GND_1_1"
+        (symbol "GND_1_1"
           (pin power_in line
             (at 0 0 270)
             (length 0)
@@ -486,7 +486,7 @@
             (hide yes)
           )
         )
-        (symbol "power:VCC_0_1"
+        (symbol "VCC_0_1"
           (polyline
             (pts
               (xy -0.762 1.27) (xy 0 2.54)
@@ -524,7 +524,7 @@
             )
           )
         )
-        (symbol "power:VCC_1_1"
+        (symbol "VCC_1_1"
           (pin power_in line
             (at 0 0 90)
             (length 0)
@@ -549,7 +549,7 @@
   )
   (symbol
     (lib_id "Connector_Generic:Conn_01x08")
-    (at 30.48 30.48 0)
+    (at 25.4 25.4 0)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -557,11 +557,11 @@
     (dnp no)
     (uuid "88ef84c4-0116-9730-0deb-a8e2b40c8eae")
     (property "Reference" "P2"
-      (at 33.02 27.94 0)
+      (at 27.94 22.86 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Header1xNMale"
-      (at 30.48 33.02 0)
+      (at 25.4 27.94 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "553163b1-5307-5776-7937-a8f4d01e60f8"))
@@ -574,42 +574,42 @@
     (pin "8" (uuid "c9950c77-604a-50e5-7f9d-48e11733127a"))
   )
   (wire
-    (pts (xy 25.4 38.1) (xy 22.86 38.1))
+    (pts (xy 20.32 33.02) (xy 17.78 33.02))
     (stroke (width 0) (type default))
     (uuid "9c9ade7b-0507-98fa-6bd4-1fceb7515d0f")
   )
   (wire
-    (pts (xy 25.4 35.56) (xy 22.86 35.56))
+    (pts (xy 20.32 30.48) (xy 17.78 30.48))
     (stroke (width 0) (type default))
     (uuid "5bc1404c-96ad-3188-4b4e-ce71d97ee5e8")
   )
   (wire
-    (pts (xy 25.4 33.02) (xy 22.86 33.02))
+    (pts (xy 20.32 27.94) (xy 17.78 27.94))
     (stroke (width 0) (type default))
     (uuid "b59f8741-14e6-16b4-bfbc-fd566cde3f22")
   )
   (wire
-    (pts (xy 25.4 30.48) (xy 22.86 30.48))
+    (pts (xy 20.32 25.4) (xy 17.78 25.4))
     (stroke (width 0) (type default))
     (uuid "efee1042-dc25-6717-e7d4-d3f22f2ca832")
   )
   (wire
-    (pts (xy 25.4 27.94) (xy 22.86 27.94))
+    (pts (xy 20.32 22.86) (xy 17.78 22.86))
     (stroke (width 0) (type default))
     (uuid "150186cf-5c7b-a569-c369-0c6c626cc708")
   )
   (wire
-    (pts (xy 25.4 25.4) (xy 22.86 25.4))
+    (pts (xy 20.32 20.32) (xy 17.78 20.32))
     (stroke (width 0) (type default))
     (uuid "e994519a-2b07-53c2-6848-904970c3cd27")
   )
   (wire
-    (pts (xy 25.4 22.86) (xy 22.86 22.86))
+    (pts (xy 20.32 17.78) (xy 17.78 17.78))
     (stroke (width 0) (type default))
     (uuid "eb79762a-4711-40d8-4585-4f34bbad3a21")
   )
   (wire
-    (pts (xy 25.4 20.32) (xy 22.86 20.32))
+    (pts (xy 20.32 15.24) (xy 17.78 15.24))
     (stroke (width 0) (type default))
     (uuid "9e25c57f-d355-62e3-9f1d-9f2bc3ee0457")
   )

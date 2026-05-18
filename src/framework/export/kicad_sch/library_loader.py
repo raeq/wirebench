@@ -88,7 +88,11 @@ def get_pin_defs(lib: str, name: str) -> list[PinDef]:
 
 
 def _qualify_names(sym_text: str, lib: str, sym_name: str) -> str:
-    """Add the `lib:` prefix to every internal name reference.
+    """Add the `lib:` prefix to the top-level symbol name only.
+
+    Sub-symbols (e.g. `R_0_1`, `LED_1_1`) are kept as bare names because
+    KiCad 9 schematics expect sub-units nested inside a qualified parent
+    to use the bare name without the `lib:` prefix.
 
     Uses callable replacements to avoid treating the lib name as a
     backreference string (e.g. '74xx' would otherwise confuse re.sub).
@@ -99,8 +103,11 @@ def _qualify_names(sym_text: str, lib: str, sym_name: str) -> str:
     def _qualify_symbol(m: re.Match[str]) -> str:
         return m.group(1) + prefix + m.group(2)
 
+    # The lookahead (?=") ensures we only match the exact parent name
+    # (immediately followed by the closing quote), not sub-symbol names
+    # like R_0_1, LED_1_1, etc. that have a suffix after the base name.
     result = re.sub(
-        r'(\(symbol\s+")(' + esc + r')',
+        r'(\(symbol\s+")(' + esc + r'(?="))',
         _qualify_symbol,
         sym_text,
     )
