@@ -25,7 +25,7 @@ dev = [
 ]
 
 [project.scripts]
-wirebench = "cli.export:main"
+wirebench = "cli.main:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/framework", "src/components", "src/wirebench", "src/cli"]
