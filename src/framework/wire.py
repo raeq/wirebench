@@ -114,12 +114,17 @@ def wire(*ports: Port, dynamically_driven: bool = False) -> None:
         # likely topology misunderstanding without blocking the build.
         if len(out_ports) > 0 or len(bidir_ports) < 2:
             names = ', '.join(f"'{p.name}'" for p in ports)
+            # stacklevel=4 hops out through pydantic.validate_call's
+            # internal frames so the warning points at the user's
+            # wire(...) call site rather than inside this module —
+            # matches the convention used by Circuit's feedback-loop
+            # warning, which is wrapped the same way.
             warnings.warn(
                 f"dynamically_driven=True on net carrying {names} — the "
                 "annotation has no effect on this net (it already has a "
                 "driver or fewer than two passive BIDIRs). This may "
                 "indicate a misunderstanding of the topology.",
                 UserWarning,
-                stacklevel=2,
+                stacklevel=4,
             )
         node.dynamically_driven = True
