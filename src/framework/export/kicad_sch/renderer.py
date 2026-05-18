@@ -1,6 +1,6 @@
 """KiCad schematic renderer — Phase 2.5b.
 
-Produces a `.kicad_sch` file (format version 20240618, KiCad 9) from any
+Produces a `.kicad_sch` file (format version 20250114, KiCad 9/10) from any
 wirebench `Part` (Circuit, Board, or leaf component).
 
 Phase 2.5b upgrades over 2.5a:
