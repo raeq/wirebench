@@ -1,7 +1,8 @@
 (kicad_sch
-  (version 20240618)
+  (version 20250114)
   (generator "wirebench")
-  (generator_version "0.1")
+  (generator_version "0.2")
+  (uuid "617e7973-59d3-667d-5891-70f5c70ecb88")
   (paper "A4")
   (lib_symbols
       (symbol "Device:LED"

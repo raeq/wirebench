@@ -35,7 +35,7 @@ from framework.export.kicad_sch.routing import Segment, find_junctions, route_ne
 from framework.export.kicad_sch.symbol_map import SymbolEntry, connector_entry, lookup
 
 _STUB_MM: float = 2.54
-_SCH_VERSION: int = 20240618
+_SCH_VERSION: int = 20250114   # KiCad 9/10 schematic format version
 _FONT_SIZE: str = '1.27 1.27'
 
 _PAPER_NAMES: dict[tuple[int, int], str] = {
@@ -455,10 +455,12 @@ def render(design: Part, ctx: ExporterContext) -> str:
     sw, sh = sheet_size_for_layout(positions)
     paper = _PAPER_NAMES.get((int(sw), int(sh)), 'User')
 
+    design_name = type(design).__name__
     lines.append('(kicad_sch')
     lines.append(f'  (version {_SCH_VERSION})')
     lines.append('  (generator "wirebench")')
-    lines.append('  (generator_version "0.1")')
+    lines.append('  (generator_version "0.2")')
+    lines.append(f'  (uuid {_q(_uuid(design_name))})')
     if paper == 'User':
         lines.append(f'  (paper "User" {_f(sw)} {_f(sh)})')
     else:

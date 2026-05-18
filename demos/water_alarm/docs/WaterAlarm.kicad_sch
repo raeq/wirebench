@@ -1,7 +1,8 @@
 (kicad_sch
-  (version 20240618)
+  (version 20250114)
   (generator "wirebench")
-  (generator_version "0.1")
+  (generator_version "0.2")
+  (uuid "795f6c62-739d-bc00-b177-3b1dee0ce5cb")
   (paper "User" 88.9 1333.5)
   (lib_symbols
       (symbol "4xxx:4069"

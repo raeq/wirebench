@@ -1,7 +1,8 @@
 (kicad_sch
-  (version 20240618)
+  (version 20250114)
   (generator "wirebench")
-  (generator_version "0.1")
+  (generator_version "0.2")
+  (uuid "7ecc5561-3ed8-ca6c-ca98-f4b44bca6015")
   (paper "A4")
   (lib_symbols
       (symbol "Connector_Generic:Conn_01x08"
