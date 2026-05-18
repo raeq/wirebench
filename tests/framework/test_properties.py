@@ -14,7 +14,7 @@ import warnings
 from collections import Counter
 
 import pytest
-from hypothesis import given, settings, strategies as st
+from hypothesis import assume, given, settings, strategies as st
 from pydantic import ValidationError
 
 from framework.errors import AmbiguousPinNameError
@@ -81,6 +81,19 @@ def _make_portmap(pin_id_pairs: list[tuple[int, str]]) -> PortMap:
 
 @given(pin_id_sets())
 def test_portmap_dispatch_correctness(pins):
+    # Skip examples whose disambiguation would collide (covered by
+    # `test_portmap_rejects_disambiguation_collision`).
+    seen_keys: set[str] = set()
+    collision = False
+    for n, name in pins:
+        siblings = [n2 for n2, nm in pins if nm == name]
+        key = name if len(siblings) == 1 else f"{name}_{sorted(siblings).index(n) + 1}"
+        if key in seen_keys:
+            collision = True
+            break
+        seen_keys.add(key)
+    assume(not collision)
+
     pm = _make_portmap(pins)
 
     # (a) len matches the number of distinct pin numbers in the input.
@@ -226,20 +239,45 @@ def test_compute_logical_nets_is_deterministic(ohms_values):
 
 @given(pin_id_sets())
 def test_portmap_iteration_is_pin_number_ascending(pins):
-    pm = _make_portmap(pins)
-    # The disambiguated keys are inserted in ascending pin-number
-    # order; iteration walks that insertion order.
-    keys = list(pm)
+    # Compute the disambiguated name → pin-number mapping the same way
+    # PortMap does.  If two pins would map to the same disambiguated
+    # key (e.g. a unique pin named 'DIG_1' and a duplicate-name set
+    # 'DIG' whose first ordinal also produces 'DIG_1'), PortMap refuses
+    # the construction — skip the example, that path is exercised
+    # by `test_portmap_rejects_disambiguation_collision` below.
     by_key: dict[str, int] = {}
+    collision = False
     for n, name in pins:
         siblings = [n2 for n2, nm in pins if nm == name]
         if len(siblings) == 1:
-            by_key[name] = n
+            key = name
         else:
             ordinal = sorted(siblings).index(n) + 1
-            by_key[f'{name}_{ordinal}'] = n
+            key = f'{name}_{ordinal}'
+        if key in by_key:
+            collision = True
+            break
+        by_key[key] = n
+    assume(not collision)
+
+    pm = _make_portmap(pins)
+    keys = list(pm)
     iterated_pin_numbers = [by_key[k] for k in keys]
     assert iterated_pin_numbers == sorted(iterated_pin_numbers)
+
+
+def test_portmap_rejects_disambiguation_collision():
+    """A unique pin name that happens to collide with an
+    auto-generated `_<ordinal>` disambiguation key fails PortMap
+    construction loudly rather than silently overwriting one of the
+    two pins."""
+    import pytest as _pytest
+
+    from framework.errors import PartConfigurationError
+
+    pins = [(1, 'B'), (2, 'B'), (3, 'B_1')]
+    with _pytest.raises(PartConfigurationError, match=r"PortMap key collision"):
+        _make_portmap(pins)
 
 
 # 7.  Refdes validation rejects invalid prefixes / non-positive numbers

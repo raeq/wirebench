@@ -73,7 +73,7 @@
     )
     (net (code "6") (name "Net-(A1_R4-Pad1)")
       (node (ref "A1_R4") (pin "1") (pintype "passive"))
-      (node (ref "A1_U1") (pin "3") (pintype "input"))
+      (node (ref "A1_U1") (pin "3") (pintype "bidirectional"))
     )
     (net (code "7") (name "Net-(A1_R5-Pad1)")
       (node (ref "A1_R5") (pin "1") (pintype "passive"))

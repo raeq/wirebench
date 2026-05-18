@@ -2,10 +2,11 @@
 
 Auto-discovers every demo by walking `demos/<subdir>/*.py`, importing
 each module, and finding every `Circuit` subclass *defined in* that
-module.  For each such class, exports all seven formats (bom, dot,
-kicad, mermaid, spice, yosys, assembly_guide) into
-`demos/<subdir>/docs/<Class>.<ext>`, and additionally renders the
-Graphviz output as a top-to-bottom SVG using the real `dot` binary.
+module.  For each such class, exports all ten formats (bom, dot,
+kicad, mermaid, spice, yosys, assembly_guide, net_report,
+domain_report, interface_report) into `demos/<subdir>/docs/<Class>.<ext>`,
+and additionally renders the Graphviz output as a top-to-bottom SVG
+using the real `dot` binary.
 
 The `assembly_guide` format refuses SMD and multi-board designs by
 raising `BreadboardIncompatibleError`; for those, the script writes a
@@ -53,6 +54,9 @@ import framework.export.mermaid          # noqa: F401, E402
 import framework.export.spice            # noqa: F401, E402
 import framework.export.yosys            # noqa: F401, E402
 import framework.export.assembly_guide   # noqa: F401, E402
+import framework.export.net_report       # noqa: F401, E402
+import framework.export.domain_report    # noqa: F401, E402
+import framework.export.interface_report # noqa: F401, E402
 
 from framework.circuit import Circuit                # noqa: E402
 from framework.errors import BreadboardIncompatibleError  # noqa: E402
@@ -63,13 +67,16 @@ from framework.export import export_to_string         # noqa: E402
 # real-world tools: KiCad eats `.net`, Mermaid CLI eats `.mmd`,
 # Yosys eats JSON, SPICE decks are `.cir`.
 EXTENSIONS = {
-    'bom':            'bom.csv',
-    'dot':            'dot',
-    'kicad':          'net',
-    'mermaid':        'mmd',
-    'spice':          'cir',
-    'yosys':          'yosys.json',
-    'assembly_guide': 'md',
+    'bom':              'bom.csv',
+    'dot':              'dot',
+    'kicad':            'net',
+    'mermaid':          'mmd',
+    'spice':            'cir',
+    'yosys':            'yosys.json',
+    'assembly_guide':   'md',
+    'net_report':       'net-report.md',
+    'domain_report':    'domain-report.md',
+    'interface_report': 'interface-report.md',
 }
 
 
@@ -228,7 +235,7 @@ def main() -> None:
         _render_svg(dot_path, svg_path)
         total_files += 1
         rendered += 1
-        print(f"  + {demo}/{class_name}: 8 artefacts")
+        print(f"  + {demo}/{class_name}: {len(EXTENSIONS) + 1} artefacts")
 
     print(f"\nWrote {total_files} files for {rendered} classes "
           f"across {len(seen_demos)} demos "

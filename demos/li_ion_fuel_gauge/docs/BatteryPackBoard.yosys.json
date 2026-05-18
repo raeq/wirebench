@@ -248,7 +248,7 @@
             "NC1": "input",
             "NC2": "input",
             "REGIN": "input",
-            "SCL": "input",
+            "SCL": "inout",
             "SDA": "inout",
             "SE": "output",
             "SRN": "input",

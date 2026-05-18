@@ -53,6 +53,9 @@ The `docs/` folder beside this README has the design's pre-generated exports:
 - [`DoorbellProtector.dot`](docs/DoorbellProtector.dot) — Graphviz source for the schematic
 - [`DoorbellProtector.mmd`](docs/DoorbellProtector.mmd) — Mermaid flowchart
 - [`DoorbellProtector.yosys.json`](docs/DoorbellProtector.yosys.json) — Yosys/netlistsvg JSON
+- [`DoorbellProtector.net-report.md`](docs/DoorbellProtector.net-report.md) — every logical net, drivers, readers, domain
+- [`DoorbellProtector.domain-report.md`](docs/DoorbellProtector.domain-report.md) — ground domains and isolation boundaries
+- [`DoorbellProtector.interface-report.md`](docs/DoorbellProtector.interface-report.md) — public connector pins and their connections
 
 ## Going further
 

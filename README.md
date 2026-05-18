@@ -6,6 +6,12 @@
 
 If you've programmed an Arduino but felt like wiring the surrounding circuit is a black art — every project a hunt for the magic combination of pull-ups, current-limiting resistors, decoupling caps, and "did I just wire the LED backwards?" — wirebench is where every line of code maps to a physical operation. You write Python that says *"a 330 Ω resistor in series with a red LED between VCC and GND."* The wires in the code are the wires you'll need on the breadboard, and the design either constructs cleanly or it doesn't — there's no middle state where pytest passes but the bench build smokes.
 
+## Who this is for
+
+wirebench is for **hobbyists, makers, and students** doing code-first electronics design: Python programmers building real circuits, students learning electronics through code rather than schematic-editor menus, educators looking for an immediate-feedback teaching tool that refuses defective designs before students reach the bench. If you're at home with `pytest` and you want your hardware design under the same discipline, this is for you.
+
+It's not for ASIC designers, EDA professionals running full Altium/Cadence PCB-layout flows, or anyone who needs continuous-voltage SPICE-grade simulation in Python. wirebench pairs cleanly with KiCad for layout (export to netlist) and ngspice for simulation (export to SPICE) — it does the part those tools don't: catching topology defects at the moment you write the code.
+
 ## Hello, world
 
 ```python
@@ -37,17 +43,20 @@ Components are stored as `self.<name>` attributes so the framework can auto-coll
 
 **What comes out:**
 
-| Format        | Extension      | What it's for                                                                |
-|---------------|----------------|------------------------------------------------------------------------------|
-| BOM CSV       | `.bom.csv`     | Paste into a parts cart at Mouser / Digikey / Tayda                          |
-| KiCad netlist | `.net`         | Import into KiCad's Pcbnew to lay out a PCB                                  |
-| SPICE deck    | `.cir`         | Simulate in ngspice or LTspice before building                               |
-| Mermaid       | `.mmd`         | Embed in a README to document what you built                                 |
-| Graphviz DOT  | `.dot`         | Render to SVG / PNG with `dot -Tsvg`                                         |
-| Yosys JSON    | `.yosys.json`  | Render to a browser-friendly schematic via [netlistsvg](https://github.com/nturley/netlistsvg) |
-| Assembly Guide| `.md`          | Read at the bench — recipe-style breadboard build instructions               |
+| Format           | Extension              | What it's for                                                                                  |
+|------------------|------------------------|------------------------------------------------------------------------------------------------|
+| BOM CSV          | `.bom.csv`             | Paste into a parts cart at Mouser / Digikey / Tayda                                            |
+| KiCad netlist    | `.net`                 | Import into KiCad's Pcbnew to lay out a PCB                                                    |
+| SPICE deck       | `.cir`                 | Simulate in ngspice or LTspice before building                                                 |
+| Mermaid          | `.mmd`                 | Embed in a README to document what you built                                                   |
+| Graphviz DOT     | `.dot`                 | Render to SVG / PNG with `dot -Tsvg`                                                           |
+| Yosys JSON       | `.yosys.json`          | Render to a browser-friendly schematic via [netlistsvg](https://github.com/nturley/netlistsvg) |
+| Assembly Guide   | `.md`                  | Read at the bench — recipe-style breadboard build instructions                                 |
+| Net Report       | `.net-report.md`       | Every logical net, what drives it, what reads it, domain assignment                            |
+| Domain Report    | `.domain-report.md`    | Every `GroundDomain`, parts in each, where isolation boundaries sit                            |
+| Interface Report | `.interface-report.md` | Every `Board`'s public connector pins and what they connect to                                 |
 
-Every demo in `demos/` ships with all seven exports pre-generated in its `docs/` subfolder — open any `*.svg` to see the rendered schematic, or any `*.md` to read the bench-assembly guide.
+Every demo in `demos/` ships with all ten exports pre-generated in its `docs/` subfolder — open any `*.svg` to see the rendered schematic, or any `*.md` to read the bench-assembly guide and the three review reports.
 
 ## What it prevents
 

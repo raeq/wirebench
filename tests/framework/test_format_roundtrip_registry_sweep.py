@@ -62,6 +62,10 @@ _OVERRIDES = {
     'FanController':    lambda n: lookup('FanController')(),
     'BackupSupervisor': lambda n: lookup('BackupSupervisor')(),
     'BLDCMotor':        lambda n: lookup('BLDCMotor')(),
+    'SeriesRectifier':  lambda n: lookup('SeriesRectifier')(v_f=0.3),
+    'ZenerShunt':       lambda n: lookup('ZenerShunt')(v_z=5.1),
+    'MOSFETSwitch':     lambda n: lookup('MOSFETSwitch')(channel='n'),
+    'BJTSwitch':        lambda n: lookup('BJTSwitch')(polarity='npn'),
     'NE555_Monostable': lambda n: lookup('NE555_Monostable')(
                               duration_ms=120.0, refdes_number=n,
                           ),
@@ -100,6 +104,17 @@ _SKIP: dict[str, str] = {
     'ISOW7841': ('multi-domain chip: __init__ requires a per-instance '
                  'iso_domain that does not fit the generic sweep record; '
                  'covered by test_isow7841.py'),
+    'SeriesRectifier': ('concept cell with constructor v_f that isn\'t '
+                        'serialised by the save format — it lives '
+                        'inside a Chip instance whose __init__ rebuilds '
+                        'it with the right v_f; never round-tripped '
+                        'standalone'),
+    'ZenerShunt': ('concept cell with constructor v_z, same shape as '
+                   'SeriesRectifier'),
+    'MOSFETSwitch': ('concept cell with constructor channel arg, same '
+                     'shape as SeriesRectifier'),
+    'BJTSwitch': ('concept cell with constructor polarity arg, same '
+                  'shape as SeriesRectifier'),
 }
 
 

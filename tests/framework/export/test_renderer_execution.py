@@ -59,6 +59,10 @@ _OVERRIDES = {
     'FanController':    lambda n: lookup('FanController')(),
     'BackupSupervisor': lambda n: lookup('BackupSupervisor')(),
     'BLDCMotor':        lambda n: lookup('BLDCMotor')(),
+    'SeriesRectifier':  lambda n: lookup('SeriesRectifier')(v_f=0.3),
+    'ZenerShunt':       lambda n: lookup('ZenerShunt')(v_z=5.1),
+    'MOSFETSwitch':     lambda n: lookup('MOSFETSwitch')(channel='n'),
+    'BJTSwitch':        lambda n: lookup('BJTSwitch')(polarity='npn'),
     'NE555_Monostable': lambda n: lookup('NE555_Monostable')(
                               duration_ms=120.0, refdes_number=n,
                           ),

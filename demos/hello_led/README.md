@@ -54,6 +54,9 @@ The `docs/` folder beside this README has the design's pre-generated exports:
 - [`HelloLED.dot`](docs/HelloLED.dot) — Graphviz source for the schematic
 - [`HelloLED.mmd`](docs/HelloLED.mmd) — Mermaid flowchart
 - [`HelloLED.yosys.json`](docs/HelloLED.yosys.json) — Yosys/netlistsvg JSON
+- [`HelloLED.net-report.md`](docs/HelloLED.net-report.md) — every logical net, drivers, readers, domain
+- [`HelloLED.domain-report.md`](docs/HelloLED.domain-report.md) — ground domains and isolation boundaries
+- [`HelloLED.interface-report.md`](docs/HelloLED.interface-report.md) — public connector pins and their connections
 
 ## Going further
 
