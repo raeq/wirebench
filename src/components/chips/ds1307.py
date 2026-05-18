@@ -30,10 +30,15 @@ class DS1307(Chip):
     REFDES_PREFIX: ClassVar[str] = 'U'
     FOOTPRINT: ClassVar[str | None] = "Package_DIP:DIP-8_W7.62mm"
     # I²C SDA is open-drain by protocol (the docstring above already
-    # calls out that SDA/SCL need external pull-ups).  SCL is
-    # Direction.IN on this slave-only chip, so it has no drive type.
-    # SQW/OUT is also open-drain (pin 7) — datasheet section 7.4.
+    # calls out that SDA/SCL need external pull-ups).  SCL is BIDIR
+    # open-drain because the DS1307 supports clock stretching (the
+    # slave can hold SCL low while it isn't ready to clock out the
+    # next bit) — datasheet section 9, "Two-Wire Bus", states the
+    # device complies with the standard I²C protocol including
+    # clock stretching.  SQW/OUT is also open-drain (pin 7) —
+    # datasheet section 7.4.
     PIN_DRIVE_TYPES: ClassVar[dict[str, "DriveType"]] = {
+        'SCL':     DriveType.OPEN_DRAIN,
         'SDA':     DriveType.OPEN_DRAIN,
         'SQW_OUT': DriveType.OPEN_DRAIN,
     }
@@ -71,7 +76,7 @@ class DS1307(Chip):
         (3, 'VBAT',    Direction.IN,    Analog),
         (4, 'GND',     Direction.IN,    Analog),
         (5, 'SDA',     Direction.BIDIR, Digital),
-        (6, 'SCL',     Direction.IN,    Digital),
+        (6, 'SCL',     Direction.BIDIR, Digital),
         (7, 'SQW_OUT', Direction.OUT,   Digital),
         (8, 'VCC',     Direction.IN,    Analog),
     )

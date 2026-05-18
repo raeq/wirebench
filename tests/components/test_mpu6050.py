@@ -14,7 +14,7 @@ EXPECTED_PINS = (
     (13, 'VDD',    Direction.IN),
     (18, 'GND',    Direction.IN),
     (20, 'CPOUT',  Direction.OUT),
-    (23, 'SCL',    Direction.IN),
+    (23, 'SCL',    Direction.BIDIR),
     (24, 'SDA',    Direction.BIDIR),
 )
 

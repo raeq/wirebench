@@ -53,8 +53,13 @@ class BQ27546G1(Chip):
     )
     # I²C SDA and HDQ single-wire are both open-drain per protocol
     # (datasheet comments inline in the pin table also note this).
-    # SCL is Direction.IN on this slave, so it carries no drive type.
+    # SCL is BIDIR open-drain because the BQ27546-G1 clock-stretches
+    # during firmware-side arithmetic and Flash-row reads — datasheet
+    # section 4.5, "Clock Stretching", explicitly documents the
+    # behaviour.  The host master must release SCL while the chip
+    # holds it low.
     PIN_DRIVE_TYPES: ClassVar[dict[str, "DriveType"]] = {
+        'SCL': DriveType.OPEN_DRAIN,
         'SDA': DriveType.OPEN_DRAIN,
         'HDQ': DriveType.OPEN_DRAIN,
     }
@@ -67,7 +72,7 @@ class BQ27546G1(Chip):
     _PIN_TABLE: ClassVar[tuple[tuple[int, str, Direction, type], ...]] = (
         ( 1, 'SRP',   Direction.IN,    Analog),    # A1  coulomb-counter (CELL- side)
         ( 2, 'HDQ',   Direction.BIDIR, Digital),   # A2  HDQ serial (open-drain)
-        ( 3, 'SCL',   Direction.IN,    Digital),   # A3  I²C clock in
+        ( 3, 'SCL',   Direction.BIDIR, Digital),   # A3  I²C clock in / chip-driven during stretch
         ( 4, 'SRN',   Direction.IN,    Analog),    # B1  coulomb-counter (PACK- side)
         ( 5, 'TS',    Direction.IN,    Analog),    # B2  thermistor sense
         ( 6, 'SDA',   Direction.BIDIR, Digital),   # B3  I²C data (open-drain)
