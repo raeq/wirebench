@@ -4,7 +4,7 @@ A regulated 5 V breadboard supply from a stack of three CR2032 coin cells: 9 V f
 
 ## What this design is protected from
 
-The framework refused these specific mistakes during this design's development. Each snippet is a near-miss — paste the broken lines into your own copy of the design and wirebench refuses to construct it.
+The framework refused these specific mistakes during this design's development. Each snippet is a near-miss — paste the broken lines into your own copy of the design and wirebench raises before the design can run, either at construction or at the first `evaluate()`.
 
 ### A floating regulator input
 

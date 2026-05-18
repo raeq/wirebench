@@ -4,7 +4,7 @@ The smallest buildable wirebench design: a red LED in series with a 330 Ω curre
 
 ## What this design is protected from
 
-The framework refused these specific mistakes during this design's development. Each snippet is a near-miss — paste the broken lines into your own copy of the design and wirebench refuses to construct it.
+The framework refused these specific mistakes during this design's development. Each snippet is a near-miss — paste the broken lines into your own copy of the design and wirebench raises before the design can run, either at construction or at the first `evaluate()`.
 
 ### A floating resistor
 
@@ -20,6 +20,8 @@ class BrokenHelloLED(Circuit):
         wire(self.vcc.out, self.d1.anode)    # then ran the LED straight across the rails
         wire(self.gnd.out, self.d1.cathode)
         super().__init__()
+
+BrokenHelloLED()
 # FloatingNetError: Floating logical net — multiple passive BIDIRs with no driver: 'Resistor.t1', 'Resistor.t2'
 ```
 

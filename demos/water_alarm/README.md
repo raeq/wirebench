@@ -4,17 +4,17 @@ A bench-style hysteresis alarm for a tank: two probes mounted at the low and hig
 
 ## What this design is protected from
 
-The framework refused these specific mistakes during this design's development. Each snippet is a near-miss — paste the broken lines into your own copy of the design and wirebench refuses to construct it.
+The framework refused these specific mistakes during this design's development. Each snippet is a near-miss — paste the broken lines into your own copy of the design and wirebench raises before the design can run, either at construction or at the first `evaluate()`.
 
 ### A locked-up latch
 
 ```python
 # In WaterAlarm.__init__, replace the inverter route from high probe
-# to reset with a direct wire:
+# to reset with a direct wire. Original two-wire route (replaced):
+#   wire(self.sensor.out_2, self.sn74hc04.a_1, self.r_pu2.ports['t1'])
+#   wire(self.sn74hc04.y_1, self.cd4043.r_1)
 wire(self.sensor.out_2, self.cd4043.r_1, self.r_pu2.ports['t1'])
-# (was: wire(self.sensor.out_2, self.sn74hc04.a_1, self.r_pu2.ports['t1'])
-#       wire(self.sn74hc04.y_1, self.cd4043.r_1)  )
-#
+
 # Now evaluating the design with both probes dry:
 d = WaterAlarm()
 d(low_probe=0.0, high_probe=0.0)
