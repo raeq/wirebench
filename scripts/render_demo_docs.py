@@ -215,6 +215,17 @@ def main() -> None:
         docs.mkdir(parents=True, exist_ok=True)
         for fmt, ext in EXTENSIONS.items():
             path = docs / f"{class_name}.{ext}"
+            if fmt == 'kicad_sch':
+                import framework.export.kicad_sch as _ks_mod
+                with warnings.catch_warnings():
+                    warnings.simplefilter('ignore')
+                    from framework.export.base import ExporterContext as _Ctx
+                    _ctx = _Ctx(circuit, 'kicad_sch')
+                    _all_files = _ks_mod.render_all(circuit, _ctx)
+                for _fname, _ftext in _all_files.items():
+                    (docs / _fname).write_text(_ftext)
+                total_files += len(_all_files)
+                continue
             try:
                 with warnings.catch_warnings():
                     warnings.simplefilter('ignore')

@@ -392,6 +392,10 @@ def _emit_routed_wires(
 def render(design: Part, ctx: ExporterContext) -> str:
     """Produce a complete `.kicad_sch` document for `design`."""
     from components.passives.rail import Rail
+    from framework.export.kicad_sch.hierarchical import collect_boards, emit_top_level
+    _boards = collect_boards(design)
+    if len(_boards) > 1:
+        return emit_top_level(design, _boards, type(design).__name__)
 
     logical_nets = compute_logical_nets(design)
 
@@ -485,3 +489,28 @@ def render(design: Part, ctx: ExporterContext) -> str:
     )
     lines.append(')')
     return '\n'.join(lines) + '\n'
+
+
+def render_all(design: Part, ctx: ExporterContext) -> dict[str, str]:
+    """Return all .kicad_sch files for `design` as {filename: content}."""
+    from framework.export.kicad_sch.hierarchical import (
+        collect_boards, sub_sheet_filename, emit_top_level,
+    )
+    import warnings
+    from framework.export.base import ExporterContext as _Ctx
+
+    design_name = type(design).__name__
+    boards = collect_boards(design)
+    if len(boards) < 2:
+        return {f'{design_name}.kicad_sch': render(design, ctx)}
+
+    result: dict[str, str] = {}
+    result[f'{design_name}.kicad_sch'] = emit_top_level(design, boards, design_name)
+    for board in boards:
+        board_class_name = type(board).__name__
+        filename = sub_sheet_filename(design_name, board_class_name)
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore')
+            board_ctx = _Ctx(board, 'kicad_sch', ctx.config)
+        result[filename] = render(board, board_ctx)
+    return result
