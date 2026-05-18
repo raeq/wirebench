@@ -1,19 +1,19 @@
 """Hand-curated mapping from KiCad netlist hints to wirebench class names.
 
-The resolver applies five tiers (exact name → suffix-strip → footprint
-disambig → libsource hint → fallback).  This table covers the cases
-the rules don't reach cleanly — typically common KiCad library parts
-whose `value` doesn't exactly match a wirebench registry name.
+The resolver applies four tiers (exact name → suffix-strip →
+libsource map → value map → fallback to `UnknownPart`).  This module
+provides the libsource and value tables; the suffix-strip list lives
+here too, in `SUFFIX_STRIPS`.
 
-Three lookup keys, checked in order:
+Three lookup keys, checked in order by the resolver:
 
   1. `(libsource_lib, libsource_part)` — most specific.
   2. `value`                            — when the netlist's value
                                           already names the part.
-  3. `value_with_suffix_stripped`       — handled by the resolver, not
-                                          this table, but the trailing
-                                          comment shows what each entry
-                                          covers.
+  3. `value_with_suffix_stripped`       — driven by `SUFFIX_STRIPS`
+                                          below; the resolver strips
+                                          each suffix and retries the
+                                          registry lookup.
 
 The mapping is grown as imports surface unmatched parts.  The intent
 is breadth over depth; perfect coverage is impossible without sharing

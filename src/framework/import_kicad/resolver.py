@@ -49,6 +49,24 @@ class KiCadComponent:
     pin_specs:    tuple[tuple[int, str], ...]  # (number, name) per pin
 
 
+_LOWERCASE_REGISTRY_CACHE: tuple[int, dict[str, type[Part]]] = (-1, {})
+
+
+def _registry_by_lowercase() -> dict[str, type[Part]]:
+    """Cached lowercased view of the global registry.  The cache is
+    keyed by `len(_REGISTRY)` so a new `@register('…')` decoration —
+    rare after framework boot — invalidates and rebuilds the map.
+    Saves O(#registry) rebuild work per component on large netlists.
+    """
+    global _LOWERCASE_REGISTRY_CACHE
+    size, cached = _LOWERCASE_REGISTRY_CACHE
+    if size == len(_REGISTRY):
+        return cached
+    fresh = {name.lower(): cls for name, cls in _REGISTRY.items()}
+    _LOWERCASE_REGISTRY_CACHE = (len(_REGISTRY), fresh)
+    return fresh
+
+
 def resolve_part_class(
     comp: KiCadComponent,
     *,
@@ -61,9 +79,7 @@ def resolve_part_class(
     classes so subsequent components that fall into the same bucket
     re-use the class rather than minting new ones per refdes.
     """
-    registry_by_lowercase = {
-        name.lower(): cls for name, cls in _REGISTRY.items()
-    }
+    registry_by_lowercase = _registry_by_lowercase()
 
     # Tier 1: exact-name match against the registry.
     by_value = registry_by_lowercase.get(comp.value.lower())

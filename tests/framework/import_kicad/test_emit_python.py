@@ -34,11 +34,24 @@ def test_generated_source_contains_part_attributes():
     )
     source = emit(report, class_name='HelloLEDImported')
     # Expected attributes: self.d1, self.r1, plus the synthesised
-    # self.gnd / self.vcc rails.
+    # GND (LED.cathode is Digital) and VCC (R1.t1 is Analog) rails.
     assert 'self.d1 = LED' in source
     assert 'self.r1 = Resistor' in source
-    assert 'self.vcc = Rail(True)' in source
     assert 'self.gnd = Rail(False)' in source
+    assert 'Rail(True, signal_type=Analog)' in source
+
+
+def test_mixed_signal_rails_split_in_generated_source():
+    """The WaterAlarm demo has CMOS inputs tied off to GND
+    (Digital) plus chip GND pads (Analog).  The generated source
+    must declare both rails or the constructed circuit raises
+    SignalTypeMismatchError when it runs."""
+    _, report = import_kicad_netlist(
+        REPO / 'demos' / 'water_alarm' / 'docs' / 'WaterAlarm.net'
+    )
+    source = emit(report, class_name='WaterAlarmImported')
+    assert 'self.gnd_analog = Rail(False, signal_type=Analog)' in source
+    assert 'self.gnd_digital = Rail(False)' in source
 
 
 def test_generated_source_includes_source_path_comment(tmp_path):

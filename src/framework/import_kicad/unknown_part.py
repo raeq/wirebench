@@ -39,9 +39,14 @@ def make_unknown_part_class(
 
     Each call produces a fresh class so two different KiCad parts
     that both fall back to UnknownPart don't share their pin maps.
-    The class is registered into wirebench's part registry under the
-    given `name` so save/load round-trips work the same way they do
-    for catalogue parts.
+
+    The class is **not** added to wirebench's component registry —
+    placeholders are per-import artefacts, and global registration
+    would collide across sessions that import different netlists.
+    Save/load round-trips of imported circuits therefore aren't
+    supported for placeholder parts; the expected workflow is for
+    users to replace each `UnknownPart` with a real catalogue class
+    before committing the imported design.
 
     `pin_specs` is the list of `(pin_number, pin_name)` pairs the
     netlist declared.  Direction defaults to BIDIR because the

@@ -69,3 +69,28 @@ def test_nonexistent_input_returns_error(tmp_path):
 def test_missing_subcommand_arg_returns_usage_error():
     code, _, _ = _invoke()
     assert code == 2
+
+
+def test_class_name_preserves_existing_capitalisation(tmp_path):
+    """A `HelloLED.net` input should generate a class named
+    `HelloLEDImported` — not the `HelloledImported` an unconditional
+    `.title()` call would produce."""
+    netlist = REPO_ROOT / 'demos' / 'hello_led' / 'docs' / 'HelloLED.net'
+    output = tmp_path / 'HelloLED.py'
+    code, _, _ = _invoke(str(netlist), '--output', str(output))
+    assert code == 0
+    text = output.read_text()
+    assert 'class HelloLEDImported(Circuit)' in text
+    assert 'class Helloled' not in text
+
+
+def test_load_error_uses_neutral_phrasing(tmp_path):
+    """LoadError covers parse failures and a few stages after; the
+    CLI message shouldn't claim 'parse failed' for what may have
+    been a missing-section or instantiation error."""
+    netlist = tmp_path / 'malformed.net'
+    netlist.write_text("(export (version \"E\")")  # unbalanced
+    code, _, err = _invoke(str(netlist))
+    assert code == 2
+    assert 'import failed' in err.lower()
+    assert 'parse failed' not in err.lower()

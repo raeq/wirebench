@@ -93,6 +93,15 @@ def _imports_for(report: ImportReport) -> list[str]:
     if catalogue:
         imports.append(f"from wirebench import {', '.join(catalogue)}")
 
+    signal_names = sorted({
+        g.signal_type_name for g in report.wire_groups
+        if g.signal_type_name
+    })
+    if signal_names:
+        imports.append(
+            f"from wirebench import {', '.join(signal_names)}"
+        )
+
     if placeholders:
         imports.append('')
         imports.append('# UnknownPart placeholders — the importer could not')
@@ -119,50 +128,66 @@ def _emit_part_instantiations(lines: list[str], report: ImportReport) -> None:
 
 
 def _emit_wires(lines: list[str], report: ImportReport) -> None:
-    """Emit `wire()` calls reconstructing each net.  Power / ground
-    nets get a synthesised Rail; mixed-signal rails are split per
-    signal_type so the wire() invariants don't fire."""
+    """Emit `wire()` calls reconstructing each net.  Reads the
+    per-signal-type splits the importer already computed
+    (`report.wire_groups`), so mixed-signal GND nets become two
+    `wire(...)` calls with two distinct Rails — same shape the
+    in-memory import produced, no re-derivation here."""
     refdes_to_part_kind: dict[str, str] = {
         p.refdes: p.klass.__name__ for p in report.parts
     }
-    high_rail_emitted: set[str] = set()
-    low_rail_emitted:  set[str] = set()
-    rail_counter = [0]
+    rail_attrs_emitted: set[str] = set()
 
-    def rail_attr(prefix: str, signal: str) -> str:
-        rail_counter[0] += 1
-        return f"{prefix.lower()}_{signal.lower()}_rail"
-
-    for net in report.nets:
-        if not net.nodes:
-            continue
-        is_high = looks_like_high_rail(net.name)
-        is_low  = looks_like_low_rail(net.name)
-        nodes_text = [
-            _port_expr(refdes_to_part_kind.get(ref, ''), ref, pin)
-            for ref, pin in net.nodes
+    for group in report.wire_groups:
+        port_exprs: list[str] = [
+            expr for expr in (
+                _port_expr(refdes_to_part_kind.get(ref, ''), ref, pin)
+                for ref, pin in group.nodes
+            )
+            if expr is not None
         ]
-        # Drop unresolved entries (where _port_expr returns None).
-        port_lines = [t for t in nodes_text if t is not None]
-        if is_high or is_low:
-            kind = 'vcc' if is_high else 'gnd'
-            attr = f"{kind}"
-            already = high_rail_emitted if is_high else low_rail_emitted
-            if attr not in already:
-                level = 'True' if is_high else 'False'
-                lines.append(
-                    f"        self.{attr} = Rail({level})"
-                )
-                already.add(attr)
-            if port_lines:
-                lines.append(
-                    f"        wire(self.{attr}.ports['out'], "
-                    f"{', '.join(port_lines)})"
-                )
-        else:
-            if len(port_lines) < 2:
+        if group.rail_polarity is None:
+            if len(port_exprs) < 2:
                 continue
-            lines.append(f"        wire({', '.join(port_lines)})")
+            lines.append(f"        wire({', '.join(port_exprs)})")
+            continue
+
+        # Rail-fed group: one Rail per (polarity, signal_type) pair.
+        polarity_word = 'vcc' if group.rail_polarity == '+' else 'gnd'
+        signal_name   = group.signal_type_name or 'Digital'
+        rail_attr = (
+            f"{polarity_word}_{signal_name.lower()}"
+            if signal_name != 'Digital' or _has_multiple_signal_groups(
+                report, group.rail_polarity,
+            )
+            else polarity_word
+        )
+        if rail_attr not in rail_attrs_emitted:
+            level = 'True' if group.rail_polarity == '+' else 'False'
+            sig_kw = f", signal_type={signal_name}" if signal_name != 'Digital' else ''
+            lines.append(
+                f"        self.{rail_attr} = Rail({level}{sig_kw})"
+            )
+            rail_attrs_emitted.add(rail_attr)
+        if port_exprs:
+            lines.append(
+                f"        wire(self.{rail_attr}.ports['out'], "
+                f"{', '.join(port_exprs)})"
+            )
+
+
+def _has_multiple_signal_groups(
+    report: ImportReport, polarity: str,
+) -> bool:
+    """True if the report contains more than one signal_type for the
+    given rail polarity — controls whether the generator names the
+    Rail attribute by polarity alone or includes the signal type for
+    disambiguation."""
+    types = {
+        g.signal_type_name for g in report.wire_groups
+        if g.rail_polarity == polarity
+    }
+    return len(types) > 1
 
 
 def _port_expr(class_name: str, refdes: str, pin_number: int) -> str | None:

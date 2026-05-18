@@ -74,7 +74,11 @@ def run_import_kicad(argv: list[str]) -> int:
         sys.stderr.write(f"wirebench import-kicad: {e}\n")
         return 1
     except LoadError as e:
-        sys.stderr.write(f"wirebench import-kicad: parse failed: {e}\n")
+        # LoadError covers parse failures *and* missing-section
+        # / instantiation errors re-wrapped from deeper in the
+        # import pipeline.  Use a neutral verb so the message
+        # doesn't mislead users about which stage failed.
+        sys.stderr.write(f"wirebench import-kicad: import failed: {e}\n")
         return 2
     except WirebenchError as e:
         sys.stderr.write(
@@ -111,10 +115,19 @@ def run_import_kicad(argv: list[str]) -> int:
 
 
 def _default_class_name(input_path: Path) -> str:
+    """Sanitise the input stem into a valid Python identifier while
+    preserving its existing capitalisation — `HelloLED.net` stays
+    `HelloLED` (not `Helloled` from a `.title()` pass) and produces
+    `HelloLEDImported`."""
     stem = ''.join(c for c in input_path.stem if c.isalnum() or c == '_')
-    if not stem or not stem[0].isalpha():
+    if not stem:
+        return 'Imported'
+    if not stem[0].isalpha():
         stem = 'Imported' + stem
-    return stem.title().replace('_', '') + 'Imported'
+    # Strip underscores at boundaries so the suffix concatenation
+    # doesn't look like `Hello_LedImported`; underscores inside are
+    # preserved verbatim (no `.title()` — we keep the user's case).
+    return stem.replace('_', '') + 'Imported'
 
 
 def _circuit_payload(circuit: Any, report: Any) -> dict[str, Any]:

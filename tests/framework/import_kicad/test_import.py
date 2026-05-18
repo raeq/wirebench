@@ -89,6 +89,33 @@ def test_non_strict_mode_substitutes_unknown_placeholder():
     assert report.parts[0].is_unknown_placeholder
 
 
+def test_unknown_placeholder_carries_pin_specs_from_nets():
+    """The netlist's `(nets ...)` section is the only place pin
+    numbers/names show up; without back-filling them onto each
+    KiCadComponent, UnknownPart placeholders would be minted with
+    zero pins and any `(node)` referencing them would be silently
+    dropped."""
+    text = """
+    (export (version "E")
+      (components
+        (comp (ref "U99") (value "MysteryChip")
+          (libsource (lib "X") (part "MysteryChip"))))
+      (nets
+        (net (code "1") (name "data")
+          (node (ref "U99") (pin "3") (pinfunction "OUT"))
+          (node (ref "U99") (pin "5") (pinfunction "IN")))))
+    """
+    ast = parse(text)
+    circuit, report = import_from_ast(ast)
+    placeholder = report.parts[0]
+    assert placeholder.is_unknown_placeholder
+    # Both pin numbers from the net section should land on the part.
+    assert placeholder.pin_specs == ((3, 'OUT'), (5, 'IN'))
+    part = next(p for p in circuit.parts if type(p).__name__ == placeholder.klass.__name__)
+    pin_numbers = sorted(getattr(part, 'ports_by_number', {}).keys())
+    assert pin_numbers == [3, 5]
+
+
 def test_missing_components_section_raises_load_error():
     text = "(export (version \"E\") (nets))"
     ast = parse(text)
