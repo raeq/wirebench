@@ -48,6 +48,7 @@ The `docs/` folder beside this README has the design's pre-generated exports:
 - [`BackupPower.bom.csv`](docs/BackupPower.bom.csv) — parts list
 - [`BackupPower.md`](docs/BackupPower.md) — breadboard assembly guide
 - [`BackupPower.net`](docs/BackupPower.net) — KiCad netlist
+- [`BackupPower.kicad_sch`](docs/BackupPower.kicad_sch) — KiCad schematic, open in Eeschema 9.x
 - [`BackupPower.cir`](docs/BackupPower.cir) — SPICE deck
 - [`BackupPower.svg`](docs/BackupPower.svg) — rendered schematic
 - [`BackupPower.dot`](docs/BackupPower.dot) — Graphviz source for the schematic

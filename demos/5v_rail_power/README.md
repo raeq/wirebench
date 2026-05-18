@@ -43,6 +43,7 @@ The `docs/` folder beside this README has the design's pre-generated exports:
 - [`FiveVoltRailPower.bom.csv`](docs/FiveVoltRailPower.bom.csv) — parts list
 - [`FiveVoltRailPower.md`](docs/FiveVoltRailPower.md) — breadboard assembly guide
 - [`FiveVoltRailPower.net`](docs/FiveVoltRailPower.net) — KiCad netlist
+- [`FiveVoltRailPower.kicad_sch`](docs/FiveVoltRailPower.kicad_sch) — KiCad schematic, open in Eeschema 9.x
 - [`FiveVoltRailPower.cir`](docs/FiveVoltRailPower.cir) — SPICE deck
 - [`FiveVoltRailPower.svg`](docs/FiveVoltRailPower.svg) — rendered schematic
 - [`FiveVoltRailPower.dot`](docs/FiveVoltRailPower.dot) — Graphviz source for the schematic

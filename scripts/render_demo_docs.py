@@ -58,10 +58,12 @@ import framework.export.net_report       # noqa: F401, E402
 import framework.export.domain_report    # noqa: F401, E402
 import framework.export.interface_report # noqa: F401, E402
 import framework.export.kicad_sch         # noqa: F401, E402
+import framework.export.kicad_sch as _kicad_sch_adapter  # noqa: E402
 
 from framework.circuit import Circuit                # noqa: E402
 from framework.errors import BreadboardIncompatibleError  # noqa: E402
 from framework.export import export_to_string         # noqa: E402
+from framework.export.base import ExporterContext     # noqa: E402
 
 
 # Per-format file extension.  Conventions match each format's
@@ -215,6 +217,15 @@ def main() -> None:
         docs.mkdir(parents=True, exist_ok=True)
         for fmt, ext in EXTENSIONS.items():
             path = docs / f"{class_name}.{ext}"
+            if fmt == 'kicad_sch':
+                _ctx = ExporterContext(circuit, 'kicad_sch')
+                with warnings.catch_warnings():
+                    warnings.simplefilter('ignore')
+                    _all_files = _kicad_sch_adapter.render_all(circuit, _ctx)
+                for _fname, _ftext in _all_files.items():
+                    (docs / _fname).write_text(_ftext)
+                total_files += len(_all_files)
+                continue
             try:
                 with warnings.catch_warnings():
                     warnings.simplefilter('ignore')
