@@ -24,38 +24,31 @@ from framework.format import load_wirebench
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog='wirebench',
+        prog='wirebench export',
         description='Export a .wirebench design to a netlist or schematic format.',
     )
-    sub = parser.add_subparsers(dest='cmd')
-
-    p_export = sub.add_parser('export', help='Export a design.')
-    p_export.add_argument(
+    parser.add_argument(
         'input', nargs='?',
         help='Path to a .wirebench design file.',
     )
-    p_export.add_argument(
+    parser.add_argument(
         '--format', '-f',
         help='Target format (e.g. "spice").',
     )
-    p_export.add_argument(
+    parser.add_argument(
         '--output', '-o',
         help='Output file path. Stdout if omitted.',
     )
-    p_export.add_argument(
+    parser.add_argument(
         '--list-formats', action='store_true',
         help='Print available formats and exit.',
     )
     return parser
 
 
-def main(argv: list[str] | None = None) -> int:
+def run_export(argv: list[str]) -> int:
     parser = _build_parser()
     args = parser.parse_args(argv)
-
-    if args.cmd != 'export':
-        parser.print_help()
-        return 1
 
     if args.list_formats:
         for fmt in list_formats():
@@ -75,7 +68,3 @@ def main(argv: list[str] | None = None) -> int:
     else:
         sys.stdout.write(text)
     return 0
-
-
-if __name__ == '__main__':
-    raise SystemExit(main())
