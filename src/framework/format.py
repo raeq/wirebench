@@ -192,19 +192,26 @@ def _collect_wires(
     the board level.
     """
     by_node: dict[int, list[tuple[str, str]]] = {}
+    nodes_by_id: dict[int, Any] = {}
     for component in components:
         comp_id = _component_id(component, rail_ids)
         for port_name, port in component.ports.items():
             if port.node is None:
                 continue
             by_node.setdefault(id(port.node), []).append((comp_id, port_name))
+            nodes_by_id.setdefault(id(port.node), port.node)
     wires: list[WireRecord] = []
-    for refs in by_node.values():
+    for nid, refs in by_node.items():
         if len(refs) < 2:
             continue
         # Sort port refs lexicographically for determinism.
         sorted_refs = sorted(_port_ref(c, p) for c, p in refs)
-        wires.append(WireRecord(ports=sorted_refs))
+        wires.append(WireRecord(
+            ports=sorted_refs,
+            dynamically_driven=getattr(
+                nodes_by_id[nid], 'dynamically_driven', False,
+            ),
+        ))
     # Sort wires by their first port-ref for determinism.
     return sorted(wires, key=lambda w: w.ports[0])
 
@@ -509,7 +516,7 @@ def _from_circuit_record(record: CircuitRecord) -> Circuit:
     components, by_id = _rebuild_circuit_components(record.components)
     for w in record.wires:
         ports = [_resolve_port(r, by_id) for r in w.ports]
-        wire(*ports)
+        wire(*ports, dynamically_driven=w.dynamically_driven)
     surface_ports = {
         name: _resolve_port(ref, by_id)
         for name, ref in record.surface_ports.items()
@@ -521,7 +528,7 @@ def _from_board_record(record: BoardRecord) -> Board:
     components, by_id = _rebuild_circuit_components(record.components)
     for w in record.wires:
         ports = [_resolve_port(r, by_id) for r in w.ports]
-        wire(*ports)
+        wire(*ports, dynamically_driven=w.dynamically_driven)
     refdes_number = _refdes_number_from_refdes(record.refdes)
     return Board(
         name=record.name,
