@@ -24,6 +24,7 @@ from typing import Any, cast
 from framework.circuit import Circuit
 from framework.errors import LoadError
 from framework.part import Part
+from framework.port import Direction
 from framework.wire import wire
 
 from framework.import_kicad.nets import (
@@ -174,6 +175,29 @@ def import_from_ast(
         is_low  = looks_like_low_rail(net.name)
 
         if is_high or is_low:
+            # If a chip's OUT-direction pin already drives this
+            # named-rail net, synthesising a Rail would add a second
+            # driver and raise ShortCircuitError.  Skip synthesis and
+            # wire the nodes together directly — the chip's OUT pin is
+            # the supply; no Rail is needed.
+            already_driven = any(
+                p.direction is Direction.OUT for p in resolved_ports
+            )
+            if already_driven:
+                if len(resolved_ports) >= 2:
+                    wire(*resolved_ports)
+                    report.wire_groups.append(WireGroup(
+                        net_name=net.name,
+                        rail_polarity=None,
+                        signal_type_name=None,
+                        nodes=list(resolved_nodes),
+                    ))
+                else:
+                    report.skipped_nets.append(
+                        net.name or f"code{net.code}"
+                    )
+                continue
+
             # Rail-fed net: wirebench's exporter inlines the Rail into
             # the net name, and the original design may have had one
             # Digital Rail and one Analog Rail sharing the bench-level

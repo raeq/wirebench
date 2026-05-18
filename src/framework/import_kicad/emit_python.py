@@ -232,8 +232,10 @@ def _constructor_for(p: ImportedPart, rd_number: int) -> str:
     if name == 'Cell':
         return f"Cell(initial_state_of_charge=1.0, refdes_number={rd_number})"
     if p.is_unknown_placeholder:
+        pin_specs_literal = repr(list(p.pin_specs))
         return (
-            f"make_unknown_part_class({name!r}, [])(refdes_number={rd_number})"
+            f"make_unknown_part_class({name!r}, {pin_specs_literal})"
+            f"(refdes_number={rd_number})"
         )
     return f"{name}(refdes_number={rd_number})"
 
