@@ -56,8 +56,12 @@ def test_collect_lib_symbols_includes_requested():
 def test_collect_lib_symbols_qualifies_subsymbols():
     result = collect_lib_symbols([('Device', 'R')])
     sym_text = result['Device:R']
-    # Sub-symbols R_0_1 and R_1_1 must be renamed to Device:R_0_1 etc.
-    assert 'symbol "Device:R_0_1"' in sym_text or 'symbol "Device:R_1_1"' in sym_text
+    # Only the top-level symbol gets the lib: prefix; sub-symbols stay bare.
+    # KiCad 9 schematics use bare names for nested sub-units.
+    assert 'symbol "R_0_1"' in sym_text or 'symbol "R_1_1"' in sym_text
+    # And the old qualified names must NOT appear (would break KiCad 9)
+    assert 'symbol "Device:R_0_1"' not in sym_text
+    assert 'symbol "Device:R_1_1"' not in sym_text
 
 
 def test_collect_lib_symbols_resolves_extends_chain():

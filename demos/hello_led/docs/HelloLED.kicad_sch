@@ -1,7 +1,8 @@
 (kicad_sch
-  (version 20240618)
+  (version 20250114)
   (generator "wirebench")
-  (generator_version "0.1")
+  (generator_version "0.2")
+  (uuid "617e7973-59d3-667d-5891-70f5c70ecb88")
   (paper "A4")
   (lib_symbols
       (symbol "Device:LED"
@@ -85,7 +86,7 @@
             (hide yes)
           )
         )
-        (symbol "Device:LED_0_1"
+        (symbol "LED_0_1"
           (polyline
             (pts
               (xy -3.048 -0.762) (xy -4.572 -2.286) (xy -3.81 -2.286) (xy -4.572 -2.286) (xy -4.572 -1.524)
@@ -147,7 +148,7 @@
             )
           )
         )
-        (symbol "Device:LED_1_1"
+        (symbol "LED_1_1"
           (pin passive line
             (at -3.81 0 0)
             (length 2.54)
@@ -258,7 +259,7 @@
             (hide yes)
           )
         )
-        (symbol "Device:R_0_1"
+        (symbol "R_0_1"
           (rectangle
             (start -1.016 -2.54)
             (end 1.016 2.54)
@@ -271,7 +272,7 @@
             )
           )
         )
-        (symbol "Device:R_1_1"
+        (symbol "R_1_1"
           (pin passive line
             (at 0 3.81 270)
             (length 1.27)
@@ -376,7 +377,7 @@
             (hide yes)
           )
         )
-        (symbol "power:GND_0_1"
+        (symbol "GND_0_1"
           (polyline
             (pts
               (xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
@@ -390,7 +391,7 @@
             )
           )
         )
-        (symbol "power:GND_1_1"
+        (symbol "GND_1_1"
           (pin power_in line
             (at 0 0 270)
             (length 0)
@@ -477,7 +478,7 @@
             (hide yes)
           )
         )
-        (symbol "power:VCC_0_1"
+        (symbol "VCC_0_1"
           (polyline
             (pts
               (xy -0.762 1.27) (xy 0 2.54)
@@ -515,7 +516,7 @@
             )
           )
         )
-        (symbol "power:VCC_1_1"
+        (symbol "VCC_1_1"
           (pin power_in line
             (at 0 0 90)
             (length 0)
@@ -540,7 +541,7 @@
   )
   (symbol
     (lib_id "Device:R")
-    (at 30.48 30.48 0)
+    (at 25.4 25.4 0)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -548,24 +549,24 @@
     (dnp no)
     (uuid "6569ece2-28ac-f351-56fc-260fdc494bbf")
     (property "Reference" "R1"
-      (at 33.02 27.94 0)
+      (at 27.94 22.86 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "330 Ω"
-      (at 30.48 33.02 0)
+      (at 25.4 27.94 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "93cd8c40-4815-ab87-a414-9ee70c004d75"))
     (pin "2" (uuid "40f066e2-2c53-ee16-2c73-4c3787d2320c"))
   )
   (wire
-    (pts (xy 30.48 34.29) (xy 30.48 36.83))
+    (pts (xy 25.4 29.21) (xy 25.4 31.75))
     (stroke (width 0) (type default))
     (uuid "b2a67e50-9801-fd5e-e608-98e95e5d428f")
   )
   (symbol
     (lib_id "power:VCC")
-    (at 30.48 36.83 90)
+    (at 25.4 31.75 90)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -573,23 +574,23 @@
     (dnp no)
     (uuid "529ff2ea-e121-a02e-3a08-a6ccb1b8e1b8")
     (property "Reference" "#PWR"
-      (at 30.48 36.83 0)
+      (at 25.4 31.75 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
     (property "Value" "VCC"
-      (at 30.48 36.83 0)
+      (at 25.4 31.75 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "a398f514-0a91-9052-662f-ad54cd0c7d06"))
   )
   (wire
-    (pts (xy 30.48 26.67) (xy 30.48 24.13))
+    (pts (xy 25.4 21.59) (xy 25.4 19.05))
     (stroke (width 0) (type default))
     (uuid "4242b99f-209f-dd36-86ea-11b2cd233569")
   )
   (global_label "Net-(D1-anode)"
     (shape input)
-    (at 30.48 24.13 0)
+    (at 25.4 19.05 0)
     (fields_autoplaced yes)
     (effects (font (size 1.27 1.27)) (justify right))
     (property "Intersheet References" "${INTERSHEET_REFS}"
@@ -600,7 +601,7 @@
   )
   (symbol
     (lib_id "Device:LED")
-    (at 69.85 30.48 0)
+    (at 63.5 88.9 0)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -608,24 +609,24 @@
     (dnp no)
     (uuid "4e0c90e4-2d30-4b54-22f6-847acbaac9ab")
     (property "Reference" "D1"
-      (at 72.39 27.94 0)
+      (at 66.04 86.36 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "LED"
-      (at 69.85 33.02 0)
+      (at 63.5 91.44 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "46f6d5b9-0a82-1283-e517-8c3dcb63f401"))
     (pin "2" (uuid "89997ea7-83b8-dce9-9436-ee9735051cfb"))
   )
   (wire
-    (pts (xy 66.04 30.48) (xy 63.5 30.48))
+    (pts (xy 59.69 88.9) (xy 57.15 88.9))
     (stroke (width 0) (type default))
     (uuid "c2b06daa-3e49-0f14-9591-ad14bd2a3d94")
   )
   (global_label "Net-(D1-anode)"
     (shape input)
-    (at 63.5 30.48 0)
+    (at 57.15 88.9 0)
     (fields_autoplaced yes)
     (effects (font (size 1.27 1.27)) (justify right))
     (property "Intersheet References" "${INTERSHEET_REFS}"
@@ -635,13 +636,13 @@
     (uuid "c615ac62-2c6d-f4c2-84e3-09715bdf32b5")
   )
   (wire
-    (pts (xy 73.66 30.48) (xy 76.2 30.48))
+    (pts (xy 67.31 88.9) (xy 69.85 88.9))
     (stroke (width 0) (type default))
     (uuid "bde10e30-2e1e-866b-198c-daa6eb2c5fa7")
   )
   (symbol
     (lib_id "power:GND")
-    (at 76.2 30.48 270)
+    (at 69.85 88.9 270)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -649,14 +650,24 @@
     (dnp no)
     (uuid "21de9fc0-3fd0-9143-f2d6-14497ca8251c")
     (property "Reference" "#PWR"
-      (at 76.2 30.48 0)
+      (at 69.85 88.9 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
     (property "Value" "GND"
-      (at 76.2 30.48 0)
+      (at 69.85 88.9 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "93bb8f54-3a79-317d-06d8-d4b53e611c07"))
+  )
+  (wire
+    (pts (xy 25.4 19.05) (xy 57.15 19.05))
+    (stroke (width 0) (type default))
+    (uuid "dc5b465a-bb39-4a04-5bec-61492a52a14e")
+  )
+  (wire
+    (pts (xy 57.15 19.05) (xy 57.15 88.9))
+    (stroke (width 0) (type default))
+    (uuid "b2d73d03-d37d-125e-f16e-4eae7fc655a4")
   )
   (sheet_instances
     (path "/" (page "1"))

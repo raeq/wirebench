@@ -1,8 +1,9 @@
 (kicad_sch
-  (version 20240618)
+  (version 20250114)
   (generator "wirebench")
-  (generator_version "0.1")
-  (paper "A3")
+  (generator_version "0.2")
+  (uuid "a48096eb-e1fe-9ae7-fa0b-69c4ad0ddb10")
+  (paper "User" 88.9 990.6)
   (lib_symbols
       (symbol "4xxx:4069"
         (pin_names
@@ -80,7 +81,7 @@
             (hide yes)
           )
         )
-        (symbol "4xxx:4069_1_0"
+        (symbol "4069_1_0"
           (polyline
             (pts
               (xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -130,7 +131,7 @@
             )
           )
         )
-        (symbol "4xxx:4069_2_0"
+        (symbol "4069_2_0"
           (polyline
             (pts
               (xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -180,7 +181,7 @@
             )
           )
         )
-        (symbol "4xxx:4069_3_0"
+        (symbol "4069_3_0"
           (polyline
             (pts
               (xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -230,7 +231,7 @@
             )
           )
         )
-        (symbol "4xxx:4069_4_0"
+        (symbol "4069_4_0"
           (polyline
             (pts
               (xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -280,7 +281,7 @@
             )
           )
         )
-        (symbol "4xxx:4069_5_0"
+        (symbol "4069_5_0"
           (polyline
             (pts
               (xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -330,7 +331,7 @@
             )
           )
         )
-        (symbol "4xxx:4069_6_0"
+        (symbol "4069_6_0"
           (polyline
             (pts
               (xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -380,7 +381,7 @@
             )
           )
         )
-        (symbol "4xxx:4069_7_0"
+        (symbol "4069_7_0"
           (pin power_in line
             (at 0 12.7 270)
             (length 5.08)
@@ -418,7 +419,7 @@
             )
           )
         )
-        (symbol "4xxx:4069_7_1"
+        (symbol "4069_7_1"
           (rectangle
             (start -5.08 7.62)
             (end 5.08 -7.62)
@@ -570,7 +571,7 @@
             (hide yes)
           )
         )
-        (symbol "74xx:74LS04_1_0"
+        (symbol "74LS04_1_0"
           (polyline
             (pts
               (xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -620,7 +621,7 @@
             )
           )
         )
-        (symbol "74xx:74LS04_2_0"
+        (symbol "74LS04_2_0"
           (polyline
             (pts
               (xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -670,7 +671,7 @@
             )
           )
         )
-        (symbol "74xx:74LS04_3_0"
+        (symbol "74LS04_3_0"
           (polyline
             (pts
               (xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -720,7 +721,7 @@
             )
           )
         )
-        (symbol "74xx:74LS04_4_0"
+        (symbol "74LS04_4_0"
           (polyline
             (pts
               (xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -770,7 +771,7 @@
             )
           )
         )
-        (symbol "74xx:74LS04_5_0"
+        (symbol "74LS04_5_0"
           (polyline
             (pts
               (xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -820,7 +821,7 @@
             )
           )
         )
-        (symbol "74xx:74LS04_6_0"
+        (symbol "74LS04_6_0"
           (polyline
             (pts
               (xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -870,7 +871,7 @@
             )
           )
         )
-        (symbol "74xx:74LS04_7_0"
+        (symbol "74LS04_7_0"
           (pin power_in line
             (at 0 12.7 270)
             (length 5.08)
@@ -908,7 +909,7 @@
             )
           )
         )
-        (symbol "74xx:74LS04_7_1"
+        (symbol "74LS04_7_1"
           (rectangle
             (start -5.08 7.62)
             (end 5.08 -7.62)
@@ -1004,7 +1005,7 @@
             (hide yes)
           )
         )
-        (symbol "Device:LED_0_1"
+        (symbol "LED_0_1"
           (polyline
             (pts
               (xy -3.048 -0.762) (xy -4.572 -2.286) (xy -3.81 -2.286) (xy -4.572 -2.286) (xy -4.572 -1.524)
@@ -1066,7 +1067,7 @@
             )
           )
         )
-        (symbol "Device:LED_1_1"
+        (symbol "LED_1_1"
           (pin passive line
             (at -3.81 0 0)
             (length 2.54)
@@ -1171,7 +1172,7 @@
             (hide yes)
           )
         )
-        (symbol "power:GND_0_1"
+        (symbol "GND_0_1"
           (polyline
             (pts
               (xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
@@ -1185,7 +1186,7 @@
             )
           )
         )
-        (symbol "power:GND_1_1"
+        (symbol "GND_1_1"
           (pin power_in line
             (at 0 0 270)
             (length 0)
@@ -1272,7 +1273,7 @@
             (hide yes)
           )
         )
-        (symbol "power:VCC_0_1"
+        (symbol "VCC_0_1"
           (polyline
             (pts
               (xy -0.762 1.27) (xy 0 2.54)
@@ -1310,7 +1311,7 @@
             )
           )
         )
-        (symbol "power:VCC_1_1"
+        (symbol "VCC_1_1"
           (pin power_in line
             (at 0 0 90)
             (length 0)
@@ -1335,7 +1336,7 @@
   )
   (symbol
     (lib_id "74xx:74HC04")
-    (at 30.48 69.85 0)
+    (at 63.5 787.4 0)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -1343,11 +1344,11 @@
     (dnp no)
     (uuid "17c9dc13-b9bd-8773-f513-f887892dae58")
     (property "Reference" "U1"
-      (at 33.02 67.31 0)
+      (at 66.04 784.86 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "SN74HC04"
-      (at 30.48 72.39 0)
+      (at 63.5 789.94 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "d087e22d-98e5-8624-9019-e84dca2f2090"))
@@ -1366,13 +1367,13 @@
     (pin "7" (uuid "c4f4cb9e-4a21-055b-6349-53d745090264"))
   )
   (wire
-    (pts (xy 22.86 69.85) (xy 20.32 69.85))
+    (pts (xy 55.88 787.4) (xy 53.34 787.4))
     (stroke (width 0) (type default))
     (uuid "6c7e4be1-aea5-7bcc-c97b-2ab8d580cd78")
   )
   (global_label "N1"
     (shape input)
-    (at 20.32 69.85 0)
+    (at 53.34 787.4 0)
     (fields_autoplaced yes)
     (effects (font (size 1.27 1.27)) (justify right))
     (property "Intersheet References" "${INTERSHEET_REFS}"
@@ -1382,13 +1383,13 @@
     (uuid "4f9fd511-632a-636c-c32c-98f8ae36ace3")
   )
   (wire
-    (pts (xy 38.1 69.85) (xy 40.64 69.85))
+    (pts (xy 71.12 787.4) (xy 73.66 787.4))
     (stroke (width 0) (type default))
     (uuid "f61ae14b-4c5c-1342-ed64-957f3bbec527")
   )
   (global_label "N6"
     (shape input)
-    (at 40.64 69.85 0)
+    (at 73.66 787.4 0)
     (fields_autoplaced yes)
     (effects (font (size 1.27 1.27)) (justify right))
     (property "Intersheet References" "${INTERSHEET_REFS}"
@@ -1398,13 +1399,13 @@
     (uuid "61faac96-a6b0-e127-3c08-481b6b292a69")
   )
   (wire
-    (pts (xy 22.86 69.85) (xy 20.32 69.85))
+    (pts (xy 55.88 787.4) (xy 53.34 787.4))
     (stroke (width 0) (type default))
     (uuid "4d4b9c82-bc87-848e-d732-471e336e36bb")
   )
   (symbol
     (lib_id "power:GND")
-    (at 20.32 69.85 270)
+    (at 53.34 787.4 270)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -1412,28 +1413,28 @@
     (dnp no)
     (uuid "92eff8f9-6d3f-8569-e231-251da3ebf4f6")
     (property "Reference" "#PWR"
-      (at 20.32 69.85 0)
+      (at 53.34 787.4 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
     (property "Value" "GND"
-      (at 20.32 69.85 0)
+      (at 53.34 787.4 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "c85fa1da-746b-b8e8-9f5c-f2eae80b739f"))
   )
   (wire
-    (pts (xy 38.1 69.85) (xy 40.64 69.85))
+    (pts (xy 71.12 787.4) (xy 73.66 787.4))
     (stroke (width 0) (type default))
     (uuid "9419f2ee-c4ef-6890-04a3-36d6f95850a4")
   )
   (wire
-    (pts (xy 22.86 69.85) (xy 20.32 69.85))
+    (pts (xy 55.88 787.4) (xy 53.34 787.4))
     (stroke (width 0) (type default))
     (uuid "8f6416e6-138f-5ec5-1b16-65838c787aa8")
   )
   (symbol
     (lib_id "power:GND")
-    (at 20.32 69.85 270)
+    (at 53.34 787.4 270)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -1441,28 +1442,28 @@
     (dnp no)
     (uuid "07c5d44e-5089-d69f-aa47-aa90c33c0ac9")
     (property "Reference" "#PWR"
-      (at 20.32 69.85 0)
+      (at 53.34 787.4 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
     (property "Value" "GND"
-      (at 20.32 69.85 0)
+      (at 53.34 787.4 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "c788ec3b-c8cf-f7f9-a2c2-3d423e3896fc"))
   )
   (wire
-    (pts (xy 38.1 69.85) (xy 40.64 69.85))
+    (pts (xy 71.12 787.4) (xy 73.66 787.4))
     (stroke (width 0) (type default))
     (uuid "e6936681-241f-455c-d5ee-e99802a0f42e")
   )
   (wire
-    (pts (xy 22.86 69.85) (xy 20.32 69.85))
+    (pts (xy 55.88 787.4) (xy 53.34 787.4))
     (stroke (width 0) (type default))
     (uuid "6059cc81-c950-6362-f69c-9d00a29943d6")
   )
   (symbol
     (lib_id "power:GND")
-    (at 20.32 69.85 270)
+    (at 53.34 787.4 270)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -1470,28 +1471,28 @@
     (dnp no)
     (uuid "74131355-09e0-2c0e-df79-d3aa542fc542")
     (property "Reference" "#PWR"
-      (at 20.32 69.85 0)
+      (at 53.34 787.4 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
     (property "Value" "GND"
-      (at 20.32 69.85 0)
+      (at 53.34 787.4 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "8443b02e-6f42-3aa5-bac9-6698cd30895e"))
   )
   (wire
-    (pts (xy 38.1 69.85) (xy 40.64 69.85))
+    (pts (xy 71.12 787.4) (xy 73.66 787.4))
     (stroke (width 0) (type default))
     (uuid "4c739d78-4bf0-dfce-e4bd-cffe605088b6")
   )
   (wire
-    (pts (xy 22.86 69.85) (xy 20.32 69.85))
+    (pts (xy 55.88 787.4) (xy 53.34 787.4))
     (stroke (width 0) (type default))
     (uuid "19688cd9-950f-e349-5b56-31e5ecc367f3")
   )
   (symbol
     (lib_id "power:GND")
-    (at 20.32 69.85 270)
+    (at 53.34 787.4 270)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -1499,28 +1500,28 @@
     (dnp no)
     (uuid "a75f93cc-ce74-43a8-569f-e8ec8c2c6da9")
     (property "Reference" "#PWR"
-      (at 20.32 69.85 0)
+      (at 53.34 787.4 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
     (property "Value" "GND"
-      (at 20.32 69.85 0)
+      (at 53.34 787.4 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "963ba1e9-8245-1163-e880-7f1d5bfb63f6"))
   )
   (wire
-    (pts (xy 38.1 69.85) (xy 40.64 69.85))
+    (pts (xy 71.12 787.4) (xy 73.66 787.4))
     (stroke (width 0) (type default))
     (uuid "4206334a-208b-c8da-6f6e-e869b267239d")
   )
   (wire
-    (pts (xy 22.86 69.85) (xy 20.32 69.85))
+    (pts (xy 55.88 787.4) (xy 53.34 787.4))
     (stroke (width 0) (type default))
     (uuid "85b13b9a-d62a-0a8e-112d-3e36951d169a")
   )
   (symbol
     (lib_id "power:GND")
-    (at 20.32 69.85 270)
+    (at 53.34 787.4 270)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -1528,33 +1529,33 @@
     (dnp no)
     (uuid "b6178a40-f104-d65e-810f-83e641000b39")
     (property "Reference" "#PWR"
-      (at 20.32 69.85 0)
+      (at 53.34 787.4 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
     (property "Value" "GND"
-      (at 20.32 69.85 0)
+      (at 53.34 787.4 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "af0c4d27-d695-4f35-ccde-85f5cc262665"))
   )
   (wire
-    (pts (xy 38.1 69.85) (xy 40.64 69.85))
+    (pts (xy 71.12 787.4) (xy 73.66 787.4))
     (stroke (width 0) (type default))
     (uuid "b22183d6-980e-13f0-528f-2e862a18abf3")
   )
   (wire
-    (pts (xy 30.48 82.55) (xy 30.48 85.09))
+    (pts (xy 63.5 800.1) (xy 63.5 802.64))
     (stroke (width 0) (type default))
     (uuid "405513cb-bf53-0634-ab20-e8a030991d20")
   )
   (wire
-    (pts (xy 30.48 57.15) (xy 30.48 54.61))
+    (pts (xy 63.5 774.7) (xy 63.5 772.16))
     (stroke (width 0) (type default))
     (uuid "447fa87d-ecba-f374-036d-26544adea0bf")
   )
   (symbol
     (lib_id "4xxx:4069")
-    (at 69.85 110.49 0)
+    (at 63.5 825.5 0)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -1562,11 +1563,11 @@
     (dnp no)
     (uuid "2bb0c764-db73-4fd7-4cd4-476b26cd2a3b")
     (property "Reference" "U2"
-      (at 72.39 107.95 0)
+      (at 66.04 822.96 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "CD4069"
-      (at 69.85 113.03 0)
+      (at 63.5 828.04 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "fab19ca8-2abf-1826-c7a4-d5f8d6ef6fcd"))
@@ -1585,13 +1586,13 @@
     (pin "7" (uuid "3594af5c-a022-3204-4fef-eaf4f0a577a8"))
   )
   (wire
-    (pts (xy 62.23 110.49) (xy 59.69 110.49))
+    (pts (xy 55.88 825.5) (xy 53.34 825.5))
     (stroke (width 0) (type default))
     (uuid "c5437035-df03-a742-3035-4ad031cdb7ff")
   )
   (global_label "Net-(D1-anode)"
     (shape input)
-    (at 59.69 110.49 0)
+    (at 53.34 825.5 0)
     (fields_autoplaced yes)
     (effects (font (size 1.27 1.27)) (justify right))
     (property "Intersheet References" "${INTERSHEET_REFS}"
@@ -1601,13 +1602,13 @@
     (uuid "ad5c7efc-c755-397c-84d4-c9f4ea13a458")
   )
   (wire
-    (pts (xy 77.47 110.49) (xy 80.01 110.49))
+    (pts (xy 71.12 825.5) (xy 73.66 825.5))
     (stroke (width 0) (type default))
     (uuid "fced1fab-11c0-4750-5a23-8fe37f41bf07")
   )
   (global_label "Net-(D2-anode)"
     (shape input)
-    (at 80.01 110.49 0)
+    (at 73.66 825.5 0)
     (fields_autoplaced yes)
     (effects (font (size 1.27 1.27)) (justify right))
     (property "Intersheet References" "${INTERSHEET_REFS}"
@@ -1617,13 +1618,13 @@
     (uuid "9e6aca08-c709-5c3f-42ae-0002971d74db")
   )
   (wire
-    (pts (xy 62.23 110.49) (xy 59.69 110.49))
+    (pts (xy 55.88 825.5) (xy 53.34 825.5))
     (stroke (width 0) (type default))
     (uuid "5510c38a-7e92-744e-f24f-4ec2f007b97a")
   )
   (symbol
     (lib_id "power:GND")
-    (at 59.69 110.49 270)
+    (at 53.34 825.5 270)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -1631,28 +1632,28 @@
     (dnp no)
     (uuid "731a675c-7a70-eeee-0aae-e51143f5e777")
     (property "Reference" "#PWR"
-      (at 59.69 110.49 0)
+      (at 53.34 825.5 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
     (property "Value" "GND"
-      (at 59.69 110.49 0)
+      (at 53.34 825.5 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "3a49a365-6998-2f66-63f4-6f8b5953973b"))
   )
   (wire
-    (pts (xy 77.47 110.49) (xy 80.01 110.49))
+    (pts (xy 71.12 825.5) (xy 73.66 825.5))
     (stroke (width 0) (type default))
     (uuid "32b0964f-70c8-6382-2ea1-ef401286cb80")
   )
   (wire
-    (pts (xy 62.23 110.49) (xy 59.69 110.49))
+    (pts (xy 55.88 825.5) (xy 53.34 825.5))
     (stroke (width 0) (type default))
     (uuid "0533dbf7-965c-b30c-ce8e-45d3bca6bfa2")
   )
   (symbol
     (lib_id "power:GND")
-    (at 59.69 110.49 270)
+    (at 53.34 825.5 270)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -1660,28 +1661,28 @@
     (dnp no)
     (uuid "5f003aff-1d83-ee4b-3a49-9772488d1399")
     (property "Reference" "#PWR"
-      (at 59.69 110.49 0)
+      (at 53.34 825.5 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
     (property "Value" "GND"
-      (at 59.69 110.49 0)
+      (at 53.34 825.5 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "93eec054-d086-065f-8118-b38353f1a4f4"))
   )
   (wire
-    (pts (xy 77.47 110.49) (xy 80.01 110.49))
+    (pts (xy 71.12 825.5) (xy 73.66 825.5))
     (stroke (width 0) (type default))
     (uuid "3f04a3e8-548a-bc05-a252-839dab33300e")
   )
   (wire
-    (pts (xy 62.23 110.49) (xy 59.69 110.49))
+    (pts (xy 55.88 825.5) (xy 53.34 825.5))
     (stroke (width 0) (type default))
     (uuid "20aebac6-a580-6adc-d5e6-c87fe482e666")
   )
   (symbol
     (lib_id "power:GND")
-    (at 59.69 110.49 270)
+    (at 53.34 825.5 270)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -1689,28 +1690,28 @@
     (dnp no)
     (uuid "beeb526b-0d62-7091-c653-87f11eaf9a98")
     (property "Reference" "#PWR"
-      (at 59.69 110.49 0)
+      (at 53.34 825.5 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
     (property "Value" "GND"
-      (at 59.69 110.49 0)
+      (at 53.34 825.5 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "39fa0a01-49d4-1520-6c8d-19eebc76c136"))
   )
   (wire
-    (pts (xy 77.47 110.49) (xy 80.01 110.49))
+    (pts (xy 71.12 825.5) (xy 73.66 825.5))
     (stroke (width 0) (type default))
     (uuid "dce50382-1450-b0d1-6528-9a79d2ff350f")
   )
   (wire
-    (pts (xy 62.23 110.49) (xy 59.69 110.49))
+    (pts (xy 55.88 825.5) (xy 53.34 825.5))
     (stroke (width 0) (type default))
     (uuid "3f8d69c1-08ca-d066-f8b6-9dcd2d4ddc92")
   )
   (symbol
     (lib_id "power:GND")
-    (at 59.69 110.49 270)
+    (at 53.34 825.5 270)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -1718,28 +1719,28 @@
     (dnp no)
     (uuid "e4b39286-befd-8a3f-55c8-60651d9e694e")
     (property "Reference" "#PWR"
-      (at 59.69 110.49 0)
+      (at 53.34 825.5 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
     (property "Value" "GND"
-      (at 59.69 110.49 0)
+      (at 53.34 825.5 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "e03583bb-c1d8-0971-c381-6ba2b3911409"))
   )
   (wire
-    (pts (xy 77.47 110.49) (xy 80.01 110.49))
+    (pts (xy 71.12 825.5) (xy 73.66 825.5))
     (stroke (width 0) (type default))
     (uuid "5ea1e7d1-4f46-d749-af5d-92651c02ae35")
   )
   (wire
-    (pts (xy 62.23 110.49) (xy 59.69 110.49))
+    (pts (xy 55.88 825.5) (xy 53.34 825.5))
     (stroke (width 0) (type default))
     (uuid "37e8612c-ffc1-4c0c-85ee-7aaa0b5c66a6")
   )
   (symbol
     (lib_id "power:GND")
-    (at 59.69 110.49 270)
+    (at 53.34 825.5 270)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -1747,33 +1748,33 @@
     (dnp no)
     (uuid "f423bc6c-957e-cdee-d161-43886cddc1a6")
     (property "Reference" "#PWR"
-      (at 59.69 110.49 0)
+      (at 53.34 825.5 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
     (property "Value" "GND"
-      (at 59.69 110.49 0)
+      (at 53.34 825.5 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "34dcabbe-f946-ead7-c16e-b53003153d6a"))
   )
   (wire
-    (pts (xy 77.47 110.49) (xy 80.01 110.49))
+    (pts (xy 71.12 825.5) (xy 73.66 825.5))
     (stroke (width 0) (type default))
     (uuid "538107a4-8705-7c6f-8466-2c520bf5eae2")
   )
   (wire
-    (pts (xy 69.85 123.19) (xy 69.85 125.73))
+    (pts (xy 63.5 838.2) (xy 63.5 840.74))
     (stroke (width 0) (type default))
     (uuid "f07b7a9a-5e36-064e-5d83-c60d9255e251")
   )
   (wire
-    (pts (xy 69.85 97.79) (xy 69.85 95.25))
+    (pts (xy 63.5 812.8) (xy 63.5 810.26))
     (stroke (width 0) (type default))
     (uuid "4012e7c6-3cbe-3a27-e4a8-ec29d9a1ca64")
   )
   (symbol
     (lib_id "Device:LED")
-    (at 229.87 149.86 0)
+    (at 63.5 927.1 0)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -1781,24 +1782,24 @@
     (dnp no)
     (uuid "4e0c90e4-2d30-4b54-22f6-847acbaac9ab")
     (property "Reference" "D1"
-      (at 232.41 147.32 0)
+      (at 66.04 924.56 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "LED"
-      (at 229.87 152.4 0)
+      (at 63.5 929.64 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "46f6d5b9-0a82-1283-e517-8c3dcb63f401"))
     (pin "2" (uuid "89997ea7-83b8-dce9-9436-ee9735051cfb"))
   )
   (wire
-    (pts (xy 226.06 149.86) (xy 223.52 149.86))
+    (pts (xy 59.69 927.1) (xy 57.15 927.1))
     (stroke (width 0) (type default))
     (uuid "c2b06daa-3e49-0f14-9591-ad14bd2a3d94")
   )
   (global_label "Net-(D1-anode)"
     (shape input)
-    (at 223.52 149.86 0)
+    (at 57.15 927.1 0)
     (fields_autoplaced yes)
     (effects (font (size 1.27 1.27)) (justify right))
     (property "Intersheet References" "${INTERSHEET_REFS}"
@@ -1808,13 +1809,13 @@
     (uuid "c615ac62-2c6d-f4c2-84e3-09715bdf32b5")
   )
   (wire
-    (pts (xy 233.68 149.86) (xy 236.22 149.86))
+    (pts (xy 67.31 927.1) (xy 69.85 927.1))
     (stroke (width 0) (type default))
     (uuid "bde10e30-2e1e-866b-198c-daa6eb2c5fa7")
   )
   (symbol
     (lib_id "Device:LED")
-    (at 30.48 190.5 0)
+    (at 63.5 965.2 0)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -1822,24 +1823,24 @@
     (dnp no)
     (uuid "4ceca786-7b09-c063-86d4-deb7aa6ef3c7")
     (property "Reference" "D2"
-      (at 33.02 187.96 0)
+      (at 66.04 962.66 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "LED"
-      (at 30.48 193.04 0)
+      (at 63.5 967.74 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "f0dbfe19-e658-df87-574a-7b54b4dcd92e"))
     (pin "2" (uuid "6a91f4af-8614-1000-4228-f76920b65aed"))
   )
   (wire
-    (pts (xy 26.67 190.5) (xy 24.13 190.5))
+    (pts (xy 59.69 965.2) (xy 57.15 965.2))
     (stroke (width 0) (type default))
     (uuid "c0edb7bc-f5b9-935d-7ad8-031c4d46f768")
   )
   (global_label "Net-(D2-anode)"
     (shape input)
-    (at 24.13 190.5 0)
+    (at 57.15 965.2 0)
     (fields_autoplaced yes)
     (effects (font (size 1.27 1.27)) (justify right))
     (property "Intersheet References" "${INTERSHEET_REFS}"
@@ -1849,9 +1850,29 @@
     (uuid "1dd21068-0eb4-cd6e-2771-943759fd60d2")
   )
   (wire
-    (pts (xy 34.29 190.5) (xy 36.83 190.5))
+    (pts (xy 67.31 965.2) (xy 69.85 965.2))
     (stroke (width 0) (type default))
     (uuid "e70f5e5a-6cd3-4d40-5494-594b7d12206f")
+  )
+  (wire
+    (pts (xy 53.34 825.5) (xy 57.15 825.5))
+    (stroke (width 0) (type default))
+    (uuid "220a64e4-8a4c-2774-6d17-5b88309bbd5f")
+  )
+  (wire
+    (pts (xy 57.15 825.5) (xy 57.15 927.1))
+    (stroke (width 0) (type default))
+    (uuid "f5ab4707-573d-f6b3-6b7c-3beb2822d7be")
+  )
+  (wire
+    (pts (xy 57.15 965.2) (xy 73.66 965.2))
+    (stroke (width 0) (type default))
+    (uuid "241dd46e-102a-161a-d17f-c80911bad126")
+  )
+  (wire
+    (pts (xy 73.66 965.2) (xy 73.66 825.5))
+    (stroke (width 0) (type default))
+    (uuid "1db70833-352c-11a1-863a-0b748d02c2bc")
   )
   (sheet_instances
     (path "/" (page "1"))

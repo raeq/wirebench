@@ -1,21 +1,21 @@
-"""KiCad schematic renderer (Phase 2.5a — syntactic emitter, naive grid).
+"""KiCad schematic renderer — Phase 2.5b.
 
 Produces a `.kicad_sch` file (format version 20240618, KiCad 9) from any
 wirebench `Part` (Circuit, Board, or leaf component).
 
-Connectivity is expressed via **global labels** placed at the end of each
-pin's 2.54 mm stub wire.  KiCad treats all global labels with the same
-name as electrically connected, so no explicit wire routing is needed in
-Phase 2.5a.  Power-net stubs use `power:GND` / `power:VCC` symbols
-instead of labels.
-
-Phase 2.5b will replace the label-based connectivity with proper routed
-wires and a better placement algorithm.
+Phase 2.5b upgrades over 2.5a:
+  - Layered Signal Flow placement (power / signal / indicator bands,
+    BFS layer assignment, generous 1500-mil spacing, cluster breakup).
+  - Orthogonal wire routing between pin stub ends (Manhattan L-shapes),
+    with junction emission at 3-way meeting points.
+  - Page sized to fit the layout (A4 → A3 → A2 → A1).
+  - Global labels retained at stub ends for net-name readability.
 """
 from __future__ import annotations
 
 import hashlib
 import math
+from collections import defaultdict
 from typing import Iterator
 
 from framework.board import Board
@@ -30,12 +30,20 @@ from framework.port import Port
 from framework.export.kicad_sch.library_loader import (
     PinDef, collect_lib_symbols, get_pin_defs,
 )
-from framework.export.kicad_sch.placement import grid_place
+from framework.export.kicad_sch.placement import layered_place, sheet_size_for_layout
+from framework.export.kicad_sch.routing import Segment, find_junctions, route_net
 from framework.export.kicad_sch.symbol_map import SymbolEntry, connector_entry, lookup
 
-_STUB_MM: float = 2.54   # length of the stub wire at each pin
-_SCH_VERSION: int = 20240618
+_STUB_MM: float = 2.54
+_SCH_VERSION: int = 20250114   # KiCad 9/10 schematic format version
 _FONT_SIZE: str = '1.27 1.27'
+
+_PAPER_NAMES: dict[tuple[int, int], str] = {
+    (297, 210): 'A4',
+    (420, 297): 'A3',
+    (594, 420): 'A2',
+    (841, 594): 'A1',
+}
 
 
 # ---------------------------------------------------------------------------
@@ -57,8 +65,7 @@ def _q(s: str) -> str:
 
 def _f(v: float) -> str:
     """Format a mm value with at most 6 significant digits, no trailing zeros."""
-    s = f'{v:.6g}'
-    return s
+    return f'{v:.6g}'
 
 
 def _xy(x: float, y: float) -> str:
@@ -92,8 +99,7 @@ def _collect_leaf_parts(design: Part) -> list[Part]:
         if isinstance(node, Circuit):
             for child in node.parts:
                 visit(child)
-            # Also record the circuit itself if it bears a refdes (sub-circuit chip).
-            if getattr(node, 'refdes', None) and not isinstance(node, (Board,)):
+            if getattr(node, 'refdes', None) and not isinstance(node, Board):
                 if node not in result:
                     result.append(node)
         else:
@@ -128,7 +134,6 @@ def _label_for_net(net: LogicalNet) -> str:
     for owner, port in net.ports:
         if isinstance(owner, Rail):
             return 'GND' if owner.level is False else 'VCC'
-    # Use lowest refdes-padN style (KiCad convention)
     candidates: list[tuple[str, str]] = []
     for owner, port in net.ports:
         rd = getattr(owner, 'refdes', None)
@@ -154,7 +159,6 @@ def _abs_pin_pos(
 ) -> tuple[float, float]:
     """Absolute pin connection-point position for a placed symbol."""
     r = math.radians(rotation_deg)
-    # KiCad: Y-axis points downward, rotation is CCW in screen coordinates.
     ax = sx + pin.x * math.cos(r) + pin.y * math.sin(r)
     ay = sy - pin.x * math.sin(r) + pin.y * math.cos(r)
     return ax, ay
@@ -165,9 +169,8 @@ def _stub_end(px: float, py: float, pin_angle: float) -> tuple[float, float]:
     symbol body.
 
     KiCad pin angles describe the direction FROM the connection point TOWARD
-    the symbol body. The stub therefore extends in the opposite direction
-    (angle + 180°). KiCad uses a Y-down coordinate system so sin increases
-    downward.
+    the symbol body; the stub extends in the opposite direction (angle+180°).
+    KiCad uses a Y-down coordinate system so sin increases downward.
     """
     outward = math.radians((pin_angle + 180) % 360)
     ex = px + _STUB_MM * math.cos(outward)
@@ -186,13 +189,16 @@ def _emit_stub_and_label(
     net_name: str,
     seed: str,
     lines: list[str],
-) -> None:
-    """Emit a stub wire and a global_label (or power symbol) at its end."""
+) -> tuple[float, float]:
+    """Emit a stub wire and a global_label (or power symbol) at its end.
+
+    Returns the stub end position (ex, ey) so the caller can collect it
+    for wire routing.
+    """
     ex, ey = _stub_end(px, py, pin_angle)
     ex, ey = _snap(ex), _snap(ey)
     px_s, py_s = _snap(px), _snap(py)
 
-    # Wire stub
     lines.append(
         f'  (wire\n'
         f'    (pts (xy {_xy(px_s, py_s)}) (xy {_xy(ex, ey)}))\n'
@@ -206,7 +212,6 @@ def _emit_stub_and_label(
     elif net_name in ('VCC', '+5V', '+3.3V', '+3V3', '+12V'):
         _emit_power_symbol('VCC', ex, ey, seed, lines)
     elif net_name != 'NC':
-        # global_label — angle=0 for all stubs in Phase 2.5a
         lines.append(
             f'  (global_label {_q(net_name)}\n'
             f'    (shape input)\n'
@@ -220,6 +225,8 @@ def _emit_stub_and_label(
             f'    (uuid {_q(_uuid(seed + "_label"))})\n'
             f'  )'
         )
+
+    return ex, ey
 
 
 def _emit_power_symbol(
@@ -271,8 +278,12 @@ def _emit_symbol_instance(
     nets: list[LogicalNet],
     lines: list[str],
     used_symbols: list[tuple[str, str]],
+    net_stub_ends: dict[str, list[tuple[float, float]]],
 ) -> None:
-    """Emit a `(symbol ...)` instance and the stub wires/labels for its pins."""
+    """Emit a `(symbol ...)` instance and the stub wires/labels for its pins.
+
+    Stub end positions are collected into `net_stub_ends` for wire routing.
+    """
     lib_id = f'{entry.lib}:{entry.name}'
     value = entry.value_template or _part_value(part)
     sym_uuid = _uuid(f'{refdes}_{lib_id}')
@@ -297,7 +308,6 @@ def _emit_symbol_instance(
         f'    )'
     )
 
-    # Add pin UUIDs
     pin_defs = get_pin_defs(entry.lib, entry.name)
     for pin in pin_defs:
         pin_uuid = _uuid(f'{refdes}_{lib_id}_pin{pin.number}')
@@ -308,23 +318,22 @@ def _emit_symbol_instance(
     if (entry.lib, entry.name) not in used_symbols:
         used_symbols.append((entry.lib, entry.name))
 
-    # Emit stubs + labels for each pin
+    # Emit stub wires + labels; collect stub ends for routing.
     all_ports = dict(part.ports) if hasattr(part, 'ports') else {}
     for pin in pin_defs:
         ax, ay = _abs_pin_pos(x, y, 0.0, pin)
-        # Find the port by pin number
         net_name = 'NC'
         for port_name, port in all_ports.items():
-            # Match by pin number using PIN_NUMBERS or Pin.id.number
             pn = _port_pin_number(part, port_name)
             if pn is not None and str(pn) == str(pin.number):
                 net_name = _net_name_for_port(port, nets)
                 break
-        _emit_stub_and_label(
-            ax, ay, pin.angle, net_name,
-            seed=f'{refdes}_{lib_id}_pin{pin.number}',
-            lines=lines,
+        pin_seed = f'{refdes}_{lib_id}_pin{pin.number}'
+        ex, ey = _emit_stub_and_label(
+            ax, ay, pin.angle, net_name, seed=pin_seed, lines=lines,
         )
+        if net_name not in ('NC',) and not _is_power_net(net_name):
+            net_stub_ends[net_name].append((ex, ey))
 
 
 def _port_pin_number(part: Part, port_name: str) -> int | None:
@@ -345,6 +354,38 @@ def _connector_pin_count(part: Part) -> int:
 
 
 # ---------------------------------------------------------------------------
+# Wire routing emission
+# ---------------------------------------------------------------------------
+
+def _emit_routed_wires(
+    net_stub_ends: dict[str, list[tuple[float, float]]],
+    lines: list[str],
+) -> None:
+    """Route and emit wire segments connecting stub ends within each net."""
+    all_segments: list[Segment] = []
+
+    for net_name in sorted(net_stub_ends):
+        ends = net_stub_ends[net_name]
+        if len(ends) < 2:
+            continue
+        segs = route_net(ends)
+        for seg in segs:
+            (x1, y1), (x2, y2) = seg
+            wire_seed = f'route_{net_name}_{x1:.3f}_{y1:.3f}_{x2:.3f}_{y2:.3f}'
+            lines.append(
+                f'  (wire\n'
+                f'    (pts (xy {_xy(x1, y1)}) (xy {_xy(x2, y2)}))\n'
+                f'    (stroke (width 0) (type default))\n'
+                f'    (uuid {_q(_uuid(wire_seed))})\n'
+                f'  )'
+            )
+        all_segments.extend(segs)
+
+    for jx, jy in find_junctions(all_segments):
+        lines.append(f'  (junction (at {_xy(jx, jy)}))')
+
+
+# ---------------------------------------------------------------------------
 # Main renderer
 # ---------------------------------------------------------------------------
 
@@ -354,17 +395,17 @@ def render(design: Part, ctx: ExporterContext) -> str:
 
     logical_nets = compute_logical_nets(design)
 
-    # Collect leaf parts (no Rails)
     leaf_parts = _collect_leaf_parts(design)
     non_rail = [p for p in leaf_parts if not isinstance(p, Rail)]
 
-    positions = grid_place(non_rail)
+    # Stage 1–8: layered placement
+    positions = layered_place(non_rail, logical_nets)
 
     lines: list[str] = []
     symbol_lines: list[str] = []
     used_symbols: list[tuple[str, str]] = []
+    net_stub_ends: dict[str, list[tuple[float, float]]] = defaultdict(list)
 
-    # --- Assign refdes (use the existing refdes if available) ---
     refdes_counters: dict[str, int] = {}
 
     def next_refdes(prefix: str) -> str:
@@ -379,6 +420,8 @@ def render(design: Part, ctx: ExporterContext) -> str:
         return next_refdes(entry.refdes_prefix)
 
     for part in non_rail:
+        if id(part) not in positions:
+            continue
         x, y = positions[id(part)]
 
         resolved: SymbolEntry | None
@@ -395,24 +438,29 @@ def render(design: Part, ctx: ExporterContext) -> str:
         refdes = get_refdes(part, entry)
         _emit_symbol_instance(
             part, entry, x, y, refdes,
-            logical_nets, symbol_lines, used_symbols,
+            logical_nets, symbol_lines, used_symbols, net_stub_ends,
         )
 
-    # Add power symbols to used list
+    # Stage 9: power symbols added to used list
     used_symbols.append(('power', 'GND'))
     used_symbols.append(('power', 'VCC'))
 
-    # --- lib_symbols section ---
+    # Routing wires between stub ends (signal nets only)
+    _emit_routed_wires(net_stub_ends, symbol_lines)
+
+    # lib_symbols section
     lib_map = collect_lib_symbols(used_symbols)
 
-    from framework.export.kicad_sch.placement import sheet_size_mm
-    sw, sh = sheet_size_mm(len(non_rail))
-    paper = 'A4' if (sw, sh) == (297, 210) else 'A3' if (sw, sh) == (420, 297) else 'User'
+    # Page sizing
+    sw, sh = sheet_size_for_layout(positions)
+    paper = _PAPER_NAMES.get((int(sw), int(sh)), 'User')
 
-    lines.append(f'(kicad_sch')
+    design_name = type(design).__name__
+    lines.append('(kicad_sch')
     lines.append(f'  (version {_SCH_VERSION})')
-    lines.append(f'  (generator "wirebench")')
-    lines.append(f'  (generator_version "0.1")')
+    lines.append('  (generator "wirebench")')
+    lines.append('  (generator_version "0.2")')
+    lines.append(f'  (uuid {_q(_uuid(design_name))})')
     if paper == 'User':
         lines.append(f'  (paper "User" {_f(sw)} {_f(sh)})')
     else:
@@ -421,8 +469,6 @@ def render(design: Part, ctx: ExporterContext) -> str:
     if lib_map:
         lines.append('  (lib_symbols')
         for _qname, sym_text in sorted(lib_map.items()):
-            # Normalise indentation: vendor files use tabs; replace with spaces
-            # so the indentation is consistent with the rest of the file.
             normalised = '\n'.join(
                 '    ' + ln.expandtabs(2).lstrip('\t')
                 for ln in sym_text.splitlines()

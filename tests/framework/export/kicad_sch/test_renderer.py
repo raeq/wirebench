@@ -207,4 +207,4 @@ def test_version_field_present():
     tree = _parse(text)
     versions = [b for b in tree if isinstance(b, list) and b and b[0] == 'version']
     assert versions, "No (version ...) field"
-    assert versions[0][1] == str(20240618)
+    assert versions[0][1] == str(20250114)

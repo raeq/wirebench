@@ -84,3 +84,4 @@ MANIFEST
 # MkDocs build output — `mkdocs build` writes the static site here.
 # Local-only; CI uploads it to GitHub Pages as an artifact instead.
 /site/
+demos/**/*.lck

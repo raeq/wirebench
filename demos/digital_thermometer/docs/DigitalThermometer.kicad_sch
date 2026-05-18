@@ -1,8 +1,9 @@
 (kicad_sch
-  (version 20240618)
+  (version 20250114)
   (generator "wirebench")
-  (generator_version "0.1")
-  (paper "A3")
+  (generator_version "0.2")
+  (uuid "e97fc69f-8a1f-e2db-1152-c0196018f116")
+  (paper "A4")
   (lib_symbols
       (symbol "Device:R"
         (pin_numbers
@@ -75,7 +76,7 @@
             (hide yes)
           )
         )
-        (symbol "Device:R_0_1"
+        (symbol "R_0_1"
           (rectangle
             (start -1.016 -2.54)
             (end 1.016 2.54)
@@ -88,7 +89,7 @@
             )
           )
         )
-        (symbol "Device:R_1_1"
+        (symbol "R_1_1"
           (pin passive line
             (at 0 3.81 270)
             (length 1.27)
@@ -193,7 +194,7 @@
             (hide yes)
           )
         )
-        (symbol "power:GND_0_1"
+        (symbol "GND_0_1"
           (polyline
             (pts
               (xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
@@ -207,7 +208,7 @@
             )
           )
         )
-        (symbol "power:GND_1_1"
+        (symbol "GND_1_1"
           (pin power_in line
             (at 0 0 270)
             (length 0)
@@ -294,7 +295,7 @@
             (hide yes)
           )
         )
-        (symbol "power:VCC_0_1"
+        (symbol "VCC_0_1"
           (polyline
             (pts
               (xy -0.762 1.27) (xy 0 2.54)
@@ -332,7 +333,7 @@
             )
           )
         )
-        (symbol "power:VCC_1_1"
+        (symbol "VCC_1_1"
           (pin power_in line
             (at 0 0 90)
             (length 0)
@@ -357,7 +358,7 @@
   )
   (symbol
     (lib_id "Device:R")
-    (at 229.87 30.48 0)
+    (at 63.5 25.4 0)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
@@ -365,24 +366,24 @@
     (dnp no)
     (uuid "6569ece2-28ac-f351-56fc-260fdc494bbf")
     (property "Reference" "R1"
-      (at 232.41 27.94 0)
+      (at 66.04 22.86 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "220 Ω"
-      (at 229.87 33.02 0)
+      (at 63.5 27.94 0)
       (effects (font (size 1.27 1.27)))
     )
     (pin "1" (uuid "93cd8c40-4815-ab87-a414-9ee70c004d75"))
     (pin "2" (uuid "40f066e2-2c53-ee16-2c73-4c3787d2320c"))
   )
   (wire
-    (pts (xy 229.87 34.29) (xy 229.87 36.83))
+    (pts (xy 63.5 29.21) (xy 63.5 31.75))
     (stroke (width 0) (type default))
     (uuid "b2a67e50-9801-fd5e-e608-98e95e5d428f")
   )
   (global_label "Net-(R1-t1)"
     (shape input)
-    (at 229.87 36.83 0)
+    (at 63.5 31.75 0)
     (fields_autoplaced yes)
     (effects (font (size 1.27 1.27)) (justify right))
     (property "Intersheet References" "${INTERSHEET_REFS}"
@@ -392,13 +393,13 @@
     (uuid "35ff2daa-ca4c-fb1c-a334-591e290bbb7e")
   )
   (wire
-    (pts (xy 229.87 26.67) (xy 229.87 24.13))
+    (pts (xy 63.5 21.59) (xy 63.5 19.05))
     (stroke (width 0) (type default))
     (uuid "4242b99f-209f-dd36-86ea-11b2cd233569")
   )
   (global_label "Net-(R1-t1)"
     (shape input)
-    (at 229.87 24.13 0)
+    (at 63.5 19.05 0)
     (fields_autoplaced yes)
     (effects (font (size 1.27 1.27)) (justify right))
     (property "Intersheet References" "${INTERSHEET_REFS}"
@@ -406,6 +407,11 @@
       (effects (font (size 1.27 1.27)) (hide yes))
     )
     (uuid "1c713d79-bca5-3b4f-4751-495000e31f8c")
+  )
+  (wire
+    (pts (xy 63.5 19.05) (xy 63.5 31.75))
+    (stroke (width 0) (type default))
+    (uuid "b032e2b9-54bf-7665-2b24-df5378d742fe")
   )
   (sheet_instances
     (path "/" (page "1"))
