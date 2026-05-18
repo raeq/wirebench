@@ -22,7 +22,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Iterator
 
-from framework.errors import AmbiguousPinNameError
+from framework.errors import AmbiguousPinNameError, PartConfigurationError
 from framework.port import Port
 
 
@@ -48,6 +48,13 @@ class PortMap(Mapping[str, Port]):
             canonical.setdefault(self._by_number[n].name, []).append(n)
         self._canonical_to_pins = canonical
         # Build the disambiguated dict (the public name-keyed view).
+        # Collision case: a chip with a unique pin named 'DIG_1' AND a
+        # second pin set named 'DIG' that disambiguates to the same
+        # 'DIG_1' key.  The two pins are semantically distinct but the
+        # name-keyed slot is single-valued — silently overwriting one
+        # would lose access to a real pin via the name-keyed view.
+        # Refuse the construction so the chip class has to rename one
+        # of the two.
         self._disambiguated: dict[str, Port] = {}
         for n in sorted(self._by_number):
             port = self._by_number[n]
@@ -57,6 +64,17 @@ class PortMap(Mapping[str, Port]):
             else:
                 ordinal = siblings.index(n) + 1
                 key = f'{port.name}_{ordinal}'
+            if key in self._disambiguated:
+                other_pin = next(
+                    pn for pn, p in self._by_number.items()
+                    if p is self._disambiguated[key]
+                )
+                raise PartConfigurationError(
+                    f"PortMap key collision: pin {n} ({port.name!r}) "
+                    f"disambiguates to {key!r}, which is already claimed "
+                    f"by pin {other_pin}.  Rename one of the two so the "
+                    f"name-keyed view has a unique slot per pin."
+                )
             self._disambiguated[key] = port
 
     # ----- Mapping protocol ------------------------------------------

@@ -78,6 +78,14 @@ def _construct_any(cls: type[Part]) -> Part | None:
             return cast(Part, factory(input_names=('a',)))
         if cls.__name__ == 'Monostable':
             return cast(Part, factory(duration_ms=1.0))
+        if cls.__name__ == 'SeriesRectifier':
+            return cast(Part, factory(v_f=0.3))
+        if cls.__name__ == 'ZenerShunt':
+            return cast(Part, factory(v_z=5.1))
+        if cls.__name__ == 'MOSFETSwitch':
+            return cast(Part, factory(channel='n'))
+        if cls.__name__ == 'BJTSwitch':
+            return cast(Part, factory(polarity='npn'))
         return cast(Part, factory())
     except Exception:
         return None

@@ -59,6 +59,9 @@ The `docs/` folder beside this README has the design's pre-generated exports:
 - [`BatteryPackBoard.dot`](docs/BatteryPackBoard.dot) — Graphviz source for the schematic
 - [`BatteryPackBoard.mmd`](docs/BatteryPackBoard.mmd) — Mermaid flowchart
 - [`BatteryPackBoard.yosys.json`](docs/BatteryPackBoard.yosys.json) — Yosys/netlistsvg JSON
+- [`BatteryPackBoard.net-report.md`](docs/BatteryPackBoard.net-report.md) — every logical net, drivers, readers, domain
+- [`BatteryPackBoard.domain-report.md`](docs/BatteryPackBoard.domain-report.md) — ground domains and isolation boundaries
+- [`BatteryPackBoard.interface-report.md`](docs/BatteryPackBoard.interface-report.md) — public connector pins and their connections
 
 ## Going further
 

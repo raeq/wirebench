@@ -49,6 +49,9 @@ The `docs/` folder beside this README has the design's pre-generated exports:
 - [`Dice.dot`](docs/Dice.dot) — Graphviz source for the schematic
 - [`Dice.mmd`](docs/Dice.mmd) — Mermaid flowchart
 - [`Dice.yosys.json`](docs/Dice.yosys.json) — Yosys/netlistsvg JSON
+- [`Dice.net-report.md`](docs/Dice.net-report.md) — every logical net, drivers, readers, domain
+- [`Dice.domain-report.md`](docs/Dice.domain-report.md) — ground domains and isolation boundaries
+- [`Dice.interface-report.md`](docs/Dice.interface-report.md) — public connector pins and their connections
 
 ## Going further
 

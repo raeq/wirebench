@@ -48,6 +48,9 @@ The `docs/` folder beside this README has the design's pre-generated exports:
 - [`FiveVoltRailPower.dot`](docs/FiveVoltRailPower.dot) — Graphviz source for the schematic
 - [`FiveVoltRailPower.mmd`](docs/FiveVoltRailPower.mmd) — Mermaid flowchart
 - [`FiveVoltRailPower.yosys.json`](docs/FiveVoltRailPower.yosys.json) — Yosys/netlistsvg JSON
+- [`FiveVoltRailPower.net-report.md`](docs/FiveVoltRailPower.net-report.md) — every logical net, drivers, readers, domain
+- [`FiveVoltRailPower.domain-report.md`](docs/FiveVoltRailPower.domain-report.md) — ground domains and isolation boundaries
+- [`FiveVoltRailPower.interface-report.md`](docs/FiveVoltRailPower.interface-report.md) — public connector pins and their connections
 
 ## Going further
 

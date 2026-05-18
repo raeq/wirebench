@@ -50,6 +50,9 @@ The `docs/` folder beside this README has the design's pre-generated exports:
 - [`WaterAlarm.dot`](docs/WaterAlarm.dot) — Graphviz source for the schematic
 - [`WaterAlarm.mmd`](docs/WaterAlarm.mmd) — Mermaid flowchart
 - [`WaterAlarm.yosys.json`](docs/WaterAlarm.yosys.json) — Yosys/netlistsvg JSON
+- [`WaterAlarm.net-report.md`](docs/WaterAlarm.net-report.md) — every logical net, drivers, readers, domain
+- [`WaterAlarm.domain-report.md`](docs/WaterAlarm.domain-report.md) — ground domains and isolation boundaries
+- [`WaterAlarm.interface-report.md`](docs/WaterAlarm.interface-report.md) — public connector pins and their connections
 
 ## Going further
 

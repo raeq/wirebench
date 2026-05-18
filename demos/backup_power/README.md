@@ -53,6 +53,9 @@ The `docs/` folder beside this README has the design's pre-generated exports:
 - [`BackupPower.dot`](docs/BackupPower.dot) — Graphviz source for the schematic
 - [`BackupPower.mmd`](docs/BackupPower.mmd) — Mermaid flowchart
 - [`BackupPower.yosys.json`](docs/BackupPower.yosys.json) — Yosys/netlistsvg JSON
+- [`BackupPower.net-report.md`](docs/BackupPower.net-report.md) — every logical net, drivers, readers, domain
+- [`BackupPower.domain-report.md`](docs/BackupPower.domain-report.md) — ground domains and isolation boundaries
+- [`BackupPower.interface-report.md`](docs/BackupPower.interface-report.md) — public connector pins and their connections
 
 ## Going further
 
