@@ -164,5 +164,4 @@ Each pattern is a specific application of the central commitment: *every line of
 
 ## Further reading
 
-- [`CLAUDE.md`](https://github.com/raeq/wirebench/blob/main/CLAUDE.md) — the project's design philosophy in the form of contributor guidance; the source for most of the principles above.
-- The implementation specs that produced each major framework feature live alongside the repo at [github.com/raeq/wirebench](https://github.com/raeq/wirebench) — every spec explains the design decisions and trade-offs behind a specific feature.
+- The source code at [github.com/raeq/wirebench](https://github.com/raeq/wirebench) — every framework primitive is annotated with comments explaining the design decisions and trade-offs that produced its current shape.

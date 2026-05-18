@@ -75,4 +75,4 @@ Once you can build a circuit from one of these demos on a breadboard and confirm
 - Make modifications. Change the timing capacitor in the dice demo. Swap the comparator hysteresis values in the water alarm. Add a third LED to the doorbell protector. The framework will tell you immediately if any change breaks the topology; if it doesn't, the modification is buildable.
 - Design your own circuit using the parts already in `src/components/`. The component catalogue is in [`docs/component-library-data.md`](component-library-data.md).
 - Add a new component to the library if the part you want doesn't exist yet. The pattern is mechanical — look at any existing class in `src/components/` and follow it.
-- Contribute. The design philosophy lives in [`CLAUDE.md`](https://github.com/raeq/wirebench/blob/main/CLAUDE.md); the implementation specs that produced each major framework feature live in [`docs/`](./).
+- Contribute. The source is at [github.com/raeq/wirebench](https://github.com/raeq/wirebench); the design philosophy is the [`design-principles.md`](design-principles.md) page on this site.
