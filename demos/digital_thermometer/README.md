@@ -28,16 +28,15 @@ The DHT11_Module declares its `GND` pin as `PinFunction.GROUND` and `Direction.I
 
 ```python
 # In DigitalThermometer.__init__, a tempting consolidation:  the
-# digital and analog rails go to the same breadboard +/- strips
-# anyway, so why not just merge them?
-wire(self.vcc_a.out, self.vcc.out)
-# (or: wire(self.gnd_a.out, self.gnd.out))
+# digital ground (self.gnd) and the analog ground (self.gnd_a) go to
+# the same breadboard − rail anyway, so why not just merge them?
+wire(self.gnd.out, self.gnd_a.out)
 
 DigitalThermometer()
 # ShortCircuitError: wire() has multiple drivers ('out', 'out') — short circuit
 ```
 
-Each Rail has a single `out` port at `Direction.OUT` — wiring two of them together puts two drivers on one net. The framework keeps the analog and digital rails distinct because their `signal_type` differs (`Analog` vs `Digital`); merging them is a category error the framework catches before it can be soldered. The bench equivalent is two bench-supply outputs accidentally bonded — whichever supply's regulator is weaker shuts down first.
+The design declares two GND `Rail`s — `self.gnd` (`Digital`) for the SN74-family tie-offs, and `self.gnd_a` (`Analog`) for the DHT11's supply pins. Each Rail has a single `out` port at `Direction.OUT`, and tying two `OUT`s together puts two drivers on one net. The framework keeps the digital and analog rails distinct because their `signal_type` differs; merging them is a category error the framework catches before it can be soldered. The bench equivalent is two bench-supply outputs accidentally bonded — whichever supply's regulator is weaker shuts down first.
 
 ## Running it
 
