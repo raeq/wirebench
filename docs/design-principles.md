@@ -164,6 +164,4 @@ Each pattern is a specific application of the central commitment: *every line of
 
 ## Further reading
 
-- [`CLAUDE.md`](../CLAUDE.md) — the project's design philosophy in the form of contributor guidance; the source for most of the principles above.
-- [`docs/vision/modelling-architecture.md`](vision/modelling-architecture.md) — the framework's primitives (`Port`, `Pin`, `Circuit`, `Chip`, `Board`, `Connector`) explained in architectural depth.
-- The implementation specs under [`docs/`](.) — every major framework feature has a spec that explains the design decisions and trade-offs. Read [`refdes-spec.md`](refdes-spec.md), [`pin-id-spec.md`](pin-id-spec.md), and [`board-connector-spec.md`](board-connector-spec.md) in that order if you want a guided tour.
+- The source code at [github.com/raeq/wirebench](https://github.com/raeq/wirebench) — every framework primitive is annotated with comments explaining the design decisions and trade-offs that produced its current shape.

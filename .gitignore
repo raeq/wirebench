@@ -80,3 +80,7 @@ MANIFEST
 # at the repo root when the user runs them; they're not source.
 *.erc
 *.log
+
+# MkDocs build output — `mkdocs build` writes the static site here.
+# Local-only; CI uploads it to GitHub Pages as an artifact instead.
+/site/

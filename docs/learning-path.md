@@ -12,7 +12,7 @@ The framework expects you to be comfortable with:
 - **Programming an Arduino** (or equivalent) — enough that microcontroller pin names like `PB5` and references to "the I²C bus" don't bounce you. The `digital_thermometer/` demo onward leans on this.
 - **Breadboard basics** — what a power rail is, what GND is, what a current-limit resistor does. The framework won't teach you these from scratch, but it will hand you back the right intuitions as the refusal messages.
 
-If you've never lit an LED with a battery, start with [the project's Hello World example](../README.md#hello-world) and a real breadboard. Build it. Then come back here.
+If you've never lit an LED with a battery, start with [the project's Hello World example](https://github.com/raeq/wirebench#hello-world) and a real breadboard. Build it. Then come back here.
 
 ## The demos in order
 
@@ -75,4 +75,4 @@ Once you can build a circuit from one of these demos on a breadboard and confirm
 - Make modifications. Change the timing capacitor in the dice demo. Swap the comparator hysteresis values in the water alarm. Add a third LED to the doorbell protector. The framework will tell you immediately if any change breaks the topology; if it doesn't, the modification is buildable.
 - Design your own circuit using the parts already in `src/components/`. The component catalogue is in [`docs/component-library-data.md`](component-library-data.md).
 - Add a new component to the library if the part you want doesn't exist yet. The pattern is mechanical — look at any existing class in `src/components/` and follow it.
-- Contribute. The design philosophy lives in [`CLAUDE.md`](../CLAUDE.md); the implementation specs that produced each major framework feature live in [`docs/`](.).
+- Contribute. The source is at [github.com/raeq/wirebench](https://github.com/raeq/wirebench); the design philosophy is the [`design-principles.md`](design-principles.md) page on this site.
