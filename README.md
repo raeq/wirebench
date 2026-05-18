@@ -107,6 +107,10 @@ When `pytest` is green, the topology is sound.
 
 See [`docs/design-principles.md`](docs/design-principles.md) for why the framework is shaped the way it is.
 
+## Documentation
+
+The docs are published at **<https://raeq.github.io/wirebench/>** — searchable, with the learning path, prevention benchmark, design principles, and component catalogue cross-linked.
+
 ## Install
 
 Requires Python 3.10+:

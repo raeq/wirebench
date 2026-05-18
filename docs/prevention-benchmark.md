@@ -25,7 +25,7 @@ message.
 |-----------|---------|-------------|
 | wirebench | 0.1.0 (current `main`) | Each reproducer either raises at wire/mate/`__init__` time (the `construct` stage) or calls `export_to_string(design, 'assembly_guide')` which runs the assembly-guide ERC (the `erc` stage). |
 | SKiDL     | 2.2.3 (PyPI, installed via `uv pip install skidl`) | Each reproducer calls `ERC()` and the salient line is captured from stdout. The SKiDL built-in library was used (`set_default_tool(SKIDL)`) — the KiCad symbol library was not available in this environment. |
-| KiCad ERC | *not installed* | **Pending hands-on capture** — `kicad-cli` wasn't installed when this document was first written, so the KiCad cells below reflect *documented* ERC behaviour rather than measured output. See [`../.plans/prevention-benchmark/kicad/README.md`](../.plans/prevention-benchmark/kicad/README.md) for what each schematic should contain and the expected ERC substring. Re-run with `kicad-cli sch erc` and update each cell when the schematics land. |
+| KiCad ERC | *not installed* | **Pending hands-on capture** — `kicad-cli` wasn't installed when this document was first written, so the KiCad cells below reflect *documented* ERC behaviour rather than measured output. The benchmark archive under `.plans/prevention-benchmark/kicad/` (local-only, git-ignored) holds per-defect notes for what each schematic should contain and the expected ERC substring; re-run with `kicad-cli sch erc` and update each cell when the schematics land. |
 
 Cells marked **pending** are the unverified ones. Cells marked
 `construct` / `erc` / `never` / `scope` reflect *what the tool actually

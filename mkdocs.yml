@@ -1,0 +1,28 @@
+site_name: wirebench
+site_url: https://raeq.github.io/wirebench/
+repo_url: https://github.com/raeq/wirebench
+repo_name: raeq/wirebench
+
+theme:
+  name: material
+  palette:
+    primary: green
+  features:
+    - navigation.instant
+    - search.suggest
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - Learning path: learning-path.md
+  - Prevention benchmark: prevention-benchmark.md
+  - Design principles: design-principles.md
+  - Component catalogue: component-library-data.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - toc:
+      permalink: true
