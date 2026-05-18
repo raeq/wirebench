@@ -71,6 +71,33 @@ def test_route_net_three_pins_chain():
     assert 2 <= len(segs) <= 4
 
 
+def test_route_net_coincident_pins_dedup_to_nothing():
+    """Two pins snapping to the same grid point must not emit a wire."""
+    # Both points land on the same 1.27 mm grid cell after snapping.
+    assert route_net([(10.0, 10.0), (10.0, 10.0)]) == []
+    assert route_net([(10.0, 10.0), (10.1, 10.1)]) == []
+
+
+def test_route_net_emits_no_zero_length_segments():
+    """No emitted segment may have start == end."""
+    segs = route_net([(10.0, 10.0), (50.0, 10.0), (50.0, 10.4)])
+    for a, b in segs:
+        assert a != b, f"zero-length segment emitted: {a}→{b}"
+
+
+def test_route_net_emits_no_duplicate_segments():
+    """A segment and its reverse must not both appear in the output."""
+    segs = route_net([(0.0, 0.0), (20.0, 0.0), (20.0, 20.0), (0.0, 20.0)])
+    canonical = {
+        (a, b) if a <= b else (b, a)
+        for a, b in segs
+    }
+    assert len(canonical) == len(segs), (
+        f"duplicate segments emitted: {len(segs)} raw, "
+        f"{len(canonical)} canonical"
+    )
+
+
 # ---------------------------------------------------------------------------
 # find_junctions
 # ---------------------------------------------------------------------------

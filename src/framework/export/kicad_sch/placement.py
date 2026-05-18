@@ -9,7 +9,8 @@ Replaces the naive grid layout with a deterministic bench-readable layout:
   Stage 6 — Cluster detection and breakup (up to 10 iterations)
   Stage 8 — Page sizing (A4 → A3 → A2 → A1)
 
-See .plans/phase-2.5-spec.md §5 for the full algorithm description.
+The algorithm and tuning constants are documented inline below; the
+functions are organised in the same stage order as the list above.
 """
 from __future__ import annotations
 

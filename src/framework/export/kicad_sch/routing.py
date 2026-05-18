@@ -30,27 +30,46 @@ def route_net(
     Connects pins in X-sorted order using L-shapes (horizontal first).
     Returns a list of (start, end) tuples where each segment is purely
     horizontal or purely vertical.
+
+    Zero-length and duplicate segments are filtered out: multiple pins
+    snapping to the same grid point would otherwise produce overlapping
+    wires and inflate `find_junctions` endpoint counts into false dots.
     """
     if len(pin_ends) < 2:
         return []
 
-    pts = sorted((_snap(x), _snap(y)) for x, y in pin_ends)
-    segments: list[Segment] = []
+    # Snap then de-duplicate — two pins landing on the same grid point
+    # would generate a zero-length L-shape pair below.
+    snapped = sorted({(_snap(x), _snap(y)) for x, y in pin_ends})
+    if len(snapped) < 2:
+        return []
 
-    for i in range(len(pts) - 1):
-        ax, ay = pts[i]
-        bx, by = pts[i + 1]
+    raw: list[Segment] = []
+    for i in range(len(snapped) - 1):
+        ax, ay = snapped[i]
+        bx, by = snapped[i + 1]
 
         if abs(ay - by) < 0.001:
-            # Same Y — single horizontal segment.
-            segments.append(((ax, ay), (bx, by)))
+            raw.append(((ax, ay), (bx, by)))
         elif abs(ax - bx) < 0.001:
-            # Same X — single vertical segment.
-            segments.append(((ax, ay), (bx, by)))
+            raw.append(((ax, ay), (bx, by)))
         else:
-            # L-shape: go horizontal first (to bx), then vertical.
-            segments.append(((ax, ay), (bx, ay)))
-            segments.append(((bx, ay), (bx, by)))
+            # L-shape: horizontal then vertical.
+            raw.append(((ax, ay), (bx, ay)))
+            raw.append(((bx, ay), (bx, by)))
+
+    # Drop zero-length segments and dedupe by canonical (sorted-endpoint)
+    # form so a segment and its reverse don't both ship.
+    seen: set[tuple[tuple[float, float], tuple[float, float]]] = set()
+    segments: list[Segment] = []
+    for a, b in raw:
+        if a == b:
+            continue
+        key = (a, b) if a <= b else (b, a)
+        if key in seen:
+            continue
+        seen.add(key)
+        segments.append((a, b))
 
     return segments
 

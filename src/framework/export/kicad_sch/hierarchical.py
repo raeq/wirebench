@@ -35,7 +35,14 @@ _PAPER_SIZES: tuple[tuple[int, int, str], ...] = (
 
 
 def collect_boards(design: Part) -> list[Board]:
-    """Return the immediate Board children of `design`."""
+    """Return every immediate Board child of `design`, in declaration order.
+
+    A `Circuit` containing a single Board yields a 1-element list; a
+    `Circuit` containing only non-Board parts yields an empty list; a
+    `design` that isn't a `Circuit` also yields an empty list. Use
+    `is_multi_board()` to decide whether hierarchical-sheet emission
+    applies — this function reports presence, not multi-Board-ness.
+    """
     if not isinstance(design, Circuit):
         return []
     return [p for p in design.parts if isinstance(p, Board)]
