@@ -15,9 +15,10 @@ theme:
 nav:
   - Home: index.md
   - Learning path: learning-path.md
+  - Components: parts.md
   - Prevention benchmark: prevention-benchmark.md
   - Design principles: design-principles.md
-  - Component catalogue: component-library-data.md
+  - Component catalogue (narrative): component-library-data.md
 
 markdown_extensions:
   - admonition
