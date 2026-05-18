@@ -24,6 +24,7 @@ from typing import Any, cast
 from framework.circuit import Circuit
 from framework.errors import LoadError
 from framework.part import Part
+from framework.port import Direction
 from framework.wire import wire
 
 from framework.import_kicad.nets import (
@@ -174,17 +175,33 @@ def import_from_ast(
         is_low  = looks_like_low_rail(net.name)
 
         if is_high or is_low:
-            # Rail-fed net: wirebench's exporter inlines the Rail into
-            # the net name, and the original design may have had one
-            # Digital Rail and one Analog Rail sharing the bench-level
-            # GND/VCC.  Split per-signal_type so we don't try to wire
-            # mixed Digital/Analog ports together.
+            # Split by signal_type first — a mixed-signal GND/VCC net
+            # becomes independent per-type buckets so we never attempt
+            # to wire Digital and Analog ports together.
             by_type: dict[type, tuple[list[Any], list[tuple[str, int]]]] = {}
             for port, node in zip(resolved_ports, resolved_nodes):
                 bucket = by_type.setdefault(port.signal_type, ([], []))
                 bucket[0].append(port)
                 bucket[1].append(node)
             for signal_type, (type_ports, type_nodes) in by_type.items():
+                # If any port in this signal-type bucket has Direction.OUT,
+                # a chip already drives the net for that signal type.
+                # Synthesising a Rail on top would add a second driver and
+                # raise ShortCircuitError — wire directly instead.
+                if any(p.direction is Direction.OUT for p in type_ports):
+                    if len(type_ports) >= 2:
+                        wire(*type_ports)
+                        report.wire_groups.append(WireGroup(
+                            net_name=net.name,
+                            rail_polarity=None,
+                            signal_type_name=None,
+                            nodes=list(type_nodes),
+                        ))
+                    else:
+                        report.skipped_nets.append(
+                            net.name or f"code{net.code}"
+                        )
+                    continue
                 pool = high_rail_by_signal if is_high else low_rail_by_signal
                 rail = pool.get(signal_type)
                 if rail is None:
