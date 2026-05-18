@@ -171,6 +171,25 @@ def test_unknown_class_name_returns_error() -> None:
     assert 'DesignZZZ' in message
 
 
+def test_missing_positional_returns_json() -> None:
+    """argparse usage errors emit a JSON payload, not the default
+    stderr-only message — preserves the one-JSON-object-per-invocation
+    contract for downstream consumers."""
+    code, out = _invoke()
+    assert code == 2
+    assert out['status'] == 'error'
+    assert out['error_class'] == 'UsageError'
+
+
+def test_sibling_module_import_resolves() -> None:
+    """A design that imports a sibling helper module from its own
+    directory should resolve, matching how `python design.py` would
+    behave when run from that directory."""
+    code, out = _invoke(str(FIXTURES / 'sibling_import_design.py'))
+    assert code == 0, f"expected success, got {out}"
+    assert out['status'] == 'constructed'
+
+
 # ---------------------------------------------------------- schema shape
 
 

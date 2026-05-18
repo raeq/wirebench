@@ -11,10 +11,18 @@ Exit codes:
     1 — framework caught a defect        (status: failed)
     2 — validator couldn't run           (status: error)
 
-The output is always a single JSON object on stdout terminated with a
+Every well-formed validation outcome — success, framework refusal,
+file-not-found, syntax error, missing target class, argparse usage
+error — emits a single JSON object on stdout terminated with a
 newline. Diagnostic text from the loaded design (prints, warnings) is
-captured and discarded — stderr stays free for the validator's own
-traceback when a defect was caught.
+captured and discarded.
+
+Construction-time exceptions outside the framework's known set
+(`WirebenchError`, `ValueError`, `TypeError`) are re-raised as Python
+tracebacks rather than wrapped into JSON — they signal a framework
+bug or a non-design problem rather than a design defect, and surfacing
+them loudly is the right behaviour for the operator.  See the spec
+(`.plans/phase-1.5b-spec.md` §7 step 5) for rationale.
 """
 from __future__ import annotations
 
@@ -40,8 +48,25 @@ from framework.errors import WirebenchError
 from cli.validate_extractors import empty_details, extract
 
 
+class _JSONArgumentParser(argparse.ArgumentParser):
+    """argparse parser that emits a `status: error` JSON payload
+    instead of writing to stderr + exiting silently.  Preserves the
+    one-JSON-object-per-invocation contract on usage errors (missing
+    positional, unknown flag, etc.)."""
+
+    def error(self, message: str) -> None:  # type: ignore[override]
+        _emit({
+            'status':      'error',
+            'design':      None,
+            'error_class': 'UsageError',
+            'message':     message,
+            'details':     empty_details(),
+        })
+        raise SystemExit(2)
+
+
 def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
+    parser = _JSONArgumentParser(
         prog='wirebench validate',
         description=(
             'Construct a Circuit subclass and emit a structured JSON '
@@ -81,14 +106,27 @@ def _error(message: str, error_class: str, *, design: str | None = None) -> int:
 def _load_module(path: Path) -> Any:
     """Import `path` as a module under a synthetic name. Raises on
     FileNotFoundError / SyntaxError / ImportError so the caller can
-    map those to `status: error`."""
+    map those to `status: error`.
+
+    The file's parent directory is prepended to `sys.path` during the
+    load so designs that import sibling helper modules (a common
+    pattern under `demos/<name>/`) resolve the same way as when the
+    file is executed directly."""
     if not path.exists():
         raise FileNotFoundError(f"File not found: {path}")
     spec = importlib.util.spec_from_file_location('_wirebench_validate', path)
     if spec is None or spec.loader is None:
         raise ImportError(f"Could not load module from {path}")
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    parent_dir = str(path.resolve().parent)
+    sys.path.insert(0, parent_dir)
+    try:
+        spec.loader.exec_module(module)
+    finally:
+        try:
+            sys.path.remove(parent_dir)
+        except ValueError:
+            pass
     return module
 
 

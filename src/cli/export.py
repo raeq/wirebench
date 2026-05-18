@@ -68,13 +68,3 @@ def run_export(argv: list[str]) -> int:
     else:
         sys.stdout.write(text)
     return 0
-
-
-def main(argv: list[str] | None = None) -> int:
-    """Backwards-compatible entrypoint — accepts the full argv so existing
-    `python -m cli.export ...` invocations keep working."""
-    return run_export(list(sys.argv[1:] if argv is None else argv))
-
-
-if __name__ == '__main__':
-    raise SystemExit(main())
