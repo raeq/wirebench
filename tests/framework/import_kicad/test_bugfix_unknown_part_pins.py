@@ -6,8 +6,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
 from framework.import_kicad import import_from_ast, import_kicad_netlist
 from framework.import_kicad.emit_python import emit
 from framework.import_kicad.parser import parse
