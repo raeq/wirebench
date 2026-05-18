@@ -9,6 +9,8 @@ that to the framework itself.
 """
 from __future__ import annotations
 
+import inspect
+import re
 from typing import Any, TypedDict
 
 # Trigger component registration so the registry is fully populated.
@@ -36,6 +38,7 @@ from components.passives.inductor  import Inductor
 from components.passives.led       import LED
 from components.passives.rail      import Rail
 from components.passives.resistor  import Resistor
+from components.relays.spdt        import Relay_SPDT
 
 
 KIND_BY_BASE: list[tuple[type, str]] = [
@@ -49,6 +52,7 @@ KIND_BY_BASE: list[tuple[type, str]] = [
     (BJT, 'transistor'),
     (MOSFET, 'transistor'),
     (Diode, 'diode'),
+    (Relay_SPDT, 'relay'),
     (Resistor, 'passive'),
     (Capacitor, 'passive'),
     (Inductor, 'passive'),
@@ -85,14 +89,24 @@ def _kind_of(cls: type) -> str:
 
 
 def _description_of(cls: type) -> str:
+    """Join the docstring's first paragraph into a single one-line
+    summary.  Python's `inspect.cleandoc` strips leading whitespace,
+    after which we collapse the contiguous run of non-blank lines into
+    one space-separated string — handles wrapped one-sentence
+    summaries like BQ27546-G1's two-line opening verbatim."""
     doc = cls.__doc__
     if not doc:
         return cls.__name__
-    for line in doc.splitlines():
+    cleaned = inspect.cleandoc(doc)
+    paragraph_lines: list[str] = []
+    for line in cleaned.splitlines():
         stripped = line.strip()
-        if stripped:
-            return stripped
-    return cls.__name__
+        if not stripped:
+            break
+        paragraph_lines.append(stripped)
+    if not paragraph_lines:
+        return cls.__name__
+    return ' '.join(paragraph_lines)
 
 
 def _pin_count_of(cls: type) -> int | None:
@@ -142,30 +156,34 @@ def _stringify_pin_functions(
     }
 
 
-def _has_behavioural_cell(cls: type) -> bool:
-    """A chip is behavioural if it has at least one cell that drives an
-    OUT pin internally — i.e. the chip's `__init__` instantiates a
-    cell.  The framework already enforces this invariant at
-    construction (`_assert_every_out_pin_is_internally_driven`), so the
-    test is structural: does the class subclass Chip AND have a non-
-    empty `cells` argument path?
+_EMPTY_CELLS_PATTERN = re.compile(r"cells\s*=\s*(?:\[\s*\]|\(\s*\))")
 
-    Without instantiating, we can't directly observe what the chip
-    constructor passes for `cells`.  Use a lighter proxy: assume any
-    Chip subclass with a non-default `__init__` (i.e. not directly
-    inheriting Chip.__init__) instantiates cells.  False positives are
-    benign — the field reads as 'this chip models behaviour' rather
-    than 'this chip's pins are externally driven only'.
+
+def _has_behavioural_cell(cls: type) -> bool:
+    """A chip is behavioural if its `__init__` instantiates cells —
+    i.e. the chip models internal logic rather than just declaring
+    a pin map.
+
+    Detection: read the chip's `__init__` source and look for an
+    explicit `cells=[]` or `cells=()` literal at the `super().__init__`
+    call site.  Black-box sensor chips (BMP280, AM2302, …) and bare-
+    firmware-driven MCUs (ATmega328P, …) use this pattern; their
+    actual behaviour is supplied by the test scenario or a subclass.
+    Anything else — every chip with named cell instances — counts as
+    behavioural for the catalogue's purposes.
     """
-    if not issubclass(cls, Chip):
+    if not issubclass(cls, Chip) or cls is Chip:
         return False
-    # Bare-firmware-driven chips (ATmega328P et al.) explicitly opt out
-    # of the cell requirement; report them as non-behavioural in the
-    # structural sense the catalogue cares about.
     if getattr(cls, 'BARE_FIRMWARE_DRIVEN', False):
         return False
-    # The Chip base provides a no-op `__init__` only in its abstract
-    # form; every concrete chip overrides.  Use that as the signal.
+    try:
+        source = inspect.getsource(cls.__init__)
+    except (OSError, TypeError):
+        # Inherited __init__ (rare for chips) means no own
+        # implementation — treat as not behavioural.
+        return False
+    if _EMPTY_CELLS_PATTERN.search(source):
+        return False
     return cls.__init__ is not Chip.__init__
 
 

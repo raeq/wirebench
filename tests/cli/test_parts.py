@@ -142,6 +142,48 @@ def test_unknown_kind_returns_usage_error() -> None:
     assert code == 2
 
 
+def test_unknown_pin_function_returns_usage_error() -> None:
+    """A typo like `--pin-function PWOER` should fail loudly, not
+    silently return an empty catalogue."""
+    code, _ = _invoke('--pin-function', 'PWOER')
+    assert code == 2
+
+
+def test_pin_function_filter_is_case_insensitive() -> None:
+    upper = _invoke_json('--pin-function', 'POWER')
+    lower = _invoke_json('--pin-function', 'power')
+    assert upper == lower
+
+
 def test_unknown_subcommand_returns_usage_error() -> None:
     code, _ = _invoke('garbage')
     assert code == 2
+
+
+# ---------------------------------------------------------- specific cases
+
+
+def test_relay_kind_returns_relay_spdt() -> None:
+    parts = _invoke_json('--kind', 'relay')
+    assert parts
+    assert any(p['class_name'] == 'Relay_SPDT' for p in parts)
+    assert all(p['kind'] == 'relay' for p in parts)
+
+
+def test_wrapped_docstring_joins_into_single_line_description() -> None:
+    """BQ27546G1's first paragraph wraps across two source lines; the
+    description should not be truncated at the first newline."""
+    parts = _invoke_json()
+    bq = next(p for p in parts if p['class_name'] == 'BQ27546G1')
+    # The full first paragraph mentions 'pack-side integration', which
+    # lives on the second physical line of the docstring.
+    assert 'pack-side integration' in bq['description']
+
+
+def test_black_box_sensor_is_not_behavioural() -> None:
+    """BMP280 uses `cells=[]` explicitly — should NOT match --has-cell."""
+    behavioural = _invoke_json('--has-cell')
+    names = {p['class_name'] for p in behavioural}
+    assert 'BMP280' not in names
+    assert 'ATmega328P' not in names  # BARE_FIRMWARE_DRIVEN
+    assert 'LM7805' in names           # real internal cell

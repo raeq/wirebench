@@ -17,6 +17,12 @@ from typing import Any
 from cli.parts_data import (
     KNOWN_KINDS, PartDescriptor, all_parts, filter_parts,
 )
+from framework.pin_function import PinFunction
+
+# Surface PinFunction names (the enum's member identifiers — POWER,
+# GROUND, …) so `--pin-function` errors loudly on typos rather than
+# silently returning an empty catalogue.
+_KNOWN_PIN_FUNCTIONS = sorted(member.name for member in PinFunction)
 
 
 class _JSONArgumentParser(argparse.ArgumentParser):
@@ -60,9 +66,11 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         '--pin-function',
+        type=str.upper,  # case-insensitive entry, store as canonical name
+        choices=_KNOWN_PIN_FUNCTIONS,
         help=(
-            'Only parts that expose pins with this function '
-            '(e.g. POWER, GROUND, REFERENCE, RESET, CLOCK_IN, NC).'
+            'Only parts that expose pins with this function. '
+            f"One of: {', '.join(_KNOWN_PIN_FUNCTIONS)}."
         ),
     )
     parser.add_argument(
