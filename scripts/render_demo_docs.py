@@ -2,8 +2,8 @@
 
 Auto-discovers every demo by walking `demos/<subdir>/*.py`, importing
 each module, and finding every `Circuit` subclass *defined in* that
-module.  For each such class, exports all ten formats (bom, dot,
-kicad, mermaid, spice, yosys, assembly_guide, net_report,
+module.  For each such class, exports all eleven formats (bom, dot,
+kicad, kicad_sch, mermaid, spice, yosys, assembly_guide, net_report,
 domain_report, interface_report) into `demos/<subdir>/docs/<Class>.<ext>`,
 and additionally renders the Graphviz output as a top-to-bottom SVG
 using the real `dot` binary.
@@ -57,6 +57,7 @@ import framework.export.assembly_guide   # noqa: F401, E402
 import framework.export.net_report       # noqa: F401, E402
 import framework.export.domain_report    # noqa: F401, E402
 import framework.export.interface_report # noqa: F401, E402
+import framework.export.kicad_sch         # noqa: F401, E402
 
 from framework.circuit import Circuit                # noqa: E402
 from framework.errors import BreadboardIncompatibleError  # noqa: E402
@@ -70,6 +71,7 @@ EXTENSIONS = {
     'bom':              'bom.csv',
     'dot':              'dot',
     'kicad':            'net',
+    'kicad_sch':        'kicad_sch',
     'mermaid':          'mmd',
     'spice':            'cir',
     'yosys':            'yosys.json',
