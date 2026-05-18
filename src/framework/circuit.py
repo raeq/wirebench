@@ -210,7 +210,13 @@ class Circuit(Part):
             if len(outs) > 1:
                 shorts.append(', '.join(
                     f"'{type(o).__name__}.{p.name}'" for o, p in outs))
-            elif len(outs) == 0 and len(bidirs) > 1:
+            elif (len(outs) == 0 and len(bidirs) > 1
+                  and not net.dynamically_driven):
+                # `dynamically_driven` is the designer's explicit
+                # assertion that the net is driven through a feedback
+                # loop (e.g. op-amp bias divider, RC timing network)
+                # rather than statically by an OUT port.  Short-circuit
+                # detection above stays strict regardless.
                 floats.append(', '.join(
                     f"'{type(o).__name__}.{p.name}'" for o, p in bidirs))
 

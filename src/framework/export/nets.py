@@ -13,6 +13,7 @@ generation.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 from framework.circuit import Circuit
 from framework.part import Part
@@ -32,10 +33,15 @@ class LogicalNet:
               ports attached to this net.  Sorted by owner refdes
               (where applicable) then port name for deterministic
               emission.
+    dynamically_driven — True if any underlying Node carries the
+              designer-asserted dynamically_driven flag.  Set at the
+              wire() call site to opt this net out of the multi-BIDIR-
+              no-driver validation rule.
     """
     id: int
     nodes: frozenset[int]
     ports: tuple[tuple[Part, Port], ...]
+    dynamically_driven: bool = False
 
 
 def _collect_components(roots: list[Part]) -> list[Part]:
@@ -123,6 +129,15 @@ def compute_logical_nets(design: Part) -> list[LogicalNet]:
     components = _collect_components(roots)
     index = _build_node_index(components)
 
+    # Side-index from id(node) → Node so we can read per-Node
+    # designer annotations (e.g. dynamically_driven) without changing
+    # the existing index shape.
+    nodes_by_id: dict[int, Any] = {}
+    for fn in components:
+        for port in fn.ports.values():
+            if port.node is not None:
+                nodes_by_id.setdefault(id(port.node), port.node)
+
     nets: list[LogicalNet] = []
     visited: set[int] = set()
     next_id = 0
@@ -149,10 +164,20 @@ def compute_logical_nets(design: Part) -> list[LogicalNet]:
                     real_ports.append((owner, p))
             real_ports.sort(key=lambda op: _port_sort_key(*op))
 
+            # If any underlying Node in this logical net carries the
+            # dynamically_driven annotation, propagate it — one
+            # annotated Node is enough to opt the whole logical net out
+            # of the multi-BIDIR-no-driver rule.
+            dyn = any(
+                getattr(nodes_by_id.get(member_nid), 'dynamically_driven', False)
+                for member_nid in membership
+            )
+
             nets.append(LogicalNet(
                 id=next_id,
                 nodes=frozenset(membership),
                 ports=tuple(real_ports),
+                dynamically_driven=dyn,
             ))
             next_id += 1
     return nets

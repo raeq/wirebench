@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 class Node:
     """A Kirchhoff junction node. Carries a potential value within one ground domain."""
 
-    __slots__ = ('name', 'domain', '_value', '_ports')
+    __slots__ = ('name', 'domain', '_value', '_ports', 'dynamically_driven')
 
     def __init__(self, name: str, domain: GroundDomain) -> None:
         self.name = name
@@ -23,6 +23,11 @@ class Node:
         # port across the shared node to every other port on the same
         # net.
         self._ports: list[Port] = []
+        # Designer assertion: this node is dynamically driven through
+        # the surrounding feedback loop, so Circuit._validate's
+        # multi-BIDIR-no-driver rule should not apply.  Promoted to
+        # True by `wire(..., dynamically_driven=True)`; never cleared.
+        self.dynamically_driven: bool = False
 
     @property
     def value(self) -> Any:

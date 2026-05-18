@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import Annotated, Any, Literal, Union
 
-from pydantic import BaseModel, ConfigDict, Discriminator, Field
+from pydantic import BaseModel, ConfigDict, Discriminator, Field, model_serializer
 
 
 # Pattern fragments shared across record families.
@@ -491,6 +491,18 @@ class WireRecord(_Record):
         list[Annotated[str, Field(min_length=1)]],
         Field(min_length=2),
     ]
+    # Designer assertion that the resulting node is driven through a
+    # feedback loop, suppressing the multi-BIDIR-no-driver rule on this
+    # net only.  Omitted from emitted JSON when False to keep the
+    # format compact for the common case.
+    dynamically_driven: bool = False
+
+    @model_serializer(mode='wrap')
+    def _omit_default_dyn(self, handler: Any) -> dict[str, Any]:
+        data: dict[str, Any] = handler(self)
+        if not self.dynamically_driven:
+            data.pop('dynamically_driven', None)
+        return data
 
 
 class MateRecord(_Record):
