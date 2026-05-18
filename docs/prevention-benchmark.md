@@ -68,7 +68,7 @@ Defects that produce intermittent / erratic behaviour.
 | **#13** Forbidden runtime state on SR latch (S=1, R=1) | **runtime** — `ForbiddenStateError: Invalid: S and R both active` *(raised by `NORLatch.evaluate()` — caught when the circuit is simulated, not at design time)* | scope *(pending)* — KiCad has no runtime simulator | scope — SKiDL has no runtime simulator |
 | **#14** Ground-domain crossing without an isolator | **construct** — `DomainCrossingError: Cannot wire ports across ground domains: 'a' (electrical), 'b' (SECONDARY)` | scope *(pending)* — no ground-domain model | scope — no ground-domain model |
 | **#15** Chip declares OUT pin but no behavioural cell drives it | **construct** — `PartConfigurationError: PartiallyDriven declares pin 'y_2' (pin 3) as Direction.OUT but no behavioural cell drives its internal face` *(sister to #6 — same invariant, different geometry)* | scope *(pending)* — same as #6 | scope — same as #6 |
-| **#16** I²C peripheral SCL pull-up missing | **never** — SCL on most peripherals is `Direction.IN`; no drive-type predicate fires *(SDA pull-up IS caught via the OPEN_DRAIN predicate — see #12)* | scope *(pending)* — no I²C-aware predicate | scope — no I²C-aware predicate |
+| **#16** I²C peripheral SCL pull-up missing | **erc** — `BreadboardIncompatibleError: Chips have open-drain / open-collector pins without a pull-up resistor to the + rail` *(clock-stretching peripherals declare `SCL` as `Direction.BIDIR + DriveType.OPEN_DRAIN`; the existing OD predicate catches a missing pull-up on the SCL bus segment)* | scope *(pending)* — no I²C-aware predicate | scope — no I²C-aware predicate |
 
 ### Wrong-part purchases
 
@@ -108,12 +108,18 @@ terminals connecting to known-ground nets, raising a new
 `PolarityError` (to be reintroduced alongside its raise site, as one
 coherent change).
 
-### Gap C — missing I²C SCL pull-up (defect #16)
-Wirebench catches missing SDA pull-ups via the OPEN_DRAIN predicate,
-but SCL is modelled as `Direction.IN` on peripherals — no drive-type
-predicate fires. **Work item (Phase 6.1):** add an I²C-bus check
-that, on any chip whose `PIN_DRIVE_TYPES` includes SDA as OPEN_DRAIN,
-also requires SCL to have a path to a pull-up.
+### ~~Gap C — missing I²C SCL pull-up (defect #16)~~ — closed in Phase 1.5a.2
+
+Originally noted as a gap: SCL was declared `Direction.IN` on
+peripheral chips, so no drive-type predicate fired and the framework
+was silent on a missing SCL pull-up — the textbook *"my I²C bus is
+intermittently corrupting reads"* bug. **Closed:** every
+clock-stretching I²C peripheral in the catalogue (`DS1307`,
+`MPU6050`, `BQ27546G1`) now declares its `SCL` pin as
+`Direction.BIDIR + DriveType.OPEN_DRAIN` — the same shape SDA carries.
+The existing OD predicate then enforces the pull-up requirement on
+the SCL net identically to SDA. Defect #16 moved from `never` to
+`erc` in the table above.
 
 ### Gap D — runtime-only defects need a separate execution path (defect #13)
 The SR-latch S=R=1 catch only fires when the latch's `evaluate()` is

@@ -9,7 +9,7 @@ from framework.signals import Analog, Digital
 EXPECTED_PINS = (
     ( 1, 'SRP',   Direction.IN,    Analog),
     ( 2, 'HDQ',   Direction.BIDIR, Digital),
-    ( 3, 'SCL',   Direction.IN,    Digital),
+    ( 3, 'SCL',   Direction.BIDIR, Digital),
     ( 4, 'SRN',   Direction.IN,    Analog),
     ( 5, 'TS',    Direction.IN,    Analog),
     ( 6, 'SDA',   Direction.BIDIR, Digital),

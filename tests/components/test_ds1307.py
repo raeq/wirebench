@@ -8,7 +8,7 @@ EXPECTED_PINS = (
     (3, 'VBAT',    Direction.IN),
     (4, 'GND',     Direction.IN),
     (5, 'SDA',     Direction.BIDIR),
-    (6, 'SCL',     Direction.IN),
+    (6, 'SCL',     Direction.BIDIR),
     (7, 'SQW_OUT', Direction.OUT),
     (8, 'VCC',     Direction.IN),
 )

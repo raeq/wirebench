@@ -33,9 +33,13 @@ class MPU6050(Chip):
     FOOTPRINT: ClassVar[str | None] = "Sensor_Motion:InvenSense_QFN-24_4x4mm_P0.5mm"
     # I²C SDA — open-drain per protocol.  Pull-up to VCC (typically
     # 2.2-4.7 kΩ for the 400 kHz fast mode the chip supports) required.
-    # AUX_DA is the auxiliary I²C SDA for the on-board master function;
-    # same drive type.
+    # SCL is BIDIR open-drain because the MPU-6050 clock-stretches during
+    # register reads (register map traversal across the internal
+    # subsystems) — datasheet section "I²C Bus Operation", "Clock
+    # stretching is supported." AUX_DA is the auxiliary I²C SDA for the
+    # on-board master function; same drive type.
     PIN_DRIVE_TYPES: ClassVar[dict[str, "DriveType"]] = {
+        'SCL':    DriveType.OPEN_DRAIN,
         'SDA':    DriveType.OPEN_DRAIN,
         'AUX_DA': DriveType.OPEN_DRAIN,
     }
@@ -52,7 +56,7 @@ class MPU6050(Chip):
         (13, 'VDD',    Direction.IN,    Analog),
         (18, 'GND',    Direction.IN,    Analog),
         (20, 'CPOUT',  Direction.OUT,   Analog),
-        (23, 'SCL',    Direction.IN,    Digital),
+        (23, 'SCL',    Direction.BIDIR, Digital),
         (24, 'SDA',    Direction.BIDIR, Digital),
     )
 
