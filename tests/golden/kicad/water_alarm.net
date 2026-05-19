@@ -30,6 +30,8 @@
   )
   (nets
     (net (code "1") (name "GND")
+      (node (ref "D1") (pin "2") (pintype "input"))
+      (node (ref "D2") (pin "2") (pintype "input"))
       (node (ref "U1") (pin "8") (pintype "input"))
       (node (ref "U2") (pin "3") (pintype "input"))
       (node (ref "U2") (pin "5") (pintype "input"))

@@ -33,7 +33,11 @@ class LED(Part):
     Ports
     -----
     anode   (IN, Digital) — connect to the driving logic output
-    cathode (IN, Digital, optional) — connect to GND rail; floating = GND
+    cathode (IN, Digital) — connect to the GND rail (or to a sink path
+                            via a current-limit resistor). Both pins
+                            are mandatory: a real LED with a floating
+                            cathode does not light. The framework
+                            refuses the bug at construction time.
     """
 
     V_F:     float = 2.0    # forward voltage drop, volts (typical red LED)
@@ -105,8 +109,8 @@ class LED(Part):
         # whose inputs are floating.
         self._lit: bool | None = None
         self._ports = {
-            'anode':   Port('anode',   Direction.IN, domain, mandatory=True,  signal_type=Digital),
-            'cathode': Port('cathode', Direction.IN, domain, mandatory=False, signal_type=Digital),
+            'anode':   Port('anode',   Direction.IN, domain, mandatory=True, signal_type=Digital),
+            'cathode': Port('cathode', Direction.IN, domain, mandatory=True, signal_type=Digital),
         }
 
     @property

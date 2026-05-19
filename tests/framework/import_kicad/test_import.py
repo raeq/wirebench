@@ -44,6 +44,10 @@ def test_imports_water_alarm_demo_export():
 
 
 def test_minimal_netlist_with_one_two_pin_net():
+    # Resistor → LED chain with explicit power and ground nets. LED's
+    # anode and cathode are both mandatory (a real LED with a floating
+    # cathode doesn't light), so the importer must land both on driven
+    # nets for the resulting circuit to pass ERC.
     text = """
     (export (version "E")
       (components
@@ -52,14 +56,22 @@ def test_minimal_netlist_with_one_two_pin_net():
         (comp (ref "D1") (value "red")
           (libsource (lib "Device") (part "LED"))))
       (nets
-        (net (code "1") (name "Net-(R1-Pad1)")
-          (node (ref "R1") (pin "1"))
-          (node (ref "D1") (pin "1")))))
+        (net (code "1") (name "+5V")
+          (node (ref "R1") (pin "1")))
+        (net (code "2") (name "Net-(R1-Pad2)")
+          (node (ref "R1") (pin "2"))
+          (node (ref "D1") (pin "1")))
+        (net (code "3") (name "GND")
+          (node (ref "D1") (pin "2")))))
     """
     ast = parse(text)
     circuit, report = import_from_ast(ast)
     assert {p.refdes for p in report.parts} == {'R1', 'D1'}
-    assert len([n for n in report.nets if n.nodes]) == 1
+    # The R1↔D1 net is the one "two-pin" net this test asserts about;
+    # the two single-node power/ground nets exist only to satisfy
+    # mandatory-port wiring.
+    two_pin = [n for n in report.nets if len(n.nodes) == 2]
+    assert len(two_pin) == 1
 
 
 def test_strict_mode_raises_on_unmapped_value():

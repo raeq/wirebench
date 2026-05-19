@@ -1814,6 +1814,25 @@
     (uuid "bde10e30-2e1e-866b-198c-daa6eb2c5fa7")
   )
   (symbol
+    (lib_id "power:GND")
+    (at 69.85 927.1 270)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "21de9fc0-3fd0-9143-f2d6-14497ca8251c")
+    (property "Reference" "#PWR"
+      (at 69.85 927.1 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Value" "GND"
+      (at 69.85 927.1 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (pin "1" (uuid "93bb8f54-3a79-317d-06d8-d4b53e611c07"))
+  )
+  (symbol
     (lib_id "Device:LED")
     (at 63.5 965.2 0)
     (unit 1)
@@ -1853,6 +1872,25 @@
     (pts (xy 67.31 965.2) (xy 69.85 965.2))
     (stroke (width 0) (type default))
     (uuid "e70f5e5a-6cd3-4d40-5494-594b7d12206f")
+  )
+  (symbol
+    (lib_id "power:GND")
+    (at 69.85 965.2 270)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "391c431b-cc6c-86a4-0ade-d64237124d07")
+    (property "Reference" "#PWR"
+      (at 69.85 965.2 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Value" "GND"
+      (at 69.85 965.2 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (pin "1" (uuid "a7c01bf4-4c05-8076-079c-efeb725187a9"))
   )
   (wire
     (pts (xy 53.34 825.5) (xy 57.15 825.5))
