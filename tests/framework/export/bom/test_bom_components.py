@@ -166,8 +166,12 @@ def test_bom_rows_sorted_alphabetically_by_refdes():
 
 
 def test_bom_header_columns():
+    from components.passives.rail import Rail
+    r = Resistor(100, refdes_number=1)
+    rail = Rail(True)
+    wire(rail.out, r.t1, r.t2)   # 0-Ω passthrough satisfies mandatory
     text = export_to_string(
-        Circuit(parts=[Resistor(100, refdes_number=1)], ports={}), 'bom')
+        Circuit(parts=[r, rail], ports={}), 'bom')
     first_line = text.splitlines()[0]
     assert first_line == 'Refdes,Value,Footprint,Quantity,Parent,Description'
 

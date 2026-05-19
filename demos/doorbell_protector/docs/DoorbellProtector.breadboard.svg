@@ -1366,7 +1366,7 @@
 <path d="M 452 162 L 452 58 L 652 58 L 652 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
 <circle cx="452" cy="162" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
 <circle cx="652" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
-<path d="M 652 162 L 652 55 L 852 55 L 852 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
+<path d="M 652 162 L 652 52 L 852 52 L 852 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
 <circle cx="652" cy="162" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
 <circle cx="852" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
 <path d="M 852 162 L 852 136 L 927 136 L 927 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
@@ -1375,13 +1375,13 @@
 <path d="M 927 162 L 927 133 L 1002 133 L 1002 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
 <circle cx="927" cy="162" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
 <circle cx="1002" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
-<path d="M 1002 162 L 1002 64 L 2152 64 L 2152 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
+<path d="M 1002 162 L 1002 55 L 2152 55 L 2152 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
 <circle cx="1002" cy="162" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
 <circle cx="2152" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
 <path d="M 2152 162 L 2152 136 L 2177 136 L 2177 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
 <circle cx="2152" cy="162" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
 <circle cx="2177" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
-<path d="M 2177 162 L 2177 64 L 2302 64 L 2302 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
+<path d="M 2177 162 L 2177 61 L 2302 61 L 2302 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
 <circle cx="2177" cy="162" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
 <circle cx="2302" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
 <path d="M 352 144 L 352 61 L 702 61 L 702 144" class="jumper analog" style="fill:none;stroke:#d4a017;stroke-width:2"/>
@@ -1408,6 +1408,66 @@
 <path d="M 802 144 L 802 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
 <circle cx="802" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
 <circle cx="802" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1052 144 L 1052 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="1052" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1052" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1127 144 L 1127 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="1127" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1127" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1177 144 L 1177 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="1177" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1177" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1252 144 L 1252 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="1252" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1252" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1552 144 L 1552 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="1552" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1552" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1627 144 L 1627 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="1627" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1627" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1677 144 L 1677 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="1677" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1677" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1752 144 L 1752 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="1752" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1752" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1802 144 L 1802 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="1802" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1802" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1877 144 L 1877 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="1877" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1877" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1927 144 L 1927 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="1927" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1927" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1952 144 L 1952 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="1952" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1952" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2002 144 L 2002 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="2002" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2002" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2027 144 L 2027 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="2027" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2027" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2077 144 L 2077 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="2077" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2077" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2102 144 L 2102 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="2102" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2102" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2227 144 L 2227 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="2227" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2227" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2252 144 L 2252 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="2252" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2252" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 627 144 L 627 55 L 777 55 L 777 144" class="jumper analog" style="fill:none;stroke:#9acd32;stroke-width:2"/>
+<circle cx="627" cy="144" r="3" class="jumper-cap analog" style="fill:#9acd32;stroke:#000000;stroke-width:0.5"/>
+<circle cx="777" cy="144" r="3" class="jumper-cap analog" style="fill:#9acd32;stroke:#000000;stroke-width:0.5"/>
+<path d="M 777 162 L 777 64 L 2327 64 L 2327 144" class="jumper analog" style="fill:none;stroke:#9acd32;stroke-width:2"/>
+<circle cx="777" cy="162" r="3" class="jumper-cap analog" style="fill:#9acd32;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2327" cy="144" r="3" class="jumper-cap analog" style="fill:#9acd32;stroke:#000000;stroke-width:0.5"/>
 <path d="M 877 144 L 877 94" class="jumper rail_minus" style="fill:none;stroke:#000000;stroke-width:2"/>
 <circle cx="877" cy="144" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
 <circle cx="877" cy="94" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>

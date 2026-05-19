@@ -5,15 +5,15 @@ V_Rail_0 vcc 0 DC 5.0
 .ENDS A1_SUBCKT
 XA2 vcc 0 net_6 net_7 net_0 net_1 0 net_3 A2_SUBCKT
 .SUBCKT A2_SUBCKT vcc 0 net_6 net_7 net_0 net_1 0 net_3
-U1 nc_0 nc_1 net_6 nc_2 nc_3 net_7 nc_4 nc_5 nc_6 nc_7 net_9 nc_8 nc_9 net_8 nc_10 nc_11 ISOW7841
-U2 nc_12 nc_13 nc_14 nc_15 nc_16 nc_17 nc_18 nc_19 nc_20 nc_21 nc_22 nc_23 nc_24 nc_25 net_8 net_9 net_1 net_0 nc_26 nc_27 TRS3122E
-C1 nc_28 nc_29 1e-07
-C2 nc_30 nc_31 1e-05
-C3 nc_32 nc_33 1e-07
-C4 nc_34 nc_35 1e-07
-C5 nc_36 nc_37 1e-07
-C6 nc_38 nc_39 1e-07
-C7 nc_40 nc_41 1e-07
+U1 nc_0 nc_1 net_6 nc_2 nc_3 net_7 nc_4 nc_5 nc_6 nc_7 net_16 nc_8 nc_9 net_15 nc_10 nc_11 ISOW7841
+U2 nc_12 nc_13 nc_14 nc_15 nc_16 nc_17 nc_18 nc_19 nc_20 nc_21 nc_22 nc_23 nc_24 nc_25 net_15 net_16 net_1 net_0 nc_26 nc_27 TRS3122E
+C1 net_14 net_14 1e-07
+C2 net_13 net_13 1e-05
+C3 net_12 net_12 1e-07
+C4 net_11 net_11 1e-07
+C5 net_10 net_10 1e-07
+C6 net_9 net_9 1e-07
+C7 net_8 net_8 1e-07
 .ENDS A2_SUBCKT
 XA3 net_0 net_1 0 net_3 A3_SUBCKT
 .SUBCKT A3_SUBCKT net_0 net_1 0 net_3

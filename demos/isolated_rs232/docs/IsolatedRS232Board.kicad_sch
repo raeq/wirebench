@@ -712,10 +712,32 @@
     (stroke (width 0) (type default))
     (uuid "702d8dbd-6be7-7a48-8861-404d0d7e7f20")
   )
+  (global_label "Net-(C1-t1)"
+    (shape input)
+    (at 63.5 184.15 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (property "Intersheet References" "${INTERSHEET_REFS}"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (uuid "9a0a7ed1-81f2-3ef5-c10d-3c44a546b315")
+  )
   (wire
     (pts (xy 63.5 173.99) (xy 63.5 171.45))
     (stroke (width 0) (type default))
     (uuid "9c5080a4-2435-4785-a3cc-364350ae0b37")
+  )
+  (global_label "Net-(C1-t1)"
+    (shape input)
+    (at 63.5 171.45 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (property "Intersheet References" "${INTERSHEET_REFS}"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (uuid "fba3bb10-9ef9-757c-200a-1dc00d35fe2d")
   )
   (symbol
     (lib_id "Device:C")
@@ -742,10 +764,32 @@
     (stroke (width 0) (type default))
     (uuid "445d2695-c02b-0097-4e1d-3ab7cb125fea")
   )
+  (global_label "Net-(C2-t1)"
+    (shape input)
+    (at 63.5 222.25 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (property "Intersheet References" "${INTERSHEET_REFS}"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (uuid "1482c414-7714-c862-746e-c6c553f12e84")
+  )
   (wire
     (pts (xy 63.5 212.09) (xy 63.5 209.55))
     (stroke (width 0) (type default))
     (uuid "c844083c-824c-4622-fd91-aa3cc82e3dc5")
+  )
+  (global_label "Net-(C2-t1)"
+    (shape input)
+    (at 63.5 209.55 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (property "Intersheet References" "${INTERSHEET_REFS}"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (uuid "cbcc5a83-5dc4-b79d-89db-525733ba663c")
   )
   (symbol
     (lib_id "Device:C")
@@ -772,10 +816,32 @@
     (stroke (width 0) (type default))
     (uuid "1199ef2f-36b3-60cd-e16d-b4a8ab34539d")
   )
+  (global_label "Net-(C3-t1)"
+    (shape input)
+    (at 63.5 260.35 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (property "Intersheet References" "${INTERSHEET_REFS}"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (uuid "a97a0716-6cdb-da51-faab-45120b2fde28")
+  )
   (wire
     (pts (xy 63.5 250.19) (xy 63.5 247.65))
     (stroke (width 0) (type default))
     (uuid "bec05a29-9d07-51f3-2428-c7a5a6cf1e72")
+  )
+  (global_label "Net-(C3-t1)"
+    (shape input)
+    (at 63.5 247.65 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (property "Intersheet References" "${INTERSHEET_REFS}"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (uuid "a812bbb9-92a6-1aaf-2a9f-18571619de1a")
   )
   (symbol
     (lib_id "Device:C")
@@ -802,10 +868,32 @@
     (stroke (width 0) (type default))
     (uuid "c875fd15-54da-9b46-1621-7d8faaa1aa87")
   )
+  (global_label "Net-(C4-t1)"
+    (shape input)
+    (at 63.5 298.45 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (property "Intersheet References" "${INTERSHEET_REFS}"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (uuid "9c0443f1-c05e-f17a-5692-8c3a38c03610")
+  )
   (wire
     (pts (xy 63.5 288.29) (xy 63.5 285.75))
     (stroke (width 0) (type default))
     (uuid "41d8b863-89b6-361a-b5ad-6ad6809ca0fb")
+  )
+  (global_label "Net-(C4-t1)"
+    (shape input)
+    (at 63.5 285.75 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (property "Intersheet References" "${INTERSHEET_REFS}"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (uuid "e71aabc9-e3af-c12d-2ca5-7416f5b32daa")
   )
   (symbol
     (lib_id "Device:C")
@@ -832,10 +920,32 @@
     (stroke (width 0) (type default))
     (uuid "4c8ac6c7-53f3-913d-9dea-9b5c1c08c59b")
   )
+  (global_label "Net-(C5-t1)"
+    (shape input)
+    (at 63.5 336.55 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (property "Intersheet References" "${INTERSHEET_REFS}"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (uuid "60a00bf2-9b5f-7481-05cb-44d58e8452dd")
+  )
   (wire
     (pts (xy 63.5 326.39) (xy 63.5 323.85))
     (stroke (width 0) (type default))
     (uuid "abfcdf03-64cb-be34-b03a-f5541d0d93e9")
+  )
+  (global_label "Net-(C5-t1)"
+    (shape input)
+    (at 63.5 323.85 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (property "Intersheet References" "${INTERSHEET_REFS}"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (uuid "da85ebf2-80ce-4fe7-1e6d-f68d43a795e4")
   )
   (symbol
     (lib_id "Device:C")
@@ -862,10 +972,32 @@
     (stroke (width 0) (type default))
     (uuid "da3c10ac-3472-56de-ea4e-ae8aa0c1939a")
   )
+  (global_label "Net-(C6-t1)"
+    (shape input)
+    (at 63.5 374.65 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (property "Intersheet References" "${INTERSHEET_REFS}"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (uuid "db0f5b0b-d6dd-db04-d6d7-c08add12b016")
+  )
   (wire
     (pts (xy 63.5 364.49) (xy 63.5 361.95))
     (stroke (width 0) (type default))
     (uuid "08a082d1-462b-2579-77a3-5e6fc1be7d1f")
+  )
+  (global_label "Net-(C6-t1)"
+    (shape input)
+    (at 63.5 361.95 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (property "Intersheet References" "${INTERSHEET_REFS}"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (uuid "b559da1d-b0d2-61a8-897b-0e4deb3dcc86")
   )
   (symbol
     (lib_id "Device:C")
@@ -892,10 +1024,32 @@
     (stroke (width 0) (type default))
     (uuid "acd73f30-8e01-3880-239c-d6718675ef81")
   )
+  (global_label "Net-(C7-t1)"
+    (shape input)
+    (at 63.5 412.75 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (property "Intersheet References" "${INTERSHEET_REFS}"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (uuid "af62fa3f-f761-c61b-e80b-cea337c39966")
+  )
   (wire
     (pts (xy 63.5 402.59) (xy 63.5 400.05))
     (stroke (width 0) (type default))
     (uuid "c8b447c7-7a2e-b10c-c6d9-ef708c973bd4")
+  )
+  (global_label "Net-(C7-t1)"
+    (shape input)
+    (at 63.5 400.05 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (property "Intersheet References" "${INTERSHEET_REFS}"
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (uuid "019d4b53-f521-0aa4-1aba-5c8cab46f95e")
   )
   (symbol
     (lib_id "Connector_Generic:Conn_01x08")
@@ -1028,6 +1182,41 @@
     (pts (xy 20.32 53.34) (xy 17.78 53.34))
     (stroke (width 0) (type default))
     (uuid "c420136e-2014-b0f9-7154-b114a0c36042")
+  )
+  (wire
+    (pts (xy 63.5 171.45) (xy 63.5 184.15))
+    (stroke (width 0) (type default))
+    (uuid "c6bbb835-efb4-d469-26cf-d8f71625bfab")
+  )
+  (wire
+    (pts (xy 63.5 209.55) (xy 63.5 222.25))
+    (stroke (width 0) (type default))
+    (uuid "b45a70c8-48dd-e078-5c6f-4b3025dde350")
+  )
+  (wire
+    (pts (xy 63.5 247.65) (xy 63.5 260.35))
+    (stroke (width 0) (type default))
+    (uuid "07da73a2-c151-5933-6806-6a0b8b3ce8b8")
+  )
+  (wire
+    (pts (xy 63.5 285.75) (xy 63.5 298.45))
+    (stroke (width 0) (type default))
+    (uuid "830dd87d-1ac7-47c1-dc26-4a1c00d7a26f")
+  )
+  (wire
+    (pts (xy 63.5 323.85) (xy 63.5 336.55))
+    (stroke (width 0) (type default))
+    (uuid "f512ba3e-3f58-c293-23fd-1f52bf7dcae5")
+  )
+  (wire
+    (pts (xy 63.5 361.95) (xy 63.5 374.65))
+    (stroke (width 0) (type default))
+    (uuid "db9c6c82-fac9-e073-20b0-279f7ca584f9")
+  )
+  (wire
+    (pts (xy 63.5 400.05) (xy 63.5 412.75))
+    (stroke (width 0) (type default))
+    (uuid "9935fc7f-b569-0e60-6635-f2b80c6c58ce")
   )
   (sheet_instances
     (path "/" (page "1"))

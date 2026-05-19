@@ -11,17 +11,38 @@ flowchart TD
         C6["C6<br/>1e-07F"]
         C7["C7<br/>1e-07F"]
     end
-    net_2(("net_2"))
+    net_10(("net_10"))
+    net_9(("net_9"))
+    net_8(("net_8"))
+    net_7(("net_7"))
+    net_6(("net_6"))
     net_5(("net_5"))
     net_4(("net_4"))
+    net_2(("net_2"))
+    net_12(("net_12"))
+    net_11(("net_11"))
     net_3(("net_3"))
     net_1(("net_1"))
     net_0(("net_0"))
+    C1 ---|"t1"| net_10
+    C1 ---|"t2"| net_10
+    C2 ---|"t1"| net_9
+    C2 ---|"t2"| net_9
+    C3 ---|"t1"| net_8
+    C3 ---|"t2"| net_8
+    C4 ---|"t1"| net_7
+    C4 ---|"t2"| net_7
+    C5 ---|"t1"| net_6
+    C5 ---|"t2"| net_6
+    C6 ---|"t1"| net_5
+    C6 ---|"t2"| net_5
+    C7 ---|"t1"| net_4
+    C7 ---|"t2"| net_4
     U1 ---|"INA"| net_2
-    U1 ---|"IND"| net_5
-    U1 ---|"OUTA"| net_4
+    U1 ---|"IND"| net_12
+    U1 ---|"OUTA"| net_11
     U1 ---|"OUTD"| net_3
     U2 ---|"RIN1"| net_1
-    U2 ---|"ROUT1"| net_5
-    U2 ---|"TIN1"| net_4
+    U2 ---|"ROUT1"| net_12
+    U2 ---|"TIN1"| net_11
     U2 ---|"TOUT1"| net_0

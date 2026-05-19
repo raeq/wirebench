@@ -81,15 +81,20 @@ class Resistor(Part):
         # number — to a base-SI float instance, so repr is canonical
         # regardless of input type.
         self._ohms: Ohms = Ohms(ohms)
-        # mandatory=False because the device is structurally inert under
-        # graph evaluation — evaluate() is a no-op, so wiring the
-        # terminals is not a *simulation* requirement.  In a real
-        # circuit both terminals must of course be connected; that is a
-        # hardware-design constraint the framework does not enforce
-        # because it cannot meaningfully act on it.
+        # Both terminals are mandatory. A real resistor with a
+        # dangling terminal does nothing — it's wasted space on the
+        # BOM and on the breadboard, and the framework's physical-
+        # fidelity contract refuses the bug at construction time
+        # rather than silently accepting a part the model can't
+        # account for. (Earlier this said `mandatory=False` because
+        # the device is "structurally inert" under graph evaluation;
+        # that justified silent acceptance of dangling parts and
+        # produced breadboard layouts where declared resistors had
+        # no jumpers attached. See `tests/components/test_resistor.py`
+        # for the regression test.)
         self._ports = {
-            't1': Port('t1', Direction.BIDIR, domain, mandatory=False, signal_type=Analog),
-            't2': Port('t2', Direction.BIDIR, domain, mandatory=False, signal_type=Analog),
+            't1': Port('t1', Direction.BIDIR, domain, mandatory=True, signal_type=Analog),
+            't2': Port('t2', Direction.BIDIR, domain, mandatory=True, signal_type=Analog),
         }
 
     @property

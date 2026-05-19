@@ -16,15 +16,29 @@ digraph "Isolated RS-232" {
   }
   // Nets
   node [shape=circle, label="", width=0.15, fixedsize=true];
-  net_0; net_1; net_2; net_3; net_4; net_5;
+  net_0; net_1; net_10; net_11; net_12; net_2; net_3; net_4; net_5; net_6; net_7; net_8; net_9;
   // Edges (component -- net, taillabel = port name)
   edge [arrowhead=none, fontname="monospace", fontsize=9];
+  C1 -> net_10 [taillabel="t1"];
+  C1 -> net_10 [taillabel="t2"];
+  C2 -> net_9 [taillabel="t1"];
+  C2 -> net_9 [taillabel="t2"];
+  C3 -> net_8 [taillabel="t1"];
+  C3 -> net_8 [taillabel="t2"];
+  C4 -> net_7 [taillabel="t1"];
+  C4 -> net_7 [taillabel="t2"];
+  C5 -> net_6 [taillabel="t1"];
+  C5 -> net_6 [taillabel="t2"];
+  C6 -> net_5 [taillabel="t1"];
+  C6 -> net_5 [taillabel="t2"];
+  C7 -> net_4 [taillabel="t1"];
+  C7 -> net_4 [taillabel="t2"];
   U1 -> net_2 [taillabel="INA"];
-  U1 -> net_5 [taillabel="IND"];
-  U1 -> net_4 [taillabel="OUTA"];
+  U1 -> net_12 [taillabel="IND"];
+  U1 -> net_11 [taillabel="OUTA"];
   U1 -> net_3 [taillabel="OUTD"];
   U2 -> net_1 [taillabel="RIN1"];
-  U2 -> net_5 [taillabel="ROUT1"];
-  U2 -> net_4 [taillabel="TIN1"];
+  U2 -> net_12 [taillabel="ROUT1"];
+  U2 -> net_11 [taillabel="TIN1"];
   U2 -> net_0 [taillabel="TOUT1"];
 }

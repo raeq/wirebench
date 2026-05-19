@@ -85,8 +85,13 @@ def test_dot_rail_emits_no_node():
 
 
 def test_dot_header_directives_present():
+    from components.passives.rail import Rail
+    from framework.wire import wire
+    r = Resistor(100, refdes_number=1)
+    rail = Rail(True)
+    wire(rail.out, r.t1, r.t2)
     text = export_to_string(
-        Circuit(parts=[Resistor(100, refdes_number=1)], ports={}),
+        Circuit(parts=[r, rail], ports={}),
         'dot')
     assert text.startswith('digraph "')
     assert 'rankdir=LR;' in text

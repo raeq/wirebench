@@ -29,10 +29,10 @@
               3
             ],
             "J2.p1": [
-              8
+              12
             ],
             "J2.p2": [
-              9
+              13
             ]
           },
           "hide_name": 0,
@@ -69,10 +69,10 @@
         "D1": {
           "connections": {
             "anode": [
-              24
+              8
             ],
             "cathode": [
-              25
+              8
             ]
           },
           "hide_name": 0,
@@ -103,10 +103,10 @@
         "J2": {
           "connections": {
             "p1": [
-              8
+              12
             ],
             "p2": [
-              9
+              13
             ]
           },
           "hide_name": 0,
@@ -120,13 +120,13 @@
         "Q1": {
           "connections": {
             "d": [
-              21
+              25
             ],
             "g": [
-              22
+              26
             ],
             "s": [
-              23
+              27
             ]
           },
           "hide_name": 0,
@@ -141,10 +141,10 @@
         "R1": {
           "connections": {
             "t1": [
-              26
+              7
             ],
             "t2": [
-              27
+              7
             ]
           },
           "hide_name": 0,
@@ -160,10 +160,10 @@
         "R2": {
           "connections": {
             "t1": [
-              28
+              6
             ],
             "t2": [
-              29
+              6
             ]
           },
           "hide_name": 0,
@@ -179,10 +179,10 @@
         "R3": {
           "connections": {
             "t1": [
-              30
+              5
             ],
             "t2": [
-              31
+              5
             ]
           },
           "hide_name": 0,
@@ -198,22 +198,22 @@
         "U1": {
           "connections": {
             "GND": [
-              11
-            ],
-            "HysSet": [
-              13
-            ],
-            "OUT": [
-              12
-            ],
-            "TripSet0": [
-              10
-            ],
-            "TripSet1": [
               15
             ],
-            "VS": [
+            "HysSet": [
+              17
+            ],
+            "OUT": [
+              16
+            ],
+            "TripSet0": [
               14
+            ],
+            "TripSet1": [
+              19
+            ],
+            "VS": [
+              18
             ]
           },
           "hide_name": 0,
@@ -231,19 +231,19 @@
         "U2": {
           "connections": {
             "A": [
-              16
-            ],
-            "GND": [
-              17
-            ],
-            "NC": [
-              19
-            ],
-            "VCC": [
               20
             ],
+            "GND": [
+              21
+            ],
+            "NC": [
+              23
+            ],
+            "VCC": [
+              24
+            ],
             "Y": [
-              18
+              22
             ]
           },
           "hide_name": 0,
@@ -273,6 +273,34 @@
           ],
           "hide_name": 0
         },
+        "net_3": {
+          "attributes": {},
+          "bits": [
+            5
+          ],
+          "hide_name": 0
+        },
+        "net_4": {
+          "attributes": {},
+          "bits": [
+            6
+          ],
+          "hide_name": 0
+        },
+        "net_5": {
+          "attributes": {},
+          "bits": [
+            7
+          ],
+          "hide_name": 0
+        },
+        "net_6": {
+          "attributes": {},
+          "bits": [
+            8
+          ],
+          "hide_name": 0
+        },
         "vcc": {
           "attributes": {},
           "bits": [
@@ -296,13 +324,13 @@
         },
         "J2.p1": {
           "bits": [
-            8
+            12
           ],
           "direction": "inout"
         },
         "J2.p2": {
           "bits": [
-            9
+            13
           ],
           "direction": "inout"
         }

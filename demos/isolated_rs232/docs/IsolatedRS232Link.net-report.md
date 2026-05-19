@@ -1,6 +1,6 @@
 # Net Report — IsolatedRS232Link
 
-10 logical net(s) across 2 ground domain(s): ELECTRICAL, ISOLATED_RS232.
+17 logical net(s) across 2 ground domain(s): ELECTRICAL, ISOLATED_RS232.
 
 ## Net N0
 
@@ -99,6 +99,69 @@ Other ports on this net (2):
 
 Domain: ISOLATED_RS232
 
+Other ports on this net (2):
+- C7.t1 (`Capacitor 100 nF`, BIDIR)
+- C7.t2 (`Capacitor 100 nF`, BIDIR)
+
+
+## Net N9
+
+Domain: ISOLATED_RS232
+
+Other ports on this net (2):
+- C6.t1 (`Capacitor 100 nF`, BIDIR)
+- C6.t2 (`Capacitor 100 nF`, BIDIR)
+
+
+## Net N10
+
+Domain: ISOLATED_RS232
+
+Other ports on this net (2):
+- C5.t1 (`Capacitor 100 nF`, BIDIR)
+- C5.t2 (`Capacitor 100 nF`, BIDIR)
+
+
+## Net N11
+
+Domain: ISOLATED_RS232
+
+Other ports on this net (2):
+- C4.t1 (`Capacitor 100 nF`, BIDIR)
+- C4.t2 (`Capacitor 100 nF`, BIDIR)
+
+
+## Net N12
+
+Domain: ISOLATED_RS232
+
+Other ports on this net (2):
+- C3.t1 (`Capacitor 100 nF`, BIDIR)
+- C3.t2 (`Capacitor 100 nF`, BIDIR)
+
+
+## Net N13
+
+Domain: ISOLATED_RS232
+
+Other ports on this net (2):
+- C2.t1 (`Capacitor 10 µF`, BIDIR)
+- C2.t2 (`Capacitor 10 µF`, BIDIR)
+
+
+## Net N14
+
+Domain: ELECTRICAL
+
+Other ports on this net (2):
+- C1.t1 (`Capacitor 100 nF`, BIDIR)
+- C1.t2 (`Capacitor 100 nF`, BIDIR)
+
+
+## Net N15
+
+Domain: ISOLATED_RS232
+
 Drivers (1):
 - U1.OUTA (`ISOW7841`, OUT)
 
@@ -106,7 +169,7 @@ Readers (1):
 - U2.TIN1 (`TRS3122E`, IN)
 
 
-## Net N9
+## Net N16
 
 Domain: ISOLATED_RS232
 

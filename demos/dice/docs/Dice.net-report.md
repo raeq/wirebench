@@ -90,7 +90,31 @@ Other ports on this net (5):
 - R1.t2 (`Resistor 470 Ω`, BIDIR)
 
 
-## Net N5
+## Net N5 — + rail
+
+Domain: ELECTRICAL
+
+Drivers (1):
+- Rail.out (`Rail`, OUT)
+
+Readers (1):
+- U1.RESET (`NE555`, IN)
+
+Other ports on this net (10):
+- C1.t1 (`Capacitor 10 nF`, BIDIR)
+- C1.t2 (`Capacitor 10 nF`, BIDIR)
+- C2.t1 (`Capacitor 100 nF`, BIDIR)
+- C2.t2 (`Capacitor 100 nF`, BIDIR)
+- R5.t1 (`Resistor 10 kΩ`, BIDIR)
+- R5.t2 (`Resistor 10 kΩ`, BIDIR)
+- R6.t1 (`Resistor 10 kΩ`, BIDIR)
+- R6.t2 (`Resistor 10 kΩ`, BIDIR)
+- R7.t1 (`Resistor 10 kΩ`, BIDIR)
+- R7.t2 (`Resistor 10 kΩ`, BIDIR)
+
+Pull-up path: R5.t2 → + rail via R5 (10000 Ω)
+
+## Net N6
 
 Domain: ELECTRICAL
 
@@ -106,7 +130,7 @@ Other ports on this net (2):
 - D5.anode (`D1N4148`, BIDIR)
 
 
-## Net N6
+## Net N7
 
 Domain: ELECTRICAL
 
@@ -120,7 +144,7 @@ Other ports on this net (1):
 - D4.anode (`D1N4148`, BIDIR)
 
 
-## Net N7
+## Net N8
 
 Domain: ELECTRICAL
 
@@ -134,7 +158,7 @@ Other ports on this net (1):
 - D3.anode (`D1N4148`, BIDIR)
 
 
-## Net N8
+## Net N9
 
 Domain: ELECTRICAL
 
@@ -148,7 +172,7 @@ Other ports on this net (1):
 - D1.anode (`D1N4148`, BIDIR)
 
 
-## Net N9
+## Net N10
 
 Domain: ELECTRICAL
 
@@ -159,7 +183,7 @@ Readers (1):
 - U2.RST (`CD4017`, IN)
 
 
-## Net N10 — − rail
+## Net N11 — − rail
 
 Domain: ELECTRICAL
 
@@ -171,7 +195,7 @@ Readers (2):
 - U2.VSS (`CD4017`, IN)
 
 
-## Net N11 — + rail
+## Net N12 — + rail
 
 Domain: ELECTRICAL
 
@@ -181,14 +205,3 @@ Drivers (1):
 Readers (2):
 - U1.VCC (`NE555`, IN)
 - U2.VDD (`CD4017`, IN)
-
-
-## Net N18 — + rail
-
-Domain: ELECTRICAL
-
-Drivers (1):
-- Rail.out (`Rail`, OUT)
-
-Readers (1):
-- U1.RESET (`NE555`, IN)

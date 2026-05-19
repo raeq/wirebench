@@ -9,3 +9,15 @@ flowchart TD
         R2["R2<br/>10000Ω"]
         R3["R3<br/>10000Ω"]
     end
+    net_5(("net_5"))
+    net_4(("net_4"))
+    net_3(("net_3"))
+    net_2(("net_2"))
+    D1 ---|"anode"| net_5
+    D1 ---|"cathode"| net_5
+    R1 ---|"t1"| net_4
+    R1 ---|"t2"| net_4
+    R2 ---|"t1"| net_3
+    R2 ---|"t2"| net_3
+    R3 ---|"t1"| net_2
+    R3 ---|"t2"| net_2

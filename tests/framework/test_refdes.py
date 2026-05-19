@@ -108,18 +108,29 @@ def test_refdes_property_has_no_setter():
 
 def test_duplicate_refdes_within_composite_rejected():
     from framework.circuit import Circuit
+    from framework.wire import wire
+    from components.passives.rail import Rail
+    rail = Rail(True)
     r1 = Resistor(330, refdes_number=1)
     r2 = Resistor(330, refdes_number=1)
+    # 0-Ω passthrough on each resistor — both terminals on the same
+    # rail net, so the mandatory-pin check passes and the validator
+    # reaches the duplicate-refdes detection this test pins down.
+    wire(rail.out, r1.t1, r1.t2, r2.t1, r2.t2)
     with pytest.raises(RefdesError, match="Duplicate refdes"):
-        Circuit(parts=[r1, r2], ports={})
+        Circuit(parts=[r1, r2, rail], ports={})
 
 
 def test_distinct_prefixes_with_same_number_do_not_collide():
     # R1 and U1 share a number but differ on prefix — fine.
     from framework.circuit import Circuit
+    from framework.wire import wire
+    from components.passives.rail import Rail
+    rail = Rail(True)
     r = Resistor(330, refdes_number=1)
     u = SN74HC04(refdes_number=1)
-    Circuit(parts=[r, u], ports={})   # must not raise
+    wire(rail.out, r.t1, r.t2)   # 0-Ω passthrough; satisfies mandatory
+    Circuit(parts=[r, u, rail], ports={})   # must not raise
 
 
 # --- __repr__ surfaces refdes ---
