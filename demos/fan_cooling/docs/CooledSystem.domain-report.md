@@ -18,4 +18,4 @@ Parts in this domain (10):
 
 Boundaries to other domains: None — single-domain design.
 
-Nets entirely within this domain: 6
+Nets entirely within this domain: 10

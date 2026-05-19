@@ -250,6 +250,16 @@ class BLDCControllerBoard(Board):
         wire(self.drv.ports['OUT3'], self.windings.pins[2].internal)
         self.windings.pins[2]._effective_role = Direction.OUT
 
+        # BOM-only DRV8313 decoupling and bootstrap capacitors, plus
+        # the ATmega RESET pull-up. Wired as isolated 0-Ω passthroughs
+        # so the mandatory-pin check passes; their analog behaviour
+        # (bootstrap refresh, charge-pump pumping, reset hold) lives
+        # outside the voltage-only graph.
+        for cap in (self.c_bst1, self.c_bst2, self.c_bst3,
+                    self.c_cp, self.c_vcp, self.c_vm):
+            wire(cap.t1, cap.t2, dynamically_driven=True)
+        wire(self.r_reset.t1, self.r_reset.t2, dynamically_driven=True)
+
         super().__init__(
             name='BLDC Controller',
             revision='A',

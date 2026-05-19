@@ -38,8 +38,13 @@ def _silently(fn, *a, **k):
 
 
 def test_mermaid_init_directive_and_flowchart_type():
+    from components.passives.rail import Rail
+    from framework.wire import wire
+    r = Resistor(100, refdes_number=1)
+    rail = Rail(True)
+    wire(rail.out, r.t1, r.t2)
     text = export_to_string(
-        Circuit(parts=[Resistor(100, refdes_number=1)], ports={}),
+        Circuit(parts=[r, rail], ports={}),
         'mermaid')
     assert text.startswith('%%{init:')
     assert '\nflowchart LR' in text

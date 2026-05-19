@@ -1,6 +1,6 @@
 # Net Report — DoorbellProtector
 
-7 logical net(s) across 1 ground domain(s): ELECTRICAL.
+8 logical net(s) across 1 ground domain(s): ELECTRICAL.
 
 ## Net N0
 
@@ -26,6 +26,49 @@ Other ports on this net (6):
 
 Domain: ELECTRICAL
 
+Other ports on this net (3):
+- D1.anode (`D1N4007`, BIDIR)
+- K1.coil_minus (`Relay_SPDT`, BIDIR)
+- Q1.c (`BC548`, BIDIR)
+
+
+## Net N2 — + rail
+
+Domain: ELECTRICAL
+
+Drivers (1):
+- Rail.out (`Rail`, OUT)
+
+Readers (1):
+- U2.RESET (`NE555_Monostable`, IN)
+
+Other ports on this net (19):
+- C1.t1 (`Capacitor 100 nF`, BIDIR)
+- C1.t2 (`Capacitor 100 nF`, BIDIR)
+- C2.t1 (`Capacitor 4.7 µF`, BIDIR)
+- C2.t2 (`Capacitor 4.7 µF`, BIDIR)
+- C3.t1 (`Capacitor 100 nF`, BIDIR)
+- C3.t2 (`Capacitor 100 nF`, BIDIR)
+- C5.t1 (`Capacitor 47 µF`, BIDIR)
+- C5.t2 (`Capacitor 47 µF`, BIDIR)
+- D1.cathode (`D1N4007`, BIDIR)
+- R2.t1 (`Resistor 1 MΩ`, BIDIR)
+- R2.t2 (`Resistor 1 MΩ`, BIDIR)
+- R3.t1 (`Resistor 1 MΩ`, BIDIR)
+- R3.t2 (`Resistor 1 MΩ`, BIDIR)
+- R6.t1 (`Resistor 1 MΩ`, BIDIR)
+- R6.t2 (`Resistor 1 MΩ`, BIDIR)
+- R7.t1 (`Resistor 4.7 kΩ`, BIDIR)
+- R7.t2 (`Resistor 4.7 kΩ`, BIDIR)
+- R8.t1 (`Resistor 47 kΩ`, BIDIR)
+- R8.t2 (`Resistor 47 kΩ`, BIDIR)
+
+Pull-up path: R2.t2 → + rail via R2 (1e+06 Ω)
+
+## Net N3
+
+Domain: ELECTRICAL
+
 Drivers (1):
 - Inverter.y (`Inverter`, OUT)
 
@@ -38,7 +81,7 @@ Other ports on this net (3):
 - R5.t2 (`Resistor 10 kΩ`, BIDIR)
 
 
-## Net N2
+## Net N4
 
 Domain: ELECTRICAL
 
@@ -54,7 +97,7 @@ Other ports on this net (3):
 - R4.t2 (`Resistor 1 kΩ`, BIDIR)
 
 
-## Net N3 — − rail
+## Net N5 — − rail
 
 Domain: ELECTRICAL
 
@@ -69,21 +112,7 @@ Other ports on this net (2):
 - Q2.e (`Q2N3904`, BIDIR)
 
 
-## Net N4 — + rail
-
-Domain: ELECTRICAL
-
-Drivers (1):
-- Rail.out (`Rail`, OUT)
-
-Readers (1):
-- U2.RESET (`NE555_Monostable`, IN)
-
-Other ports on this net (1):
-- D1.cathode (`D1N4007`, BIDIR)
-
-
-## Net N5 — − rail
+## Net N6 — − rail
 
 Domain: ELECTRICAL
 
@@ -95,7 +124,7 @@ Readers (2):
 - U2.GND (`NE555_Monostable`, IN)
 
 
-## Net N6 — + rail
+## Net N7 — + rail
 
 Domain: ELECTRICAL
 

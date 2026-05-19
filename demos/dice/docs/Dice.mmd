@@ -24,18 +24,22 @@ flowchart TD
     D11["D11<br/>red LED"]
     D12["D12<br/>red LED"]
     D13["D13<br/>red LED"]
-    net_8(("net_8"))
+    vcc(("vcc"))
+    net_9(("net_9"))
     net_4(("net_4"))
     net_2(("net_2"))
     gnd(("gnd"))
     net_0(("net_0"))
-    net_5(("net_5"))
-    net_7(("net_7"))
     net_6(("net_6"))
+    net_8(("net_8"))
+    net_7(("net_7"))
     net_3(("net_3"))
-    vcc(("vcc"))
-    net_9(("net_9"))
-    D1 ---|"anode"| net_8
+    net_10(("net_10"))
+    C1 ---|"t1"| vcc
+    C1 ---|"t2"| vcc
+    C2 ---|"t1"| vcc
+    C2 ---|"t2"| vcc
+    D1 ---|"anode"| net_9
     D1 ---|"cathode"| net_4
     D10 ---|"anode"| net_2
     D10 ---|"cathode"| gnd
@@ -45,13 +49,13 @@ flowchart TD
     D12 ---|"cathode"| gnd
     D13 ---|"anode"| net_0
     D13 ---|"cathode"| gnd
-    D2 ---|"anode"| net_5
+    D2 ---|"anode"| net_6
     D2 ---|"cathode"| net_4
-    D3 ---|"anode"| net_7
+    D3 ---|"anode"| net_8
     D3 ---|"cathode"| net_4
-    D4 ---|"anode"| net_6
+    D4 ---|"anode"| net_7
     D4 ---|"cathode"| net_2
-    D5 ---|"anode"| net_5
+    D5 ---|"anode"| net_6
     D5 ---|"cathode"| net_2
     D6 ---|"anode"| net_0
     D6 ---|"cathode"| net_2
@@ -69,16 +73,22 @@ flowchart TD
     R3 ---|"t2"| net_2
     R4 ---|"t1"| net_0
     R4 ---|"t2"| net_0
+    R5 ---|"t1"| vcc
+    R5 ---|"t2"| vcc
+    R6 ---|"t1"| vcc
+    R6 ---|"t2"| vcc
+    R7 ---|"t1"| vcc
+    R7 ---|"t2"| vcc
     U1 ---|"GND"| gnd
     U1 ---|"RESET"| vcc
     U1 ---|"VCC"| vcc
     U2 ---|"CO"| net_3
-    U2 ---|"Q1"| net_8
-    U2 ---|"Q2"| net_6
-    U2 ---|"Q3"| net_5
+    U2 ---|"Q1"| net_9
+    U2 ---|"Q2"| net_7
+    U2 ---|"Q3"| net_6
     U2 ---|"Q4"| net_0
-    U2 ---|"Q5"| net_7
-    U2 ---|"Q6"| net_9
-    U2 ---|"RST"| net_9
+    U2 ---|"Q5"| net_8
+    U2 ---|"Q6"| net_10
+    U2 ---|"RST"| net_10
     U2 ---|"VDD"| vcc
     U2 ---|"VSS"| gnd

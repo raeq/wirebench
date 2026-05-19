@@ -15,17 +15,38 @@ flowchart TD
     end
     subgraph A3["A3: RS-232 Cable Rev A"]
     end
-    net_6(("net_6"))
+    net_14(("net_14"))
+    net_13(("net_13"))
+    net_12(("net_12"))
+    net_11(("net_11"))
+    net_10(("net_10"))
     net_9(("net_9"))
     net_8(("net_8"))
+    net_6(("net_6"))
+    net_16(("net_16"))
+    net_15(("net_15"))
     net_7(("net_7"))
     net_1(("net_1"))
     net_0(("net_0"))
+    C1 ---|"t1"| net_14
+    C1 ---|"t2"| net_14
+    C2 ---|"t1"| net_13
+    C2 ---|"t2"| net_13
+    C3 ---|"t1"| net_12
+    C3 ---|"t2"| net_12
+    C4 ---|"t1"| net_11
+    C4 ---|"t2"| net_11
+    C5 ---|"t1"| net_10
+    C5 ---|"t2"| net_10
+    C6 ---|"t1"| net_9
+    C6 ---|"t2"| net_9
+    C7 ---|"t1"| net_8
+    C7 ---|"t2"| net_8
     U1 ---|"INA"| net_6
-    U1 ---|"IND"| net_9
-    U1 ---|"OUTA"| net_8
+    U1 ---|"IND"| net_16
+    U1 ---|"OUTA"| net_15
     U1 ---|"OUTD"| net_7
     U2 ---|"RIN1"| net_1
-    U2 ---|"ROUT1"| net_9
-    U2 ---|"TIN1"| net_8
+    U2 ---|"ROUT1"| net_16
+    U2 ---|"TIN1"| net_15
     U2 ---|"TOUT1"| net_0

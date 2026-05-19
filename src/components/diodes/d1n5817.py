@@ -78,8 +78,8 @@ class D1N5817(Diode):
         validate_refdes(self.REFDES_PREFIX, refdes_number)
         self._refdes_number = refdes_number
         self._ports = {
-            'anode':   Port('anode',   Direction.BIDIR, domain, mandatory=False, signal_type=Analog),
-            'cathode': Port('cathode', Direction.BIDIR, domain, mandatory=False, signal_type=Analog),
+            'anode':   Port('anode',   Direction.BIDIR, domain, mandatory=True, signal_type=Analog),
+            'cathode': Port('cathode', Direction.BIDIR, domain, mandatory=True, signal_type=Analog),
         }
 
     @property

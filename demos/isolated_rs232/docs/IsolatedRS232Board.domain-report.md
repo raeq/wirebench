@@ -12,7 +12,7 @@ Parts in this domain (3):
 Boundaries to other domains (1):
 - ISOLATED_RS232 — crossed via U1 (`ISOW7841`)
 
-Nets entirely within this domain: 4
+Nets entirely within this domain: 5
 
 ## Domain `ISOLATED_RS232`
 
@@ -30,4 +30,4 @@ Parts in this domain (9):
 Boundaries to other domains (1):
 - ELECTRICAL — crossed via U1 (`ISOW7841`)
 
-Nets entirely within this domain: 10
+Nets entirely within this domain: 16

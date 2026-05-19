@@ -39,7 +39,7 @@ def test_terminals_are_bidir_analog_wildcards():
         p = l.ports[name]
         assert p.direction is Direction.BIDIR
         assert p.signal_type is Analog
-        assert p.mandatory is False
+        assert p.mandatory is True   # see test_terminals_are_mandatory below
 
 
 def test_call_returns_value_and_skips_input_guard():
@@ -70,3 +70,25 @@ def test_repr_and_str():
     assert "L2" in repr(l)
     assert "0.001" in repr(l)
     assert "H" in str(l)
+
+
+def test_terminals_are_mandatory():
+    """Both Inductor terminals must be `mandatory=True`. See
+    `tests/components/test_resistor.py::test_terminals_are_mandatory`
+    for the same regression on Resistor."""
+    l = Inductor(1e-3, refdes_number=1)
+    assert l.ports['t1'].mandatory is True
+    assert l.ports['t2'].mandatory is True
+
+
+def test_floating_inductor_refused_at_circuit_construction():
+    from framework.circuit import Circuit
+    from framework.errors import UnconnectedPinError
+
+    class _DanglingInductor(Circuit):
+        def __init__(self) -> None:
+            self.l = Inductor(1e-3, refdes_number=1)
+            super().__init__()
+
+    with pytest.raises(UnconnectedPinError, match='Inductor'):
+        _DanglingInductor()

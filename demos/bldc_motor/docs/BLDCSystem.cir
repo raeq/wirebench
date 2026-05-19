@@ -5,15 +5,15 @@ V_Rail_0 vcc 0 DC 5.0
 .ENDS A1_SUBCKT
 XA2 vcc 0 net_0 net_1 net_2 net_3 net_4 net_5 A2_SUBCKT
 .SUBCKT A2_SUBCKT vcc 0 net_0 net_1 net_2 net_3 net_4 net_5
-U1 nc_0 nc_1 nc_2 net_9 net_10 net_12 nc_3 nc_4 nc_5 nc_6 net_13 net_15 net_16 net_8 net_11 net_14 nc_7 nc_8 nc_9 nc_10 nc_11 nc_12 net_3 net_4 net_5 nc_13 nc_14 nc_15 Uno_BLDCCommutator
-U2 nc_16 nc_17 nc_18 nc_19 nc_20 nc_21 nc_22 nc_23 nc_24 nc_25 net_8 net_9 net_10 net_11 net_12 net_13 net_14 net_15 net_16 nc_26 net_0 nc_27 net_1 nc_28 net_2 nc_29 nc_30 nc_31 DRV8313
-C1 nc_32 nc_33 1e-08
-C2 nc_34 nc_35 1e-08
-C3 nc_36 nc_37 1e-08
-C4 nc_38 nc_39 1e-08
-C5 nc_40 nc_41 1e-07
-C6 nc_42 nc_43 1e-05
-R1 nc_44 nc_45 10000.0
+U1 nc_0 nc_1 nc_2 net_16 net_17 net_19 nc_3 nc_4 nc_5 nc_6 net_20 net_22 net_23 net_15 net_18 net_21 nc_7 nc_8 nc_9 nc_10 nc_11 nc_12 net_3 net_4 net_5 nc_13 nc_14 nc_15 Uno_BLDCCommutator
+U2 nc_16 nc_17 nc_18 nc_19 nc_20 nc_21 nc_22 nc_23 nc_24 nc_25 net_15 net_16 net_17 net_18 net_19 net_20 net_21 net_22 net_23 nc_26 net_0 nc_27 net_1 nc_28 net_2 nc_29 nc_30 nc_31 DRV8313
+C1 net_14 net_14 1e-08
+C2 net_13 net_13 1e-08
+C3 net_12 net_12 1e-08
+C4 net_11 net_11 1e-08
+C5 net_10 net_10 1e-07
+C6 net_9 net_9 1e-05
+R1 net_8 net_8 10000.0
 .ENDS A2_SUBCKT
 .LIB spice-models.lib
 .END

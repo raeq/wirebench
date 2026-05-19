@@ -6,10 +6,10 @@
         "C1": {
           "connections": {
             "t1": [
-              40
+              7
             ],
             "t2": [
-              41
+              7
             ]
           },
           "hide_name": 0,
@@ -23,10 +23,10 @@
         "C2": {
           "connections": {
             "t1": [
-              42
+              7
             ],
             "t2": [
-              43
+              7
             ]
           },
           "hide_name": 0,
@@ -40,7 +40,7 @@
         "D1": {
           "connections": {
             "anode": [
-              10
+              11
             ],
             "cathode": [
               6
@@ -133,7 +133,7 @@
         "D2": {
           "connections": {
             "anode": [
-              7
+              8
             ],
             "cathode": [
               6
@@ -150,7 +150,7 @@
         "D3": {
           "connections": {
             "anode": [
-              9
+              10
             ],
             "cathode": [
               6
@@ -167,7 +167,7 @@
         "D4": {
           "connections": {
             "anode": [
-              8
+              9
             ],
             "cathode": [
               4
@@ -184,7 +184,7 @@
         "D5": {
           "connections": {
             "anode": [
-              7
+              8
             ],
             "cathode": [
               4
@@ -351,10 +351,10 @@
         "R5": {
           "connections": {
             "t1": [
-              34
+              7
             ],
             "t2": [
-              35
+              7
             ]
           },
           "hide_name": 0,
@@ -370,10 +370,10 @@
         "R6": {
           "connections": {
             "t1": [
-              36
+              7
             ],
             "t2": [
-              37
+              7
             ]
           },
           "hide_name": 0,
@@ -389,10 +389,10 @@
         "R7": {
           "connections": {
             "t1": [
-              38
+              7
             ],
             "t2": [
-              39
+              7
             ]
           },
           "hide_name": 0,
@@ -414,13 +414,13 @@
               30
             ],
             "GND": [
-              12
+              13
             ],
             "OUT": [
               27
             ],
             "RESET": [
-              20
+              7
             ],
             "THRES": [
               29
@@ -429,7 +429,7 @@
               26
             ],
             "VCC": [
-              13
+              14
             ]
           },
           "hide_name": 0,
@@ -461,22 +461,22 @@
               25
             ],
             "Q1": [
-              10
+              11
             ],
             "Q2": [
-              8
+              9
             ],
             "Q3": [
-              7
+              8
             ],
             "Q4": [
               2
             ],
             "Q5": [
-              9
+              10
             ],
             "Q6": [
-              11
+              12
             ],
             "Q7": [
               31
@@ -488,13 +488,13 @@
               33
             ],
             "RST": [
-              11
+              12
             ],
             "VDD": [
-              13
+              14
             ],
             "VSS": [
-              12
+              13
             ]
           },
           "hide_name": 0,
@@ -535,6 +535,13 @@
           ],
           "hide_name": 0
         },
+        "net_10": {
+          "attributes": {},
+          "bits": [
+            12
+          ],
+          "hide_name": 0
+        },
         "net_2": {
           "attributes": {},
           "bits": [
@@ -553,13 +560,6 @@
           "attributes": {},
           "bits": [
             6
-          ],
-          "hide_name": 0
-        },
-        "net_5": {
-          "attributes": {},
-          "bits": [
-            7
           ],
           "hide_name": 0
         },
@@ -594,7 +594,7 @@
         "vcc": {
           "attributes": {},
           "bits": [
-            13
+            14
           ],
           "hide_name": 0
         }

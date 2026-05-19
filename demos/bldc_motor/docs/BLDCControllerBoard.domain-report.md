@@ -20,4 +20,4 @@ Parts in this domain (12):
 
 Boundaries to other domains: None — single-domain design.
 
-Nets entirely within this domain: 19
+Nets entirely within this domain: 26
