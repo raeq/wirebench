@@ -943,7 +943,7 @@
 <line x1="327" y1="198" x2="327" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="402" y1="198" x2="402" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="329" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
-<text x="364.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">330Ω</text>
+<text x="364.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">330 Ω</text>
 <text x="364.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R1</text>
 </g>
 <g class="component" data-refdes="D1" data-kind="passive">

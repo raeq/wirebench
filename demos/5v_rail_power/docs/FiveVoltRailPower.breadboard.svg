@@ -1016,7 +1016,7 @@
 <line x1="902" y1="198" x2="902" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="977" y1="198" x2="977" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="904" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
-<text x="939.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">470Ω</text>
+<text x="939.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">470 Ω</text>
 <text x="939.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R1</text>
 </g>
 <g class="component" data-refdes="D3" data-kind="passive">

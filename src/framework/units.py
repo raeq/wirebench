@@ -81,7 +81,20 @@ class Ohms(_Unit):
     __slots__ = ()
     _SCALE = 1.0
     def __str__(self) -> str:
-        return f"{float(self) / self._SCALE:.3g} Ω"
+        # Canonical engineering notation: 47 Ω, 4.7 kΩ, 10 kΩ,
+        # 100 kΩ, 1 MΩ, 10 MΩ, 1 GΩ. Schematic / bench convention
+        # — a resistor labelled "10K" or "10 kΩ" reads instantly,
+        # while "10000 Ω" forces the reader to count zeros and the
+        # raw `:.3g` formatter would emit unreadable scientific
+        # form ("1e+04 Ω") for clean kilo / mega multiples.
+        v = float(self) / self._SCALE
+        if v >= 1e9:
+            return f"{v / 1e9:g} GΩ"
+        if v >= 1e6:
+            return f"{v / 1e6:g} MΩ"
+        if v >= 1e3:
+            return f"{v / 1e3:g} kΩ"
+        return f"{v:g} Ω"
 
 
 class Kilohms(_Unit):

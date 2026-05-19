@@ -440,11 +440,12 @@ def _render_passive_body(
             x1 + 2, body_y1, x2 - x1 - 4, body_h,
             fill=colors.PASSIVE_BODY, stroke='#000000', stroke_width=1, rx=4,
         ))
-        # Value label inside the body.
+        # Value label inside the body — engineering notation
+        # (47 Ω, 4.7 kΩ, 10 kΩ, 1 MΩ) via the Ohms class's
+        # canonical str. Matches what a bench builder reads off a
+        # resistor's colour bands or sees on a schematic.
         ohms = getattr(part, 'ohms', None)
-        val_label = f"{int(ohms)}Ω" if ohms is not None and int(ohms) == float(ohms) else (
-            f"{ohms:g}Ω" if ohms is not None else ""
-        )
+        val_label = str(ohms) if ohms is not None else ""
         parts.append(svg.text(
             (x1 + x2) / 2, y_center + 3, val_label, fill=colors.PASSIVE_LABEL,
             size=8, anchor='middle',

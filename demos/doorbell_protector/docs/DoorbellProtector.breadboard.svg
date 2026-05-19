@@ -1530,56 +1530,56 @@
 <line x1="927" y1="198" x2="927" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="1002" y1="198" x2="1002" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="929" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
-<text x="964.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">1000Ω</text>
+<text x="964.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">1 kΩ</text>
 <text x="964.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R1</text>
 </g>
 <g class="component" data-refdes="R2" data-kind="passive">
 <line x1="1052" y1="198" x2="1052" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="1127" y1="198" x2="1127" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="1054" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
-<text x="1089.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">1000000Ω</text>
+<text x="1089.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">1 MΩ</text>
 <text x="1089.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R2</text>
 </g>
 <g class="component" data-refdes="R3" data-kind="passive">
 <line x1="1177" y1="198" x2="1177" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="1252" y1="198" x2="1252" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="1179" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
-<text x="1214.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">1000000Ω</text>
+<text x="1214.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">1 MΩ</text>
 <text x="1214.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R3</text>
 </g>
 <g class="component" data-refdes="R4" data-kind="passive">
 <line x1="1302" y1="198" x2="1302" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="1377" y1="198" x2="1377" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="1304" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
-<text x="1339.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">1000Ω</text>
+<text x="1339.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">1 kΩ</text>
 <text x="1339.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R4</text>
 </g>
 <g class="component" data-refdes="R5" data-kind="passive">
 <line x1="1427" y1="198" x2="1427" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="1502" y1="198" x2="1502" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="1429" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
-<text x="1464.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">10000Ω</text>
+<text x="1464.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">10 kΩ</text>
 <text x="1464.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R5</text>
 </g>
 <g class="component" data-refdes="R6" data-kind="passive">
 <line x1="1552" y1="198" x2="1552" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="1627" y1="198" x2="1627" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="1554" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
-<text x="1589.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">1000000Ω</text>
+<text x="1589.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">1 MΩ</text>
 <text x="1589.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R6</text>
 </g>
 <g class="component" data-refdes="R7" data-kind="passive">
 <line x1="1677" y1="198" x2="1677" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="1752" y1="198" x2="1752" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="1679" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
-<text x="1714.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">4700Ω</text>
+<text x="1714.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">4.7 kΩ</text>
 <text x="1714.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R7</text>
 </g>
 <g class="component" data-refdes="R8" data-kind="passive">
 <line x1="1802" y1="198" x2="1802" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="1877" y1="198" x2="1877" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="1804" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
-<text x="1839.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">47000Ω</text>
+<text x="1839.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">47 kΩ</text>
 <text x="1839.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R8</text>
 </g>
 <g class="component" data-refdes="C1" data-kind="passive">

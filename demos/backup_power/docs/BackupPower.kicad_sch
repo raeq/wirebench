@@ -1990,7 +1990,7 @@
       (at 66.04 962.66 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "7.15e+05 Ω"
+    (property "Value" "715 kΩ"
       (at 63.5 967.74 0)
       (effects (font (size 1.27 1.27)))
     )
@@ -2058,7 +2058,7 @@
       (at 66.04 1000.76 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "2.26e+05 Ω"
+    (property "Value" "226 kΩ"
       (at 63.5 1005.84 0)
       (effects (font (size 1.27 1.27)))
     )
@@ -2126,7 +2126,7 @@
       (at 66.04 1038.86 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "4.02e+04 Ω"
+    (property "Value" "40.2 kΩ"
       (at 63.5 1043.94 0)
       (effects (font (size 1.27 1.27)))
     )
@@ -2194,7 +2194,7 @@
       (at 66.04 1076.96 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1e+04 Ω"
+    (property "Value" "10 kΩ"
       (at 63.5 1082.04 0)
       (effects (font (size 1.27 1.27)))
     )
