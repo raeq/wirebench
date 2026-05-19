@@ -1,0 +1,51 @@
+digraph "OneSecondTimer" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  U1 [label="U1\\nLM741"];
+  R1 [label="R1\\n100000Ω"];
+  R2 [label="R2\\n100000Ω"];
+  R3 [label="R3\\n4700Ω"];
+  R4 [label="R4\\n50000Ω"];
+  R5 [label="R5\\n1e+07Ω"];
+  R6 [label="R6\\n220000Ω"];
+  C2 [label="C2\\n1e-07F"];
+  D1 [label="D1\\nD1N4148"];
+  C1 [label="C1\\n0.0001F"];
+  R7 [label="R7\\n510Ω"];
+  R8 [label="R8\\n510Ω"];
+  D2 [label="D2\\nred LED"];
+  // Nets
+  node [shape=circle, label="", width=0.15, fixedsize=true];
+  gnd; net_0; net_1; net_2; net_5; net_6; net_7; net_8; vcc;
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+  C1 -> vcc [taillabel="t1"];
+  C1 -> gnd [taillabel="t2"];
+  C2 -> net_5 [taillabel="t1"];
+  C2 -> gnd [taillabel="t2"];
+  D1 -> net_5 [taillabel="anode"];
+  D1 -> net_6 [taillabel="cathode"];
+  D2 -> net_0 [taillabel="anode"];
+  D2 -> net_1 [taillabel="cathode"];
+  R1 -> vcc [taillabel="t1"];
+  R1 -> net_8 [taillabel="t2"];
+  R2 -> net_8 [taillabel="t1"];
+  R2 -> gnd [taillabel="t2"];
+  R3 -> net_8 [taillabel="t1"];
+  R3 -> net_7 [taillabel="t2"];
+  R4 -> net_7 [taillabel="t1"];
+  R4 -> net_2 [taillabel="t2"];
+  R5 -> net_6 [taillabel="t1"];
+  R5 -> net_5 [taillabel="t2"];
+  R6 -> net_2 [taillabel="t1"];
+  R6 -> net_6 [taillabel="t2"];
+  R7 -> vcc [taillabel="t1"];
+  R7 -> net_0 [taillabel="t2"];
+  R8 -> net_1 [taillabel="t1"];
+  R8 -> net_2 [taillabel="t2"];
+  U1 -> net_5 [taillabel="IN_NEG"];
+  U1 -> net_8 [taillabel="IN_POS"];
+  U1 -> net_2 [taillabel="OUT"];
+  U1 -> gnd [taillabel="V_NEG"];
+  U1 -> vcc [taillabel="V_POS"];
+}

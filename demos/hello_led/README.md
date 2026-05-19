@@ -48,6 +48,7 @@ The `docs/` folder beside this README has the design's pre-generated exports:
 
 - [`HelloLED.bom.csv`](docs/HelloLED.bom.csv) — parts list (one resistor, one LED)
 - [`HelloLED.md`](docs/HelloLED.md) — breadboard assembly guide
+- [`HelloLED.breadboard.svg`](docs/HelloLED.breadboard.svg) — breadboard layout SVG (open in a browser)
 - [`HelloLED.net`](docs/HelloLED.net) — KiCad netlist
 - [`HelloLED.kicad_sch`](docs/HelloLED.kicad_sch) — KiCad schematic, open in Eeschema 9.x
 - [`HelloLED.cir`](docs/HelloLED.cir) — SPICE deck

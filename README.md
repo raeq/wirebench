@@ -53,11 +53,12 @@ Components are stored as `self.<name>` attributes so the framework can auto-coll
 | Graphviz DOT     | `.dot`                 | Render to SVG / PNG with `dot -Tsvg`                                                           |
 | Yosys JSON       | `.yosys.json`          | Render to a browser-friendly schematic via [netlistsvg](https://github.com/nturley/netlistsvg) |
 | Assembly Guide   | `.md`                  | Read at the bench — recipe-style breadboard build instructions                                 |
+| Breadboard SVG   | `.breadboard.svg`      | Open in a browser — the design as it sits on a standard solderless breadboard                  |
 | Net Report       | `.net-report.md`       | Every logical net, what drives it, what reads it, domain assignment                            |
 | Domain Report    | `.domain-report.md`    | Every `GroundDomain`, parts in each, where isolation boundaries sit                            |
 | Interface Report | `.interface-report.md` | Every `Board`'s public connector pins and what they connect to                                 |
 
-Every demo in `demos/` ships with all eleven exports pre-generated in its `docs/` subfolder — open any `*.kicad_sch` in Eeschema or any `*.svg` to see the rendered schematic, or any `*.md` to read the bench-assembly guide and the three review reports.
+Every demo in `demos/` ships with all twelve exports pre-generated in its `docs/` subfolder — open any `*.kicad_sch` in Eeschema or any `*.svg` to see the rendered schematic, or any `*.md` to read the bench-assembly guide and the three review reports.
 
 ## What it prevents
 

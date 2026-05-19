@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 240" width="800" height="240">
+<title>BLDCSupplyBoard — breadboard visualiser refused</title>
+<rect x="0" y="0" width="800" height="240" style="fill:#fffaf0;stroke:#888888;stroke-width:1"/>
+<text x="400" y="40" text-anchor="middle" style="font-family:monospace;font-size:14px;fill:#222222;font-weight:bold">BLDCSupplyBoard — breadboard render not produced</text>
+<text x="400" y="68" text-anchor="middle" style="font-family:monospace;font-size:10px;fill:#222222">The breadboard visualiser refused this design with:</text>
+<text x="40" y="96" style="font-family:monospace;font-size:10px;fill:#333333">The breadboard visualiser renders single-circuit designs onto a standard solderless breadboard. The top-level design is a Board (BLDCSupplyBoard) — a populated PCB. Render `board.circuit` directly, or use the `kicad_sch` exporter for the PCB schematic.</text>
+<text x="400" y="220" text-anchor="middle" style="font-family:monospace;font-size:9px;fill:#666666">See the .kicad_sch (schematic) or .dot (graph) exports for this design.</text>
+</svg>

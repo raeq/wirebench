@@ -1,0 +1,17 @@
+.TITLE OneSecondTimer
+V_Rail_0 vcc 0 DC 5.0
+U1 nc_0 net_5 net_8 0 nc_1 net_2 vcc LM741
+R1 vcc net_8 100000.0
+R2 net_8 0 100000.0
+R3 net_8 net_7 4700.0
+R4 net_7 net_2 50000.0
+R5 net_6 net_5 10000000.0
+R6 net_2 net_6 220000.0
+C2 net_5 0 1e-07
+D1 net_5 net_6 D1N4148
+C1 vcc 0 0.0001
+R7 vcc net_0 510.0
+R8 net_1 net_2 510.0
+D2 net_0 net_1 D_LED
+.LIB spice-models.lib
+.END
