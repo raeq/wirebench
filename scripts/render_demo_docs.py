@@ -59,6 +59,7 @@ import framework.export.domain_report    # noqa: F401, E402
 import framework.export.interface_report # noqa: F401, E402
 import framework.export.kicad_sch         # noqa: F401, E402
 import framework.export.kicad_sch as _kicad_sch_adapter  # noqa: E402
+import framework.export.breadboard        # noqa: F401, E402
 
 from framework.circuit import Circuit                # noqa: E402
 from framework.errors import BreadboardIncompatibleError  # noqa: E402
@@ -78,6 +79,7 @@ EXTENSIONS = {
     'spice':            'cir',
     'yosys':            'yosys.json',
     'assembly_guide':   'md',
+    'breadboard':       'breadboard.svg',
     'net_report':       'net-report.md',
     'domain_report':    'domain-report.md',
     'interface_report': 'interface-report.md',
@@ -168,6 +170,48 @@ def _refusal_stub(class_name: str, error: BreadboardIncompatibleError) -> str:
     )
 
 
+def _breadboard_refusal_stub(
+    class_name: str, error: BreadboardIncompatibleError,
+) -> str:
+    """SVG stub for designs the breadboard visualiser refuses. Renders
+    a placeholder text block explaining the refusal and pointing at the
+    schematic / kicad_sch exports."""
+    reason_lines = str(error).splitlines()
+    # Escape angle brackets & ampersands for SVG text content.
+    def _esc(s: str) -> str:
+        return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+    lines = [
+        '<svg xmlns="http://www.w3.org/2000/svg" '
+        'viewBox="0 0 800 240" width="800" height="240">',
+        f'<title>{_esc(class_name)} — breadboard visualiser refused</title>',
+        '<rect x="0" y="0" width="800" height="240" '
+        'style="fill:#fffaf0;stroke:#888888;stroke-width:1"/>',
+        '<text x="400" y="40" text-anchor="middle" '
+        'style="font-family:monospace;font-size:14px;fill:#222222;'
+        'font-weight:bold">'
+        f'{_esc(class_name)} — breadboard render not produced</text>',
+        '<text x="400" y="68" text-anchor="middle" '
+        'style="font-family:monospace;font-size:10px;fill:#222222">'
+        'The breadboard visualiser refused this design with:</text>',
+    ]
+    y = 96
+    for ln in reason_lines[:8]:
+        lines.append(
+            '<text x="40" y="{y}" '
+            'style="font-family:monospace;font-size:10px;fill:#333333">'
+            f'{_esc(ln)}</text>'.format(y=y)
+        )
+        y += 14
+    lines.append(
+        '<text x="400" y="220" text-anchor="middle" '
+        'style="font-family:monospace;font-size:9px;fill:#666666">'
+        'See the .kicad_sch (schematic) or .dot (graph) exports for '
+        'this design.</text>'
+    )
+    lines.append('</svg>')
+    return '\n'.join(lines) + '\n'
+
+
 def _retarget_dot_to_tb(dot_path: Path) -> None:
     """Rewrite a `.dot` file in place so its `rankdir` is `TB` instead
     of `LR`.  The library currently emits LR, but the docs/ artefacts
@@ -231,9 +275,15 @@ def main() -> None:
                     warnings.simplefilter('ignore')
                     out = export_to_string(circuit, fmt)
             except BreadboardIncompatibleError as e:
-                # Only the assembly_guide refuses on substrate grounds —
-                # preserve the refusal as a stub doc.
-                out = _refusal_stub(class_name, e)
+                # Two exporters refuse on substrate grounds: the
+                # assembly_guide (markdown stub) and the breadboard
+                # visualiser (SVG stub). Each gets a format-appropriate
+                # placeholder so the docs/ directory always contains a
+                # file for the format, even when the design is refused.
+                if fmt == 'breadboard':
+                    out = _breadboard_refusal_stub(class_name, e)
+                else:
+                    out = _refusal_stub(class_name, e)
             path.write_text(out)
             total_files += 1
         # Rewrite the saved .dot and .mmd to top-to-bottom layout —

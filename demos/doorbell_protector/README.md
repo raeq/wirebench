@@ -47,6 +47,7 @@ The `docs/` folder beside this README has the design's pre-generated exports:
 
 - [`DoorbellProtector.bom.csv`](docs/DoorbellProtector.bom.csv) — parts list
 - [`DoorbellProtector.md`](docs/DoorbellProtector.md) — breadboard assembly guide
+- [`DoorbellProtector.breadboard.svg`](docs/DoorbellProtector.breadboard.svg) — breadboard layout SVG (open in a browser)
 - [`DoorbellProtector.net`](docs/DoorbellProtector.net) — KiCad netlist
 - [`DoorbellProtector.kicad_sch`](docs/DoorbellProtector.kicad_sch) — KiCad schematic, open in Eeschema 9.x
 - [`DoorbellProtector.cir`](docs/DoorbellProtector.cir) — SPICE deck

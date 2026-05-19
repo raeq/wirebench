@@ -53,6 +53,7 @@ The `docs/` folder beside this README has the design's pre-generated exports:
 
 - [`BatteryPackBoard.bom.csv`](docs/BatteryPackBoard.bom.csv) — parts list
 - [`BatteryPackBoard.md`](docs/BatteryPackBoard.md) — breadboard assembly guide
+- [`BatteryPackBoard.breadboard.svg`](docs/BatteryPackBoard.breadboard.svg) — breadboard layout SVG (open in a browser)
 - [`BatteryPackBoard.net`](docs/BatteryPackBoard.net) — KiCad netlist
 - [`BatteryPackBoard.kicad_sch`](docs/BatteryPackBoard.kicad_sch) — KiCad schematic, open in Eeschema 9.x
 - [`BatteryPackBoard.cir`](docs/BatteryPackBoard.cir) — SPICE deck

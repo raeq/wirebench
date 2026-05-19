@@ -176,13 +176,25 @@ def _place_2lead_part(
     spacing: int,
 ) -> tuple[ComponentPlacement, int]:
     """Place a 2-lead through-hole part with leads at `start_pos` and
-    `start_pos + spacing`.  Both leads land above the trough (row 'A')
-    so the user can see the part orientation at a glance.  Returns
-    (placement, next_free_position)."""
+    `start_pos + spacing`.  Both leads land on row 'D' — near the
+    trough at the bottom of the top bank.
+
+    Row 'D' (one row above the trough) keeps the passive body close
+    to the bank floor, leaving rows A–C entirely clear above it for
+    jumpers terminating on the same tie strip. A jumper coming down
+    from a detour band now lands cleanly at row A without crossing
+    the passive body on the way.
+
+    The assembly guide narrates each tie strip as "any of
+    `<pos>A`–`<pos>E`", which covers row D and any clean hole above
+    it — the bench builder is free to use whichever row is least
+    cluttered for their incoming jumpers.
+
+    Returns (placement, next_free_position)."""
     port_names = list(component.ports.keys())
     placements: list[tuple[str, PinPlacement]] = []
     for i, name in enumerate(port_names[:2]):
-        placements.append((name, PinPlacement(start_pos + i * spacing, 'A')))
+        placements.append((name, PinPlacement(start_pos + i * spacing, 'D')))
     next_pos = start_pos + spacing + 1
     return ComponentPlacement(component, tuple(placements)), next_pos
 
