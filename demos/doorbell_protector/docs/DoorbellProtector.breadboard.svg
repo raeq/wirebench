@@ -1354,12 +1354,12 @@
 <path d="M 427 144 L 427 94" class="jumper rail_minus" style="fill:none;stroke:#000000;stroke-width:2"/>
 <circle cx="427" cy="144" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
 <circle cx="427" cy="94" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
-<path d="M 277 332 L 277 382" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<path d="M 277 332 L 277 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
 <circle cx="277" cy="332" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
-<circle cx="277" cy="382" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
-<path d="M 427 332 L 427 382" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="277" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 427 332 L 427 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
 <circle cx="427" cy="332" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
-<circle cx="427" cy="382" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="427" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
 <path d="M 327 144 L 327 64 L 452 64 L 452 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
 <circle cx="327" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
 <circle cx="452" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>

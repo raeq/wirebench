@@ -305,13 +305,24 @@ def route_jumpers(
         if net_polarity is True:
             color = RAIL_PLUS_JUMPER
             kind = JumperKind.RAIL_PLUS
+            # Always route to the TOP rails. The shared assembly
+            # guide instructs builders to wire only the top `+`/`-`
+            # rails to the supply; a standard breadboard's top and
+            # bottom rail strips are electrically isolated, so
+            # sending a bot-bank pin to a `+BOT`/`-BOT` rail would
+            # show an unpowered connection unless the renderer also
+            # drew rail-bridge jumpers. Sending every rail jumper to
+            # the top rails matches the assembly-guide narrative —
+            # bot-bank pins cross the trough via the standard
+            # cross-bank double-detour, terminating at the powered
+            # top rail.
             rail_marker_top = '+TOP'
-            rail_marker_bot = '+BOT'
+            rail_marker_bot = '+TOP'
         elif net_polarity is False:
             color = RAIL_MINUS_JUMPER
             kind = JumperKind.RAIL_MINUS
             rail_marker_top = '-TOP'
-            rail_marker_bot = '-BOT'
+            rail_marker_bot = '-TOP'
         else:
             kind_str = _net_signal_kind(node_obj.get(nid))
             if kind_str == 'analog':
@@ -325,8 +336,8 @@ def route_jumpers(
             rail_marker_top = rail_marker_bot = ''
 
         if net_polarity is not None:
-            # Rail net: one jumper per non-rail endpoint to the nearest
-            # rail strip on its bank's side.
+            # Rail net: one jumper per non-rail endpoint to the
+            # powered top rail (see comment above).
             for pos, row, label in unique_endpoints:
                 rail_marker = rail_marker_top if _bank(row) == 'top' else rail_marker_bot
                 jumpers.append(Jumper(

@@ -11,7 +11,13 @@ Refusal (acceptance criterion 7 in `.plans/phase-2.6-spec.md`):
   - SMD parts (`is_breadboard_compatible == False`)
   - Top-level `Board` (one populated PCB)
   - Multi-board designs (nested `Board`s — v1 defers; spec §12)
-  - Designs whose placement exceeds 63 positions
+  - Designs whose placement exceeds `svg.MAX_POSITIONS` columns
+    (four daisy-chained full-size breadboards). Smaller designs
+    that span more than one full-size breadboard's 63 columns —
+    Dice at col 106, DoorbellProtector at col 92 — are rendered on
+    a canvas wide enough to fit the daisy-chain, with a faint
+    column-break marker every 63 columns. Only designs that exceed
+    the four-board cap are refused.
 
 Output is a single SVG per top-level `Circuit`. v1 does not produce a
 composite multi-Board SVG — that's deferred to v2 per the locked
