@@ -1,0 +1,13 @@
+.TITLE LightActivatedSwitch
+V_Rail_0 vcc 0 DC 5.0
+U1 nc_0 net_6 net_8 0 nc_1 net_3 vcc LM741
+R2 vcc net_8 20000.0
+R1 net_8 0 10000.0
+R3 vcc net_6 10000.0
+R4 net_6 0 5000.0
+Q1 net_1 net_4 0 BC547
+R5 net_3 net_4 4700.0
+R6 vcc net_0 470.0
+D1 net_0 net_1 D_LED
+.LIB spice-models.lib
+.END

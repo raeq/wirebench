@@ -21,6 +21,7 @@ import components.chips        # noqa: F401
 import components.connectors   # noqa: F401
 import components.diodes       # noqa: F401
 import components.passives     # noqa: F401
+import components.transducers  # noqa: F401
 import components.transistors  # noqa: F401
 import framework.board         # noqa: F401
 
@@ -44,6 +45,13 @@ _OVERRIDES = {
     'Capacitor':  _passive('Capacitor', farads=100e-9),
     'Inductor':   _passive('Inductor',  henries=100e-6),
     'LED':        _passive('LED',       color='red'),
+    'Photoresistor':     _passive('Photoresistor', dark_ohms=1_000_000, light_ohms=500),
+    'Speaker':           _passive('Speaker', impedance_ohms=8),
+    'CrystalEarpiece':   _passive('CrystalEarpiece', impedance_ohms=32_000),
+    'VariableCapacitor': _passive('VariableCapacitor', min_farads=10e-12, max_farads=300e-12),
+    'FerriteAerial':     _passive('FerriteAerial', henries=400e-6),
+    'Antenna':           lambda n: lookup('Antenna')(refdes_number=n),
+    'Earth':             lambda n: lookup('Earth')(refdes_number=n),
     'Relay_SPDT': lambda n: lookup('Relay_SPDT')(refdes_number=n),
     'Rail':       lambda n: lookup('Rail')(level=True),
     'Cell':       lambda n: lookup('Cell')(

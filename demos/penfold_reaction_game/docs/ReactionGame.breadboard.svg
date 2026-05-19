@@ -1,0 +1,2201 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3255 470" width="3255" height="470">
+<title>ReactionGame — breadboard layout</title>
+<g class="board-surface">
+<rect x="0" y="0" width="3255" height="470" style="fill:#fffaf0;stroke:#888888;stroke-width:1"/>
+<line x1="40" y1="74" x2="3215" y2="74" class="rail-strip" style="stroke:#cc0000;stroke-width:2"/>
+<text x="26" y="78" text-anchor="start" style="font-family:monospace;font-size:12px;fill:#cc0000;font-weight:bold">+</text>
+<line x1="40" y1="94" x2="3215" y2="94" class="rail-strip" style="stroke:#6cb4e4;stroke-width:2"/>
+<text x="26" y="98" text-anchor="start" style="font-family:monospace;font-size:12px;fill:#6cb4e4;font-weight:bold">−</text>
+<line x1="40" y1="382" x2="3215" y2="382" class="rail-strip" style="stroke:#cc0000;stroke-width:2"/>
+<text x="26" y="386" text-anchor="start" style="font-family:monospace;font-size:12px;fill:#cc0000;font-weight:bold">+</text>
+<line x1="40" y1="402" x2="3215" y2="402" class="rail-strip" style="stroke:#6cb4e4;stroke-width:2"/>
+<text x="26" y="406" text-anchor="start" style="font-family:monospace;font-size:12px;fill:#6cb4e4;font-weight:bold">−</text>
+<circle cx="52" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="77" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="102" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="127" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="152" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="177" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="202" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="227" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="252" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="277" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="302" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="327" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="352" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="377" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="402" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="427" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="452" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="477" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="502" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="527" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="552" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="577" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="602" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="627" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="652" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="677" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="702" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="727" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="752" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="777" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="802" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="827" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="852" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="877" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="902" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="927" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="952" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="977" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1002" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1027" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1052" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1077" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1102" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1127" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1152" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1177" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1202" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1227" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1252" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1277" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1302" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1327" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1352" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1377" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1402" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1427" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1452" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1477" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1502" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1527" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1552" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1577" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1602" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1627" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1652" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1677" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1702" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1727" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1752" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1777" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1802" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1827" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1852" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1877" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1902" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1927" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1952" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1977" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2002" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2027" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2052" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2077" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2102" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2127" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2152" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2177" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2202" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2227" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2252" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2277" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2302" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2327" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2352" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2377" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2402" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2427" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2452" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2477" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2502" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2527" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2552" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2577" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2602" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2627" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2652" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2677" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2702" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2727" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2752" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2777" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2802" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2827" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2852" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2877" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2902" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2927" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2952" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2977" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3002" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3027" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3052" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3077" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3102" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3127" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3152" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3177" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3202" cy="74" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="52" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="77" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="102" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="127" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="152" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="177" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="202" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="227" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="252" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="277" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="302" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="327" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="352" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="377" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="402" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="427" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="452" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="477" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="502" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="527" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="552" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="577" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="602" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="627" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="652" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="677" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="702" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="727" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="752" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="777" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="802" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="827" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="852" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="877" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="902" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="927" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="952" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="977" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1002" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1027" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1052" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1077" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1102" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1127" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1152" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1177" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1202" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1227" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1252" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1277" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1302" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1327" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1352" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1377" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1402" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1427" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1452" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1477" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1502" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1527" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1552" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1577" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1602" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1627" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1652" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1677" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1702" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1727" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1752" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1777" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1802" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1827" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1852" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1877" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1902" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1927" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1952" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1977" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2002" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2027" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2052" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2077" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2102" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2127" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2152" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2177" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2202" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2227" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2252" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2277" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2302" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2327" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2352" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2377" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2402" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2427" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2452" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2477" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2502" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2527" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2552" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2577" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2602" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2627" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2652" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2677" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2702" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2727" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2752" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2777" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2802" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2827" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2852" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2877" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2902" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2927" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2952" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2977" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3002" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3027" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3052" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3077" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3102" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3127" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3152" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3177" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3202" cy="94" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="52" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="77" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="102" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="127" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="152" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="177" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="202" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="227" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="252" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="277" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="302" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="327" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="352" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="377" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="402" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="427" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="452" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="477" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="502" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="527" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="552" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="577" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="602" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="627" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="652" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="677" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="702" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="727" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="752" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="777" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="802" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="827" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="852" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="877" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="902" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="927" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="952" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="977" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1002" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1027" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1052" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1077" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1102" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1127" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1152" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1177" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1202" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1227" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1252" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1277" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1302" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1327" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1352" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1377" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1402" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1427" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1452" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1477" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1502" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1527" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1552" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1577" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1602" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1627" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1652" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1677" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1702" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1727" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1752" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1777" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1802" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1827" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1852" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1877" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1902" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1927" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1952" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1977" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2002" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2027" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2052" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2077" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2102" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2127" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2152" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2177" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2202" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2227" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2252" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2277" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2302" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2327" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2352" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2377" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2402" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2427" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2452" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2477" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2502" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2527" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2552" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2577" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2602" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2627" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2652" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2677" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2702" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2727" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2752" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2777" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2802" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2827" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2852" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2877" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2902" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2927" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2952" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2977" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3002" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3027" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3052" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3077" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3102" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3127" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3152" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3177" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3202" cy="382" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="52" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="77" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="102" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="127" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="152" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="177" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="202" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="227" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="252" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="277" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="302" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="327" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="352" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="377" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="402" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="427" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="452" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="477" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="502" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="527" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="552" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="577" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="602" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="627" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="652" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="677" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="702" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="727" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="752" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="777" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="802" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="827" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="852" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="877" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="902" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="927" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="952" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="977" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1002" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1027" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1052" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1077" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1102" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1127" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1152" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1177" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1202" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1227" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1252" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1277" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1302" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1327" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1352" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1377" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1402" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1427" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1452" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1477" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1502" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1527" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1552" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1577" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1602" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1627" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1652" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1677" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1702" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1727" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1752" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1777" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1802" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1827" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1852" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1877" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1902" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1927" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1952" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1977" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2002" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2027" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2052" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2077" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2102" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2127" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2152" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2177" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2202" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2227" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2252" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2277" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2302" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2327" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2352" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2377" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2402" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2427" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2452" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2477" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2502" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2527" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2552" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2577" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2602" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2627" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2652" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2677" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2702" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2727" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2752" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2777" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2802" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2827" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2852" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2877" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2902" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2927" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2952" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2977" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3002" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3027" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3052" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3077" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3102" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3127" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3152" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3177" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3202" cy="402" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="52" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="77" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="102" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="127" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="152" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="177" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="202" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="227" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="252" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="277" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="302" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="327" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="352" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="377" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="402" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="427" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="452" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="477" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="502" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="527" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="552" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="577" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="602" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="627" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="652" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="677" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="702" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="727" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="752" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="777" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="802" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="827" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="852" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="877" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="902" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="927" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="952" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="977" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1002" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1027" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1052" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1077" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1102" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1127" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1152" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1177" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1202" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1227" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1252" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1277" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1302" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1327" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1352" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1377" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1402" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1427" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1452" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1477" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1502" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1527" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1552" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1577" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1602" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1627" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1652" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1677" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1702" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1727" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1752" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1777" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1802" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1827" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1852" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1877" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1902" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1927" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1952" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1977" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2002" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2027" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2052" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2077" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2102" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2127" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2152" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2177" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2202" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2227" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2252" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2277" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2302" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2327" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2352" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2377" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2402" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2427" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2452" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2477" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2502" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2527" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2552" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2577" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2602" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2627" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2652" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2677" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2702" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2727" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2752" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2777" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2802" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2827" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2852" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2877" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2902" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2927" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2952" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2977" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3002" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3027" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3052" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3077" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3102" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3127" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3152" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3177" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3202" cy="144" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="52" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="77" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="102" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="127" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="152" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="177" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="202" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="227" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="252" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="277" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="302" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="327" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="352" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="377" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="402" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="427" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="452" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="477" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="502" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="527" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="552" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="577" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="602" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="627" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="652" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="677" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="702" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="727" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="752" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="777" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="802" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="827" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="852" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="877" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="902" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="927" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="952" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="977" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1002" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1027" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1052" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1077" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1102" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1127" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1152" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1177" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1202" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1227" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1252" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1277" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1302" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1327" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1352" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1377" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1402" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1427" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1452" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1477" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1502" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1527" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1552" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1577" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1602" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1627" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1652" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1677" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1702" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1727" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1752" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1777" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1802" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1827" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1852" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1877" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1902" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1927" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1952" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1977" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2002" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2027" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2052" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2077" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2102" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2127" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2152" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2177" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2202" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2227" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2252" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2277" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2302" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2327" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2352" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2377" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2402" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2427" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2452" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2477" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2502" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2527" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2552" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2577" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2602" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2627" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2652" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2677" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2702" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2727" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2752" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2777" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2802" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2827" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2852" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2877" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2902" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2927" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2952" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2977" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3002" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3027" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3052" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3077" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3102" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3127" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3152" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3177" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3202" cy="162" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="52" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="77" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="102" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="127" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="152" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="177" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="202" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="227" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="252" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="277" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="302" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="327" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="352" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="377" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="402" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="427" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="452" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="477" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="502" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="527" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="552" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="577" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="602" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="627" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="652" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="677" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="702" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="727" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="752" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="777" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="802" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="827" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="852" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="877" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="902" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="927" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="952" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="977" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1002" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1027" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1052" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1077" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1102" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1127" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1152" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1177" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1202" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1227" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1252" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1277" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1302" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1327" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1352" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1377" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1402" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1427" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1452" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1477" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1502" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1527" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1552" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1577" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1602" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1627" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1652" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1677" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1702" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1727" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1752" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1777" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1802" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1827" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1852" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1877" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1902" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1927" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1952" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1977" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2002" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2027" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2052" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2077" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2102" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2127" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2152" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2177" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2202" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2227" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2252" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2277" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2302" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2327" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2352" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2377" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2402" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2427" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2452" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2477" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2502" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2527" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2552" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2577" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2602" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2627" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2652" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2677" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2702" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2727" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2752" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2777" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2802" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2827" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2852" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2877" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2902" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2927" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2952" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2977" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3002" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3027" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3052" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3077" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3102" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3127" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3152" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3177" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3202" cy="180" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="52" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="77" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="102" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="127" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="152" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="177" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="202" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="227" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="252" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="277" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="302" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="327" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="352" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="377" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="402" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="427" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="452" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="477" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="502" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="527" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="552" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="577" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="602" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="627" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="652" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="677" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="702" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="727" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="752" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="777" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="802" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="827" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="852" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="877" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="902" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="927" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="952" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="977" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1002" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1027" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1052" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1077" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1102" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1127" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1152" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1177" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1202" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1227" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1252" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1277" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1302" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1327" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1352" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1377" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1402" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1427" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1452" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1477" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1502" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1527" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1552" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1577" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1602" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1627" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1652" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1677" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1702" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1727" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1752" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1777" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1802" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1827" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1852" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1877" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1902" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1927" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1952" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1977" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2002" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2027" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2052" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2077" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2102" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2127" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2152" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2177" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2202" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2227" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2252" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2277" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2302" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2327" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2352" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2377" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2402" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2427" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2452" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2477" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2502" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2527" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2552" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2577" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2602" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2627" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2652" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2677" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2702" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2727" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2752" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2777" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2802" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2827" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2852" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2877" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2902" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2927" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2952" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2977" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3002" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3027" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3052" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3077" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3102" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3127" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3152" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3177" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3202" cy="198" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="52" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="77" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="102" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="127" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="152" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="177" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="202" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="227" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="252" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="277" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="302" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="327" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="352" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="377" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="402" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="427" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="452" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="477" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="502" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="527" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="552" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="577" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="602" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="627" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="652" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="677" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="702" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="727" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="752" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="777" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="802" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="827" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="852" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="877" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="902" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="927" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="952" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="977" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1002" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1027" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1052" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1077" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1102" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1127" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1152" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1177" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1202" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1227" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1252" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1277" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1302" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1327" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1352" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1377" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1402" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1427" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1452" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1477" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1502" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1527" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1552" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1577" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1602" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1627" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1652" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1677" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1702" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1727" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1752" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1777" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1802" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1827" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1852" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1877" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1902" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1927" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1952" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1977" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2002" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2027" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2052" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2077" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2102" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2127" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2152" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2177" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2202" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2227" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2252" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2277" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2302" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2327" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2352" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2377" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2402" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2427" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2452" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2477" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2502" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2527" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2552" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2577" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2602" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2627" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2652" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2677" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2702" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2727" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2752" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2777" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2802" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2827" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2852" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2877" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2902" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2927" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2952" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2977" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3002" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3027" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3052" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3077" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3102" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3127" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3152" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3177" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3202" cy="216" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="52" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="77" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="102" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="127" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="152" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="177" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="202" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="227" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="252" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="277" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="302" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="327" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="352" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="377" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="402" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="427" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="452" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="477" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="502" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="527" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="552" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="577" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="602" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="627" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="652" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="677" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="702" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="727" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="752" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="777" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="802" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="827" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="852" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="877" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="902" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="927" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="952" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="977" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1002" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1027" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1052" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1077" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1102" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1127" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1152" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1177" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1202" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1227" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1252" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1277" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1302" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1327" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1352" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1377" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1402" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1427" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1452" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1477" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1502" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1527" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1552" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1577" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1602" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1627" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1652" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1677" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1702" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1727" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1752" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1777" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1802" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1827" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1852" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1877" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1902" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1927" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1952" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1977" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2002" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2027" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2052" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2077" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2102" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2127" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2152" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2177" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2202" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2227" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2252" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2277" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2302" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2327" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2352" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2377" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2402" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2427" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2452" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2477" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2502" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2527" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2552" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2577" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2602" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2627" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2652" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2677" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2702" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2727" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2752" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2777" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2802" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2827" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2852" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2877" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2902" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2927" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2952" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2977" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3002" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3027" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3052" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3077" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3102" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3127" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3152" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3177" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3202" cy="260" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="52" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="77" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="102" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="127" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="152" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="177" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="202" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="227" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="252" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="277" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="302" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="327" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="352" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="377" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="402" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="427" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="452" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="477" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="502" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="527" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="552" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="577" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="602" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="627" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="652" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="677" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="702" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="727" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="752" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="777" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="802" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="827" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="852" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="877" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="902" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="927" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="952" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="977" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1002" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1027" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1052" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1077" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1102" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1127" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1152" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1177" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1202" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1227" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1252" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1277" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1302" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1327" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1352" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1377" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1402" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1427" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1452" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1477" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1502" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1527" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1552" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1577" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1602" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1627" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1652" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1677" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1702" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1727" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1752" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1777" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1802" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1827" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1852" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1877" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1902" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1927" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1952" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1977" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2002" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2027" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2052" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2077" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2102" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2127" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2152" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2177" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2202" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2227" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2252" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2277" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2302" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2327" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2352" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2377" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2402" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2427" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2452" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2477" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2502" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2527" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2552" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2577" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2602" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2627" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2652" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2677" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2702" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2727" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2752" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2777" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2802" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2827" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2852" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2877" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2902" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2927" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2952" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2977" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3002" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3027" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3052" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3077" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3102" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3127" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3152" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3177" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3202" cy="278" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="52" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="77" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="102" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="127" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="152" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="177" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="202" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="227" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="252" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="277" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="302" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="327" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="352" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="377" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="402" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="427" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="452" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="477" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="502" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="527" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="552" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="577" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="602" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="627" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="652" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="677" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="702" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="727" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="752" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="777" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="802" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="827" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="852" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="877" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="902" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="927" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="952" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="977" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1002" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1027" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1052" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1077" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1102" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1127" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1152" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1177" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1202" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1227" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1252" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1277" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1302" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1327" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1352" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1377" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1402" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1427" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1452" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1477" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1502" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1527" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1552" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1577" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1602" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1627" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1652" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1677" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1702" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1727" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1752" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1777" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1802" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1827" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1852" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1877" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1902" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1927" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1952" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1977" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2002" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2027" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2052" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2077" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2102" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2127" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2152" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2177" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2202" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2227" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2252" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2277" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2302" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2327" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2352" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2377" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2402" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2427" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2452" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2477" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2502" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2527" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2552" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2577" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2602" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2627" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2652" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2677" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2702" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2727" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2752" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2777" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2802" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2827" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2852" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2877" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2902" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2927" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2952" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2977" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3002" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3027" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3052" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3077" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3102" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3127" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3152" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3177" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3202" cy="296" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="52" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="77" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="102" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="127" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="152" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="177" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="202" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="227" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="252" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="277" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="302" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="327" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="352" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="377" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="402" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="427" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="452" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="477" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="502" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="527" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="552" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="577" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="602" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="627" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="652" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="677" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="702" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="727" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="752" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="777" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="802" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="827" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="852" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="877" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="902" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="927" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="952" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="977" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1002" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1027" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1052" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1077" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1102" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1127" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1152" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1177" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1202" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1227" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1252" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1277" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1302" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1327" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1352" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1377" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1402" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1427" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1452" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1477" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1502" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1527" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1552" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1577" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1602" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1627" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1652" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1677" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1702" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1727" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1752" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1777" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1802" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1827" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1852" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1877" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1902" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1927" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1952" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1977" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2002" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2027" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2052" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2077" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2102" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2127" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2152" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2177" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2202" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2227" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2252" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2277" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2302" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2327" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2352" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2377" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2402" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2427" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2452" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2477" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2502" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2527" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2552" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2577" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2602" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2627" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2652" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2677" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2702" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2727" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2752" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2777" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2802" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2827" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2852" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2877" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2902" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2927" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2952" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2977" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3002" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3027" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3052" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3077" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3102" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3127" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3152" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3177" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3202" cy="314" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="52" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="77" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="102" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="127" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="152" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="177" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="202" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="227" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="252" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="277" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="302" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="327" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="352" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="377" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="402" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="427" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="452" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="477" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="502" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="527" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="552" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="577" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="602" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="627" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="652" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="677" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="702" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="727" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="752" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="777" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="802" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="827" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="852" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="877" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="902" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="927" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="952" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="977" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1002" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1027" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1052" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1077" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1102" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1127" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1152" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1177" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1202" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1227" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1252" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1277" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1302" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1327" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1352" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1377" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1402" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1427" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1452" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1477" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1502" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1527" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1552" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1577" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1602" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1627" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1652" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1677" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1702" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1727" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1752" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1777" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1802" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1827" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1852" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1877" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1902" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1927" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1952" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="1977" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2002" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2027" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2052" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2077" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2102" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2127" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2152" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2177" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2202" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2227" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2252" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2277" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2302" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2327" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2352" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2377" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2402" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2427" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2452" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2477" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2502" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2527" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2552" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2577" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2602" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2627" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2652" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2677" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2702" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2727" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2752" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2777" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2802" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2827" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2852" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2877" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2902" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2927" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2952" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="2977" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3002" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3027" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3052" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3077" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3102" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3127" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3152" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3177" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<circle cx="3202" cy="332" r="1.5" class="tie-point" style="fill:#666666"/>
+<rect x="40" y="227" width="3175" height="22" class="trough" style="fill:#f0e8d0"/>
+<text x="152" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">5</text>
+<text x="152" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">5</text>
+<text x="277" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">10</text>
+<text x="277" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">10</text>
+<text x="402" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">15</text>
+<text x="402" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">15</text>
+<text x="527" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">20</text>
+<text x="527" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">20</text>
+<text x="652" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">25</text>
+<text x="652" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">25</text>
+<text x="777" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">30</text>
+<text x="777" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">30</text>
+<text x="902" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">35</text>
+<text x="902" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">35</text>
+<text x="1027" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">40</text>
+<text x="1027" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">40</text>
+<text x="1152" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">45</text>
+<text x="1152" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">45</text>
+<text x="1277" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">50</text>
+<text x="1277" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">50</text>
+<text x="1402" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">55</text>
+<text x="1402" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">55</text>
+<text x="1527" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">60</text>
+<text x="1527" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">60</text>
+<text x="1652" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">65</text>
+<text x="1652" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">65</text>
+<text x="1777" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">70</text>
+<text x="1777" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">70</text>
+<text x="1902" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">75</text>
+<text x="1902" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">75</text>
+<text x="2027" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">80</text>
+<text x="2027" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">80</text>
+<text x="2152" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">85</text>
+<text x="2152" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">85</text>
+<text x="2277" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">90</text>
+<text x="2277" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">90</text>
+<text x="2402" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">95</text>
+<text x="2402" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">95</text>
+<text x="2527" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">100</text>
+<text x="2527" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">100</text>
+<text x="2652" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">105</text>
+<text x="2652" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">105</text>
+<text x="2777" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">110</text>
+<text x="2777" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">110</text>
+<text x="2902" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">115</text>
+<text x="2902" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">115</text>
+<text x="3027" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">120</text>
+<text x="3027" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">120</text>
+<text x="3152" y="130" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">125</text>
+<text x="3152" y="348" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:normal">125</text>
+<line x1="1614" y1="69" x2="1614" y2="407" class="board-break" style="stroke:#cccccc;stroke-width:1"/>
+<line x1="3189" y1="69" x2="3189" y2="407" class="board-break" style="stroke:#cccccc;stroke-width:1"/>
+<text x="26" y="147" text-anchor="start" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:bold">A</text>
+<text x="26" y="165" text-anchor="start" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:bold">B</text>
+<text x="26" y="183" text-anchor="start" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:bold">C</text>
+<text x="26" y="201" text-anchor="start" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:bold">D</text>
+<text x="26" y="219" text-anchor="start" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:bold">E</text>
+<text x="26" y="263" text-anchor="start" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:bold">F</text>
+<text x="26" y="281" text-anchor="start" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:bold">G</text>
+<text x="26" y="299" text-anchor="start" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:bold">H</text>
+<text x="26" y="317" text-anchor="start" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:bold">I</text>
+<text x="26" y="335" text-anchor="start" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:bold">J</text>
+</g>
+<g class="jumpers">
+<path d="M 277 144 L 277 64 L 1102 64 L 1102 144" class="jumper digital" style="fill:none;stroke:#2a6dbf;stroke-width:2"/>
+<circle cx="277" cy="144" r="3" class="jumper-cap digital" style="fill:#2a6dbf;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1102" cy="144" r="3" class="jumper-cap digital" style="fill:#2a6dbf;stroke:#000000;stroke-width:0.5"/>
+<path d="M 277 332 L 277 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="277" cy="332" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="277" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 527 332 L 527 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="527" cy="332" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="527" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 302 144 L 302 61 L 802 61 L 802 144" class="jumper digital" style="fill:none;stroke:#7c3aed;stroke-width:2"/>
+<circle cx="302" cy="144" r="3" class="jumper-cap digital" style="fill:#7c3aed;stroke:#000000;stroke-width:0.5"/>
+<circle cx="802" cy="144" r="3" class="jumper-cap digital" style="fill:#7c3aed;stroke:#000000;stroke-width:0.5"/>
+<path d="M 327 144 L 327 58 L 727 58 L 727 144" class="jumper digital" style="fill:none;stroke:#1f6e3a;stroke-width:2"/>
+<circle cx="327" cy="144" r="3" class="jumper-cap digital" style="fill:#1f6e3a;stroke:#000000;stroke-width:0.5"/>
+<circle cx="727" cy="144" r="3" class="jumper-cap digital" style="fill:#1f6e3a;stroke:#000000;stroke-width:0.5"/>
+<path d="M 352 144 L 352 55 L 877 55 L 877 144" class="jumper digital" style="fill:none;stroke:#c0317a;stroke-width:2"/>
+<circle cx="352" cy="144" r="3" class="jumper-cap digital" style="fill:#c0317a;stroke:#000000;stroke-width:0.5"/>
+<circle cx="877" cy="144" r="3" class="jumper-cap digital" style="fill:#c0317a;stroke:#000000;stroke-width:0.5"/>
+<path d="M 377 144 L 377 52 L 1177 52 L 1177 144" class="jumper digital" style="fill:none;stroke:#2a6dbf;stroke-width:2"/>
+<circle cx="377" cy="144" r="3" class="jumper-cap digital" style="fill:#2a6dbf;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1177" cy="144" r="3" class="jumper-cap digital" style="fill:#2a6dbf;stroke:#000000;stroke-width:0.5"/>
+<path d="M 402 332 L 402 412 L 477 412 L 477 37 L 1402 37 L 1402 144" class="jumper digital" style="fill:none;stroke:#7c3aed;stroke-width:2"/>
+<circle cx="402" cy="332" r="3" class="jumper-cap digital" style="fill:#7c3aed;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1402" cy="144" r="3" class="jumper-cap digital" style="fill:#7c3aed;stroke:#000000;stroke-width:0.5"/>
+<path d="M 402 144 L 402 49 L 1252 49 L 1252 144" class="jumper digital" style="fill:none;stroke:#1f6e3a;stroke-width:2"/>
+<circle cx="402" cy="144" r="3" class="jumper-cap digital" style="fill:#1f6e3a;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1252" cy="144" r="3" class="jumper-cap digital" style="fill:#1f6e3a;stroke:#000000;stroke-width:0.5"/>
+<path d="M 427 144 L 427 46 L 952 46 L 952 144" class="jumper digital" style="fill:none;stroke:#c0317a;stroke-width:2"/>
+<circle cx="427" cy="144" r="3" class="jumper-cap digital" style="fill:#c0317a;stroke:#000000;stroke-width:0.5"/>
+<circle cx="952" cy="144" r="3" class="jumper-cap digital" style="fill:#c0317a;stroke:#000000;stroke-width:0.5"/>
+<path d="M 427 332 L 427 415 L 477 415 L 477 43 L 1027 43 L 1027 144" class="jumper digital" style="fill:none;stroke:#2a6dbf;stroke-width:2"/>
+<circle cx="427" cy="332" r="3" class="jumper-cap digital" style="fill:#2a6dbf;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1027" cy="144" r="3" class="jumper-cap digital" style="fill:#2a6dbf;stroke:#000000;stroke-width:0.5"/>
+<path d="M 452 332 L 452 418 L 477 418 L 477 40 L 1327 40 L 1327 144" class="jumper digital" style="fill:none;stroke:#7c3aed;stroke-width:2"/>
+<circle cx="452" cy="332" r="3" class="jumper-cap digital" style="fill:#7c3aed;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1327" cy="144" r="3" class="jumper-cap digital" style="fill:#7c3aed;stroke:#000000;stroke-width:0.5"/>
+<path d="M 452 144 L 452 94" class="jumper rail_minus" style="fill:none;stroke:#000000;stroke-width:2"/>
+<circle cx="452" cy="144" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="452" cy="94" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 527 144 L 527 94" class="jumper rail_minus" style="fill:none;stroke:#000000;stroke-width:2"/>
+<circle cx="527" cy="144" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="527" cy="94" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 602 144 L 602 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="602" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="602" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2727 144 L 2727 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="2727" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2727" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2802 144 L 2802 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="2802" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2802" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2852 144 L 2852 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="2852" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2852" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2927 144 L 2927 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="2927" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2927" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2977 144 L 2977 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="2977" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2977" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 3002 144 L 3002 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="3002" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="3002" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 3052 144 L 3052 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="3052" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="3052" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 3077 144 L 3077 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="3077" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="3077" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 3127 144 L 3127 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="3127" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="3127" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 3202 144 L 3202 74" class="jumper rail_plus" style="fill:none;stroke:#cc0000;stroke-width:2"/>
+<circle cx="3202" cy="144" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="3202" cy="74" r="3" class="jumper-cap rail_plus" style="fill:#cc0000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 752 144 L 752 58 L 1477 58 L 1477 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
+<circle cx="752" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1477" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
+<path d="M 827 144 L 827 61 L 1602 61 L 1602 144" class="jumper analog" style="fill:none;stroke:#d4a017;stroke-width:2"/>
+<circle cx="827" cy="144" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1602" cy="144" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
+<path d="M 902 144 L 902 55 L 1727 55 L 1727 144" class="jumper analog" style="fill:none;stroke:#8b5a2b;stroke-width:2"/>
+<circle cx="902" cy="144" r="3" class="jumper-cap analog" style="fill:#8b5a2b;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1727" cy="144" r="3" class="jumper-cap analog" style="fill:#8b5a2b;stroke:#000000;stroke-width:0.5"/>
+<path d="M 977 144 L 977 46 L 1852 46 L 1852 144" class="jumper analog" style="fill:none;stroke:#9acd32;stroke-width:2"/>
+<circle cx="977" cy="144" r="3" class="jumper-cap analog" style="fill:#9acd32;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1852" cy="144" r="3" class="jumper-cap analog" style="fill:#9acd32;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1052 144 L 1052 43 L 1977 43 L 1977 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
+<circle cx="1052" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1977" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1127 144 L 1127 64 L 2102 64 L 2102 144" class="jumper analog" style="fill:none;stroke:#d4a017;stroke-width:2"/>
+<circle cx="1127" cy="144" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2102" cy="144" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1202 144 L 1202 52 L 2227 52 L 2227 144" class="jumper analog" style="fill:none;stroke:#8b5a2b;stroke-width:2"/>
+<circle cx="1202" cy="144" r="3" class="jumper-cap analog" style="fill:#8b5a2b;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2227" cy="144" r="3" class="jumper-cap analog" style="fill:#8b5a2b;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1277 144 L 1277 49 L 2352 49 L 2352 144" class="jumper analog" style="fill:none;stroke:#9acd32;stroke-width:2"/>
+<circle cx="1277" cy="144" r="3" class="jumper-cap analog" style="fill:#9acd32;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2352" cy="144" r="3" class="jumper-cap analog" style="fill:#9acd32;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1352 144 L 1352 40 L 2477 40 L 2477 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
+<circle cx="1352" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2477" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1427 144 L 1427 37 L 2602 37 L 2602 144" class="jumper analog" style="fill:none;stroke:#d4a017;stroke-width:2"/>
+<circle cx="1427" cy="144" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2602" cy="144" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1552 144 L 1552 94" class="jumper rail_minus" style="fill:none;stroke:#000000;stroke-width:2"/>
+<circle cx="1552" cy="144" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1552" cy="94" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1677 144 L 1677 94" class="jumper rail_minus" style="fill:none;stroke:#000000;stroke-width:2"/>
+<circle cx="1677" cy="144" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1677" cy="94" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1802 144 L 1802 94" class="jumper rail_minus" style="fill:none;stroke:#000000;stroke-width:2"/>
+<circle cx="1802" cy="144" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1802" cy="94" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 1927 144 L 1927 94" class="jumper rail_minus" style="fill:none;stroke:#000000;stroke-width:2"/>
+<circle cx="1927" cy="144" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="1927" cy="94" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2052 144 L 2052 94" class="jumper rail_minus" style="fill:none;stroke:#000000;stroke-width:2"/>
+<circle cx="2052" cy="144" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2052" cy="94" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2177 144 L 2177 94" class="jumper rail_minus" style="fill:none;stroke:#000000;stroke-width:2"/>
+<circle cx="2177" cy="144" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2177" cy="94" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2302 144 L 2302 94" class="jumper rail_minus" style="fill:none;stroke:#000000;stroke-width:2"/>
+<circle cx="2302" cy="144" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2302" cy="94" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2427 144 L 2427 94" class="jumper rail_minus" style="fill:none;stroke:#000000;stroke-width:2"/>
+<circle cx="2427" cy="144" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2427" cy="94" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2552 144 L 2552 94" class="jumper rail_minus" style="fill:none;stroke:#000000;stroke-width:2"/>
+<circle cx="2552" cy="144" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2552" cy="94" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<path d="M 2677 144 L 2677 94" class="jumper rail_minus" style="fill:none;stroke:#000000;stroke-width:2"/>
+<circle cx="2677" cy="144" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+<circle cx="2677" cy="94" r="3" class="jumper-cap rail_minus" style="fill:#000000;stroke:#000000;stroke-width:0.5"/>
+</g>
+<g class="component" data-refdes="U2" data-kind="chip">
+<rect x="269" y="212" width="191" height="52" rx="3" style="fill:#222222;stroke:#000000;stroke-width:1"/>
+<circle cx="277" cy="238" r="2.5" style="fill:#ffffff"/>
+<text x="364.5" y="234" text-anchor="middle" style="font-family:monospace;font-size:10px;fill:#ffffff;font-weight:normal">CD4017</text>
+<text x="364.5" y="246" text-anchor="middle" style="font-family:monospace;font-size:9px;fill:#ffffff;font-weight:bold">U2</text>
+<text x="277" y="222" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">Q5</text>
+<text x="302" y="222" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">Q1</text>
+<text x="327" y="222" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">Q0</text>
+<text x="352" y="222" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">Q2</text>
+<text x="377" y="222" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">Q6</text>
+<text x="402" y="222" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">Q7</text>
+<text x="427" y="222" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">Q3</text>
+<text x="452" y="222" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">VSS</text>
+<text x="452" y="260" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">Q8</text>
+<text x="427" y="260" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">Q4</text>
+<text x="402" y="260" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">Q9</text>
+<text x="377" y="260" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">CO</text>
+<text x="352" y="260" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">CE</text>
+<text x="327" y="260" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">CLK</text>
+<text x="302" y="260" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">RST</text>
+<text x="277" y="260" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">VDD</text>
+</g>
+<g class="component" data-refdes="U1" data-kind="chip">
+<rect x="519" y="212" width="91" height="52" rx="3" style="fill:#222222;stroke:#000000;stroke-width:1"/>
+<circle cx="527" cy="238" r="2.5" style="fill:#ffffff"/>
+<text x="564.5" y="234" text-anchor="middle" style="font-family:monospace;font-size:10px;fill:#ffffff;font-weight:normal">NE555</text>
+<text x="564.5" y="246" text-anchor="middle" style="font-family:monospace;font-size:9px;fill:#ffffff;font-weight:bold">U1</text>
+<text x="527" y="222" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">GND</text>
+<text x="552" y="222" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">TRIG</text>
+<text x="577" y="222" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">OUT</text>
+<text x="602" y="222" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">RESET</text>
+<text x="602" y="260" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">CONT</text>
+<text x="577" y="260" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">THRES</text>
+<text x="552" y="260" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">DISCH</text>
+<text x="527" y="260" text-anchor="middle" style="font-family:monospace;font-size:7px;fill:#ffffff;font-weight:bold">VCC</text>
+</g>
+<g class="component" data-refdes="D1" data-kind="passive">
+<line x1="727" y1="198" x2="727" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="752" y1="198" x2="752" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="729" y="170" width="21" height="14" rx="5" style="fill:#cc3333;stroke:#000000;stroke-width:1"/>
+<line x1="748" y1="171" x2="748" y2="183" style="stroke:#000000;stroke-width:1"/>
+<text x="739.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">D1 (red)</text>
+</g>
+<g class="component" data-refdes="D2" data-kind="passive">
+<line x1="802" y1="198" x2="802" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="827" y1="198" x2="827" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="804" y="170" width="21" height="14" rx="5" style="fill:#cc3333;stroke:#000000;stroke-width:1"/>
+<line x1="823" y1="171" x2="823" y2="183" style="stroke:#000000;stroke-width:1"/>
+<text x="814.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">D2 (red)</text>
+</g>
+<g class="component" data-refdes="D3" data-kind="passive">
+<line x1="877" y1="198" x2="877" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="902" y1="198" x2="902" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="879" y="170" width="21" height="14" rx="5" style="fill:#cc3333;stroke:#000000;stroke-width:1"/>
+<line x1="898" y1="171" x2="898" y2="183" style="stroke:#000000;stroke-width:1"/>
+<text x="889.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">D3 (red)</text>
+</g>
+<g class="component" data-refdes="D4" data-kind="passive">
+<line x1="952" y1="198" x2="952" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="977" y1="198" x2="977" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="954" y="170" width="21" height="14" rx="5" style="fill:#cc3333;stroke:#000000;stroke-width:1"/>
+<line x1="973" y1="171" x2="973" y2="183" style="stroke:#000000;stroke-width:1"/>
+<text x="964.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">D4 (red)</text>
+</g>
+<g class="component" data-refdes="D5" data-kind="passive">
+<line x1="1027" y1="198" x2="1027" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="1052" y1="198" x2="1052" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="1029" y="170" width="21" height="14" rx="5" style="fill:#cc3333;stroke:#000000;stroke-width:1"/>
+<line x1="1048" y1="171" x2="1048" y2="183" style="stroke:#000000;stroke-width:1"/>
+<text x="1039.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">D5 (red)</text>
+</g>
+<g class="component" data-refdes="D6" data-kind="passive">
+<line x1="1102" y1="198" x2="1102" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="1127" y1="198" x2="1127" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="1104" y="170" width="21" height="14" rx="5" style="fill:#cc3333;stroke:#000000;stroke-width:1"/>
+<line x1="1123" y1="171" x2="1123" y2="183" style="stroke:#000000;stroke-width:1"/>
+<text x="1114.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">D6 (red)</text>
+</g>
+<g class="component" data-refdes="D7" data-kind="passive">
+<line x1="1177" y1="198" x2="1177" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="1202" y1="198" x2="1202" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="1179" y="170" width="21" height="14" rx="5" style="fill:#cc3333;stroke:#000000;stroke-width:1"/>
+<line x1="1198" y1="171" x2="1198" y2="183" style="stroke:#000000;stroke-width:1"/>
+<text x="1189.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">D7 (red)</text>
+</g>
+<g class="component" data-refdes="D8" data-kind="passive">
+<line x1="1252" y1="198" x2="1252" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="1277" y1="198" x2="1277" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="1254" y="170" width="21" height="14" rx="5" style="fill:#cc3333;stroke:#000000;stroke-width:1"/>
+<line x1="1273" y1="171" x2="1273" y2="183" style="stroke:#000000;stroke-width:1"/>
+<text x="1264.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">D8 (red)</text>
+</g>
+<g class="component" data-refdes="D9" data-kind="passive">
+<line x1="1327" y1="198" x2="1327" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="1352" y1="198" x2="1352" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="1329" y="170" width="21" height="14" rx="5" style="fill:#cc3333;stroke:#000000;stroke-width:1"/>
+<line x1="1348" y1="171" x2="1348" y2="183" style="stroke:#000000;stroke-width:1"/>
+<text x="1339.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">D9 (red)</text>
+</g>
+<g class="component" data-refdes="D10" data-kind="passive">
+<line x1="1402" y1="198" x2="1402" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="1427" y1="198" x2="1427" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="1404" y="170" width="21" height="14" rx="5" style="fill:#cc3333;stroke:#000000;stroke-width:1"/>
+<line x1="1423" y1="171" x2="1423" y2="183" style="stroke:#000000;stroke-width:1"/>
+<text x="1414.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">D10 (red)</text>
+</g>
+<g class="component" data-refdes="R1" data-kind="passive">
+<line x1="1477" y1="198" x2="1477" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="1552" y1="198" x2="1552" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="1479" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="1514.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">470Ω</text>
+<text x="1514.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R1</text>
+</g>
+<g class="component" data-refdes="R2" data-kind="passive">
+<line x1="1602" y1="198" x2="1602" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="1677" y1="198" x2="1677" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="1604" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="1639.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">470Ω</text>
+<text x="1639.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R2</text>
+</g>
+<g class="component" data-refdes="R3" data-kind="passive">
+<line x1="1727" y1="198" x2="1727" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="1802" y1="198" x2="1802" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="1729" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="1764.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">470Ω</text>
+<text x="1764.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R3</text>
+</g>
+<g class="component" data-refdes="R4" data-kind="passive">
+<line x1="1852" y1="198" x2="1852" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="1927" y1="198" x2="1927" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="1854" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="1889.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">470Ω</text>
+<text x="1889.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R4</text>
+</g>
+<g class="component" data-refdes="R5" data-kind="passive">
+<line x1="1977" y1="198" x2="1977" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="2052" y1="198" x2="2052" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="1979" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="2014.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">470Ω</text>
+<text x="2014.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R5</text>
+</g>
+<g class="component" data-refdes="R6" data-kind="passive">
+<line x1="2102" y1="198" x2="2102" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="2177" y1="198" x2="2177" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="2104" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="2139.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">470Ω</text>
+<text x="2139.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R6</text>
+</g>
+<g class="component" data-refdes="R7" data-kind="passive">
+<line x1="2227" y1="198" x2="2227" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="2302" y1="198" x2="2302" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="2229" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="2264.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">470Ω</text>
+<text x="2264.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R7</text>
+</g>
+<g class="component" data-refdes="R8" data-kind="passive">
+<line x1="2352" y1="198" x2="2352" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="2427" y1="198" x2="2427" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="2354" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="2389.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">470Ω</text>
+<text x="2389.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R8</text>
+</g>
+<g class="component" data-refdes="R9" data-kind="passive">
+<line x1="2477" y1="198" x2="2477" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="2552" y1="198" x2="2552" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="2479" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="2514.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">470Ω</text>
+<text x="2514.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R9</text>
+</g>
+<g class="component" data-refdes="R10" data-kind="passive">
+<line x1="2602" y1="198" x2="2602" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="2677" y1="198" x2="2677" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="2604" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="2639.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">470Ω</text>
+<text x="2639.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R10</text>
+</g>
+<g class="component" data-refdes="R11" data-kind="passive">
+<line x1="2727" y1="198" x2="2727" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="2802" y1="198" x2="2802" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="2729" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="2764.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">47000Ω</text>
+<text x="2764.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R11</text>
+</g>
+<g class="component" data-refdes="R12" data-kind="passive">
+<line x1="2852" y1="198" x2="2852" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="2927" y1="198" x2="2927" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="2854" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="2889.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">4700Ω</text>
+<text x="2889.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R12</text>
+</g>
+<g class="component" data-refdes="C1" data-kind="passive">
+<line x1="2977" y1="198" x2="2977" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="3002" y1="198" x2="3002" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="2979" y="170" width="21" height="14" rx="3" style="fill:#a0a0c8;stroke:#000000;stroke-width:1"/>
+<text x="2989.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">C1</text>
+</g>
+<g class="component" data-refdes="C2" data-kind="passive">
+<line x1="3052" y1="198" x2="3052" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="3077" y1="198" x2="3077" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="3054" y="170" width="21" height="14" rx="3" style="fill:#a0a0c8;stroke:#000000;stroke-width:1"/>
+<text x="3064.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">C2</text>
+</g>
+<g class="component" data-refdes="R13" data-kind="passive">
+<line x1="3127" y1="198" x2="3127" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="3202" y1="198" x2="3202" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="3129" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="3164.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">10000Ω</text>
+<text x="3164.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R13</text>
+</g>
+</svg>

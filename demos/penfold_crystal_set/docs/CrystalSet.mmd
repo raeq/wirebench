@@ -1,0 +1,24 @@
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    A1["A1<br/>Antenna"]
+    A2["A2<br/>Earth"]
+    L1["L1<br/>0.0004H aerial"]
+    C1["C1<br/>1e-11–3e-10F"]
+    D1["D1<br/>D_OA90"]
+    R1["R1<br/>100000Ω"]
+    LS1["LS1<br/>crystal"]
+    net_2(("net_2"))
+    net_1(("net_1"))
+    net_0(("net_0"))
+    A1 ---|"out"| net_2
+    A2 ---|"out"| net_1
+    C1 ---|"t1"| net_2
+    C1 ---|"t2"| net_1
+    D1 ---|"anode"| net_2
+    D1 ---|"cathode"| net_0
+    L1 ---|"t1"| net_2
+    L1 ---|"t2"| net_1
+    LS1 ---|"t1"| net_0
+    LS1 ---|"t2"| net_1
+    R1 ---|"t1"| net_0
+    R1 ---|"t2"| net_1

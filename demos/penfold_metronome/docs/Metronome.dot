@@ -1,0 +1,39 @@
+digraph "Metronome" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  U1 [label="U1\\nNE555"];
+  R1 [label="R1\\n4700Ω"];
+  R2 [label="R2\\n50000Ω"];
+  C1 [label="C1\\n1e-07F"];
+  C2 [label="C2\\n1e-08F"];
+  R3 [label="R3\\n100Ω"];
+  C3 [label="C3\\n1e-05F"];
+  LS1 [label="LS1\\n8Ω"];
+  // Nets
+  node [shape=circle, label="", width=0.15, fixedsize=true];
+  gnd; net_0; net_2; net_3; net_4; net_5; net_6; vcc;
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+  C1 -> net_5 [taillabel="t1"];
+  C1 -> gnd [taillabel="t2"];
+  C2 -> net_4 [taillabel="t1"];
+  C2 -> gnd [taillabel="t2"];
+  C3 -> net_2 [taillabel="t1"];
+  C3 -> net_0 [taillabel="t2"];
+  LS1 -> net_0 [taillabel="t1"];
+  LS1 -> gnd [taillabel="t2"];
+  R1 -> vcc [taillabel="t1"];
+  R1 -> net_6 [taillabel="t2"];
+  R2 -> net_6 [taillabel="t1"];
+  R2 -> net_5 [taillabel="t2"];
+  R3 -> net_3 [taillabel="t1"];
+  R3 -> net_2 [taillabel="t2"];
+  U1 -> net_4 [taillabel="CONT"];
+  U1 -> net_6 [taillabel="DISCH"];
+  U1 -> gnd [taillabel="GND"];
+  U1 -> net_3 [taillabel="OUT"];
+  U1 -> vcc [taillabel="RESET"];
+  U1 -> net_5 [taillabel="THRES"];
+  U1 -> net_5 [taillabel="TRIG"];
+  U1 -> vcc [taillabel="VCC"];
+}

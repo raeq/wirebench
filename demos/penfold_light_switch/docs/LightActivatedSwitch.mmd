@@ -1,0 +1,41 @@
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    U1["U1<br/>LM741"]
+    R2["R2<br/>LDR"]
+    R1["R1<br/>10000Ω"]
+    R3["R3<br/>10000Ω"]
+    R4["R4<br/>5000Ω"]
+    Q1["Q1<br/>BC547"]
+    R5["R5<br/>4700Ω"]
+    R6["R6<br/>470Ω"]
+    D1["D1<br/>red LED"]
+    net_0(("net_0"))
+    net_1(("net_1"))
+    net_4(("net_4"))
+    gnd(("gnd"))
+    net_8(("net_8"))
+    vcc(("vcc"))
+    net_6(("net_6"))
+    net_3(("net_3"))
+    D1 ---|"anode"| net_0
+    D1 ---|"cathode"| net_1
+    Q1 ---|"b"| net_4
+    Q1 ---|"c"| net_1
+    Q1 ---|"e"| gnd
+    R1 ---|"t1"| net_8
+    R1 ---|"t2"| gnd
+    R2 ---|"t1"| vcc
+    R2 ---|"t2"| net_8
+    R3 ---|"t1"| vcc
+    R3 ---|"t2"| net_6
+    R4 ---|"t1"| net_6
+    R4 ---|"t2"| gnd
+    R5 ---|"t1"| net_3
+    R5 ---|"t2"| net_4
+    R6 ---|"t1"| vcc
+    R6 ---|"t2"| net_0
+    U1 ---|"IN_NEG"| net_6
+    U1 ---|"IN_POS"| net_8
+    U1 ---|"OUT"| net_3
+    U1 ---|"V_NEG"| gnd
+    U1 ---|"V_POS"| vcc

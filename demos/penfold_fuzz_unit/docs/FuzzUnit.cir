@@ -1,0 +1,16 @@
+.TITLE FuzzUnit
+V_Rail_0 vcc 0 DC 5.0
+U1 nc_0 net_6 net_4 0 nc_1 net_2 vcc LM741
+C1 net_8 net_7 1e-07
+R1 net_7 0 1000000.0
+R2 net_7 net_6 1000.0
+R3 net_6 net_2 470000.0
+R4 vcc net_4 100000.0
+R5 net_4 0 100000.0
+C2 net_4 0 1e-05
+D1 net_2 0 D1N4148
+D2 0 net_2 D1N4148
+C3 net_2 net_0 2.2e-07
+R6 net_0 net_1 50000.0
+.LIB spice-models.lib
+.END

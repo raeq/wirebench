@@ -1,0 +1,13 @@
+.TITLE Metronome
+V_Rail_0 vcc 0 DC 5.0
+V_Rail_1 vcc 0 DC 5.0
+U1 0 net_5 net_3 vcc net_4 net_5 net_6 vcc NE555
+R1 vcc net_6 4700.0
+R2 net_6 net_5 50000.0
+C1 net_5 0 1e-07
+C2 net_4 0 1e-08
+R3 net_3 net_2 100.0
+C3 net_2 net_0 1e-05
+R1_LS net_0 0 8.0
+.LIB spice-models.lib
+.END

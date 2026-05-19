@@ -16,18 +16,26 @@ If you've never lit an LED with a battery, start with [the project's Hello World
 
 ## The demos in order
 
-| # | Demo                          | What it teaches                                                                       |
-|---|-------------------------------|---------------------------------------------------------------------------------------|
-| 1 | [`water_alarm/`](../demos/water_alarm/)                  | Composing chips, wiring rails, latching logic. Four chips, two LEDs.        |
-| 2 | [`dice/`](../demos/dice/)                                | Classic 555 + 4017 + diode-OR matrix. Recognisable hobbyist staple.         |
-| 3 | [`digital_thermometer/`](../demos/digital_thermometer/)  | First MCU project. ATmega328P + DHT11 + 7-seg display. Firmware-as-cell.    |
-| 4 | [`doorbell_protector/`](../demos/doorbell_protector/)    | Two-555 monostable with transistor switching and a relay.                   |
-| 5 | [`fan_cooling/`](../demos/fan_cooling/)                  | First `Board` demo. TMP302 + MOSFET-switched fan. Connectors that mate.     |
-| 6 | [`backup_power/`](../demos/backup_power/)                | TI Designs TIDA-03031. Three-stage power architecture (eFuse + boost + buck). |
-| 7 | [`water_alarm_split/`](../demos/water_alarm_split/)      | Same circuit as #1 but split across two boards via `mate()`. HAT pattern.   |
-| 8 | [`bldc_motor/`](../demos/bldc_motor/)                    | ATmega328P + DRV8313 + Hall sensors. Three-phase commutation.               |
-| 9 | [`isolated_rs232/`](../demos/isolated_rs232/)            | TIDA-01230. Cross-domain isolation — first demo to exercise `GroundDomain`. |
-|10 | [`li_ion_fuel_gauge/`](../demos/li_ion_fuel_gauge/)      | TIDA-00594. BQ27546-G1 fuel gauge with sense resistor + thermistor.         |
+| #  | Demo                          | What it teaches                                                                       |
+|----|-------------------------------|---------------------------------------------------------------------------------------|
+|  1 | [`hello_led/`](../demos/hello_led/)                      | The minimal viable circuit — one LED, one resistor, two rails. Reading point.|
+|  2 | [`penfold_light_switch/`](../demos/penfold_light_switch/)| First sensor circuit. LDR + comparator + transistor switch. Penfold BP107 P3.|
+|  3 | [`water_alarm/`](../demos/water_alarm/)                  | Composing chips, wiring rails, latching logic. Four chips, two LEDs.        |
+|  4 | [`penfold_reaction_game/`](../demos/penfold_reaction_game/)| Sequential digital — counter ring + button-stops-clock topology. Penfold P22.|
+|  5 | [`dice/`](../demos/dice/)                                | Classic 555 + 4017 + diode-OR matrix. Recognisable hobbyist staple.         |
+|  6 | [`digital_thermometer/`](../demos/digital_thermometer/)  | First MCU project. ATmega328P + DHT11 + 7-seg display. Firmware-as-cell.    |
+|  7 | [`penfold_one_second_timer/`](../demos/penfold_one_second_timer/)| Op-amp relaxation oscillator with hysteresis. Penfold BP107 P8.|
+|  8 | [`penfold_metronome/`](../demos/penfold_metronome/)      | NE555 astable + speaker — the other classical astable. Penfold BP107 P9.    |
+|  9 | [`penfold_warbling_doorbuzzer/`](../demos/penfold_warbling_doorbuzzer/)| Oscillator composition — slow gates fast. Penfold BP107 P16.       |
+| 10 | [`doorbell_protector/`](../demos/doorbell_protector/)    | Two-555 monostable with transistor switching and a relay.                   |
+| 11 | [`fan_cooling/`](../demos/fan_cooling/)                  | First `Board` demo. TMP302 + MOSFET-switched fan. Connectors that mate.     |
+| 12 | [`backup_power/`](../demos/backup_power/)                | TI Designs TIDA-03031. Three-stage power architecture (eFuse + boost + buck). |
+| 13 | [`water_alarm_split/`](../demos/water_alarm_split/)      | Same circuit as #3 but split across two boards via `mate()`. HAT pattern.   |
+| 14 | [`bldc_motor/`](../demos/bldc_motor/)                    | ATmega328P + DRV8313 + Hall sensors. Three-phase commutation.               |
+| 15 | [`isolated_rs232/`](../demos/isolated_rs232/)            | TIDA-01230. Cross-domain isolation — first demo to exercise `GroundDomain`. |
+| 16 | [`li_ion_fuel_gauge/`](../demos/li_ion_fuel_gauge/)      | TIDA-00594. BQ27546-G1 fuel gauge with sense resistor + thermistor.         |
+| 17 | [`penfold_fuzz_unit/`](../demos/penfold_fuzz_unit/)      | Audio domain — op-amp + clipping diodes. Guitar fuzz pedal. Penfold P30.    |
+| 18 | [`penfold_crystal_set/`](../demos/penfold_crystal_set/)  | Passive-only RF — no Rail, no battery. Boundary case. Penfold BP107 P27.    |
 
 ## What each demo gives you
 

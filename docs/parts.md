@@ -6,7 +6,7 @@ shows the refdes prefix the framework assigns when you place
 the part, the import path, the kind of component, and a
 one-line description from the class docstring.
 
-**142 parts** across 8 categories.
+**150 parts** across 9 categories.
 
 | Refdes | Class | Kind | Description | Footprint | Datasheet |
 |--------|-------|------|-------------|-----------|-----------|
@@ -17,6 +17,7 @@ one-line description from the class docstring.
 | `U` | `components.chips.atmega32u4.ATmega32U4` | chip | Microchip ATmega32U4 — 8-bit AVR microcontroller with USB device, 32 KB flash (TQFP-44). | `Package_QFP:TQFP-44_10x10mm_P0.8mm` | — |
 | `U` | `components.chips.attiny84.ATtiny84` | chip | Microchip ATtiny84 — 8-bit AVR microcontroller, 8 KB flash (PDIP-14). | `Package_DIP:DIP-14_W7.62mm` | — |
 | `U` | `components.chips.attiny85.ATtiny85` | chip | Microchip ATtiny85 — 8-bit AVR microcontroller, 8 KB flash (PDIP-8). | `Package_DIP:DIP-8_W7.62mm` | — |
+| `A` | `components.transducers.antenna.Antenna` | transducer | Long-wire or whip antenna — environment-fed signal source. | — | — |
 | `J` | `components.connectors.audio.Audio3p5mmTRRSJack` | connector | 3.5 mm TRRS audio jack (4 contacts: tip/ring1/ring2/sleeve). Wiring convention (CTIA vs OMTP) is a consumer decision. | `Connector_Audio:Jack_3.5mm_TRRS_QingPu_WQP-PJ398SM_Vertical` | — |
 | `P` | `components.connectors.audio.Audio3p5mmTRRSPlug` | connector | 3.5 mm TRRS audio plug. | `Connector_Audio:Jack_3.5mm_TRRS_QingPu_WQP-PJ398SM_Vertical` | — |
 | `J` | `components.connectors.audio.Audio3p5mmTRSJack` | connector | 3.5 mm TRS audio jack (board-side). | `Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles` | — |
@@ -37,6 +38,7 @@ one-line description from the class docstring.
 | `U` | `components.chips.cd4069.CD4069` | chip | Texas Instruments CD4069UB — hex unbuffered inverter. | `Package_DIP:DIP-14_W7.62mm` | — |
 | `C` | `components.passives.capacitor.Capacitor` | passive | Ideal capacitor.  Charge accumulates: Q = C × V, I = C × dV/dt. | `Capacitor_SMD:C_0603_1608Metric` | — |
 | `BT` | `components.passives.cell.Cell` | passive | Single-cell Li-Ion battery, modelled as a voltage source. | `Battery:BatteryHolder_Keystone_1042_1x18650` | — |
+| `LS` | `components.transducers.crystal_earpiece.CrystalEarpiece` | transducer | High-impedance piezo-crystal earpiece — the iconic transducer of the 1920s–1970s crystal radio set. | `Buzzer_Beeper:Buzzer_12x9.5RM7.6` | — |
 | `D` | `components.diodes.d1n4001.D1N4001` | diode | 1N4001 — 50 V / 1 A general-purpose silicon rectifier (DO-41). | `Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal` | — |
 | `D` | `components.diodes.d1n4007.D1N4007` | diode | 1N4007 — 1000 V / 1 A general-purpose silicon rectifier (DO-41). | `Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal` | — |
 | `D` | `components.diodes.d1n4148.D1N4148` | diode | 1N4148 — fast signal switching diode (100 V / 200 mA, DO-35). | `Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal` | — |
@@ -49,9 +51,12 @@ one-line description from the class docstring.
 | `U` | `components.chips.drv8313.DRV8313` | chip | Texas Instruments DRV8313 — three-channel brushless-DC pre-driver with integrated half-bridge power stages (HTSSOP-28, PWP package). | `Package_SO:HTSSOP-28-1EP_4.4x9.7mm_P0.65mm_EP3.4x9.5mm` | — |
 | `U` | `components.chips.ds1307.DS1307` | chip | Analog Devices (Maxim) DS1307 — I²C real-time clock with 56-byte NV RAM (DIP-8). | `Package_DIP:DIP-8_W7.62mm` | — |
 | `U` | `components.chips.ds18b20.DS18B20` | chip | Analog Devices (Maxim) DS18B20 — 1-Wire programmable digital thermometer (TO-92, 3-pin). | `Package_TO_SOT_THT:TO-92_Inline` | — |
+| `D` | `components.diodes.oa90.D_OA90` | diode | Mullard OA90 — small-signal germanium point-contact diode. | `Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal` | — |
 | `U` | `components.chips.display5641as.Display5641AS` | chip | 5641AS — 4-digit common-anode 7-segment LED display module (0.56" digits, 12-pin DIP-like single-row package). | `Display_7Segment:Display_5641AS` | — |
 | `U` | `components.chips.esp32_wroom_32.ESP32_WROOM_32` | chip | Espressif ESP32-WROOM-32 — Wi-Fi + Bluetooth SMD module with ESP32-D0WDQ6, 4 MB flash (38-pad). | `RF_Module:ESP32-WROOM-32` | — |
 | `U` | `components.chips.esp8266_12f.ESP8266_12F` | chip | Ai-Thinker ESP-12F — Wi-Fi SMD module with ESP8266EX, 4 MB flash (22-pad). | `RF_Module:ESP-12E` | — |
+| `A` | `components.transducers.earth.Earth` | transducer | Earth-ground connection — the literal soil, the cold-water pipe, or the mains-protective-earth terminal. | — | — |
+| `L` | `components.passives.ferrite_aerial.FerriteAerial` | passive | Ferrite-rod tuned aerial coil — the antenna *and* the inductor in one part. | `Inductor_THT:L_Radial_D10.0mm_P5.00mm_Vertical` | — |
 | `U` | `components.chips.hcsr04.HCSR04` | chip | HC-SR04 — ultrasonic ranging breakout module (4-pin SIP, 2.54 mm). | `Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical` | — |
 | `P` | `components.connectors.video.HDMITypeAPlug` | connector | HDMI Type-A plug (cable-side). | `Connector_Video:HDMI_A_Amphenol_10029449-001RLF_Horizontal` | — |
 | `J` | `components.connectors.video.HDMITypeAReceptacle` | connector | HDMI Type-A receptacle (board-side). | `Connector_Video:HDMI_A_Amphenol_10029449-001RLF_Horizontal` | — |
@@ -102,6 +107,7 @@ one-line description from the class docstring.
 | `U` | `components.chips.opa2134.OPA2134` | chip | Texas Instruments / Burr-Brown OPA2134 — dual audio FET-input op-amp (DIP-8). | `Package_DIP:DIP-8_W7.62mm` | — |
 | `U` | `components.chips.opto_4n25.OPTO_4N25` | chip | onsemi 4N25 — general-purpose phototransistor optocoupler with base pin (DIP-6). | `Package_DIP:DIP-6_W7.62mm` | — |
 | `U` | `components.chips.opto_tlp521.OPTO_TLP521` | chip | Toshiba TLP521-1 — single-channel phototransistor optocoupler (DIP-4). | `Package_DIP:DIP-4_W7.62mm` | — |
+| `R` | `components.passives.photoresistor.Photoresistor` | passive | Cadmium-sulphide light-dependent resistor (LDR / photocell). | `Resistor_THT:R_Axial_DIN0309_L9.0mm_D3.2mm_P12.70mm_Horizontal` | — |
 | `Q` | `components.transistors.q2n2222.Q2N2222` | transistor | NPN BJT, medium-power switching (800 mA, 40 V). | `Package_TO_SOT_THT:TO-92_Inline` | — |
 | `Q` | `components.transistors.q2n3904.Q2N3904` | transistor | NPN BJT, general-purpose small-signal (200 mA, 40 V). | `Package_TO_SOT_THT:TO-92_Inline` | — |
 | `Q` | `components.transistors.q2n3906.Q2N3906` | transistor | PNP BJT, general-purpose small-signal (200 mA, 40 V). | `Package_TO_SOT_THT:TO-92_Inline` | — |
@@ -134,6 +140,7 @@ one-line description from the class docstring.
 | `U` | `components.chips.stm32f103c8t6.STM32F103C8T6` | chip | STMicroelectronics STM32F103C8T6 — ARM Cortex-M3 microcontroller, 64 KB flash (LQFP-48). | `Package_QFP:LQFP-48_7x7mm_P0.5mm` | — |
 | `U` | `components.chips.stm32f411ceu6.STM32F411CEU6` | chip | STMicroelectronics STM32F411CEU6 — ARM Cortex-M4F microcontroller, 512 KB flash (UFQFPN-48). | `Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.6x5.6mm` | — |
 | `J` | `components.connectors.screw_terminal.ScrewTerminalBlock` | connector | PCB-mount screw terminal block. | various | — |
+| `LS` | `components.transducers.speaker.Speaker` | transducer | Low-impedance moving-coil loudspeaker. | `Buzzer_Beeper:Speaker_Mallory_M9CP-916H_15mm` | — |
 | `Q` | `components.transistors.tip120.TIP120` | transistor | NPN Darlington power transistor (5 A, 60 V). | `Package_TO_SOT_THT:TO-220-3_Vertical` | — |
 | `U` | `components.chips.tl072.TL072` | chip | Texas Instruments TL072 — dual low-noise JFET-input op-amp (DIP-8). | `Package_DIP:DIP-8_W7.62mm` | — |
 | `U` | `components.chips.tl074.TL074` | chip | Texas Instruments TL074 — quad low-noise JFET-input op-amp (DIP-14). | `Package_DIP:DIP-14_W7.62mm` | — |
@@ -152,6 +159,7 @@ one-line description from the class docstring.
 | `J` | `components.connectors.usb.USBCReceptacle` | connector | USB Type-C receptacle (full 24-pin). | `Connector_USB:USB_C_Receptacle_GCT_USB4105-GF-A_16P_TopMnt_Horizontal` | — |
 | `P` | `components.connectors.usb.USBMicroBPlug` | connector | USB Micro-B plug. | `Connector_USB:USB_Micro-B_GCT_USB3076-30-A_Horizontal` | — |
 | `J` | `components.connectors.usb.USBMicroBReceptacle` | connector | USB Micro-B receptacle. | `Connector_USB:USB_Micro-B_GCT_USB3076-30-A_Horizontal` | — |
+| `C` | `components.passives.variable_capacitor.VariableCapacitor` | passive | Tuning capacitor — a mechanical variable capacitor. | `Capacitor_THT:CP_Radial_D10.0mm_P5.00mm` | — |
 
 ## Filtering at the command line
 

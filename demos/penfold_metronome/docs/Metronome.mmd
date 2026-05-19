@@ -1,0 +1,40 @@
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    U1["U1<br/>NE555"]
+    R1["R1<br/>4700Ω"]
+    R2["R2<br/>50000Ω"]
+    C1["C1<br/>1e-07F"]
+    C2["C2<br/>1e-08F"]
+    R3["R3<br/>100Ω"]
+    C3["C3<br/>1e-05F"]
+    LS1["LS1<br/>8Ω spkr"]
+    net_5(("net_5"))
+    gnd(("gnd"))
+    net_4(("net_4"))
+    net_2(("net_2"))
+    net_0(("net_0"))
+    vcc(("vcc"))
+    net_6(("net_6"))
+    net_3(("net_3"))
+    C1 ---|"t1"| net_5
+    C1 ---|"t2"| gnd
+    C2 ---|"t1"| net_4
+    C2 ---|"t2"| gnd
+    C3 ---|"t1"| net_2
+    C3 ---|"t2"| net_0
+    LS1 ---|"t1"| net_0
+    LS1 ---|"t2"| gnd
+    R1 ---|"t1"| vcc
+    R1 ---|"t2"| net_6
+    R2 ---|"t1"| net_6
+    R2 ---|"t2"| net_5
+    R3 ---|"t1"| net_3
+    R3 ---|"t2"| net_2
+    U1 ---|"CONT"| net_4
+    U1 ---|"DISCH"| net_6
+    U1 ---|"GND"| gnd
+    U1 ---|"OUT"| net_3
+    U1 ---|"RESET"| vcc
+    U1 ---|"THRES"| net_5
+    U1 ---|"TRIG"| net_5
+    U1 ---|"VCC"| vcc

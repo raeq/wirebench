@@ -24,6 +24,7 @@ import components.connectors   # noqa: F401
 import components.diodes       # noqa: F401
 import components.passives     # noqa: F401
 import components.relays       # noqa: F401
+import components.transducers  # noqa: F401
 import components.transistors  # noqa: F401
 import framework.board         # noqa: F401
 

@@ -1,0 +1,146 @@
+{
+  "creator": "wirebench 0.x",
+  "modules": {
+    "CrystalSet": {
+      "cells": {
+        "A1": {
+          "connections": {
+            "out": [
+              4
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "out": "output"
+          },
+          "type": "Antenna"
+        },
+        "A2": {
+          "connections": {
+            "out": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "out": "output"
+          },
+          "type": "Earth"
+        },
+        "C1": {
+          "connections": {
+            "t1": [
+              4
+            ],
+            "t2": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "VariableCapacitor"
+        },
+        "D1": {
+          "connections": {
+            "anode": [
+              4
+            ],
+            "cathode": [
+              2
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "anode": "inout",
+            "cathode": "inout"
+          },
+          "type": "D_OA90"
+        },
+        "L1": {
+          "connections": {
+            "t1": [
+              4
+            ],
+            "t2": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "FerriteAerial"
+        },
+        "LS1": {
+          "connections": {
+            "t1": [
+              2
+            ],
+            "t2": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "CrystalEarpiece"
+        },
+        "R1": {
+          "connections": {
+            "t1": [
+              2
+            ],
+            "t2": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "100000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        }
+      },
+      "netnames": {
+        "net_0": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        },
+        "net_1": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "net_2": {
+          "attributes": {},
+          "bits": [
+            4
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {}
+    }
+  }
+}
