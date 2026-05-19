@@ -64,3 +64,52 @@ def test_physics_constants_present():
     assert hasattr(LED, 'I_F_MAX')
     assert LED.V_F > 0
     assert LED.I_F_MAX > LED.I_F_TYP
+
+
+def test_anode_and_cathode_are_both_mandatory(red_led):
+    """Regression: an LED with a floating cathode does not light at the
+    bench — leaving it unconnected silently is a physical-fidelity
+    violation. Both ports must be declared mandatory so the framework
+    refuses the bug at construction time, not at the bench.
+
+    Discovered when the breadboard visualiser drew WaterAlarm with no
+    ground connection to either LED's cathode: the rendered SVG was
+    technically faithful (the source had no `wire()` for the cathode)
+    but matched a circuit that wouldn't light. The fix is to enforce
+    cathode-must-be-wired at the framework layer."""
+    assert red_led.ports['anode'].mandatory, (
+        "LED.anode must be mandatory: a real LED with a floating anode "
+        "has no driver and cannot light."
+    )
+    assert red_led.ports['cathode'].mandatory, (
+        "LED.cathode must be mandatory: a real LED with a floating "
+        "cathode has no return path to ground and cannot light. "
+        "Allowing the cathode to default to GND is a physical-fidelity "
+        "violation."
+    )
+
+
+def test_floating_cathode_refused_at_circuit_construction():
+    """End-to-end: a Circuit that wires only the LED's anode (and
+    leaves the cathode floating) must fail at `Circuit.__init__` with
+    UnconnectedPinError naming the cathode.
+
+    This is the test that would have caught the WaterAlarm regression
+    — assembly_guide / kicad_sch / etc. happily exported the broken
+    design because the framework's validator silently tolerated the
+    floating cathode."""
+    from framework.circuit import Circuit
+    from framework.errors import UnconnectedPinError
+    from framework.wire import wire
+    from components.passives.rail import Rail
+
+    class _DanglingCathode(Circuit):
+        def __init__(self) -> None:
+            self.vcc = Rail(True)
+            self.led = LED('red', refdes_number=1)
+            wire(self.vcc.out, self.led.anode)
+            # Cathode deliberately left floating.
+            super().__init__()
+
+    with pytest.raises(UnconnectedPinError, match='LED.cathode'):
+        _DanglingCathode()

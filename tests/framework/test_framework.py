@@ -136,14 +136,17 @@ def test_topological_order_is_respected():
     """A logic gate must evaluate before its downstream load reads its output."""
     from framework.circuit import Circuit
     from framework.wire import wire
+    from components.passives.rail import Rail
 
     chip = SN74HC04(refdes_number=1)
     led = LED('green', refdes_number=1)
+    gnd = Rail(False)
 
     wire(chip.ports['y_1'], led.ports['anode'])
+    wire(gnd.ports['out'], led.ports['cathode'])
 
     circuit = Circuit(
-        parts=[led, chip],   # deliberately wrong order — circuit must fix it
+        parts=[led, chip, gnd],   # deliberately wrong order — circuit must fix it
         ports={'sig': chip.ports['a_1'], 'out': chip.ports['y_1']},
     )
 
