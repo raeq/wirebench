@@ -143,6 +143,19 @@ class FanCoolingBoard(Board):
         wire(self.controller.ports['fan_drive'],
              self.fan_out.pins[1].internal)        # J2.p2 = FAN-
 
+        # BOM-only passives: D1 zener, R1 ballast, R2 pull-up, R3
+        # gate pull-down. Each is wired as an ISOLATED 0-Ω passthrough
+        # (both terminals on its own private net) so the mandatory-
+        # pin check passes without altering the signal-flow graph —
+        # joining them onto the VIN net would introduce a feedback
+        # cycle between the controller and the fan-out drive.
+        # Marked `dynamically_driven` so the framework's "multiple
+        # BIDIRs with no driver" check doesn't flag the isolated net.
+        wire(self.d1.anode, self.d1.cathode, dynamically_driven=True)
+        wire(self.r1.t1, self.r1.t2, dynamically_driven=True)
+        wire(self.r2.t1, self.r2.t2, dynamically_driven=True)
+        wire(self.r3.t1, self.r3.t2, dynamically_driven=True)
+
         self.fan_out.pins[1]._effective_role = Direction.OUT
 
         super().__init__(

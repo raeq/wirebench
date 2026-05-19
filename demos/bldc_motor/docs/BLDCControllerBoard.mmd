@@ -11,42 +11,63 @@ flowchart TD
         C6["C6<br/>1e-05F"]
         R1["R1<br/>10000Ω"]
     end
-    net_6(("net_6"))
-    net_9(("net_9"))
     net_12(("net_12"))
+    net_11(("net_11"))
+    net_10(("net_10"))
+    net_9(("net_9"))
+    net_8(("net_8"))
+    net_7(("net_7"))
+    net_6(("net_6"))
+    net_13(("net_13"))
+    net_16(("net_16"))
+    net_19(("net_19"))
     net_0(("net_0"))
     net_1(("net_1"))
     net_2(("net_2"))
-    net_7(("net_7"))
-    net_8(("net_8"))
-    net_10(("net_10"))
-    net_11(("net_11"))
-    net_13(("net_13"))
     net_14(("net_14"))
+    net_15(("net_15"))
+    net_17(("net_17"))
+    net_18(("net_18"))
+    net_20(("net_20"))
+    net_21(("net_21"))
     net_3(("net_3"))
     net_4(("net_4"))
     net_5(("net_5"))
-    U1 ---|"PB0"| net_6
-    U1 ---|"PB1"| net_9
-    U1 ---|"PB2"| net_12
+    C1 ---|"t1"| net_12
+    C1 ---|"t2"| net_12
+    C2 ---|"t1"| net_11
+    C2 ---|"t2"| net_11
+    C3 ---|"t1"| net_10
+    C3 ---|"t2"| net_10
+    C4 ---|"t1"| net_9
+    C4 ---|"t2"| net_9
+    C5 ---|"t1"| net_8
+    C5 ---|"t2"| net_8
+    C6 ---|"t1"| net_7
+    C6 ---|"t2"| net_7
+    R1 ---|"t1"| net_6
+    R1 ---|"t2"| net_6
+    U1 ---|"PB0"| net_13
+    U1 ---|"PB1"| net_16
+    U1 ---|"PB2"| net_19
     U1 ---|"PC0"| net_0
     U1 ---|"PC1"| net_1
     U1 ---|"PC2"| net_2
-    U1 ---|"PD2"| net_7
-    U1 ---|"PD3"| net_8
-    U1 ---|"PD4"| net_10
-    U1 ---|"PD5"| net_11
-    U1 ---|"PD6"| net_13
-    U1 ---|"PD7"| net_14
-    U2 ---|"EN1"| net_6
-    U2 ---|"EN2"| net_9
-    U2 ---|"EN3"| net_12
-    U2 ---|"IN1"| net_7
-    U2 ---|"IN2"| net_8
-    U2 ---|"IN3"| net_10
-    U2 ---|"IN4"| net_11
-    U2 ---|"IN5"| net_13
-    U2 ---|"IN6"| net_14
+    U1 ---|"PD2"| net_14
+    U1 ---|"PD3"| net_15
+    U1 ---|"PD4"| net_17
+    U1 ---|"PD5"| net_18
+    U1 ---|"PD6"| net_20
+    U1 ---|"PD7"| net_21
+    U2 ---|"EN1"| net_13
+    U2 ---|"EN2"| net_16
+    U2 ---|"EN3"| net_19
+    U2 ---|"IN1"| net_14
+    U2 ---|"IN2"| net_15
+    U2 ---|"IN3"| net_17
+    U2 ---|"IN4"| net_18
+    U2 ---|"IN5"| net_20
+    U2 ---|"IN6"| net_21
     U2 ---|"OUT1"| net_3
     U2 ---|"OUT2"| net_4
     U2 ---|"OUT3"| net_5

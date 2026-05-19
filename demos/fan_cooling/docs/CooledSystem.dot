@@ -16,6 +16,17 @@ digraph "CooledSystem" {
     R2 [label="R2\\n10000Ω"];
     R3 [label="R3\\n10000Ω"];
   }
+  // Nets
+  node [shape=circle, label="", width=0.15, fixedsize=true];
+  net_3; net_4; net_5; net_6;
   // Edges (component -- net, taillabel = port name)
   edge [arrowhead=none, fontname="monospace", fontsize=9];
+  D1 -> net_6 [taillabel="anode"];
+  D1 -> net_6 [taillabel="cathode"];
+  R1 -> net_5 [taillabel="t1"];
+  R1 -> net_5 [taillabel="t2"];
+  R2 -> net_4 [taillabel="t1"];
+  R2 -> net_4 [taillabel="t2"];
+  R3 -> net_3 [taillabel="t1"];
+  R3 -> net_3 [taillabel="t2"];
 }

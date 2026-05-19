@@ -62,3 +62,32 @@ def test_repr_round_trip_for_unit_inputs():
 def test_str():
     r = Resistor(ohms=47, refdes_number=1)
     assert str(r) == "47.0 Ω"
+
+
+def test_terminals_are_mandatory():
+    """Both Resistor terminals must be `mandatory=True`. A real
+    resistor with a floating terminal does nothing — leaving it
+    unwired silently is a physical-fidelity violation that produces
+    breadboard layouts where the resistor sits with no jumpers
+    attached. Earlier this was `mandatory=False` to let demos declare
+    BOM-only timing/decoupling components without wiring them; that
+    pattern is exactly the bug this regression test exists to catch."""
+    r = Resistor(330, refdes_number=1)
+    assert r.ports['t1'].mandatory is True
+    assert r.ports['t2'].mandatory is True
+
+
+def test_floating_resistor_refused_at_circuit_construction():
+    """End-to-end: a Circuit that declares a Resistor but doesn't
+    wire its terminals raises `UnconnectedPinError` at
+    `Circuit.__init__`. Mirrors the LED.cathode regression test."""
+    from framework.circuit import Circuit
+    from framework.errors import UnconnectedPinError
+
+    class _DanglingResistor(Circuit):
+        def __init__(self) -> None:
+            self.r = Resistor(330, refdes_number=1)
+            super().__init__()
+
+    with pytest.raises(UnconnectedPinError, match='Resistor'):
+        _DanglingResistor()

@@ -31,4 +31,4 @@ Parts in this domain (23):
 
 Boundaries to other domains: None — single-domain design.
 
-Nets entirely within this domain: 7
+Nets entirely within this domain: 8

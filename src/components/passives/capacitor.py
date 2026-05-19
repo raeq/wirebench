@@ -102,13 +102,15 @@ class Capacitor(Part):
         validate_refdes(self.REFDES_PREFIX, refdes_number)
         self._refdes_number = refdes_number
         self._farads: Farads = Farads(farads)
-        # mandatory=False: opaque under evaluation, so wiring is not a
-        # simulation requirement.  In a real circuit both terminals must
-        # of course be connected — that's a hardware-design constraint
-        # the framework does not enforce.
+        # Both terminals are mandatory. A real capacitor with a
+        # dangling terminal does nothing — see Resistor for the same
+        # reasoning. (Earlier this said `mandatory=False` to let
+        # demos declare BOM-only timing/decoupling caps without
+        # wiring them; that produced breadboard layouts where the
+        # caps appeared but had no jumpers attached.)
         self._ports = {
-            't1': Port('t1', Direction.BIDIR, domain, mandatory=False, signal_type=Analog),
-            't2': Port('t2', Direction.BIDIR, domain, mandatory=False, signal_type=Analog),
+            't1': Port('t1', Direction.BIDIR, domain, mandatory=True, signal_type=Analog),
+            't2': Port('t2', Direction.BIDIR, domain, mandatory=True, signal_type=Analog),
         }
 
     @property

@@ -39,7 +39,7 @@ def test_terminals_are_bidir_analog_wildcards():
         p = c.ports[name]
         assert p.direction is Direction.BIDIR
         assert p.signal_type is Analog
-        assert p.mandatory is False
+        assert p.mandatory is True   # see test_terminals_are_mandatory below
 
 
 def test_call_returns_value_and_skips_input_guard():
@@ -72,3 +72,25 @@ def test_repr_and_str():
     assert "C2" in repr(c)
     assert "1e-06" in repr(c)
     assert "F" in str(c)
+
+
+def test_terminals_are_mandatory():
+    """Both Capacitor terminals must be `mandatory=True`. See
+    `tests/components/test_resistor.py::test_terminals_are_mandatory`
+    for the same regression on Resistor."""
+    c = Capacitor(1e-6, refdes_number=1)
+    assert c.ports['t1'].mandatory is True
+    assert c.ports['t2'].mandatory is True
+
+
+def test_floating_capacitor_refused_at_circuit_construction():
+    from framework.circuit import Circuit
+    from framework.errors import UnconnectedPinError
+
+    class _DanglingCapacitor(Circuit):
+        def __init__(self) -> None:
+            self.c = Capacitor(1e-6, refdes_number=1)
+            super().__init__()
+
+    with pytest.raises(UnconnectedPinError, match='Capacitor'):
+        _DanglingCapacitor()

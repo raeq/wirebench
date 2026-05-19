@@ -261,13 +261,35 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    51 (any of 51A–51E).
 35. Run a jumper from R4 t2 to U2 pin 3 — position 54 (any of 54A–54E) to
    position 18 (any of 18A–18E).
-36. Run a jumper from D1 cathode at position 31 (any of 31A–31E) to the top
-   `+` rail.
-37. Run a jumper from U2 pin 4 at position 19 (any of 19A–19E) to the top `+`
+36. Run a jumper from C1 t1 at position 76 (any of 76A–76E) to the top `+`
    rail.
-38. Run a jumper from D2 cathode at position 34 (any of 34A–34E) to the top
+37. Run a jumper from C2 t1 at position 79 (any of 79A–79E) to the top `+`
+   rail.
+38. Run a jumper from C3 t1 at position 82 (any of 82A–82E) to the top `+`
+   rail.
+39. Run a jumper from C5 t1 at position 88 (any of 88A–88E) to the top `+`
+   rail.
+40. Run a jumper from D1 cathode at position 31 (any of 31A–31E) to the top
+   `+` rail.
+41. Run a jumper from R2 t1 at position 41 (any of 41A–41E) to the top `+`
+   rail.
+42. Run a jumper from R3 t1 at position 46 (any of 46A–46E) to the top `+`
+   rail.
+43. Run a jumper from R6 t1 at position 61 (any of 61A–61E) to the top `+`
+   rail.
+44. Run a jumper from R7 t1 at position 66 (any of 66A–66E) to the top `+`
+   rail.
+45. Run a jumper from R8 t1 at position 71 (any of 71A–71E) to the top `+`
+   rail.
+46. Run a jumper from U2 pin 4 at position 19 (any of 19A–19E) to the top `+`
+   rail.
+47. Run a jumper from D1 anode to K1 coil_minus — position 30 (any of 30A–30E)
+   to position 92 (any of 92A–92E).
+48. Run a jumper from K1 coil_minus to Q1 c — position 92 (any of 92A–92E) to
+   position 24 (any of 24A–24E).
+49. Run a jumper from D2 cathode at position 34 (any of 34A–34E) to the top
    `-` rail.
-39. Verify nothing is shorted by inspecting the rails with a multimeter
+50. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.
 

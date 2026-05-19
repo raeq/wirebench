@@ -1,6 +1,6 @@
 # Net Report — BLDCControllerBoard
 
-15 logical net(s) across 1 ground domain(s): ELECTRICAL.
+22 logical net(s) across 1 ground domain(s): ELECTRICAL.
 
 ## Net N0
 
@@ -54,6 +54,69 @@ Drivers (1):
 
 Domain: ELECTRICAL
 
+Other ports on this net (2):
+- R1.t1 (`Resistor 10 kΩ`, BIDIR)
+- R1.t2 (`Resistor 10 kΩ`, BIDIR)
+
+
+## Net N7
+
+Domain: ELECTRICAL
+
+Other ports on this net (2):
+- C6.t1 (`Capacitor 10 µF`, BIDIR)
+- C6.t2 (`Capacitor 10 µF`, BIDIR)
+
+
+## Net N8
+
+Domain: ELECTRICAL
+
+Other ports on this net (2):
+- C5.t1 (`Capacitor 100 nF`, BIDIR)
+- C5.t2 (`Capacitor 100 nF`, BIDIR)
+
+
+## Net N9
+
+Domain: ELECTRICAL
+
+Other ports on this net (2):
+- C4.t1 (`Capacitor 10 nF`, BIDIR)
+- C4.t2 (`Capacitor 10 nF`, BIDIR)
+
+
+## Net N10
+
+Domain: ELECTRICAL
+
+Other ports on this net (2):
+- C3.t1 (`Capacitor 10 nF`, BIDIR)
+- C3.t2 (`Capacitor 10 nF`, BIDIR)
+
+
+## Net N11
+
+Domain: ELECTRICAL
+
+Other ports on this net (2):
+- C2.t1 (`Capacitor 10 nF`, BIDIR)
+- C2.t2 (`Capacitor 10 nF`, BIDIR)
+
+
+## Net N12
+
+Domain: ELECTRICAL
+
+Other ports on this net (2):
+- C1.t1 (`Capacitor 10 nF`, BIDIR)
+- C1.t2 (`Capacitor 10 nF`, BIDIR)
+
+
+## Net N13
+
+Domain: ELECTRICAL
+
 Readers (1):
 - U2.EN1 (`DRV8313`, IN)
 
@@ -61,7 +124,7 @@ Other ports on this net (1):
 - U1.PB0 (`Uno_BLDCCommutator`, BIDIR)
 
 
-## Net N7
+## Net N14
 
 Domain: ELECTRICAL
 
@@ -72,7 +135,7 @@ Other ports on this net (1):
 - U1.PD2 (`Uno_BLDCCommutator`, BIDIR)
 
 
-## Net N8
+## Net N15
 
 Domain: ELECTRICAL
 
@@ -83,7 +146,7 @@ Other ports on this net (1):
 - U1.PD3 (`Uno_BLDCCommutator`, BIDIR)
 
 
-## Net N9
+## Net N16
 
 Domain: ELECTRICAL
 
@@ -94,7 +157,7 @@ Other ports on this net (1):
 - U1.PB1 (`Uno_BLDCCommutator`, BIDIR)
 
 
-## Net N10
+## Net N17
 
 Domain: ELECTRICAL
 
@@ -105,7 +168,7 @@ Other ports on this net (1):
 - U1.PD4 (`Uno_BLDCCommutator`, BIDIR)
 
 
-## Net N11
+## Net N18
 
 Domain: ELECTRICAL
 
@@ -116,7 +179,7 @@ Other ports on this net (1):
 - U1.PD5 (`Uno_BLDCCommutator`, BIDIR)
 
 
-## Net N12
+## Net N19
 
 Domain: ELECTRICAL
 
@@ -127,7 +190,7 @@ Other ports on this net (1):
 - U1.PB2 (`Uno_BLDCCommutator`, BIDIR)
 
 
-## Net N13
+## Net N20
 
 Domain: ELECTRICAL
 
@@ -138,7 +201,7 @@ Other ports on this net (1):
 - U1.PD6 (`Uno_BLDCCommutator`, BIDIR)
 
 
-## Net N14
+## Net N21
 
 Domain: ELECTRICAL
 

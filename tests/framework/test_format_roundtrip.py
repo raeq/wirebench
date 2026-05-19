@@ -149,8 +149,9 @@ def test_determinism_two_saves_byte_identical(tmp_path):
 
 
 def test_hand_edited_file_loads(tmp_path):
-    # Minimal sanity-check design: two resistors, no wires.  Resistor
-    # terminals are mandatory=False so an unconnected design loads.
+    # Minimal sanity-check design: two resistors plus a rail, with
+    # all four terminals on the rail's net as 0-Ω passthroughs so the
+    # framework's mandatory-pin check is satisfied.
     content = {
         "format_version": "1.0.0",
         "root": {
@@ -158,14 +159,22 @@ def test_hand_edited_file_loads(tmp_path):
             "components": [
                 {"type": "Resistor", "refdes": "R1", "ohms": 330},
                 {"type": "Resistor", "refdes": "R2", "ohms": 1000},
+                {"type": "Rail", "id": "Rail_0", "level": True,
+                 "domain": None, "signal_type": None},
             ],
-            "wires": [],
+            "wires": [
+                {"ports": [
+                    "Rail_0.out",
+                    "R1.t1", "R1.t2",
+                    "R2.t1", "R2.t2",
+                ]},
+            ],
         },
     }
     p = tmp_path / "hand.wirebench"
     p.write_text(json.dumps(content))
     loaded = _load_silently(p)
-    assert len(loaded.parts) == 2
+    assert len(loaded.parts) == 3
     assert _refdes_set(loaded) == {"R1", "R2"}
 
 

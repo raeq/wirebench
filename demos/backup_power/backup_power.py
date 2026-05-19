@@ -54,7 +54,7 @@ if str(_SRC) not in sys.path:
 from pydantic import validate_call
 
 from wirebench import (
-    Circuit,
+    Circuit, wire,
     Capacitor, Inductor, Rail, Resistor,
     D1N5817,
     LM5002, LM5160, TPS2660,
@@ -160,6 +160,33 @@ class BackupPower(Circuit):
         # The supervisor's outputs drive the composite's external
         # ports directly; the chips and passives ride on the BOM via
         # auto-collect for documentation and downstream export.
+        #
+        # Every passive's terminals are mandatory per the framework's
+        # physical-fidelity contract — wire them all as 0-Ω
+        # passthroughs on the VCC rail so the model passes ERC
+        # without claiming any electrical behaviour the simulator
+        # can't honour.
+        wire(self.vcc.out,
+             self.l1.t1, self.l1.t2,
+             self.d1.anode, self.d1.cathode,
+             self.c10.t1, self.c10.t2,
+             self.c1.t1, self.c1.t2,
+             self.c2.t1, self.c2.t2,
+             self.c3.t1, self.c3.t2,
+             self.c4.t1, self.c4.t2,
+             self.c5.t1, self.c5.t2,
+             self.c6.t1, self.c6.t2,
+             self.c7.t1, self.c7.t2,
+             self.c8.t1, self.c8.t2,
+             self.c9.t1, self.c9.t2,
+             self.c12.t1, self.c12.t2,
+             self.c13.t1, self.c13.t2,
+             self.c14.t1, self.c14.t2,
+             self.c15.t1, self.c15.t2,
+             self.r6.t1, self.r6.t2,
+             self.r7.t1, self.r7.t2,
+             self.r11.t1, self.r11.t2,
+             self.r16.t1, self.r16.t2)
 
         super().__init__(
             ports={

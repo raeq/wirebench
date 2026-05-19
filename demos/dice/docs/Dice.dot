@@ -27,10 +27,14 @@ digraph "Dice" {
   D13 [label="D13\\nred LED"];
   // Nets
   node [shape=circle, label="", width=0.15, fixedsize=true];
-  gnd; net_0; net_2; net_3; net_4; net_5; net_6; net_7; net_8; net_9; vcc;
+  gnd; net_0; net_10; net_2; net_3; net_4; net_6; net_7; net_8; net_9; vcc;
   // Edges (component -- net, taillabel = port name)
   edge [arrowhead=none, fontname="monospace", fontsize=9];
-  D1 -> net_8 [taillabel="anode"];
+  C1 -> vcc [taillabel="t1"];
+  C1 -> vcc [taillabel="t2"];
+  C2 -> vcc [taillabel="t1"];
+  C2 -> vcc [taillabel="t2"];
+  D1 -> net_9 [taillabel="anode"];
   D1 -> net_4 [taillabel="cathode"];
   D10 -> net_2 [taillabel="anode"];
   D10 -> gnd [taillabel="cathode"];
@@ -40,13 +44,13 @@ digraph "Dice" {
   D12 -> gnd [taillabel="cathode"];
   D13 -> net_0 [taillabel="anode"];
   D13 -> gnd [taillabel="cathode"];
-  D2 -> net_5 [taillabel="anode"];
+  D2 -> net_6 [taillabel="anode"];
   D2 -> net_4 [taillabel="cathode"];
-  D3 -> net_7 [taillabel="anode"];
+  D3 -> net_8 [taillabel="anode"];
   D3 -> net_4 [taillabel="cathode"];
-  D4 -> net_6 [taillabel="anode"];
+  D4 -> net_7 [taillabel="anode"];
   D4 -> net_2 [taillabel="cathode"];
-  D5 -> net_5 [taillabel="anode"];
+  D5 -> net_6 [taillabel="anode"];
   D5 -> net_2 [taillabel="cathode"];
   D6 -> net_0 [taillabel="anode"];
   D6 -> net_2 [taillabel="cathode"];
@@ -64,17 +68,23 @@ digraph "Dice" {
   R3 -> net_2 [taillabel="t2"];
   R4 -> net_0 [taillabel="t1"];
   R4 -> net_0 [taillabel="t2"];
+  R5 -> vcc [taillabel="t1"];
+  R5 -> vcc [taillabel="t2"];
+  R6 -> vcc [taillabel="t1"];
+  R6 -> vcc [taillabel="t2"];
+  R7 -> vcc [taillabel="t1"];
+  R7 -> vcc [taillabel="t2"];
   U1 -> gnd [taillabel="GND"];
   U1 -> vcc [taillabel="RESET"];
   U1 -> vcc [taillabel="VCC"];
   U2 -> net_3 [taillabel="CO"];
-  U2 -> net_8 [taillabel="Q1"];
-  U2 -> net_6 [taillabel="Q2"];
-  U2 -> net_5 [taillabel="Q3"];
+  U2 -> net_9 [taillabel="Q1"];
+  U2 -> net_7 [taillabel="Q2"];
+  U2 -> net_6 [taillabel="Q3"];
   U2 -> net_0 [taillabel="Q4"];
-  U2 -> net_7 [taillabel="Q5"];
-  U2 -> net_9 [taillabel="Q6"];
-  U2 -> net_9 [taillabel="RST"];
+  U2 -> net_8 [taillabel="Q5"];
+  U2 -> net_10 [taillabel="Q6"];
+  U2 -> net_10 [taillabel="RST"];
   U2 -> vcc [taillabel="VDD"];
   U2 -> gnd [taillabel="VSS"];
 }
