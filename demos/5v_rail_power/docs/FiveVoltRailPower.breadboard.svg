@@ -997,12 +997,14 @@
 <line x1="677" y1="198" x2="677" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="702" y1="198" x2="702" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="679" y="170" width="21" height="14" rx="3" style="fill:#a0a0c8;stroke:#000000;stroke-width:1"/>
+<text x="689.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">100 nF</text>
 <text x="689.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">C1</text>
 </g>
 <g class="component" data-refdes="C2" data-kind="passive">
 <line x1="752" y1="198" x2="752" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="777" y1="198" x2="777" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="754" y="170" width="21" height="14" rx="3" style="fill:#a0a0c8;stroke:#000000;stroke-width:1"/>
+<text x="764.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">10 µF</text>
 <text x="764.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">C2</text>
 </g>
 <g class="component" data-refdes="D2" data-kind="passive">

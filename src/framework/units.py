@@ -108,7 +108,21 @@ class Farads(_Unit):
     __slots__ = ()
     _SCALE = 1.0
     def __str__(self) -> str:
-        return f"{float(self) / self._SCALE:.3g} F"
+        # Canonical engineering notation: 100 pF, 22 nF, 100 nF,
+        # 1 µF, 10 µF, 470 µF, 1 mF, 1 F. Matches what a bench
+        # builder reads off a capacitor body or sees on a schematic.
+        # The raw `:.3g` formatter would emit unreadable scientific
+        # form ("1e-07 F") for typical small-cap values.
+        v = float(self) / self._SCALE
+        if v >= 1.0:
+            return f"{v:g} F"
+        if v >= 1e-3:
+            return f"{v * 1e3:g} mF"
+        if v >= 1e-6:
+            return f"{v * 1e6:g} µF"
+        if v >= 1e-9:
+            return f"{v * 1e9:g} nF"
+        return f"{v * 1e12:g} pF"
 
 
 class Microfarads(_Unit):
@@ -136,7 +150,17 @@ class Henries(_Unit):
     __slots__ = ()
     _SCALE = 1.0
     def __str__(self) -> str:
-        return f"{float(self) / self._SCALE:.3g} H"
+        # Canonical engineering notation: 100 nH, 10 µH, 22 mH, 1 H.
+        # Matches what a bench builder reads off an inductor body or
+        # sees on a schematic.
+        v = float(self) / self._SCALE
+        if v >= 1.0:
+            return f"{v:g} H"
+        if v >= 1e-3:
+            return f"{v * 1e3:g} mH"
+        if v >= 1e-6:
+            return f"{v * 1e6:g} µH"
+        return f"{v * 1e9:g} nH"
 
 
 class Millihenries(_Unit):

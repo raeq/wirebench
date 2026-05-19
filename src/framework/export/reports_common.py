@@ -34,45 +34,25 @@ def part_description(part: Part) -> str:
     Resistor → 'Resistor 4.7 kΩ'.  Capacitor → 'Capacitor 100 nF'.
     LED → 'LED red'.  Chips and connectors → class name.  The output
     avoids quoting so the calling renderer can wrap it in backticks.
+
+    Value formatting is delegated to the unit class's `__str__`
+    (`Ohms`, `Farads`, `Henries`) so every consumer of an engineering
+    quantity sees the same canonical notation.
     """
     cls = type(part).__name__
     ohms = getattr(part, 'ohms', None)
     if ohms is not None:
-        return f"{cls} {_format_ohms(float(ohms))}"
+        return f"{cls} {ohms}"
     farads = getattr(part, 'farads', None)
     if farads is not None:
-        return f"{cls} {_format_farads(float(farads))}"
+        return f"{cls} {farads}"
     henries = getattr(part, 'henries', None)
     if henries is not None:
-        return f"{cls} {_format_henries(float(henries))}"
+        return f"{cls} {henries}"
     color = getattr(part, 'color', None) or getattr(part, 'colour', None)
     if color is not None:
         return f"{cls} {color}"
     return cls
-
-
-def _format_ohms(value: float) -> str:
-    if value >= 1_000_000:
-        return f"{value / 1_000_000:g} MΩ"
-    if value >= 1_000:
-        return f"{value / 1_000:g} kΩ"
-    return f"{value:g} Ω"
-
-
-def _format_farads(value: float) -> str:
-    if value >= 1e-6:
-        return f"{value * 1e6:g} µF"
-    if value >= 1e-9:
-        return f"{value * 1e9:g} nF"
-    return f"{value * 1e12:g} pF"
-
-
-def _format_henries(value: float) -> str:
-    if value >= 1:
-        return f"{value:g} H"
-    if value >= 1e-3:
-        return f"{value * 1e3:g} mH"
-    return f"{value * 1e6:g} µH"
 
 
 def direction_label(port: Port) -> str:

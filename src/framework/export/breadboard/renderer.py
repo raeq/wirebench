@@ -423,6 +423,14 @@ def _render_passive_body(
             x1 + 2, body_y1, x2 - x1 - 4, body_h,
             fill=colors.CAP_BODY, stroke='#000000', stroke_width=1, rx=3,
         ))
+        # Value label inside the body — engineering notation via the
+        # Farads class's canonical str (100 pF, 22 nF, 4.7 µF, 1 mF).
+        farads = getattr(part, 'farads', None)
+        val_label = str(farads) if farads is not None else ""
+        parts.append(svg.text(
+            (x1 + x2) / 2, y_center + 3, val_label, fill=colors.PASSIVE_LABEL,
+            size=8, anchor='middle',
+        ))
         label = refdes
     elif isinstance(part, Diode):
         parts.append(svg.rect(
@@ -456,6 +464,16 @@ def _render_passive_body(
             x1 + 2, body_y1, x2 - x1 - 4, body_h,
             fill=colors.PASSIVE_BODY, stroke='#000000', stroke_width=1, rx=3,
         ))
+        # Inductors fall through here (no dedicated branch); label
+        # their value if the part carries a `henries` attribute. Same
+        # engineering-notation principle as resistor / capacitor:
+        # canonical str from the Henries class (10 µH, 22 mH, 1 H).
+        henries = getattr(part, 'henries', None)
+        if henries is not None:
+            parts.append(svg.text(
+                (x1 + x2) / 2, y_center + 3, str(henries),
+                fill=colors.PASSIVE_LABEL, size=8, anchor='middle',
+            ))
         label = refdes
 
     # Refdes label above the body so it doesn't fight with the value

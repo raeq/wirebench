@@ -1826,12 +1826,14 @@
 <line x1="2052" y1="198" x2="2052" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="2077" y1="198" x2="2077" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="2054" y="170" width="21" height="14" rx="3" style="fill:#a0a0c8;stroke:#000000;stroke-width:1"/>
+<text x="2064.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">10 nF</text>
 <text x="2064.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">C1</text>
 </g>
 <g class="component" data-refdes="C2" data-kind="passive">
 <line x1="2127" y1="198" x2="2127" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="2152" y1="198" x2="2152" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="2129" y="170" width="21" height="14" rx="3" style="fill:#a0a0c8;stroke:#000000;stroke-width:1"/>
+<text x="2139.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">100 nF</text>
 <text x="2139.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">C2</text>
 </g>
 <g class="component" data-refdes="D7" data-kind="passive">

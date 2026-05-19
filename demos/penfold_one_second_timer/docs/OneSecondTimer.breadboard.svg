@@ -1128,6 +1128,7 @@
 <line x1="1227" y1="198" x2="1227" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="1252" y1="198" x2="1252" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="1229" y="170" width="21" height="14" rx="3" style="fill:#a0a0c8;stroke:#000000;stroke-width:1"/>
+<text x="1239.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">100 nF</text>
 <text x="1239.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">C2</text>
 </g>
 <g class="component" data-refdes="D1" data-kind="passive">
@@ -1141,6 +1142,7 @@
 <line x1="1377" y1="198" x2="1377" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="1402" y1="198" x2="1402" y2="184" style="stroke:#222222;stroke-width:1"/>
 <rect x="1379" y="170" width="21" height="14" rx="3" style="fill:#a0a0c8;stroke:#000000;stroke-width:1"/>
+<text x="1389.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">100 µF</text>
 <text x="1389.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">C1</text>
 </g>
 <g class="component" data-refdes="R7" data-kind="passive">
