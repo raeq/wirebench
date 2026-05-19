@@ -36,23 +36,23 @@ class _ThreeAttrs(Circuit):
         self.r1 = Resistor(330, refdes_number=1)
         self.d1 = LED('red', refdes_number=1)
         self.vcc = Rail(True)
+        self.gnd = Rail(False)
         wire(self.vcc.out, self.r1.t1)
         wire(self.r1.t2, self.d1.anode)
-        # d1.cathode left floating — would normally floating-net fail,
-        # but LED.cathode is mandatory=False so the validator is OK.
+        wire(self.gnd.out, self.d1.cathode)
         super().__init__()
 
 
 def test_attribute_auto_collection_picks_up_self_attrs() -> None:
     c = _ThreeAttrs()
     assert {id(fn) for fn in c.parts} == {
-        id(c.r1), id(c.d1), id(c.vcc),
+        id(c.r1), id(c.d1), id(c.vcc), id(c.gnd),
     }
 
 
 def test_attribute_auto_collection_preserves_insertion_order() -> None:
     c = _ThreeAttrs()
-    assert c.parts == (c.r1, c.d1, c.vcc)
+    assert c.parts == (c.r1, c.d1, c.vcc, c.gnd)
 
 
 class _ListGates(Circuit):
@@ -89,7 +89,7 @@ class _MixedAttrs(Circuit):
         self.r = Resistor(100, refdes_number=1)
         self.gates = [Inverter(), Inverter()]
         self.rail = Rail(True)
-        wire(self.rail.out, self.r.t1)
+        wire(self.rail.out, self.r.t1, self.r.t2)
         for g in self.gates:
             wire(self.rail.out, g.ports['a'])
         super().__init__()
@@ -109,7 +109,7 @@ class _WithJunk(Circuit):
         self.threshold = 5.0
         self.r = Resistor(100, refdes_number=1)
         self.rail = Rail(True)
-        wire(self.rail.out, self.r.t1)
+        wire(self.rail.out, self.r.t1, self.r.t2)
         super().__init__()
 
 
@@ -128,7 +128,7 @@ def test_manual_override_preserved() -> None:
             self.r = Resistor(100, refdes_number=1)
             self.unused_d = LED('red', refdes_number=2)  # not in explicit list
             self.rail = Rail(True)
-            wire(self.rail.out, self.r.t1)
+            wire(self.rail.out, self.r.t1, self.r.t2)
             super().__init__(parts=[self.r, self.rail])
 
     c = _ExplicitOverride()
@@ -176,7 +176,7 @@ def test_dunder_prefixed_attributes_skipped() -> None:
             self.__dunder_thing = "string, not a Part"  # noqa: F841
             self.r = Resistor(100, refdes_number=1)
             self.rail = Rail(True)
-            wire(self.rail.out, self.r.t1)
+            wire(self.rail.out, self.r.t1, self.r.t2)
             super().__init__()
 
     c = _WithMangledAttr()
@@ -195,7 +195,7 @@ def test_deduplication_when_component_stored_twice() -> None:
             self.r = Resistor(100, refdes_number=1)
             self.collection = [self.r]
             self.rail = Rail(True)
-            wire(self.rail.out, self.r.t1)
+            wire(self.rail.out, self.r.t1, self.r.t2)
             super().__init__()
 
     c = _Duplicated()
@@ -213,7 +213,7 @@ def test_ports_explicit_preserved() -> None:
         def __init__(self) -> None:
             self.r = Resistor(100, refdes_number=1)
             self.rail = Rail(True)
-            wire(self.rail.out, self.r.t1)
+            wire(self.rail.out, self.r.t1, self.r.t2)
             super().__init__(ports={'tap': self.r.t2})
 
     c = _WithSurface()
@@ -252,7 +252,11 @@ def test_orphan_port_detected_under_explicit_parts() -> None:
             r1 = Resistor(100, refdes_number=1)
             r2 = Resistor(100, refdes_number=2)
             rail = Rail(True)
-            wire(rail.out, r1.t1, r2.t1)   # both r1 and r2 share the same net
+            # 0-Ω passthroughs on both resistors — both r1 and r2's
+            # terminals share the single rail net so the mandatory-pin
+            # check passes and the validator reaches the orphan
+            # detection this test pins down.
+            wire(rail.out, r1.t1, r1.t2, r2.t1, r2.t2)
             super().__init__(parts=[r1, rail])   # r2 deliberately omitted
 
     with pytest.raises(OrphanWireError):

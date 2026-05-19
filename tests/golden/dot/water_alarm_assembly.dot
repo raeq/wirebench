@@ -21,7 +21,9 @@ digraph "WaterAlarmAssembly" {
   // Edges (component -- net, taillabel = port name)
   edge [arrowhead=none, fontname="monospace", fontsize=9];
   D1 -> net_43 [taillabel="anode"];
+  D1 -> gnd [taillabel="cathode"];
   D2 -> net_42 [taillabel="anode"];
+  D2 -> gnd [taillabel="cathode"];
   U1 -> net_5 [taillabel="a_1"];
   U1 -> gnd [taillabel="a_2"];
   U1 -> gnd [taillabel="a_3"];

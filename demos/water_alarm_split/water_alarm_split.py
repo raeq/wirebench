@@ -90,6 +90,9 @@ class ControllerBoard(Board):
         wire(self.cd4043.q_1, self.red_led.anode)
         wire(self.cd4043.q_1, self.cd4069.a_1)
         wire(self.cd4069.y_1, self.green_led.anode)
+        # LED cathodes to ground. Add a 330 Ω series resistor on each
+        # at the bench — this logic-level demo doesn't model current.
+        wire(self.gnd.out, self.red_led.cathode, self.green_led.cathode)
 
         # CD4043 OE tied HIGH.
         wire(self.vcc.out, self.cd4043.oe)

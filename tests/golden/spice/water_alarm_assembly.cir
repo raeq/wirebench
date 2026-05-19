@@ -8,8 +8,8 @@ XA2 net_0 net_9 net_10 net_11 net_12 net_13 net_14 net_15 net_16 net_17 net_18 n
 U1 net_5 net_44 0 nc_11 0 nc_12 nc_13 nc_14 0 nc_15 0 nc_16 0 nc_17 SN74HC04
 U2 net_43 net_42 0 nc_18 0 nc_19 nc_20 nc_21 0 nc_22 0 nc_23 0 nc_24 CD4069
 U3 net_43 net_44 net_4 nc_25 0 0 vcc nc_26 0 0 nc_27 0 0 nc_28 nc_29 CD4043
-D1 net_43 nc_30 D_LED
-D2 net_42 nc_31 D_LED
+D1 net_43 0 D_LED
+D2 net_42 0 D_LED
 V_Rail_0 vcc 0 DC 5.0
 .ENDS A2_SUBCKT
 .LIB spice-models.lib

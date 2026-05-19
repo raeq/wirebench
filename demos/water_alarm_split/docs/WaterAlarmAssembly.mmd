@@ -11,16 +11,18 @@ flowchart TD
         D2["D2<br/>green LED"]
     end
     net_43(("net_43"))
+    gnd(("gnd"))
     net_42(("net_42"))
     net_5(("net_5"))
-    gnd(("gnd"))
     net_2(("net_2"))
     net_3(("net_3"))
     net_4(("net_4"))
     net_44(("net_44"))
     vcc(("vcc"))
     D1 ---|"anode"| net_43
+    D1 ---|"cathode"| gnd
     D2 ---|"anode"| net_42
+    D2 ---|"cathode"| gnd
     U1 ---|"a_1"| net_5
     U1 ---|"a_2"| gnd
     U1 ---|"a_3"| gnd

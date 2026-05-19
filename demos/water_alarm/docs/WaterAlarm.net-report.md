@@ -51,7 +51,9 @@ Domain: ELECTRICAL
 Drivers (1):
 - Rail.out (`Rail`, OUT)
 
-Readers (16):
+Readers (18):
+- D1.cathode (`LED red`, IN)
+- D2.cathode (`LED green`, IN)
 - U2.a_2 (`SN74HC04`, IN)
 - U2.a_3 (`SN74HC04`, IN)
 - U2.a_4 (`SN74HC04`, IN)

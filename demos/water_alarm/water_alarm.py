@@ -98,6 +98,12 @@ class WaterAlarm(Circuit):
         # /Q is not a CD4043 package pin — derive it via gate 1 of the CD4069.
         wire(self.cd4043.q_1,     self.cd4069.a_1)
         wire(self.cd4069.y_1,     self.green_led.anode)
+        # LED cathodes to ground. A real bench build needs a series
+        # current-limit resistor on each LED (see the LED GOTCHA); the
+        # demo's logic-level evaluation doesn't model V_F or current,
+        # so the framework can't size the resistor for you. Add a 330 Ω
+        # in series at the bench if you build this.
+        wire(self.gnd.out, self.red_led.cathode, self.green_led.cathode)
         # CD4043 OE must be tied HIGH for outputs to be enabled.
         wire(self.vcc.out,        self.cd4043.oe)
         # CMOS inputs must never float — tie all unused inverter inputs
