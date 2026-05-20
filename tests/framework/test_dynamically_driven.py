@@ -206,7 +206,10 @@ def test_save_omits_dynamically_driven_when_false(tmp_path):
     path = tmp_path / 'plain.wirebench'
     save_wirebench(PlainDivider(), path)
     text = path.read_text()
-    assert 'dynamically_driven' not in text
+    # Match the JSON key, not the bare substring — the round-tripped
+    # source_location field carries the filename of this test module,
+    # which happens to contain "dynamically_driven".
+    assert '"dynamically_driven"' not in text
 
 
 def test_save_includes_dynamically_driven_when_true(tmp_path):

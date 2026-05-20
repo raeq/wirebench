@@ -11,7 +11,10 @@ if TYPE_CHECKING:
 class Node:
     """A Kirchhoff junction node. Carries a potential value within one ground domain."""
 
-    __slots__ = ('name', 'domain', '_value', '_ports', 'dynamically_driven')
+    __slots__ = (
+        'name', 'domain', '_value', '_ports',
+        'dynamically_driven', '_source_locations',
+    )
 
     def __init__(self, name: str, domain: GroundDomain) -> None:
         self.name = name
@@ -28,6 +31,11 @@ class Node:
         # multi-BIDIR-no-driver rule should not apply.  Promoted to
         # True by `wire(..., dynamically_driven=True)`; never cleared.
         self.dynamically_driven: bool = False
+        # (filename, lineno) of every `wire()` call that touched this
+        # node, in call order.  Populated by `wire()` via
+        # `_add_source_location`; surfaced in error messages that
+        # implicate the node and in `.wirebench` save / load.
+        self._source_locations: list[tuple[str, int]] = []
 
     @property
     def value(self) -> Any:
@@ -46,6 +54,18 @@ class Node:
     def ports(self) -> tuple[Port, ...]:
         """All ports attached to this node, in attachment order."""
         return tuple(self._ports)
+
+    @property
+    def source_locations(self) -> tuple[tuple[str, int], ...]:
+        """`(filename, lineno)` of every `wire()` call that touched this
+        node, in call order.  Empty when the node was created outside
+        the `wire()` path (e.g. by direct framework code)."""
+        return tuple(self._source_locations)
+
+    def _add_source_location(self, location: tuple[str, int]) -> None:
+        """Called by `wire()` when a call touches this node.  Underscore
+        prefix because external callers should never invoke this."""
+        self._source_locations.append(location)
 
     def __repr__(self) -> str:
         return f"Node('{self.name}', domain='{self.domain.name}', value={self._value!r})"

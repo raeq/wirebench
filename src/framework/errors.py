@@ -16,14 +16,66 @@ exception type it semantically replaces (`ValueError` or `TypeError`),
 so existing `pytest.raises(ValueError, …)` checks keep working without
 modification.  The family classes themselves inherit from `Exception`
 only — they're abstract groupings.
+
+Every class carries a `PHYSICAL_JUSTIFICATION` ClassVar — one or two
+short sentences anchored to a physical-world referent that explain
+*why this rule exists*.  The justification renders as a `Why:` line
+after the base message whenever the exception is stringified, turning
+the diagnostic from *"tells you what's wrong"* into *"teaches you why
+the rule exists."*  When the framework knows which `wire()` call(s)
+introduced the defect, those source locations render as an additional
+`Wired at:` line.  Both additions are append-only — existing
+`pytest.raises(..., match='...')` patterns continue to find the head of
+the original message.
 """
 from __future__ import annotations
+
+from collections.abc import Sequence
+from typing import Any, ClassVar
 
 
 # ----------------------------------------------------------------- root
 
 class WirebenchError(Exception):
     """Root of every framework-raised exception."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Real breadboards punish topology mistakes at runtime — overheated "
+        "outputs, undefined logic levels, parts that won't seat. "
+        "wirebench catches them at construction time instead."
+    )
+
+    def __init__(
+        self,
+        *args: Any,
+        source_locations: Sequence[tuple[str, int]] | None = None,
+    ) -> None:
+        super().__init__(*args)
+        self._source_locations: tuple[tuple[str, int], ...] = (
+            tuple(source_locations) if source_locations else ()
+        )
+
+    @property
+    def source_locations(self) -> tuple[tuple[str, int], ...]:
+        """File-and-line of each `wire()` call that contributed to the
+        defect, in attachment order.  Empty when the framework couldn't
+        attribute the error to a specific call site (e.g. errors raised
+        outside the `wire()` path)."""
+        return self._source_locations
+
+    def __str__(self) -> str:
+        base = super().__str__()
+        parts = [base]
+        justification = type(self).PHYSICAL_JUSTIFICATION
+        if justification:
+            parts.append(f"  Why: {justification}")
+        if self._source_locations:
+            locs = ", ".join(
+                f"{filename}:{lineno}"
+                for filename, lineno in self._source_locations
+            )
+            parts.append(f"  Wired at: {locs}")
+        return "\n".join(parts)
 
 
 # ============================================================ Circuit ===
@@ -33,6 +85,12 @@ class CircuitError(WirebenchError):
     """Anything wrong with the circuit being modelled — its topology,
     its signals, its parts, its connectors, or its allowed states."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "The circuit as described has a real-world defect: wires routed "
+        "wrong, signals that can't share copper, parts in impossible "
+        "configurations, or connectors that don't physically fit."
+    )
+
 
 # ----------------------------------------------------------- Wiring ---
 
@@ -41,30 +99,64 @@ class WiringError(CircuitError):
     wrong — too many drivers, no drivers, the same node touched twice,
     a mandatory pin left floating."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Copper traces only carry one signal at one potential at a time; "
+        "wiring defects break that physical assumption."
+    )
+
 
 class ShortCircuitError(WiringError, ValueError):
     """Multiple drivers on a single logical net — two outputs tied
     together, or an output and a rail tied to the same node."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Two OUT-direction ports on one net fight each other on the "
+        "copper — current sinks through the losing output stage until "
+        "the FETs overheat; one driver per shared conductor."
+    )
 
 
 class FloatingNetError(WiringError, ValueError):
     """A net touched only by passive BIDIR ports with no driver
     anywhere.  Nothing can determine the net's value."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "A net with no driver has no defined voltage — CMOS inputs in "
+        "particular drift to mid-rail and oscillate, picking up nearby "
+        "switching noise as if the trace were an antenna."
+    )
+
 
 class UnconnectedPinError(WiringError, ValueError):
     """A pin declared `mandatory=True` was not connected to any wire
     inside the enclosing circuit."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "A mandatory pin (regulator IN, op-amp V+, MCU VDD) left in air "
+        "leaves the silicon stage tied to nothing — the part either "
+        "doesn't power up or behaves unpredictably."
+    )
 
 
 class NodeMergeError(WiringError, ValueError):
     """`wire()` was asked to join ports already on two distinct
     existing nodes — the framework refuses to merge them."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Two distinct existing nets fused at construction time would "
+        "silently combine independent design intent; the framework "
+        "requires the join to be made explicit."
+    )
+
 
 class EmptyWireError(WiringError, ValueError):
     """`wire()` was called with no ports (or with a single port —
     which couldn't connect anything to anything)."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "A wire with no endpoints connects nothing to nothing — it has "
+        "no physical analogue on a real breadboard."
+    )
 
 
 # ----------------------------------------------------------- Signal ---
@@ -73,9 +165,21 @@ class SignalError(CircuitError):
     """Signal-type / direction / ground-domain mismatch — the wires
     are joined, but the signals they carry don't fit together."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "A piece of copper carries one kind of signal at one reference; "
+        "mismatched signal-types or ground domains can't coexist on the "
+        "same conductor without an isolator or level-shifter."
+    )
+
 
 class SignalTypeMismatchError(SignalError, TypeError):
     """An Analog signal landed on a Digital port, or vice versa."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "An Analog continuous voltage and a Digital logic-level on one "
+        "net are incompatible — converting between them needs an "
+        "explicit interface (comparator, ADC, level-shifter)."
+    )
 
 
 class DomainCrossingError(SignalError, ValueError):
@@ -83,11 +187,23 @@ class DomainCrossingError(SignalError, ValueError):
     boundary.  Only `IsolatedChannel`-style cells with ports in
     different domains may bridge."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Two ground domains share a net only through an isolator "
+        "(optocoupler, digital isolator, transformer); a direct wire "
+        "would tie the references together and defeat the isolation."
+    )
+
 
 class PortContentionError(SignalError, ValueError):
     """A BIDIR pin's external and internal faces hold conflicting
     values during evaluation — two simultaneous drivers on the bond
     wire, one from outside the chip and one from inside."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "A BIDIR pin is one piece of metal at one potential at a time — "
+        "the external and internal faces can't simultaneously drive "
+        "opposite values."
+    )
 
 
 
@@ -100,6 +216,12 @@ class ForbiddenStateError(CircuitError, ValueError):
     *wirings* whose evaluation produces an undefined or destructive
     real-world result."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Some logical states real silicon refuses to enter — SR latch "
+        "with S=R=1, half-bridge shoot-through, three-phase Hall "
+        "(1,1,1); evaluation produces undefined or destructive output."
+    )
+
 
 # ------------------------------------------------------------ Part ---
 
@@ -107,16 +229,34 @@ class PartError(CircuitError):
     """Anything wrong with a part itself — its refdes, its parameters,
     its registration, its configuration."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "A part on a real board has fixed properties — label, pinout, "
+        "rated parameter ranges; a wirebench Part with broken "
+        "properties describes something the parts catalogue can't sell."
+    )
+
 
 class RefdesError(PartError, ValueError):
     """Reference-designator format violation: unknown prefix,
     non-positive number, duplicate refdes in a circuit, duplicate
     surface-port name."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Every part on a real board needs one unique label so the "
+        "schematic, the layout, the BOM, and the assembly drawing all "
+        "refer to the same physical chip."
+    )
+
 
 class DuplicateRegistrationError(PartError, ValueError):
     """The component registry rejected a `@register(name)` because
     another class is already registered under that name."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Two classes claiming the same registered name would make "
+        "`.wirebench` load ambiguous — the loader couldn't know which "
+        "class to instantiate."
+    )
 
 
 class UnknownPartError(PartError, KeyError):
@@ -124,17 +264,35 @@ class UnknownPartError(PartError, KeyError):
     been registered — typically when a saved `.wirebench` file
     references a class whose module hasn't been imported."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "The registry only knows classes whose module has been "
+        "imported; a name with no entry refers to no part the "
+        "framework can build."
+    )
+
 
 class PartConfigurationError(PartError, TypeError):
     """A component's constructor was passed bad arguments or the
     class is missing required class-level configuration
     (PIN_COUNT, PITCH_MM, PINOUT, distinct ground domains, etc.)."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "A component's class-level configuration (pin count, pinout, "
+        "ground domains) is what makes it that specific part; missing "
+        "or inconsistent values describe nothing real."
+    )
+
 
 class PartParameterError(PartError, ValueError):
     """A component's constructor accepted the kwarg by signature but
     rejected the *value* — out-of-range state of charge, trip-high
     below trip-low, duplicate diode-OR input names, etc."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Physical parameters (state of charge, trip levels, voltage "
+        "ratings) live within ranges set by the underlying physics; "
+        "values outside the range describe a part that can't exist."
+    )
 
 
 # ---------------------------------------------------------- Mating ---
@@ -144,11 +302,24 @@ class MatingError(CircuitError):
     requested — wrong family, wrong dimensions, no in-model partner
     declared."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Two connectors mate only when their shells, pin counts, and "
+        "pitches match the same mechanical drawing; mismatches don't "
+        "physically seat together."
+    )
+
 
 class IncompatibleMateError(MatingError, TypeError):
     """The two connectors are from fundamentally different families
     (e.g. a USB-A receptacle and a TRRS audio jack).  The partner
     class doesn't match what `MATES_WITH` declared."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Two connector families don't fit together physically — USB-A "
+        "and TRRS audio have different shells, pin counts, and "
+        "pitches; calling them mated is asserting a fact contradicted "
+        "by the mechanical drawings."
+    )
 
 
 class UnmateableError(MatingError, TypeError):
@@ -157,15 +328,31 @@ class UnmateableError(MatingError, TypeError):
     mating partner lives outside the design (a barrel jack, an audio
     plug, a USB cable end)."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Some user-facing receptacles (barrel jacks, audio sockets) "
+        "mate with cables that live outside the design — there is no "
+        "in-model partner to wire to."
+    )
+
 
 class PinCountMismatchError(MatingError, ValueError):
     """Two connectors of compatible families have different pin
     counts — a 4-pin plug into a 5-pin receptacle."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "A 4-pin plug into a 5-pin receptacle leaves one pin unmated; "
+        "the physical connection is incomplete."
+    )
+
 
 class PitchMismatchError(MatingError, ValueError):
     """Two connectors of compatible families have different pitches —
     a 2.54 mm plug into a 2.00 mm receptacle."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "A 2.54 mm plug into a 2.00 mm receptacle won't seat — the "
+        "pins land between contacts, not on them."
+    )
 
 
 # ============================================================= Format ===
@@ -175,17 +362,35 @@ class FormatError(WirebenchError):
     """Anything wrong with the file format / persistence / rendering
     layer.  The circuit itself may be fine; the I/O around it isn't."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "The serialised form of a design is the contract every "
+        "downstream tool (SPICE, KiCad, schematic visualisers) reads; "
+        "a broken format leaves no downstream tool able to consume it."
+    )
+
 
 class SaveError(FormatError, ValueError):
     """`save_wirebench` couldn't serialise the design — a component
     has no refdes and no synthesised id, a kwarg's type isn't
     encodable, etc."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "A design's serialised form must round-trip back to an "
+        "equivalent in-memory model; a save that loses information "
+        "leaves the file unable to reconstruct what it describes."
+    )
+
 
 class LoadError(FormatError, ValueError):
     """`load_wirebench` couldn't reconstruct a design from its
     serialised form — malformed port reference, unknown component id,
     duplicate id, unknown class, missing required field."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "A `.wirebench` file is a contract about which parts and wires "
+        "the design contains; a file that can't be parsed into that "
+        "contract isn't a wirebench design."
+    )
 
 
 class UnknownFormatError(FormatError, ValueError):
@@ -194,6 +399,12 @@ class UnknownFormatError(FormatError, ValueError):
     `framework.export.`.  Typically a typo (`spcie` for `spice`)
     or a name the caller carried over from before the adapter was
     renamed."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Each export adapter (KiCad, SPICE, SVG) speaks a specific "
+        "downstream tool's dialect; an unknown format name doesn't "
+        "correspond to any real tool."
+    )
 
 
 class BreadboardIncompatibleError(FormatError, ValueError):
@@ -207,6 +418,12 @@ class BreadboardIncompatibleError(FormatError, ValueError):
     DIP-28 instead of an ATmega2560 TQFP-100; a sensor breakout
     module instead of a bare BGA chip)."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Solderless breadboards accept only through-hole leads on "
+        "0.1\" centres; SMD chips and BGA packages need a PCB to "
+        "mount on."
+    )
+
 
 class RendererRegistryError(FormatError):
     """Anything wrong with the export-adapter renderer / net-namer
@@ -214,17 +431,35 @@ class RendererRegistryError(FormatError):
     based on whether the operation was a duplicate registration
     (ValueError) or a missing lookup (KeyError)."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "The export pipeline routes each component to a registered "
+        "renderer; a broken registry leaves the pipeline with no way "
+        "to translate the design into the downstream format."
+    )
+
 
 class DuplicateRendererError(RendererRegistryError, ValueError):
     """A renderer or net-namer is already registered for the
     requested (class, format) pair — the export adapter tried to
     register a second one."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Each (component class, export format) pair has one canonical "
+        "renderer; two registered renderers would make the export "
+        "order-dependent and non-deterministic."
+    )
+
 
 class RendererNotFoundError(RendererRegistryError, KeyError):
     """No renderer (or net-namer) is registered for the requested
     (class, format) pair — typically because the adapter module
     wasn't imported before `export_to_string` was called."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "The export adapter registers renderers when its module is "
+        "imported; a missing entry means the module wasn't loaded "
+        "before export was attempted."
+    )
 
 
 # ============================================================== Usage ===
@@ -234,11 +469,24 @@ class RendererNotFoundError(RendererRegistryError, KeyError):
 class UsageError(WirebenchError):
     """The framework's API was called incorrectly."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "The framework's API is the boundary between the designer's "
+        "intent and the model; calling it incorrectly leaves the "
+        "model unable to represent what the designer meant."
+    )
+
 
 class WiredChipCallError(UsageError, RuntimeError):
     """A chip's standalone `__call__` was invoked while one or more
     of its ports were wired by an enclosing circuit.  Drive via the
     parent's `evaluate()` instead."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "A chip wired into an enclosing circuit must be driven by "
+        "that circuit's `evaluate()`; calling its standalone "
+        "`__call__` bypasses the wired ports and produces "
+        "inconsistent output."
+    )
 
 
 class AmbiguousPinNameError(UsageError, KeyError):
@@ -247,6 +495,13 @@ class AmbiguousPinNameError(UsageError, KeyError):
     similar).  Use the disambiguated name (`'VSS_1'`, `'VSS_2'`) or
     look up by pin number."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "Some chips have multiple pins sharing a common name (two VSS "
+        "pads, paired power inputs); a bare lookup can't pick one — "
+        "the disambiguated name (`VSS_1`, `VSS_2`) identifies the "
+        "specific solder pad."
+    )
+
 
 class CompositeShapeError(UsageError, TypeError):
     """A composite `Circuit` subclass is missing the `__dict__` the
@@ -254,11 +509,23 @@ class CompositeShapeError(UsageError, TypeError):
     `__slots__`), or it constructed itself with an empty part
     list."""
 
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "A Circuit composite needs parts and a way to find them — "
+        "either auto-collection through `__dict__` or an explicit "
+        "`parts=` list; an empty composite describes nothing real."
+    )
+
 
 class UnknownPortError(UsageError, ValueError):
     """An internal API was given a port that doesn't belong to the
     object it was passed to — e.g. `pin.other_face(stranger_port)`
     where `stranger_port` is not one of this pin's two faces."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "An internal API was handed a port that doesn't belong to the "
+        "object it was passed to — the port reference is dangling and "
+        "names nothing on the recipient."
+    )
 
 
 class OrphanWireError(UsageError, ValueError):
@@ -269,3 +536,9 @@ class OrphanWireError(UsageError, ValueError):
     explicit `parts=[...]` list that omitted it.  The
     framework can validate or evaluate the orphan's contribution to
     the circuit, so it refuses to build the composite."""
+
+    PHYSICAL_JUSTIFICATION: ClassVar[str] = (
+        "A wire whose endpoint isn't in the composite's `parts` list "
+        "joins a phantom — a component the framework can't validate, "
+        "evaluate, or serialise."
+    )

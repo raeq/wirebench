@@ -42,6 +42,18 @@ def empty_details() -> Details:
 _Extractor = Callable[[str], Details]
 
 
+def _head_line(message: str) -> str:
+    """Return the first line of an exception message.
+
+    `WirebenchError.__str__` appends optional `Why:` and `Wired at:`
+    lines after the base message; the per-class patterns below match
+    against the base message only.  Bullet-style payloads (used by
+    `BreadboardIncompatibleError`) handle their multi-line shape via
+    `splitlines()` directly.
+    """
+    return message.splitlines()[0] if message else ''
+
+
 def _strip_quotes(token: str) -> str:
     token = token.strip()
     if len(token) >= 2 and token[0] == token[-1] and token[0] in ("'", '"'):
@@ -109,11 +121,12 @@ _BREADBOARD_BULLET = re.compile(
 
 def extract_short_circuit(message: str) -> Details:
     out = empty_details()
-    m = _SHORT_WIRE.match(message)
+    head = _head_line(message)
+    m = _SHORT_WIRE.match(head)
     if m:
         out['pins'] = _split_quoted_list(m.group(1))
         return out
-    m = _SHORT_NET.match(message)
+    m = _SHORT_NET.match(head)
     if m:
         parts, pins = _split_part_pin_list(m.group(1))
         out['parts'] = parts
@@ -123,7 +136,7 @@ def extract_short_circuit(message: str) -> Details:
 
 def extract_floating_net(message: str) -> Details:
     out = empty_details()
-    m = _FLOATING_NET.match(message)
+    m = _FLOATING_NET.match(_head_line(message))
     if m:
         parts, pins = _split_part_pin_list(m.group(1))
         out['parts'] = parts
@@ -133,7 +146,7 @@ def extract_floating_net(message: str) -> Details:
 
 def extract_incompatible_mate(message: str) -> Details:
     out = empty_details()
-    m = _INCOMPATIBLE_MATE.match(message)
+    m = _INCOMPATIBLE_MATE.match(_head_line(message))
     if m:
         out['parts'] = [m.group(1), m.group(3)]
     return out
@@ -141,18 +154,19 @@ def extract_incompatible_mate(message: str) -> Details:
 
 def extract_part_configuration(message: str) -> Details:
     out = empty_details()
-    m = _PARTCONFIG_OUT_NO_CELL.match(message)
+    head = _head_line(message)
+    m = _PARTCONFIG_OUT_NO_CELL.match(head)
     if m:
         out['parts'] = [m.group(1)]
         out['pin'] = m.group(2)
         out['pin_number'] = int(m.group(3))
         return out
-    m = _PARTCONFIG_DRIVE_WRONG_DIR.match(message)
+    m = _PARTCONFIG_DRIVE_WRONG_DIR.match(head)
     if m:
         out['parts'] = [m.group(1)]
         out['pin'] = m.group(2)
         return out
-    m = _PARTCONFIG_TYPO_ENTRY.match(message)
+    m = _PARTCONFIG_TYPO_ENTRY.match(head)
     if m:
         out['parts'] = [m.group(1)]
         out['pin'] = m.group(2)
@@ -161,7 +175,7 @@ def extract_part_configuration(message: str) -> Details:
 
 def extract_part_parameter(message: str) -> Details:
     out = empty_details()
-    m = _PARTPARAM_PIN_FUNCTION.match(message)
+    m = _PARTPARAM_PIN_FUNCTION.match(_head_line(message))
     if m:
         out['pin_number'] = int(m.group(1))
         out['pin'] = m.group(2)
@@ -170,7 +184,7 @@ def extract_part_parameter(message: str) -> Details:
 
 def extract_domain_crossing(message: str) -> Details:
     out = empty_details()
-    m = _DOMAIN_CROSSING.match(message)
+    m = _DOMAIN_CROSSING.match(_head_line(message))
     if not m:
         return out
     pins:    list[str] = []

@@ -496,12 +496,20 @@ class WireRecord(_Record):
     # net only.  Omitted from emitted JSON when False to keep the
     # format compact for the common case.
     dynamically_driven: bool = False
+    # `(filename, lineno)` of the user's original `wire()` call that
+    # introduced this net, preserved across save / load so that
+    # framework errors raised against the reconstructed circuit point
+    # back at the user-source line rather than the loader.  Omitted
+    # from emitted JSON when absent.
+    source_location: tuple[str, int] | None = None
 
     @model_serializer(mode='wrap')
-    def _omit_default_dyn(self, handler: Any) -> dict[str, Any]:
+    def _omit_defaults(self, handler: Any) -> dict[str, Any]:
         data: dict[str, Any] = handler(self)
         if not self.dynamically_driven:
             data.pop('dynamically_driven', None)
+        if self.source_location is None:
+            data.pop('source_location', None)
         return data
 
 
