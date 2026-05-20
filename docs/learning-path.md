@@ -18,26 +18,27 @@ If you've never lit an LED with a battery, start with [the project's Hello World
 
 The *first catches* column names rules from [`the-rules.md`](the-rules.md) that this demo is the first place to surface — i.e. work the demos top-to-bottom and you'll see the framework refuse each rule in a real circuit by the time you reach the demo it's listed against.
 
-| #  | Demo                                                                   | What it teaches                                                              | First catches                 |
-|----|------------------------------------------------------------------------|------------------------------------------------------------------------------|-------------------------------|
-|  1 | [`hello_led/`](../demos/hello_led/)                                    | The minimal viable circuit — one LED, one resistor, two rails. Reading point.| [Rules 1, 2](the-rules.md)    |
-|  2 | [`penfold_light_switch/`](../demos/penfold_light_switch/)              | First sensor circuit. LDR + comparator + transistor switch. Penfold BP107 P3.| [Rules 3, 4](the-rules.md)    |
-|  3 | [`water_alarm/`](../demos/water_alarm/)                                | Composing chips, wiring rails, latching logic. Four chips, two LEDs.         | [Rule 9](the-rules.md)        |
-|  4 | [`penfold_reaction_game/`](../demos/penfold_reaction_game/)            | Sequential digital — counter ring + button-stops-clock topology. Penfold P22.| —                             |
-|  5 | [`dice/`](../demos/dice/)                                              | Classic 555 + 4017 + diode-OR matrix. Recognisable hobbyist staple.          | —                             |
-|  6 | [`digital_thermometer/`](../demos/digital_thermometer/)                | First MCU project. ATmega328P + DHT11 + 7-seg display. Firmware-as-cell.     | —                             |
-|  7 | [`penfold_one_second_timer/`](../demos/penfold_one_second_timer/)      | Op-amp relaxation oscillator with hysteresis. Penfold BP107 P8.              | —                             |
-|  8 | [`penfold_metronome/`](../demos/penfold_metronome/)                    | NE555 astable + speaker — the other classical astable. Penfold BP107 P9.     | —                             |
-|  9 | [`penfold_warbling_doorbuzzer/`](../demos/penfold_warbling_doorbuzzer/)| Oscillator composition — slow gates fast. Penfold BP107 P16.                 | —                             |
-| 10 | [`doorbell_protector/`](../demos/doorbell_protector/)                  | Two-555 monostable with transistor switching and a relay.                    | —                             |
-| 11 | [`fan_cooling/`](../demos/fan_cooling/)                                | First `Board` demo. TMP302 + MOSFET-switched fan. Connectors that mate.      | [Rule 7](the-rules.md)        |
-| 12 | [`backup_power/`](../demos/backup_power/)                              | TI Designs TIDA-03031. Three-stage power architecture (eFuse + boost + buck).| —                             |
-| 13 | [`water_alarm_split/`](../demos/water_alarm_split/)                    | Same circuit as #3 but split across two boards via `mate()`. HAT pattern.    | [Rule 6](the-rules.md)        |
-| 14 | [`bldc_motor/`](../demos/bldc_motor/)                                  | ATmega328P + DRV8313 + Hall sensors. Three-phase commutation.                | —                             |
-| 15 | [`isolated_rs232/`](../demos/isolated_rs232/)                          | TIDA-01230. Cross-domain isolation — first demo to exercise `GroundDomain`.  | [Rule 5](the-rules.md)        |
-| 16 | [`li_ion_fuel_gauge/`](../demos/li_ion_fuel_gauge/)                    | TIDA-00594. BQ27546-G1 fuel gauge with sense resistor + thermistor.          | —                             |
-| 17 | [`penfold_fuzz_unit/`](../demos/penfold_fuzz_unit/)                    | Audio domain — op-amp + clipping diodes. Guitar fuzz pedal. Penfold P30.     | —                             |
-| 18 | [`penfold_crystal_set/`](../demos/penfold_crystal_set/)                | Passive-only RF — no Rail, no battery. Boundary case. Penfold BP107 P27.     | —                             |
+| #  | Demo                                                                                                             | What it teaches                                                               | First catches              |
+|----|------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|----------------------------|
+| 1  | [`hello_led/`](https://github.com/raeq/wirebench/tree/main/demos/hello_led/)                                     | The minimal viable circuit — one LED, one resistor, two rails. Reading point. | [Rules 1, 2](the-rules.md) |
+| 2  | [`5v_rail_power/`](https://github.com/raeq/wirebench/tree/main/demos/5v_rail_power/)                             | First regulator — LM7805 + Cell + bypass caps. Linear-supply basics.          | —                          |
+| 3  | [`penfold_light_switch/`](https://github.com/raeq/wirebench/tree/main/demos/penfold_light_switch/)               | First sensor circuit. LDR + comparator + transistor switch. Penfold BP107 P3. | [Rules 3, 4](the-rules.md) |
+| 4  | [`water_alarm/`](https://github.com/raeq/wirebench/tree/main/demos/water_alarm/)                                 | Composing chips, wiring rails, latching logic. Four chips, two LEDs.          | [Rule 9](the-rules.md)     |
+| 5  | [`penfold_reaction_game/`](https://github.com/raeq/wirebench/tree/main/demos/penfold_reaction_game/)             | Sequential digital — counter ring + button-stops-clock topology. Penfold P22. | —                          |
+| 6  | [`dice/`](https://github.com/raeq/wirebench/tree/main/demos/dice/)                                               | Classic 555 + 4017 + diode-OR matrix. Recognisable hobbyist staple.           | —                          |
+| 7  | [`digital_thermometer/`](https://github.com/raeq/wirebench/tree/main/demos/digital_thermometer/)                 | First MCU project. ATmega328P + DHT11 + 7-seg display. Firmware-as-cell.      | —                          |
+| 8  | [`penfold_one_second_timer/`](https://github.com/raeq/wirebench/tree/main/demos/penfold_one_second_timer/)       | Op-amp relaxation oscillator with hysteresis. Penfold BP107 P8.               | —                          |
+| 9  | [`penfold_metronome/`](https://github.com/raeq/wirebench/tree/main/demos/penfold_metronome/)                     | NE555 astable + speaker — the other classical astable. Penfold BP107 P9.      | —                          |
+| 10 | [`penfold_warbling_doorbuzzer/`](https://github.com/raeq/wirebench/tree/main/demos/penfold_warbling_doorbuzzer/) | Oscillator composition — slow gates fast. Penfold BP107 P16.                  | —                          |
+| 11 | [`doorbell_protector/`](https://github.com/raeq/wirebench/tree/main/demos/doorbell_protector/)                   | Two-555 monostable with transistor switching and a relay.                     | —                          |
+| 12 | [`fan_cooling/`](https://github.com/raeq/wirebench/tree/main/demos/fan_cooling/)                                 | First `Board` demo. TMP302 + MOSFET-switched fan. Connectors that mate.       | [Rule 7](the-rules.md)     |
+| 13 | [`backup_power/`](https://github.com/raeq/wirebench/tree/main/demos/backup_power/)                               | TI Designs TIDA-03031. Three-stage power architecture (eFuse + boost + buck). | —                          |
+| 14 | [`water_alarm_split/`](https://github.com/raeq/wirebench/tree/main/demos/water_alarm_split/)                     | Same circuit as #3 but split across two boards via `mate()`. HAT pattern.     | [Rule 6](the-rules.md)     |
+| 15 | [`bldc_motor/`](https://github.com/raeq/wirebench/tree/main/demos/bldc_motor/)                                   | ATmega328P + DRV8313 + Hall sensors. Three-phase commutation.                 | —                          |
+| 16 | [`isolated_rs232/`](https://github.com/raeq/wirebench/tree/main/demos/isolated_rs232/)                           | TIDA-01230. Cross-domain isolation — first demo to exercise `GroundDomain`.   | [Rule 5](the-rules.md)     |
+| 17 | [`li_ion_fuel_gauge/`](https://github.com/raeq/wirebench/tree/main/demos/li_ion_fuel_gauge/)                     | TIDA-00594. BQ27546-G1 fuel gauge with sense resistor + thermistor.           | —                          |
+| 18 | [`penfold_fuzz_unit/`](https://github.com/raeq/wirebench/tree/main/demos/penfold_fuzz_unit/)                     | Audio domain — op-amp + clipping diodes. Guitar fuzz pedal. Penfold P30.      | —                          |
+| 19 | [`penfold_crystal_set/`](https://github.com/raeq/wirebench/tree/main/demos/penfold_crystal_set/)                 | Passive-only RF — no Rail, no battery. Boundary case. Penfold BP107 P27.      | —                          |
 
 Rules 8, 10, 11, and 12 are framework-internal refusals — they fire during refactors and new-design construction rather than in any specific demo's near-miss snippet. The full table of all twelve rules is on [`the-rules.md`](the-rules.md).
 
@@ -49,16 +50,25 @@ Every demo folder has the same shape:
 
 ```text
 demos/<name>/
-    <name>.py                  # the source — read this first
+    <name>.py                       # the source — read this first
+    README.md                       # what this design is protected from + recipe
     docs/
-        <Top>.bom.csv          # BOM ready to paste into a parts cart
-        <Top>.net              # KiCad netlist for PCB layout
-        <Top>.cir              # SPICE deck for simulation
-        <Top>.mmd              # Mermaid render for documentation
-        <Top>.dot              # Graphviz DOT
-        <Top>.yosys.json       # Yosys JSON for netlistsvg
-        <Top>.svg              # rendered schematic — open this in a browser
+        <Top>.bom.csv               # BOM ready to paste into a parts cart
+        <Top>.net                   # KiCad netlist for PCB layout
+        <Top>.kicad_sch             # KiCad schematic for Eeschema review
+        <Top>.cir                   # SPICE deck for simulation
+        <Top>.mmd                   # Mermaid render for documentation
+        <Top>.dot                   # Graphviz DOT
+        <Top>.yosys.json            # Yosys JSON for netlistsvg
+        <Top>.svg                   # rendered schematic — open this in a browser
+        <Top>.breadboard.svg        # half-size breadboard layout (single-Board demos)
+        <Top>.md                    # recipe-style breadboard assembly guide
+        <Top>.net-report.md         # every logical net + drivers + readers + domain
+        <Top>.domain-report.md      # GroundDomain memberships and isolation
+        <Top>.interface-report.md   # public Board connector pins
 ```
+
+A live example of the full set sits in the [hello_led/docs/ folder on GitHub](https://github.com/raeq/wirebench/tree/main/demos/hello_led/docs) — that's the authoritative live index, regenerated whenever an exporter changes, so the listing above can't drift from what actually ships.
 
 For composite assemblies (the `water_alarm_split`, `fan_cooling`, `bldc_motor`, `isolated_rs232`, and `li_ion_fuel_gauge` demos), there's one set of exports per board *plus* one set for the parent assembly — so you can see how the same model exports differently depending on whether you're producing a per-board netlist or an assembly-level overview.
 
