@@ -61,7 +61,20 @@ def test_repr_round_trip_for_unit_inputs():
 
 def test_str():
     r = Resistor(ohms=47, refdes_number=1)
-    assert str(r) == "47.0 Ω"
+    assert str(r) == "47 Ω"
+
+
+def test_str_renders_in_engineering_notation():
+    """Resistor.__str__ delegates to Ohms.__str__, which uses
+    canonical engineering notation (kΩ, MΩ) rather than raw ohms.
+    A schematic / bench builder reads `10 kΩ` instantly; `10000 Ω`
+    forces them to count zeros."""
+    assert str(Resistor(ohms=1_000,      refdes_number=1)) == "1 kΩ"
+    assert str(Resistor(ohms=4_700,      refdes_number=2)) == "4.7 kΩ"
+    assert str(Resistor(ohms=10_000,     refdes_number=3)) == "10 kΩ"
+    assert str(Resistor(ohms=100_000,    refdes_number=4)) == "100 kΩ"
+    assert str(Resistor(ohms=1_000_000,  refdes_number=5)) == "1 MΩ"
+    assert str(Resistor(ohms=10_000_000, refdes_number=6)) == "10 MΩ"
 
 
 def test_terminals_are_mandatory():

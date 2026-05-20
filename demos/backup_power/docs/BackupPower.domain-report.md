@@ -6,7 +6,7 @@
 
 Parts in this domain (23):
 - C1 (`Capacitor 10 nF`)
-- C10 (`Capacitor 1200 µF`)
+- C10 (`Capacitor 1.2 mF`)
 - C12 (`Capacitor 1 µF`)
 - C13 (`Capacitor 220 µF`)
 - C14 (`Capacitor 1 µF`)

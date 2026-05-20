@@ -142,7 +142,9 @@ class Capacitor(Part):
         return self._farads
 
     def __str__(self) -> str:
-        return f"{float(self._farads)} F"
+        # Delegate to Farads.__str__ for engineering notation
+        # (100 pF, 22 nF, 100 nF, 1 µF, 10 µF, 1 mF, 1 F).
+        return str(self._farads)
 
     def __repr__(self) -> str:
         return f"Capacitor(farads={float(self._farads)!r}, refdes={self.refdes!r})"

@@ -2,6 +2,8 @@ from framework.units import (
     Amps, Milliamps, Microamps,
     Volts, Millivolts,
     Ohms, Kilohms,
+    Farads, Microfarads, Nanofarads, Picofarads,
+    Henries, Millihenries, Microhenries, Nanohenries,
 )
 
 
@@ -62,6 +64,44 @@ def test_volts_str_format():
 
 def test_ohms_str_format():
     assert str(Ohms(330)) == '330 Ω'
+
+
+def test_ohms_str_engineering_notation():
+    """Ohms.__str__ uses canonical engineering notation across kilo /
+    mega / giga thresholds. Bare `:.3g` would emit unreadable
+    scientific form ("1e+04 Ω") for clean kilo multiples — schematics
+    write `10 kΩ` instead."""
+    assert str(Ohms(1_000))         == '1 kΩ'
+    assert str(Ohms(4_700))         == '4.7 kΩ'
+    assert str(Ohms(10_000))        == '10 kΩ'
+    assert str(Ohms(100_000))       == '100 kΩ'
+    assert str(Ohms(1_000_000))     == '1 MΩ'
+    assert str(Ohms(10_000_000))    == '10 MΩ'
+    assert str(Ohms(1_000_000_000)) == '1 GΩ'
+
+
+def test_farads_str_engineering_notation():
+    """Farads.__str__ uses engineering notation in the canonical
+    capacitance bands: pF, nF, µF, mF, F."""
+    assert str(Farads(100e-12)) == '100 pF'
+    assert str(Farads(22e-9))   == '22 nF'
+    assert str(Farads(100e-9))  == '100 nF'
+    assert str(Farads(1e-6))    == '1 µF'
+    assert str(Farads(4.7e-6))  == '4.7 µF'
+    assert str(Farads(10e-6))   == '10 µF'
+    assert str(Farads(470e-6))  == '470 µF'
+    assert str(Farads(1e-3))    == '1 mF'
+    assert str(Farads(1.0))     == '1 F'
+
+
+def test_henries_str_engineering_notation():
+    """Henries.__str__ uses engineering notation in the canonical
+    inductance bands: nH, µH, mH, H."""
+    assert str(Henries(100e-9)) == '100 nH'
+    assert str(Henries(10e-6))  == '10 µH'
+    assert str(Henries(33e-6))  == '33 µH'
+    assert str(Henries(22e-3))  == '22 mH'
+    assert str(Henries(1.0))    == '1 H'
 
 
 def test_milliamps_str_format():
