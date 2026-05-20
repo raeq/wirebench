@@ -93,7 +93,9 @@ class Inductor(Part):
         return self._henries
 
     def __str__(self) -> str:
-        return f"{float(self._henries)} H"
+        # Delegate to Henries.__str__ for engineering notation
+        # (100 nH, 10 µH, 22 mH, 1 H).
+        return str(self._henries)
 
     def __repr__(self) -> str:
         return f"Inductor(henries={float(self._henries)!r}, refdes={self.refdes!r})"

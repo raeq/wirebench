@@ -700,7 +700,7 @@
       (at 66.04 175.26 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1e-07 F"
+    (property "Value" "100 nF"
       (at 63.5 180.34 0)
       (effects (font (size 1.27 1.27)))
     )
@@ -752,7 +752,7 @@
       (at 66.04 213.36 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1e-05 F"
+    (property "Value" "10 µF"
       (at 63.5 218.44 0)
       (effects (font (size 1.27 1.27)))
     )
@@ -804,7 +804,7 @@
       (at 66.04 251.46 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1e-07 F"
+    (property "Value" "100 nF"
       (at 63.5 256.54 0)
       (effects (font (size 1.27 1.27)))
     )
@@ -856,7 +856,7 @@
       (at 66.04 289.56 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1e-07 F"
+    (property "Value" "100 nF"
       (at 63.5 294.64 0)
       (effects (font (size 1.27 1.27)))
     )
@@ -908,7 +908,7 @@
       (at 66.04 327.66 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1e-07 F"
+    (property "Value" "100 nF"
       (at 63.5 332.74 0)
       (effects (font (size 1.27 1.27)))
     )
@@ -960,7 +960,7 @@
       (at 66.04 365.76 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1e-07 F"
+    (property "Value" "100 nF"
       (at 63.5 370.84 0)
       (effects (font (size 1.27 1.27)))
     )
@@ -1012,7 +1012,7 @@
       (at 66.04 403.86 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1e-07 F"
+    (property "Value" "100 nF"
       (at 63.5 408.94 0)
       (effects (font (size 1.27 1.27)))
     )

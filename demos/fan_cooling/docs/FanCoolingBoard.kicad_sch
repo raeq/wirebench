@@ -789,7 +789,7 @@
       (at 66.04 213.36 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1e+04 Ω"
+    (property "Value" "10 kΩ"
       (at 63.5 218.44 0)
       (effects (font (size 1.27 1.27)))
     )
@@ -841,7 +841,7 @@
       (at 66.04 251.46 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1e+04 Ω"
+    (property "Value" "10 kΩ"
       (at 63.5 256.54 0)
       (effects (font (size 1.27 1.27)))
     )
@@ -893,7 +893,7 @@
       (at 66.04 289.56 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1e+04 Ω"
+    (property "Value" "10 kΩ"
       (at 63.5 294.64 0)
       (effects (font (size 1.27 1.27)))
     )

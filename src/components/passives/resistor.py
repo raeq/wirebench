@@ -138,7 +138,9 @@ class Resistor(Part):
         return Volts(current * self._ohms)
 
     def __str__(self) -> str:
-        return f"{float(self._ohms)} Ω"
+        # Delegate to Ohms.__str__ for engineering notation
+        # (47 Ω, 4.7 kΩ, 10 kΩ, 1 MΩ).
+        return str(self._ohms)
 
     def __repr__(self) -> str:
         return f"Resistor(ohms={float(self._ohms)!r}, refdes={self.refdes!r})"
