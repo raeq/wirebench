@@ -66,15 +66,20 @@ def passive_spec(class_name: str | None = None) -> ComponentSpec:
 
 def chip_spec(class_name: str | None = None) -> ComponentSpec:
     """A minimal chip shape: power + ground + one digital input + one
-    digital output.  Exercises the OUT-pin code path."""
+    digital output.  Exercises the OUT-pin code path.
+
+    Supply pins (`vcc`, `gnd`) are declared `Analog` because the
+    framework's name-based pin-function inference classifies any
+    `VCC` / `VDD` / `GND` / `VSS` (case-insensitive) as POWER /
+    GROUND, and those functions require an `Analog` signal_type."""
     return ComponentSpec(
         class_name=class_name or unique_class_name('ChipSm'),
         kind='chip',
         refdes_prefix='U',
         footprint='Package_DIP:DIP-4_W7.62mm',
         pins=(
-            PinSpec(name='vcc', direction='in',  signal_type='Digital'),
-            PinSpec(name='gnd', direction='in',  signal_type='Digital'),
+            PinSpec(name='vcc', direction='in',  signal_type='Analog'),
+            PinSpec(name='gnd', direction='in',  signal_type='Analog'),
             PinSpec(name='in_', direction='in',  signal_type='Digital'),
             PinSpec(name='out', direction='out', signal_type='Digital'),
         ),

@@ -116,17 +116,50 @@ def test_passive_scaffold_updates_init_all(tmp_path: Path) -> None:
 
 
 def test_chip_scaffold_constructs_cleanly(tmp_path: Path) -> None:
-    """A scaffolded chip with an OUT pin still constructs — `evaluate()`
-    drives every OUT pin with a placeholder so the framework's
-    OUT-pin-must-be-driven invariant passes by default."""
+    """A scaffolded chip must construct without `PartConfigurationError`
+    — `Chip.__init__` enforces *every OUT pin is internally driven*
+    by a cell, and the scaffold satisfies that by wiring an
+    `IdleDriver` to each OUT pin's internal face."""
     spec = chip_spec()
     paths, component_module, _ = materialise_and_load(spec, tmp_path)
     cls = getattr(component_module, spec.class_name)
     instance = cls(refdes_number=1)
     assert instance.refdes == f"{spec.refdes_prefix}1"
-    # OUT pin is driven by evaluate() — exercise that path too.
-    instance.evaluate()
-    assert instance.ports['out'].value is False  # placeholder for Digital OUT
+    # Every declared external pin surfaces on the chip's ports map.
+    for pin in spec.pins:
+        assert pin.name in instance.ports
+
+
+def test_chip_scaffold_drives_every_out_pin_via_a_cell(
+    tmp_path: Path,
+) -> None:
+    """`Chip._assert_every_out_pin_is_internally_driven` would refuse
+    the scaffold's output if any OUT pin's internal face had no
+    cell-side driver.  The scaffold passes this check by construction
+    via an `IdleDriver` per OUT pin."""
+    spec = chip_spec()
+    _, component_module, _ = materialise_and_load(spec, tmp_path)
+    cls = getattr(component_module, spec.class_name)
+    # Construction would have raised PartConfigurationError if the
+    # invariant didn't hold.
+    instance = cls(refdes_number=1)
+    # Driving the chip via __call__ + evaluate() should leave the OUT
+    # pin at the IdleDriver's idle value (False for Digital).
+    instance(in_=True)
+    assert instance.ports['out'].value is False
+
+
+def test_chip_scaffold_implements_concrete_call(tmp_path: Path) -> None:
+    """`Chip.__call__` is abstract; a scaffold that didn't override it
+    would fail at `cls(refdes_number=1)` with TypeError.  The chip
+    template emits a concrete `__call__` that drives every IN/BIDIR
+    pin from its argument."""
+    spec = chip_spec()
+    paths, component_module, _ = materialise_and_load(spec, tmp_path)
+    text = paths['component'].read_text()
+    assert "def __call__(" in text
+    # The signature must mention the IN pin name (concrete, not abstract).
+    assert "in_:" in text
 
 
 def test_chip_scaffold_declares_chip_as_base(tmp_path: Path) -> None:
@@ -137,6 +170,36 @@ def test_chip_scaffold_declares_chip_as_base(tmp_path: Path) -> None:
     text = paths['component'].read_text()
     assert 'from framework.chip import Chip' in text
     assert '(Chip)' in text
+    assert 'super().__init__(' in text, (
+        "Chip scaffold must call `super().__init__(pins=..., cells=...)` "
+        "so `Chip.__init__` builds the port map and validates the "
+        "OUT-pin invariant."
+    )
+
+
+# =============================================== name → filename mapping
+
+
+@pytest.mark.parametrize(
+    'class_name,expected_filename',
+    [
+        ('LM7806',    'lm7806'),
+        ('SN74HC04',  'sn74hc04'),
+        ('ATmega328P', 'atmega328p'),
+        ('MyChip',    'my_chip'),
+        ('HTTPServer', 'http_server'),
+    ],
+)
+def test_class_name_to_filename_handles_acronyms(
+    class_name: str, expected_filename: str,
+) -> None:
+    """Acronym-heavy part names map to the conventional Python
+    file-naming style: `LM7806` → `lm7806.py`, not `l_m7806.py`;
+    `SN74HC04` → `sn74hc04.py`, not `s_n74_h_c04.py`.  The wirebench
+    catalogue's existing file naming is the reference (see
+    `src/components/chips/atmega328p.py`, `sn74hc04.py`, etc.)."""
+    from ._scaffold_harness import _snake_case
+    assert _snake_case(class_name) == expected_filename
 
 
 # =================================================== refused overwrite

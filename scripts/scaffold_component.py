@@ -23,10 +23,6 @@ Usage:
         --pins "t1:bidir:Analog,t2:bidir:Analog" \\
         --description "My example passive"
 
-Or interactively:
-
-    uv run scripts/scaffold_component.py --interactive
-
 Supported `--kind` values: `passive`, `chip`.  Other framework
 component families (connector, diode, transistor, relay, transducer)
 inherit through dedicated base classes whose shapes are too varied to
@@ -78,8 +74,30 @@ _KINDS = {'passive', 'chip'}
 
 
 def _snake_case(name: str) -> str:
-    # CamelCase → snake_case; handles consecutive caps (LM7805 → lm7805).
-    s = re.sub(r'(?<!^)(?=[A-Z])', '_', name)
+    """CamelCase → snake_case with acronym-aware splits.
+
+    Splits happen at:
+      - `XYZSomething` → `XYZ_Something`  (acronym followed by Word)
+      - `aB`           → `a_B`            (lowercase to uppercase)
+
+    Digits attach to whichever side they ran into in the source name —
+    `LM7806` → `lm7806` (no underscore between the trailing letters
+    and digits), `ATmega328P` → `atmega328p` (the trailing `P`
+    stays attached because there's no preceding lowercase letter).
+    """
+    # First regex: split an all-caps acronym (≥ 2 caps) from a
+    # following CapitalizedWord (`HTTPServer` → `HTTP_Server`).  The
+    # `[A-Z][A-Z]+` floor of 2 caps prevents catastrophic backtracking
+    # of single-letter prefixes (`ATmega` would otherwise split at
+    # `A_Tmega` because the regex engine backs `[A-Z]+` down to `A`
+    # to find a fit).  With the 2-cap floor, `ATmega` has no
+    # consecutive-2-cap prefix followed by Cap+lowercase and stays
+    # whole.
+    s = re.sub(r'([A-Z][A-Z]+)([A-Z][a-z])', r'\1_\2', name)
+    # Second regex: split CamelCase boundaries — `aB` becomes `a_B`.
+    # Catches `MyChip` → `My_Chip` and the post-acronym word split
+    # introduced above.
+    s = re.sub(r'([a-z])([A-Z])', r'\1_\2', s)
     return s.lower()
 
 
@@ -176,19 +194,36 @@ _DIRECTION_ENUM = {
 def _imports_for(spec: ComponentSpec) -> str:
     """Build the imports block.  Pulls in only the signal types used
     by the pin spec — keeps the generated file tight and matches the
-    style of the hand-written components."""
+    style of the hand-written components.
+
+    Chip scaffolds get the additional surface they need to satisfy
+    `Chip.__init__`: `Pin`, `PinId`, `wire`, and `IdleDriver` as the
+    placeholder cell that drives every OUT pin's internal face."""
     sig_types = sorted({p.signal_type for p in spec.pins})
     signals_import = f"from framework.signals import {', '.join(sig_types)}"
     if spec.kind == 'chip':
-        base_import = "from framework.chip import Chip"
-    else:
-        base_import = "from framework.part import Part"
+        return (
+            f"from typing import Any, ClassVar\n"
+            f"\n"
+            f"from pydantic import validate_call\n"
+            f"\n"
+            f"from framework.chip import Chip\n"
+            f"from framework.ground import GroundDomain, ELECTRICAL\n"
+            f"from framework.pin import Pin, PinId\n"
+            f"from framework.port import Direction\n"
+            f"from framework.refdes import RefdesNumber, validate_refdes\n"
+            f"from framework.registry import register\n"
+            f"{signals_import}\n"
+            f"from framework.wire import wire\n"
+            f"\n"
+            f"from .concepts.idle_driver import IdleDriver\n"
+        )
     return (
         f"from typing import Any, ClassVar\n"
         f"\n"
         f"from pydantic import validate_call\n"
         f"\n"
-        f"{base_import}\n"
+        f"from framework.part import Part\n"
         f"from framework.ground import GroundDomain, ELECTRICAL\n"
         f"from framework.port import Port, Direction\n"
         f"from framework.refdes import RefdesNumber, validate_refdes\n"
@@ -287,25 +322,16 @@ def _call_signature(spec: ComponentSpec) -> tuple[str, str]:
 
 
 def _class_body(spec: ComponentSpec) -> str:
-    base = 'Chip' if spec.kind == 'chip' else 'Part'
-    pin_names_tuple = ', '.join(f"'_{p.name}'" for p in spec.pins)
-    slots = (
-        f"    __slots__ = ('_ports', '_refdes_number')"
+    return (
+        _chip_class_body(spec) if spec.kind == 'chip'
+        else _passive_class_body(spec)
     )
-    call_sig, call_body = _call_signature(spec)
+
+
+def _shared_classvars(spec: ComponentSpec) -> str:
+    """The six ClassVars every component class declares.  Identical
+    across kinds — only the surrounding init / port machinery differs."""
     return f'''\
-@register('{spec.class_name}')
-class {spec.class_name}({base}):
-    """{spec.description}
-
-    TODO: replace this docstring with the part's real behavioural
-    description.  Include the manufacturer's pin table, the operating
-    voltage range, and any framework-relevant gotchas the part is
-    famous for.
-    """
-
-{slots}
-
     REFDES_PREFIX: ClassVar[str] = '{spec.refdes_prefix}'
     FOOTPRINT: ClassVar[str | None] = "{spec.footprint}"
     {_pin_numbers_block(spec)}
@@ -325,7 +351,25 @@ class {spec.class_name}({base}):
         # TODO: zero or more assembly-time warnings — the things a
         # first-time builder gets wrong about this specific part.
     )
+'''
 
+
+def _passive_class_body(spec: ComponentSpec) -> str:
+    call_sig, call_body = _call_signature(spec)
+    return f'''\
+@register('{spec.class_name}')
+class {spec.class_name}(Part):
+    """{spec.description}
+
+    TODO: replace this docstring with the part's real behavioural
+    description.  Include the manufacturer's pin table, the operating
+    voltage range, and any framework-relevant gotchas the part is
+    famous for.
+    """
+
+    __slots__ = ('_ports', '_refdes_number')
+
+{_shared_classvars(spec)}
     @validate_call(config={{'arbitrary_types_allowed': True}})
     def __init__(
         self,
@@ -354,6 +398,157 @@ class {spec.class_name}({base}):
     def evaluate(self) -> None:
 {_evaluate_body(spec)}
 
+{call_sig}
+{call_body}
+
+    def __str__(self) -> str:
+        return self.refdes
+
+    def __repr__(self) -> str:
+        return f"{spec.class_name}(refdes={{self.refdes!r}})"
+'''
+
+
+def _chip_pin_construction(spec: ComponentSpec) -> str:
+    """Build a Pin per declared port — the `Pin(PinId(n, 'name'), ...)`
+    shape every concrete Chip uses."""
+    lines = []
+    for i, p in enumerate(spec.pins, 1):
+        mandatory = 'True' if p.direction != 'out' else 'False'
+        lines.append(
+            f"        pin_{p.name} = Pin(\n"
+            f"            PinId({i}, '{p.name}'),\n"
+            f"            {_DIRECTION_ENUM[p.direction]},\n"
+            f"            domain,\n"
+            f"            mandatory={mandatory},\n"
+            f"            signal_type={p.signal_type},\n"
+            f"        )"
+        )
+    return '\n'.join(lines)
+
+
+def _chip_cell_wiring(spec: ComponentSpec) -> tuple[str, str]:
+    """For each OUT pin, instantiate an `IdleDriver` and wire its
+    `out` port to `pin.internal`.  Satisfies the framework's "every
+    OUT pin is internally driven" invariant — the scaffolded chip
+    constructs without `BARE_FIRMWARE_DRIVEN`, and the contributor
+    later replaces each `IdleDriver` with the real behavioural cell.
+
+    Returns `(cells_decl, cells_list)` where `cells_decl` is the
+    statements that build the cells and `cells_list` is the
+    comma-joined expression for `super().__init__(cells=...)`.
+    """
+    out_pins = [p for p in spec.pins if p.direction == 'out']
+    if not out_pins:
+        return ('', '')
+    decl_lines: list[str] = []
+    cell_names: list[str] = []
+    for p in out_pins:
+        idle_val = 'False' if p.signal_type == 'Digital' else '0.0'
+        cell_name = f"cell_{p.name}"
+        decl_lines.append(
+            f"        {cell_name} = IdleDriver("
+            f"{p.signal_type}, idle_value={idle_val}, domain=domain)"
+        )
+        decl_lines.append(
+            f"        wire({cell_name}.ports['out'], pin_{p.name}.internal)"
+        )
+        cell_names.append(cell_name)
+    return ('\n'.join(decl_lines), ', '.join(cell_names))
+
+
+def _chip_call_signature_and_body(spec: ComponentSpec) -> tuple[str, str]:
+    """Build a concrete `__call__` for the chip scaffold — `Chip.__call__`
+    is abstract, so every concrete Chip subclass must implement one.
+    The scaffold's shape mirrors `SN74HC04.__call__`: take each IN /
+    BIDIR pin as a keyword argument with a sensible default, drive
+    the corresponding external port, run `evaluate()`, return the
+    tuple of OUT-pin values."""
+    in_pins = [p for p in spec.pins if p.direction in ('in', 'bidir')]
+    out_pins = [p for p in spec.pins if p.direction == 'out']
+
+    def _annot(p: PinSpec) -> str:
+        return 'float | None' if p.signal_type == 'Analog' else 'bool | None'
+
+    def _default(p: PinSpec) -> str:
+        return '0.0' if p.signal_type == 'Analog' else 'False'
+
+    if not in_pins:
+        sig = "    def __call__(self) -> Any:"
+    else:
+        # Format on continuation lines for readability when many pins.
+        args = ',\n        '.join(
+            f"{p.name}: {_annot(p)} = {_default(p)}" for p in in_pins
+        )
+        sig = f"    def __call__(\n        self,\n        {args},\n    ) -> Any:"
+
+    body_lines = ["        self._assert_no_inputs_wired()"]
+    for p in in_pins:
+        body_lines.append(f"        self._ports['{p.name}'].drive({p.name})")
+    body_lines.append("        self.evaluate()")
+    if out_pins:
+        return_tuple = ', '.join(f"self._ports['{p.name}'].value" for p in out_pins)
+        body_lines.append(f"        return ({return_tuple},)")
+    else:
+        body_lines.append("        return None")
+    return sig, '\n'.join(body_lines)
+
+
+def _chip_class_body(spec: ComponentSpec) -> str:
+    pin_var_list = ', '.join(f"pin_{p.name}" for p in spec.pins)
+    cell_decl, cell_list = _chip_cell_wiring(spec)
+    cell_decl_block = ('\n' + cell_decl) if cell_decl else ''
+    cell_arg = f"[{cell_list}]" if cell_list else '[]'
+    call_sig, call_body = _chip_call_signature_and_body(spec)
+    # `__slots__` for a Chip is empty by convention — Chip's own
+    # `__slots__` carries the framework-needed members.  The scaffold
+    # adds `_refdes_number` (chip-specific) and leaves room for the
+    # contributor to add more if the part needs internal state.
+    return f'''\
+@register('{spec.class_name}')
+class {spec.class_name}(Chip):
+    """{spec.description}
+
+    TODO: replace this docstring with the part's real behavioural
+    description.  Include the manufacturer's pin table, the operating
+    voltage range, and any framework-relevant gotchas the part is
+    famous for.
+
+    The scaffold wires every OUT pin to an `IdleDriver` cell as a
+    placeholder so the framework's *every OUT pin is internally
+    driven* invariant passes by construction.  Replace each
+    `IdleDriver` with the real behavioural cell once you know the
+    part's logic (concept cells live in
+    `src/components/chips/concepts/`).
+    """
+
+    __slots__ = ('_refdes_number',)
+
+{_shared_classvars(spec)}
+    @validate_call(config={{'arbitrary_types_allowed': True}})
+    def __init__(
+        self,
+        domain: GroundDomain = ELECTRICAL,
+        *,
+        refdes_number: RefdesNumber,
+    ) -> None:
+        validate_refdes(self.REFDES_PREFIX, refdes_number)
+        self._refdes_number = refdes_number
+{_chip_pin_construction(spec)}{cell_decl_block}
+        super().__init__(
+            pins=[{pin_var_list}],
+            cells={cell_arg},
+        )
+
+    @property
+    def refdes(self) -> str:
+        return f"{{self.REFDES_PREFIX}}{{self._refdes_number}}"
+
+    @property
+    def refdes_number(self) -> int:
+        return self._refdes_number
+
+    @validate_call(config={{'arbitrary_types_allowed': True}})
 {call_sig}
 {call_body}
 
