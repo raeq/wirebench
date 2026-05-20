@@ -142,11 +142,10 @@ Full coverage of the framework, components, every export format with byte-determ
 
 ## Going further
 
-- [`demos/`](demos/) — every demo is a complete study artifact (source + all six exports + rendered schematic).
+- [`demos/`](demos/) — every demo is a complete study artifact: source plus the full set of generated exports (BOM, KiCad netlist + schematic, SPICE deck, Mermaid / Graphviz / Yosys / SVG renders, breadboard SVG, assembly guide, net / domain / interface reports). [`hello_led/docs/`](demos/hello_led/docs/) is a live example.
 - [`docs/learning-path.md`](docs/learning-path.md) — suggested order for working through the demos.
 - [`docs/design-principles.md`](docs/design-principles.md) — why the framework prevents what it prevents.
 - [`docs/component-library-data.md`](docs/component-library-data.md) — hand-curated catalogue with datasheet links, pin maps, and footprints; [`docs/parts.md`](docs/parts.md) — auto-generated index of all 150 modelled components, searchable on the doc site.
-- [`docs/`](docs/) — implementation specs for every major work package.
 - [`CLAUDE.md`](CLAUDE.md) — design philosophy in full, for contributors.
 
 ## Licensing
