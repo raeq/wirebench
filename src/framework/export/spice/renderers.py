@@ -27,6 +27,13 @@ from components.passives.capacitor import Capacitor
 from components.passives.cell import Cell
 from components.passives.inductor import Inductor
 from components.passives.led import LED
+from components.passives.ferrite_aerial import FerriteAerial
+from components.passives.photoresistor import Photoresistor
+from components.passives.variable_capacitor import VariableCapacitor
+from components.transducers.antenna import Antenna
+from components.transducers.crystal_earpiece import CrystalEarpiece
+from components.transducers.earth import Earth
+from components.transducers.speaker import Speaker
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
 from components.relays.spdt import Relay_SPDT
@@ -55,6 +62,67 @@ def render_inductor(l: Inductor, ctx: ExporterContext) -> str:
     n1 = ctx.net_name(l.ports['t1'])
     n2 = ctx.net_name(l.ports['t2'])
     return f"{l.refdes} {n1} {n2} {float(l.henries)}"
+
+
+@register_renderer(Photoresistor, format='spice')
+def render_photoresistor(p: Photoresistor, ctx: ExporterContext) -> str:
+    n1 = ctx.net_name(p.ports['t1'])
+    n2 = ctx.net_name(p.ports['t2'])
+    # Geometric mean of the dark/light values picks a sensible
+    # mid-illumination operating point; real SPICE work uses a
+    # voltage-controlled resistor with a light-intensity sweep.
+    mid = (float(p.dark_ohms) * float(p.light_ohms)) ** 0.5
+    return f"{p.refdes} {n1} {n2} {mid}"
+
+
+@register_renderer(Speaker, format='spice')
+def render_speaker(s: Speaker, ctx: ExporterContext) -> str:
+    n1 = ctx.net_name(s.ports['t1'])
+    n2 = ctx.net_name(s.ports['t2'])
+    return f"R{s.refdes_number}_LS {n1} {n2} {float(s.impedance_ohms)}"
+
+
+@register_renderer(CrystalEarpiece, format='spice')
+def render_crystal_earpiece(e: CrystalEarpiece, ctx: ExporterContext) -> str:
+    n1 = ctx.net_name(e.ports['t1'])
+    n2 = ctx.net_name(e.ports['t2'])
+    return f"R{e.refdes_number}_EARP {n1} {n2} {float(e.impedance_ohms)}"
+
+
+@register_renderer(VariableCapacitor, format='spice')
+def render_variable_capacitor(vc: VariableCapacitor, ctx: ExporterContext) -> str:
+    n1 = ctx.net_name(vc.ports['t1'])
+    n2 = ctx.net_name(vc.ports['t2'])
+    # SPICE-side: pick the geometric mean of the tuning range as the
+    # nominal operating value.  A real swept-tuning SPICE study uses
+    # a parameter sweep across min/max.
+    mid = (float(vc.min_farads) * float(vc.max_farads)) ** 0.5
+    return f"C{vc.refdes_number}_VC {n1} {n2} {mid}"
+
+
+@register_renderer(FerriteAerial, format='spice')
+def render_ferrite_aerial(fa: FerriteAerial, ctx: ExporterContext) -> str:
+    n1 = ctx.net_name(fa.ports['t1'])
+    n2 = ctx.net_name(fa.ports['t2'])
+    return f"{fa.refdes} {n1} {n2} {float(fa.henries)}"
+
+
+@register_renderer(Antenna, format='spice')
+def render_antenna(a: Antenna, ctx: ExporterContext) -> str:
+    # SPICE-side: model the antenna as a small AC voltage source so
+    # the surrounding tank network has something to resonate against.
+    # Real RF-input SPICE work substitutes a full antenna model.
+    net = ctx.net_name(a.ports['out'])
+    return f"V_{ctx.refdes_of(a)} {net} 0 AC 1m"
+
+
+@register_renderer(Earth, format='spice')
+def render_earth(e: Earth, ctx: ExporterContext) -> str:
+    # SPICE-side: tie the earth net to node 0 via an ideal 0 V
+    # source.  Same shape as a Rail(False) but logically a different
+    # network role.
+    net = ctx.net_name(e.ports['out'])
+    return f"V_{ctx.refdes_of(e)} {net} 0 DC 0"
 
 
 @register_renderer(Relay_SPDT, format='spice')

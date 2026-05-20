@@ -1,0 +1,10 @@
+.TITLE CrystalSet
+V_A1 net_2 0 AC 1m
+V_E1 net_1 0 DC 0
+L1 net_2 net_1 0.0004
+C1_VC net_2 net_1 5.4772255750516613e-11
+D1 net_2 net_0 D_OA90
+R1 net_0 net_1 100000.0
+R1_EARP net_0 net_1 32000.0
+.LIB spice-models.lib
+.END

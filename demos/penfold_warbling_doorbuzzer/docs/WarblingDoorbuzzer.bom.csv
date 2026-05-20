@@ -1,0 +1,14 @@
+Refdes,Value,Footprint,Quantity,Parent,Description
+C1,2.2e-06F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+C2,1e-08F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+C3,1e-07F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+C4,1e-08F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+C5,1e-05F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+LS1,8Ω speaker,Buzzer_Beeper:Speaker_Mallory_M9CP-916H_15mm,1,,Speaker
+R1,47000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R2,47000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R3,4700Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R4,4700Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R5,100Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+U1,NE555,Package_DIP:DIP-8_W7.62mm,1,,NE555
+U2,NE555,Package_DIP:DIP-8_W7.62mm,1,,NE555

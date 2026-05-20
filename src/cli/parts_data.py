@@ -19,6 +19,7 @@ import components.connectors   # noqa: F401
 import components.diodes       # noqa: F401
 import components.passives     # noqa: F401
 import components.relays       # noqa: F401
+import components.transducers  # noqa: F401
 import components.transistors  # noqa: F401
 import framework.board         # noqa: F401
 
@@ -32,13 +33,20 @@ from framework.pin_function import PinFunction, infer_pin_function
 from framework.registry  import _REGISTRY
 from framework.transistor import BJT, MOSFET
 
-from components.passives.capacitor import Capacitor
-from components.passives.cell      import Cell
-from components.passives.inductor  import Inductor
-from components.passives.led       import LED
-from components.passives.rail      import Rail
-from components.passives.resistor  import Resistor
-from components.relays.spdt        import Relay_SPDT
+from components.passives.capacitor          import Capacitor
+from components.passives.cell               import Cell
+from components.passives.ferrite_aerial     import FerriteAerial
+from components.passives.inductor           import Inductor
+from components.passives.led                import LED
+from components.passives.photoresistor      import Photoresistor
+from components.passives.rail               import Rail
+from components.passives.resistor           import Resistor
+from components.passives.variable_capacitor import VariableCapacitor
+from components.relays.spdt                 import Relay_SPDT
+from components.transducers.antenna           import Antenna
+from components.transducers.crystal_earpiece  import CrystalEarpiece
+from components.transducers.earth             import Earth
+from components.transducers.speaker           import Speaker
 
 
 KIND_BY_BASE: list[tuple[type, str]] = [
@@ -59,6 +67,13 @@ KIND_BY_BASE: list[tuple[type, str]] = [
     (LED, 'passive'),
     (Rail, 'passive'),
     (Cell, 'passive'),
+    (Photoresistor, 'passive'),
+    (VariableCapacitor, 'passive'),
+    (FerriteAerial, 'passive'),
+    (Speaker, 'transducer'),
+    (CrystalEarpiece, 'transducer'),
+    (Antenna, 'transducer'),
+    (Earth, 'transducer'),
 ]
 
 

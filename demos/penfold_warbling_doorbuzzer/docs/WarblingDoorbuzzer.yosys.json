@@ -1,0 +1,375 @@
+{
+  "creator": "wirebench 0.x",
+  "modules": {
+    "WarblingDoorbuzzer": {
+      "cells": {
+        "C1": {
+          "connections": {
+            "t1": [
+              11
+            ],
+            "t2": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C2": {
+          "connections": {
+            "t1": [
+              10
+            ],
+            "t2": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C3": {
+          "connections": {
+            "t1": [
+              7
+            ],
+            "t2": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C4": {
+          "connections": {
+            "t1": [
+              6
+            ],
+            "t2": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "C5": {
+          "connections": {
+            "t1": [
+              4
+            ],
+            "t2": [
+              2
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Capacitor"
+        },
+        "LS1": {
+          "connections": {
+            "t1": [
+              2
+            ],
+            "t2": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Speaker"
+        },
+        "R1": {
+          "connections": {
+            "t1": [
+              9
+            ],
+            "t2": [
+              12
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "47000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "R2": {
+          "connections": {
+            "t1": [
+              12
+            ],
+            "t2": [
+              11
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "47000"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "R3": {
+          "connections": {
+            "t1": [
+              9
+            ],
+            "t2": [
+              8
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "4700"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "R4": {
+          "connections": {
+            "t1": [
+              8
+            ],
+            "t2": [
+              7
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "4700"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "R5": {
+          "connections": {
+            "t1": [
+              5
+            ],
+            "t2": [
+              4
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {
+            "ohms": "100"
+          },
+          "port_directions": {
+            "t1": "inout",
+            "t2": "inout"
+          },
+          "type": "Resistor"
+        },
+        "U1": {
+          "connections": {
+            "CONT": [
+              10
+            ],
+            "DISCH": [
+              12
+            ],
+            "GND": [
+              3
+            ],
+            "OUT": [
+              13
+            ],
+            "RESET": [
+              14
+            ],
+            "THRES": [
+              11
+            ],
+            "TRIG": [
+              11
+            ],
+            "VCC": [
+              9
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "CONT": "inout",
+            "DISCH": "output",
+            "GND": "input",
+            "OUT": "output",
+            "RESET": "input",
+            "THRES": "input",
+            "TRIG": "input",
+            "VCC": "input"
+          },
+          "type": "NE555"
+        },
+        "U2": {
+          "connections": {
+            "CONT": [
+              6
+            ],
+            "DISCH": [
+              8
+            ],
+            "GND": [
+              3
+            ],
+            "OUT": [
+              5
+            ],
+            "RESET": [
+              13
+            ],
+            "THRES": [
+              7
+            ],
+            "TRIG": [
+              7
+            ],
+            "VCC": [
+              9
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "CONT": "inout",
+            "DISCH": "output",
+            "GND": "input",
+            "OUT": "output",
+            "RESET": "input",
+            "THRES": "input",
+            "TRIG": "input",
+            "VCC": "input"
+          },
+          "type": "NE555"
+        }
+      },
+      "netnames": {
+        "GND": {
+          "attributes": {},
+          "bits": [
+            3
+          ],
+          "hide_name": 0
+        },
+        "net_0": {
+          "attributes": {},
+          "bits": [
+            2
+          ],
+          "hide_name": 0
+        },
+        "net_10": {
+          "attributes": {},
+          "bits": [
+            12
+          ],
+          "hide_name": 0
+        },
+        "net_11": {
+          "attributes": {},
+          "bits": [
+            13
+          ],
+          "hide_name": 0
+        },
+        "net_2": {
+          "attributes": {},
+          "bits": [
+            4
+          ],
+          "hide_name": 0
+        },
+        "net_3": {
+          "attributes": {},
+          "bits": [
+            5
+          ],
+          "hide_name": 0
+        },
+        "net_4": {
+          "attributes": {},
+          "bits": [
+            6
+          ],
+          "hide_name": 0
+        },
+        "net_5": {
+          "attributes": {},
+          "bits": [
+            7
+          ],
+          "hide_name": 0
+        },
+        "net_6": {
+          "attributes": {},
+          "bits": [
+            8
+          ],
+          "hide_name": 0
+        },
+        "net_8": {
+          "attributes": {},
+          "bits": [
+            10
+          ],
+          "hide_name": 0
+        },
+        "net_9": {
+          "attributes": {},
+          "bits": [
+            11
+          ],
+          "hide_name": 0
+        },
+        "vcc": {
+          "attributes": {},
+          "bits": [
+            9
+          ],
+          "hide_name": 0
+        }
+      },
+      "ports": {}
+    }
+  }
+}

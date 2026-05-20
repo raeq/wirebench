@@ -13,10 +13,11 @@ import sys
 from pathlib import Path
 
 # Trigger component registration so the loader recognises every class.
-import components.chips      # noqa: F401
-import components.passives   # noqa: F401
-import components.connectors # noqa: F401
-import framework.board       # noqa: F401
+import components.chips        # noqa: F401
+import components.passives     # noqa: F401
+import components.connectors   # noqa: F401
+import components.transducers  # noqa: F401
+import framework.board         # noqa: F401
 
 from framework.export import export_to_string, list_formats
 from framework.format import load_wirebench

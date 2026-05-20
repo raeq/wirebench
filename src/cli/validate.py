@@ -37,10 +37,11 @@ from pathlib import Path
 from typing import Any
 
 # Trigger component registration so loaded designs see every class.
-import components.chips      # noqa: F401
-import components.passives   # noqa: F401
-import components.connectors # noqa: F401
-import framework.board       # noqa: F401
+import components.chips        # noqa: F401
+import components.passives     # noqa: F401
+import components.connectors   # noqa: F401
+import components.transducers  # noqa: F401
+import framework.board         # noqa: F401
 
 from framework import Circuit
 from framework.errors import WirebenchError

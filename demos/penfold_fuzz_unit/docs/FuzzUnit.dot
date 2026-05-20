@@ -1,0 +1,48 @@
+digraph "FuzzUnit" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  U1 [label="U1\\nLM741"];
+  C1 [label="C1\\n1e-07F"];
+  R1 [label="R1\\n1e+06Ω"];
+  R2 [label="R2\\n1000Ω"];
+  R3 [label="R3\\n470000Ω"];
+  R4 [label="R4\\n100000Ω"];
+  R5 [label="R5\\n100000Ω"];
+  C2 [label="C2\\n1e-05F"];
+  D1 [label="D1\\nD1N4148"];
+  D2 [label="D2\\nD1N4148"];
+  C3 [label="C3\\n2.2e-07F"];
+  R6 [label="R6\\n50000Ω"];
+  // Nets
+  node [shape=circle, label="", width=0.15, fixedsize=true];
+  gnd; net_0; net_1; net_2; net_4; net_6; net_7; net_8; vcc;
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+  C1 -> net_8 [taillabel="t1"];
+  C1 -> net_7 [taillabel="t2"];
+  C2 -> net_4 [taillabel="t1"];
+  C2 -> gnd [taillabel="t2"];
+  C3 -> net_2 [taillabel="t1"];
+  C3 -> net_0 [taillabel="t2"];
+  D1 -> net_2 [taillabel="anode"];
+  D1 -> gnd [taillabel="cathode"];
+  D2 -> gnd [taillabel="anode"];
+  D2 -> net_2 [taillabel="cathode"];
+  R1 -> net_7 [taillabel="t1"];
+  R1 -> gnd [taillabel="t2"];
+  R2 -> net_7 [taillabel="t1"];
+  R2 -> net_6 [taillabel="t2"];
+  R3 -> net_6 [taillabel="t1"];
+  R3 -> net_2 [taillabel="t2"];
+  R4 -> vcc [taillabel="t1"];
+  R4 -> net_4 [taillabel="t2"];
+  R5 -> net_4 [taillabel="t1"];
+  R5 -> gnd [taillabel="t2"];
+  R6 -> net_0 [taillabel="t1"];
+  R6 -> net_1 [taillabel="t2"];
+  U1 -> net_6 [taillabel="IN_NEG"];
+  U1 -> net_4 [taillabel="IN_POS"];
+  U1 -> net_2 [taillabel="OUT"];
+  U1 -> gnd [taillabel="V_NEG"];
+  U1 -> vcc [taillabel="V_POS"];
+}

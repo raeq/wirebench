@@ -1,0 +1,18 @@
+.TITLE WarblingDoorbuzzer
+V_Rail_0 vcc 0 DC 5.0
+V_Rail_1 vcc 0 DC 5.0
+U1 0 net_9 net_11 vcc net_8 net_9 net_10 vcc NE555
+U2 0 net_5 net_3 net_11 net_4 net_5 net_6 vcc NE555
+R1 vcc net_10 47000.0
+R2 net_10 net_9 47000.0
+C1 net_9 0 2.2e-06
+C2 net_8 0 1e-08
+R3 vcc net_6 4700.0
+R4 net_6 net_5 4700.0
+C3 net_5 0 1e-07
+C4 net_4 0 1e-08
+R5 net_3 net_2 100.0
+C5 net_2 net_0 1e-05
+R1_LS net_0 0 8.0
+.LIB spice-models.lib
+.END

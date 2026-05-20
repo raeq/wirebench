@@ -1,0 +1,15 @@
+Refdes,Value,Footprint,Quantity,Parent,Description
+C1,1e-07F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+C2,1e-05F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+C3,2.2e-07F,Capacitor_SMD:C_0603_1608Metric,1,,Capacitor
+D1,D1N4148,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,1,,D1N4148
+D2,D1N4148,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,1,,D1N4148
+J1,Audio3p5mmTRSJack,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,1,,Audio3p5mmTRSJack
+J2,Audio3p5mmTRSJack,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles,1,,Audio3p5mmTRSJack
+R1,1e+06Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R2,1000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R3,470000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R4,100000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R5,100000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R6,50000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+U1,LM741,Package_DIP:DIP-8_W7.62mm,1,,LM741

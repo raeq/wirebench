@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 240" width="800" height="240">
+<title>FuzzUnit — breadboard visualiser refused</title>
+<rect x="0" y="0" width="800" height="240" style="fill:#fffaf0;stroke:#888888;stroke-width:1"/>
+<text x="400" y="40" text-anchor="middle" style="font-family:monospace;font-size:14px;fill:#222222;font-weight:bold">FuzzUnit — breadboard render not produced</text>
+<text x="400" y="68" text-anchor="middle" style="font-family:monospace;font-size:10px;fill:#222222">The breadboard visualiser refused this design with:</text>
+<text x="40" y="96" style="font-family:monospace;font-size:10px;fill:#333333">2 parts can't be assembled on a breadboard:</text>
+<text x="40" y="110" style="font-family:monospace;font-size:10px;fill:#333333">  - J1 (Audio3p5mmTRSJack) — Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles</text>
+<text x="40" y="124" style="font-family:monospace;font-size:10px;fill:#333333">  - J2 (Audio3p5mmTRSJack) — Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical_CircularHoles</text>
+<text x="40" y="138" style="font-family:monospace;font-size:10px;fill:#333333"></text>
+<text x="40" y="152" style="font-family:monospace;font-size:10px;fill:#333333">Use `export(&lt;design&gt;, 'kicad', …)` for a PCB netlist, or rework the design with breadboard-friendly part variants (DIP packages, THT passives, 0.1" headers).</text>
+<text x="400" y="220" text-anchor="middle" style="font-family:monospace;font-size:9px;fill:#666666">See the .kicad_sch (schematic) or .dot (graph) exports for this design.</text>
+</svg>

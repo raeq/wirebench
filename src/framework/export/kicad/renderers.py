@@ -18,7 +18,14 @@ from framework.transistor import Transistor
 
 from framework.export.base import ExporterContext, register_renderer
 
+from components.passives.ferrite_aerial import FerriteAerial
+from components.passives.photoresistor import Photoresistor
 from components.passives.capacitor import Capacitor
+from components.passives.variable_capacitor import VariableCapacitor
+from components.transducers.antenna import Antenna
+from components.transducers.crystal_earpiece import CrystalEarpiece
+from components.transducers.earth import Earth
+from components.transducers.speaker import Speaker
 from components.passives.cell import Cell
 from components.passives.inductor import Inductor
 from components.passives.led import LED
@@ -84,6 +91,81 @@ def render_inductor(l: Inductor, ctx: ExporterContext, qrd: str,
     return _comp_block(
         qrd, value, _footprint_field(l),
         _libsource('Device', 'L', 'Inductor'),
+        names, tstamps,
+    )
+
+
+@register_renderer(Photoresistor, format='kicad')
+def render_photoresistor(p: Photoresistor, ctx: ExporterContext, qrd: str,
+                         names: str, tstamps: str) -> str:
+    value = f"LDR_{float(p.dark_ohms):g}/{float(p.light_ohms):g}"
+    return _comp_block(
+        qrd, value, _footprint_field(p),
+        _libsource('Device', 'R_Photo', 'Photoresistor (LDR)'),
+        names, tstamps,
+    )
+
+
+@register_renderer(Speaker, format='kicad')
+def render_speaker(s: Speaker, ctx: ExporterContext, qrd: str,
+                   names: str, tstamps: str) -> str:
+    value = f"{float(s.impedance_ohms):g}"
+    return _comp_block(
+        qrd, value, _footprint_field(s),
+        _libsource('Device', 'Speaker', 'Speaker'),
+        names, tstamps,
+    )
+
+
+@register_renderer(CrystalEarpiece, format='kicad')
+def render_crystal_earpiece(e: CrystalEarpiece, ctx: ExporterContext, qrd: str,
+                            names: str, tstamps: str) -> str:
+    value = f"{float(e.impedance_ohms):g}"
+    return _comp_block(
+        qrd, value, _footprint_field(e),
+        _libsource('Device', 'Speaker_Crystal', 'Crystal earpiece (high-Z)'),
+        names, tstamps,
+    )
+
+
+@register_renderer(VariableCapacitor, format='kicad')
+def render_variable_capacitor(vc: VariableCapacitor, ctx: ExporterContext, qrd: str,
+                              names: str, tstamps: str) -> str:
+    value = f"{float(vc.min_farads):g}/{float(vc.max_farads):g}"
+    return _comp_block(
+        qrd, value, _footprint_field(vc),
+        _libsource('Device', 'C_Variable', 'Variable capacitor'),
+        names, tstamps,
+    )
+
+
+@register_renderer(FerriteAerial, format='kicad')
+def render_ferrite_aerial(fa: FerriteAerial, ctx: ExporterContext, qrd: str,
+                          names: str, tstamps: str) -> str:
+    value = f"{float(fa.henries):g}"
+    return _comp_block(
+        qrd, value, _footprint_field(fa),
+        _libsource('Device', 'L_Ferrite', 'Ferrite-rod aerial coil'),
+        names, tstamps,
+    )
+
+
+@register_renderer(Antenna, format='kicad')
+def render_antenna(a: Antenna, ctx: ExporterContext, qrd: str,
+                   names: str, tstamps: str) -> str:
+    return _comp_block(
+        qrd, 'Antenna', _footprint_field(a),
+        _libsource('Device', 'Antenna', 'Antenna (environment-fed)'),
+        names, tstamps,
+    )
+
+
+@register_renderer(Earth, format='kicad')
+def render_earth(e: Earth, ctx: ExporterContext, qrd: str,
+                 names: str, tstamps: str) -> str:
+    return _comp_block(
+        qrd, 'Earth', _footprint_field(e),
+        _libsource('power', 'Earth', 'Earth-ground'),
         names, tstamps,
     )
 

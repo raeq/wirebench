@@ -1,0 +1,10 @@
+Refdes,Value,Footprint,Quantity,Parent,Description
+D1,red LED,LED_SMD:LED_0805,1,,Light-emitting diode
+Q1,BC547,Package_TO_SOT_THT:TO-92_Inline,1,,BC547
+R1,10000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R2,LDR 1e+06/400Ω,Resistor_THT:R_Axial_DIN0309_L9.0mm_D3.2mm_P12.70mm_Horizontal,1,,Photoresistor (LDR)
+R3,10000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R4,5000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R5,4700Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+R6,470Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor
+U1,LM741,Package_DIP:DIP-8_W7.62mm,1,,LM741

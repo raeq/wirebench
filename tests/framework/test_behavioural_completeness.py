@@ -30,6 +30,7 @@ import components.connectors   # noqa: F401
 import components.diodes       # noqa: F401
 import components.passives     # noqa: F401
 import components.relays       # noqa: F401
+import components.transducers  # noqa: F401
 import components.transistors  # noqa: F401
 import framework.board         # noqa: F401
 
@@ -59,6 +60,11 @@ def _construct_any(cls: type[Part]) -> Part | None:
             elif name == 'Inductor':       kwargs['henries'] = 100e-6
             elif name == 'LED':            kwargs['color']   = 'red'
             elif name == 'Cell':           kwargs['initial_state_of_charge'] = 1.0
+            elif name == 'Photoresistor': kwargs.update({'dark_ohms': 1_000_000, 'light_ohms': 500})
+            elif name == 'Speaker':         kwargs['impedance_ohms'] = 8
+            elif name == 'CrystalEarpiece': kwargs['impedance_ohms'] = 32_000
+            elif name == 'VariableCapacitor': kwargs.update({'min_farads': 10e-12, 'max_farads': 300e-12})
+            elif name == 'FerriteAerial':   kwargs['henries'] = 400e-6
             elif name == 'NE555_Monostable': kwargs['duration_ms']  = 1.0
             elif 'Header' in name and ('Female' in name or 'Male' in name):
                 kwargs.update({'pin_count': 4, 'pitch_mm': 2.54})

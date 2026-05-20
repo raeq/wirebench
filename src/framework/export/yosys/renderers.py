@@ -23,6 +23,13 @@ from components.passives.capacitor import Capacitor
 from components.passives.cell import Cell
 from components.passives.inductor import Inductor
 from components.passives.led import LED
+from components.passives.ferrite_aerial import FerriteAerial
+from components.passives.photoresistor import Photoresistor
+from components.passives.variable_capacitor import VariableCapacitor
+from components.transducers.antenna import Antenna
+from components.transducers.crystal_earpiece import CrystalEarpiece
+from components.transducers.earth import Earth
+from components.transducers.speaker import Speaker
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
 from components.relays.spdt import Relay_SPDT
@@ -38,6 +45,34 @@ def render_capacitor(c: Capacitor, ctx: ExporterContext) -> str: return ""
 
 @register_renderer(Inductor, format='yosys')
 def render_inductor(l: Inductor, ctx: ExporterContext) -> str: return ""
+
+
+@register_renderer(Photoresistor, format='yosys')
+def render_photoresistor(p: Photoresistor, ctx: ExporterContext) -> str: return ""
+
+
+@register_renderer(Speaker, format='yosys')
+def render_speaker(s: Speaker, ctx: ExporterContext) -> str: return ""
+
+
+@register_renderer(CrystalEarpiece, format='yosys')
+def render_crystal_earpiece(e: CrystalEarpiece, ctx: ExporterContext) -> str: return ""
+
+
+@register_renderer(VariableCapacitor, format='yosys')
+def render_variable_capacitor(vc: VariableCapacitor, ctx: ExporterContext) -> str: return ""
+
+
+@register_renderer(FerriteAerial, format='yosys')
+def render_ferrite_aerial(fa: FerriteAerial, ctx: ExporterContext) -> str: return ""
+
+
+@register_renderer(Antenna, format='yosys')
+def render_antenna(a: Antenna, ctx: ExporterContext) -> str: return ""
+
+
+@register_renderer(Earth, format='yosys')
+def render_earth(e: Earth, ctx: ExporterContext) -> str: return ""
 
 
 @register_renderer(Relay_SPDT, format='yosys')

@@ -25,6 +25,13 @@ from components.passives.capacitor import Capacitor
 from components.passives.cell import Cell
 from components.passives.inductor import Inductor
 from components.passives.led import LED
+from components.passives.ferrite_aerial import FerriteAerial
+from components.passives.photoresistor import Photoresistor
+from components.passives.variable_capacitor import VariableCapacitor
+from components.transducers.antenna import Antenna
+from components.transducers.crystal_earpiece import CrystalEarpiece
+from components.transducers.earth import Earth
+from components.transducers.speaker import Speaker
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
 from components.relays.spdt import Relay_SPDT
@@ -59,6 +66,54 @@ def render_capacitor(c: Capacitor, ctx: ExporterContext, parent: str = '') -> st
 def render_inductor(l: Inductor, ctx: ExporterContext, parent: str = '') -> str:
     value = f"{float(l.henries):g}H"
     return _csv_row(l.refdes, value, _footprint_of(l), '1', parent, 'Inductor')
+
+
+@register_renderer(Photoresistor, format='bom')
+def render_photoresistor(p: Photoresistor, ctx: ExporterContext, parent: str = '') -> str:
+    value = f"LDR {float(p.dark_ohms):g}/{float(p.light_ohms):g}Ω"
+    return _csv_row(p.refdes, value, _footprint_of(p), '1', parent,
+                    'Photoresistor (LDR)')
+
+
+@register_renderer(Speaker, format='bom')
+def render_speaker(s: Speaker, ctx: ExporterContext, parent: str = '') -> str:
+    value = f"{float(s.impedance_ohms):g}Ω speaker"
+    return _csv_row(s.refdes, value, _footprint_of(s), '1', parent, 'Speaker')
+
+
+@register_renderer(CrystalEarpiece, format='bom')
+def render_crystal_earpiece(e: CrystalEarpiece, ctx: ExporterContext, parent: str = '') -> str:
+    value = f"crystal earpiece {float(e.impedance_ohms):g}Ω"
+    return _csv_row(e.refdes, value, _footprint_of(e), '1', parent,
+                    'Crystal earpiece (piezo high-Z)')
+
+
+@register_renderer(VariableCapacitor, format='bom')
+def render_variable_capacitor(vc: VariableCapacitor, ctx: ExporterContext, parent: str = '') -> str:
+    value = f"VC {float(vc.min_farads):g}–{float(vc.max_farads):g}F"
+    return _csv_row(vc.refdes, value, _footprint_of(vc), '1', parent,
+                    'Variable capacitor (tuning)')
+
+
+@register_renderer(FerriteAerial, format='bom')
+def render_ferrite_aerial(fa: FerriteAerial, ctx: ExporterContext, parent: str = '') -> str:
+    value = f"{float(fa.henries):g}H ferrite aerial"
+    return _csv_row(fa.refdes, value, _footprint_of(fa), '1', parent,
+                    'Ferrite-rod tuned aerial coil')
+
+
+@register_renderer(Antenna, format='bom')
+def render_antenna(a: Antenna, ctx: ExporterContext, parent: str = '') -> str:
+    # Antenna is a logical environment-source marker — no procurable
+    # part on the BOM (the antenna is "a wire you hang outside").
+    return ""
+
+
+@register_renderer(Earth, format='bom')
+def render_earth(e: Earth, ctx: ExporterContext, parent: str = '') -> str:
+    # Earth is a logical environment-sink marker — no procurable
+    # part on the BOM.
+    return ""
 
 
 @register_renderer(Relay_SPDT, format='bom')

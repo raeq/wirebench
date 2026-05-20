@@ -1,0 +1,28 @@
+digraph "CrystalSet" {
+  rankdir=TB;
+  node [shape=box, fontname="monospace"];
+  A1 [label="A1\\nAntenna"];
+  E1 [label="E1\\nEarth"];
+  L1 [label="L1\\n0.0004H aerial"];
+  C1 [label="C1\\n1e-11–3e-10F"];
+  D1 [label="D1\\nD_OA90"];
+  R1 [label="R1\\n100000Ω"];
+  BZ1 [label="BZ1\\ncrystal"];
+  // Nets
+  node [shape=circle, label="", width=0.15, fixedsize=true];
+  net_0; net_1; net_2;
+  // Edges (component -- net, taillabel = port name)
+  edge [arrowhead=none, fontname="monospace", fontsize=9];
+  A1 -> net_2 [taillabel="out"];
+  BZ1 -> net_0 [taillabel="t1"];
+  BZ1 -> net_1 [taillabel="t2"];
+  C1 -> net_2 [taillabel="t1"];
+  C1 -> net_1 [taillabel="t2"];
+  D1 -> net_2 [taillabel="anode"];
+  D1 -> net_0 [taillabel="cathode"];
+  E1 -> net_1 [taillabel="out"];
+  L1 -> net_2 [taillabel="t1"];
+  L1 -> net_1 [taillabel="t2"];
+  R1 -> net_0 [taillabel="t1"];
+  R1 -> net_1 [taillabel="t2"];
+}

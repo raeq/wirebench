@@ -31,16 +31,23 @@ import components.passives     # noqa: F401
 import components.connectors   # noqa: F401
 import framework.board         # noqa: F401
 
-import water_alarm              # noqa: F401
-import water_alarm_split        # noqa: F401
-import dice                     # noqa: F401
-import digital_thermometer      # noqa: F401
-import doorbell_protector       # noqa: F401
-import backup_power             # noqa: F401
-import fan_cooling              # noqa: F401
-import bldc_motor               # noqa: F401
-import isolated_rs232           # noqa: F401
-import li_ion_fuel_gauge        # noqa: F401
+import water_alarm                     # noqa: F401
+import water_alarm_split               # noqa: F401
+import dice                            # noqa: F401
+import digital_thermometer             # noqa: F401
+import doorbell_protector              # noqa: F401
+import backup_power                    # noqa: F401
+import fan_cooling                     # noqa: F401
+import bldc_motor                      # noqa: F401
+import isolated_rs232                  # noqa: F401
+import li_ion_fuel_gauge               # noqa: F401
+import penfold_one_second_timer        # noqa: F401
+import penfold_reaction_game           # noqa: F401
+import penfold_light_switch            # noqa: F401
+import penfold_metronome               # noqa: F401
+import penfold_warbling_doorbuzzer     # noqa: F401
+import penfold_fuzz_unit               # noqa: F401
+import penfold_crystal_set             # noqa: F401
 
 from framework.format import load_wirebench, save_wirebench
 from framework.refdes import RefdesBearing
@@ -88,6 +95,20 @@ _FACTORIES = [
         lambda: __import__('isolated_rs232').IsolatedRS232Link()),
     ('li_ion_fuel_gauge.BatteryPackBoard',
         lambda: __import__('li_ion_fuel_gauge').BatteryPackBoard(refdes_number=1)),
+    ('penfold_one_second_timer.OneSecondTimer',
+        lambda: __import__('penfold_one_second_timer').OneSecondTimer()),
+    ('penfold_reaction_game.ReactionGame',
+        lambda: __import__('penfold_reaction_game').ReactionGame()),
+    ('penfold_light_switch.LightActivatedSwitch',
+        lambda: __import__('penfold_light_switch').LightActivatedSwitch()),
+    ('penfold_metronome.Metronome',
+        lambda: __import__('penfold_metronome').Metronome()),
+    ('penfold_warbling_doorbuzzer.WarblingDoorbuzzer',
+        lambda: __import__('penfold_warbling_doorbuzzer').WarblingDoorbuzzer()),
+    ('penfold_fuzz_unit.FuzzUnit',
+        lambda: __import__('penfold_fuzz_unit').FuzzUnit()),
+    ('penfold_crystal_set.CrystalSet',
+        lambda: __import__('penfold_crystal_set').CrystalSet()),
 ]
 
 

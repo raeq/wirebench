@@ -1,0 +1,32 @@
+.TITLE ReactionGame
+V_Rail_0 vcc 0 DC 5.0
+V_Rail_1 vcc 0 DC 5.0
+U1 0 nc_0 nc_1 vcc nc_2 nc_3 nc_4 vcc NE555
+U2 net_16 net_20 net_21 net_19 net_15 net_14 net_18 0 net_13 net_17 net_12 nc_5 nc_6 nc_7 nc_8 vcc CD4017
+D1 net_21 net_11 D_LED
+D2 net_20 net_10 D_LED
+D3 net_19 net_9 D_LED
+D4 net_18 net_8 D_LED
+D5 net_17 net_7 D_LED
+D6 net_16 net_6 D_LED
+D7 net_15 net_5 D_LED
+D8 net_14 net_4 D_LED
+D9 net_13 net_3 D_LED
+D10 net_12 net_1 D_LED
+R1 net_11 0 470.0
+R2 net_10 0 470.0
+R3 net_9 0 470.0
+R4 net_8 0 470.0
+R5 net_7 0 470.0
+R6 net_6 0 470.0
+R7 net_5 0 470.0
+R8 net_4 0 470.0
+R9 net_3 0 470.0
+R10 net_1 0 470.0
+R11 vcc vcc 47000.0
+R12 vcc vcc 4700.0
+C1 vcc vcc 1e-07
+C2 vcc vcc 1e-08
+R13 vcc vcc 10000.0
+.LIB spice-models.lib
+.END

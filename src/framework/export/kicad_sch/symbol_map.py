@@ -26,17 +26,26 @@ class SymbolEntry:
 
 _BY_CLASS: dict[str, SymbolEntry] = {
     # ---- passives ----
-    'Resistor':   SymbolEntry('Device', 'R',            '',   'R'),
-    'Capacitor':  SymbolEntry('Device', 'C',            '',   'C'),
-    'Inductor':   SymbolEntry('Device', 'L',            '',   'L'),
-    'LED':        SymbolEntry('Device', 'LED',          '',   'D'),
-    'Cell':       SymbolEntry('Device', 'Battery_Cell', '',   'B'),
+    'Resistor':     SymbolEntry('Device', 'R',            '',     'R'),
+    'Capacitor':    SymbolEntry('Device', 'C',            '',     'C'),
+    'Inductor':     SymbolEntry('Device', 'L',            '',     'L'),
+    'LED':          SymbolEntry('Device', 'LED',          '',     'D'),
+    'Cell':         SymbolEntry('Device', 'Battery_Cell', '',     'B'),
+    'Photoresistor':    SymbolEntry('Device', 'R_Photo',         'LDR',     'R'),
+    'Speaker':          SymbolEntry('Device', 'Speaker',         'Speaker', 'LS'),
+    'CrystalEarpiece':  SymbolEntry('Device', 'Speaker_Crystal', 'Earpiece','BZ'),
+    'VariableCapacitor':SymbolEntry('Device', 'C_Variable',      'VC',      'C'),
+    'FerriteAerial':    SymbolEntry('Device', 'L_Ferrite',       'Aerial',  'L'),
+    'Antenna':          SymbolEntry('Device', 'Antenna',         'Antenna', 'A'),
+    'Earth':            SymbolEntry('power',  'Earth',           'Earth',   'E'),
 
     # ---- discrete diodes ----
     'D1N4001':  SymbolEntry('Diode', '1N4001', '1N4001', 'D'),
     'D1N4007':  SymbolEntry('Diode', '1N4007', '1N4007', 'D'),
     'D1N4148':  SymbolEntry('Diode', '1N4148', '1N4148', 'D'),
     'D1N5817':  SymbolEntry('Diode', '1N5817', '1N5817', 'D'),
+    # No vendored germanium symbol — use the generic Diode glyph.
+    'D_OA90':   SymbolEntry('Device', 'D', 'OA90', 'D'),
     'D1N4728A': SymbolEntry('Device', 'D_Zener', '1N4728A', 'D'),
     'D1N4742A': SymbolEntry('Device', 'D_Zener', '1N4742A', 'D'),
 

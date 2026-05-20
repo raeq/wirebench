@@ -14,6 +14,13 @@ from components.passives.capacitor import Capacitor
 from components.passives.cell import Cell
 from components.passives.inductor import Inductor
 from components.passives.led import LED
+from components.passives.ferrite_aerial import FerriteAerial
+from components.passives.photoresistor import Photoresistor
+from components.passives.variable_capacitor import VariableCapacitor
+from components.transducers.antenna import Antenna
+from components.transducers.crystal_earpiece import CrystalEarpiece
+from components.transducers.earth import Earth
+from components.transducers.speaker import Speaker
 from components.passives.rail import Rail
 from components.passives.resistor import Resistor
 from components.relays.spdt import Relay_SPDT
@@ -40,6 +47,48 @@ def render_capacitor(c: Capacitor, ctx: ExporterContext) -> str:
 def render_inductor(l: Inductor, ctx: ExporterContext) -> str:
     label = f"{l.refdes}<br/>{float(l.henries):g}H"
     return f'{l.refdes}["{_mm_label(label)}"]'
+
+
+@register_renderer(Photoresistor, format='mermaid')
+def render_photoresistor(p: Photoresistor, ctx: ExporterContext) -> str:
+    label = f"{p.refdes}<br/>LDR"
+    return f'{p.refdes}["{_mm_label(label)}"]'
+
+
+@register_renderer(Speaker, format='mermaid')
+def render_speaker(s: Speaker, ctx: ExporterContext) -> str:
+    label = f"{s.refdes}<br/>{float(s.impedance_ohms):g}Ω spkr"
+    return f'{s.refdes}["{_mm_label(label)}"]'
+
+
+@register_renderer(CrystalEarpiece, format='mermaid')
+def render_crystal_earpiece(e: CrystalEarpiece, ctx: ExporterContext) -> str:
+    label = f"{e.refdes}<br/>crystal"
+    return f'{e.refdes}["{_mm_label(label)}"]'
+
+
+@register_renderer(VariableCapacitor, format='mermaid')
+def render_variable_capacitor(vc: VariableCapacitor, ctx: ExporterContext) -> str:
+    label = f"{vc.refdes}<br/>{float(vc.min_farads):g}–{float(vc.max_farads):g}F"
+    return f'{vc.refdes}["{_mm_label(label)}"]'
+
+
+@register_renderer(FerriteAerial, format='mermaid')
+def render_ferrite_aerial(fa: FerriteAerial, ctx: ExporterContext) -> str:
+    label = f"{fa.refdes}<br/>{float(fa.henries):g}H aerial"
+    return f'{fa.refdes}["{_mm_label(label)}"]'
+
+
+@register_renderer(Antenna, format='mermaid')
+def render_antenna(a: Antenna, ctx: ExporterContext) -> str:
+    label = f"{a.refdes}<br/>Antenna"
+    return f'{a.refdes}["{_mm_label(label)}"]'
+
+
+@register_renderer(Earth, format='mermaid')
+def render_earth(e: Earth, ctx: ExporterContext) -> str:
+    label = f"{e.refdes}<br/>Earth"
+    return f'{e.refdes}["{_mm_label(label)}"]'
 
 
 @register_renderer(Relay_SPDT, format='mermaid')

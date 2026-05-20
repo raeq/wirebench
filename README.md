@@ -58,7 +58,7 @@ Components are stored as `self.<name>` attributes so the framework can auto-coll
 | Domain Report    | `.domain-report.md`    | Every `GroundDomain`, parts in each, where isolation boundaries sit                            |
 | Interface Report | `.interface-report.md` | Every `Board`'s public connector pins and what they connect to                                 |
 
-Every demo in `demos/` ships with all twelve exports pre-generated in its `docs/` subfolder — open any `*.kicad_sch` in Eeschema or any `*.svg` to see the rendered schematic, or any `*.md` to read the bench-assembly guide and the three review reports.
+Every demo in `demos/` ships with all twelve exports pre-generated in its `docs/` subfolder — open any `*.kicad_sch` in Eeschema or any `*.svg` to see the rendered schematic, or any `*.md` to read the bench-assembly guide and the three review reports.  The catalogue currently ships **eighteen demos** spanning hello-world LED circuits, vintage-1980s hobbyist designs (the Penfold corpus), and modern microcontroller / power / isolation patterns.
 
 ## What it prevents
 
@@ -145,7 +145,7 @@ Full coverage of the framework, components, every export format with byte-determ
 - [`demos/`](demos/) — every demo is a complete study artifact (source + all six exports + rendered schematic).
 - [`docs/learning-path.md`](docs/learning-path.md) — suggested order for working through the demos.
 - [`docs/design-principles.md`](docs/design-principles.md) — why the framework prevents what it prevents.
-- [`docs/component-library-data.md`](docs/component-library-data.md) — hand-curated catalogue with datasheet links, pin maps, and footprints; [`docs/parts.md`](docs/parts.md) — auto-generated index of all 142 modelled components, searchable on the doc site.
+- [`docs/component-library-data.md`](docs/component-library-data.md) — hand-curated catalogue with datasheet links, pin maps, and footprints; [`docs/parts.md`](docs/parts.md) — auto-generated index of all 150 modelled components, searchable on the doc site.
 - [`docs/`](docs/) — implementation specs for every major work package.
 - [`CLAUDE.md`](CLAUDE.md) — design philosophy in full, for contributors.
 
