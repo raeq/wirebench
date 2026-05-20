@@ -10,7 +10,7 @@ import inspect
 from framework.ground import ELECTRICAL
 from framework.port import Direction, Port
 from framework.signals import Digital
-from framework.wire import wire
+from framework.wire import _wire_with_attribution, wire
 
 
 def _make_pair() -> tuple[Port, Port]:
@@ -56,13 +56,30 @@ def test_multiple_wire_calls_accumulate_on_same_node() -> None:
     assert lines == [first_line, second_line]
 
 
-def test_explicit_source_location_overrides_capture() -> None:
-    """The loader passes `source_location` explicitly to attribute a
-    reconstructed wire to the user's original code rather than to the
-    loader itself."""
+def test_explicit_source_location_via_internal_helper() -> None:
+    """The `.wirebench` loader uses `_wire_with_attribution` directly
+    to attribute a reconstructed wire to the user's original source
+    line rather than to the loader's own frame."""
     out, inp = _make_pair()
-    wire(out, inp, source_location=('hello_led.py', 14))
+    _wire_with_attribution(
+        [out, inp],
+        dynamically_driven=False,
+        source_location=('hello_led.py', 14),
+    )
     assert out.node.source_locations == (('hello_led.py', 14),)
+
+
+def test_internal_helper_with_none_leaves_node_unattributed() -> None:
+    """Passing `source_location=None` to the internal helper means *no
+    attribution*: the resulting node carries no source location, even
+    though we're inside a frame the auto-capture would otherwise grab."""
+    out, inp = _make_pair()
+    _wire_with_attribution(
+        [out, inp],
+        dynamically_driven=False,
+        source_location=None,
+    )
+    assert out.node.source_locations == ()
 
 
 def test_source_locations_is_immutable_tuple() -> None:

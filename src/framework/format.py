@@ -23,7 +23,7 @@ from framework.port import Port
 from framework.refdes import RefdesBearing
 from framework.errors import LoadError, SaveError
 from framework.registry import lookup
-from framework.wire import wire
+from framework.wire import _wire_with_attribution
 from framework.format_extension import deserialize_kwargs, serialize_kwargs
 from framework.format_records import (
     AssemblyRecord, BoardRecord, CircuitRecord, CircuitryFile,
@@ -521,8 +521,12 @@ def _from_circuit_record(record: CircuitRecord) -> Circuit:
     components, by_id = _rebuild_circuit_components(record.components)
     for w in record.wires:
         ports = [_resolve_port(r, by_id) for r in w.ports]
-        wire(
-            *ports,
+        # Use the internal helper so a `None` `source_location` from
+        # legacy files stays unattributed — calling the public `wire()`
+        # would auto-capture the loader's frame and fabricate
+        # attribution to framework internals.
+        _wire_with_attribution(
+            ports,
             dynamically_driven=w.dynamically_driven,
             source_location=w.source_location,
         )
@@ -537,8 +541,12 @@ def _from_board_record(record: BoardRecord) -> Board:
     components, by_id = _rebuild_circuit_components(record.components)
     for w in record.wires:
         ports = [_resolve_port(r, by_id) for r in w.ports]
-        wire(
-            *ports,
+        # Use the internal helper so a `None` `source_location` from
+        # legacy files stays unattributed — calling the public `wire()`
+        # would auto-capture the loader's frame and fabricate
+        # attribution to framework internals.
+        _wire_with_attribution(
+            ports,
             dynamically_driven=w.dynamically_driven,
             source_location=w.source_location,
         )

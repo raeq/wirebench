@@ -1,5 +1,6 @@
 import sys
 import warnings
+from collections.abc import Sequence
 from types import FrameType
 
 from pydantic import validate_call
@@ -21,7 +22,7 @@ def _capture_user_call_site() -> tuple[str, int] | None:
     'pydantic' appearing in the filename — robust across pydantic
     versions, where the number of wrapper frames varies.
     """
-    frame: 'FrameType | None' = sys._getframe(1)  # skip wire() itself
+    frame: FrameType | None = sys._getframe(1)  # skip wire() itself
     while frame is not None:
         filename = frame.f_code.co_filename
         if 'pydantic' not in filename and filename != __file__:
@@ -31,11 +32,7 @@ def _capture_user_call_site() -> tuple[str, int] | None:
 
 
 @validate_call(config={"arbitrary_types_allowed": True})
-def wire(
-    *ports: Port,
-    dynamically_driven: bool = False,
-    source_location: tuple[str, int] | None = None,
-) -> None:
+def wire(*ports: Port, dynamically_driven: bool = False) -> None:
     """Connect ports together, creating the junction node at their meeting point.
 
     Enforces:
@@ -51,14 +48,37 @@ def wire(
     Promotion is one-way: once a node is annotated, subsequent wire()
     calls that omit the kwarg do not clear it.
 
-    `source_location` is the `(filename, lineno)` to attribute this
-    `wire()` call to.  Captured automatically from the caller's frame
-    when omitted; the `.wirebench` loader overrides with the
-    serialised location so reconstructed nodes carry the original
-    user-source attribution.
+    The caller's `(filename, lineno)` is captured automatically and
+    recorded on the resulting `Node`, then surfaced in framework error
+    messages as a `Wired at:` line.  The `.wirebench` loader uses
+    `_wire_with_attribution` directly so legacy files without a
+    captured source stay unattributed across save → load → save.
     """
-    if source_location is None:
-        source_location = _capture_user_call_site()
+    _wire_with_attribution(
+        list(ports),
+        dynamically_driven=dynamically_driven,
+        source_location=_capture_user_call_site(),
+    )
+
+
+def _wire_with_attribution(
+    ports: Sequence[Port],
+    *,
+    dynamically_driven: bool,
+    source_location: tuple[str, int] | None,
+) -> None:
+    """Internal wire-implementation that takes source attribution
+    explicitly.  Pass `source_location=None` to mean *no attribution*:
+    the resulting Node carries no `source_locations` entry, so
+    diagnostics for that net stay free of a fabricated `Wired at:`
+    line and the round-tripped `.wirebench` keeps the field omitted.
+
+    Used by the `.wirebench` loader so reconstructed nodes carry the
+    original user-source attribution (when present in the file) or
+    stay unattributed (when the file pre-dates source-location
+    capture).  Not part of the public API — user code should call
+    `wire()` and let it auto-capture.
+    """
     call_locs: list[tuple[str, int]] = (
         [source_location] if source_location is not None else []
     )

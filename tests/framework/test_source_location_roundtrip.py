@@ -100,3 +100,75 @@ def test_source_location_appears_in_emitted_json_when_present(
         filename, lineno = loc
         assert filename.endswith('test_source_location_roundtrip.py')
         assert isinstance(lineno, int)
+
+
+# ----------------------------------------- legacy-file regression
+
+
+def _legacy_wirebench_json() -> str:
+    """A `.wirebench` payload predating source_location capture — every
+    wire record omits the field entirely.  Modelled on the bytes a
+    pre-Phase-2b.1 `save_wirebench` would have produced."""
+    return (
+        '{\n'
+        '  "format_version": "1.0.0",\n'
+        '  "name": null,\n'
+        '  "root": {\n'
+        '    "type": "Circuit",\n'
+        '    "components": [\n'
+        '      {"type": "Rail", "id": "Rail_0", "level": true,  "domain": null, "signal_type": "Analog"},\n'
+        '      {"type": "Rail", "id": "Rail_1", "level": false, "domain": null, "signal_type": "Analog"},\n'
+        '      {"type": "Resistor", "refdes": "R1", "ohms": 10000.0}\n'
+        '    ],\n'
+        '    "wires": [\n'
+        '      {"ports": ["R1.t1", "Rail_0.out"]},\n'
+        '      {"ports": ["R1.t2", "Rail_1.out"]}\n'
+        '    ],\n'
+        '    "surface_ports": {}\n'
+        '  }\n'
+        '}\n'
+    )
+
+
+def test_legacy_file_loads_without_fabricating_source_attribution(
+    tmp_path,
+) -> None:
+    """A `.wirebench` file written before Phase 2b.1 has no
+    `source_location` field on its wire records.  Loading must keep
+    each reconstructed node *unattributed* — fabricating loader-frame
+    attribution would mislead diagnostics and corrupt the file on
+    re-save."""
+    path = tmp_path / 'legacy.wirebench'
+    path.write_text(_legacy_wirebench_json())
+    loaded = load_wirebench(path)
+    assert isinstance(loaded, Circuit)
+    for part in loaded.parts:
+        for port in part.ports.values():
+            if port.node is None:
+                continue
+            assert port.node.source_locations == (), (
+                f"Loader fabricated source attribution for "
+                f"{type(part).__name__}.{port.name}: "
+                f"{port.node.source_locations}"
+            )
+
+
+def test_legacy_file_round_trips_without_injecting_source_location(
+    tmp_path,
+) -> None:
+    """Re-saving a legacy file must not inject `source_location` data
+    that wasn't there originally — the file's wire records stay
+    field-for-field equivalent after load → save."""
+    in_path  = tmp_path / 'legacy.wirebench'
+    out_path = tmp_path / 'roundtripped.wirebench'
+    in_path.write_text(_legacy_wirebench_json())
+
+    loaded = load_wirebench(in_path)
+    save_wirebench(loaded, out_path)
+
+    out_obj = json.loads(out_path.read_text())
+    for w in out_obj['root']['wires']:
+        assert 'source_location' not in w, (
+            f"Re-saved legacy file injected source_location into wire "
+            f"record: {w}"
+        )
