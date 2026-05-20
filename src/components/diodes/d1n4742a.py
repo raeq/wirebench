@@ -24,6 +24,11 @@ class D1N4742A(Diode):
     FOOTPRINT: ClassVar[str | None] = "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
+    # Silicon Zener — forward V_F is the standard silicon ~0.7 V; the
+    # device's *operating point* is the reverse-breakdown V_Z.
+    V_F: ClassVar[float] = 0.7
+    V_BREAKDOWN_R: ClassVar[float | None] = 12.0
+
     @validate_call(config={'arbitrary_types_allowed': True})
     def __init__(self, domain: GroundDomain = ELECTRICAL, *,
                  refdes_number: RefdesNumber) -> None:

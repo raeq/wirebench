@@ -43,12 +43,25 @@ class FerriteAerial(Part):
     __slots__ = ('_henries', '_ports', '_refdes_number')
 
     REFDES_PREFIX: ClassVar[str] = 'L'
-    FOOTPRINT: ClassVar[str | None] = "Inductor_THT:L_Radial_D10.0mm_P5.00mm_Vertical"
+    # Ferrite aerial is a 50–100 mm rod with a coil wound around it,
+    # mounted in a clip beside the breadboard; two flying leads connect
+    # the coil's terminals to LC-tank tie strips.  The breadboard-side
+    # connection is a 2-pin header pair; the aerial assembly itself is
+    # sourced from the BOM (Denco MW5FR class or equivalent) and lives
+    # off-board.  The previous Inductor_THT:L_Radial_* footprint
+    # mis-modelled it as a 10 mm standing inductor whose 3-hole pitch
+    # can't physically accommodate the 100 mm rod.
+    FOOTPRINT: ClassVar[str | None] = "Connector:Conn_01x02_Pin"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'t1': 1, 't2': 2}
 
     LAYOUT: ClassVar[dict[str, Any]] = {
-        'kind': 'axial_2lead',
-        'lead_spacing_holes': 3,
+        'kind': 'off_board_flying_lead',
+        'lead_spacing_holes': 2,
+        'description': (
+            'Ferrite-rod tuned aerial coil — off-board with two flying '
+            'leads to the LC-tank tie strips.  The rod itself sits in a '
+            'clip beside the breadboard.'
+        ),
     }
 
     SERIALIZE_KWARGS: ClassVar[tuple[str, ...]] = ('henries',)

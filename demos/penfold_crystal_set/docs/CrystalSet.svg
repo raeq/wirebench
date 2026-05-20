@@ -26,20 +26,20 @@
 <path fill="none" stroke="black" d="M107.11,-48.94C109.91,-48.21 112.67,-47.49 115.38,-46.8 180.03,-30.26 259.11,-12.31 280.07,-7.59"/>
 <text xml:space="preserve" text-anchor="middle" x="114.99" y="-51.64" font-family="monospace" font-size="9.00">out</text>
 </g>
-<!-- A2 -->
+<!-- E1 -->
 <g id="node2" class="node">
-<title>A2</title>
+<title>E1</title>
 <polygon fill="none" stroke="black" points="562.5,-82.8 472.25,-82.8 472.25,-46.8 562.5,-46.8 562.5,-82.8"/>
-<text xml:space="preserve" text-anchor="middle" x="517.38" y="-60.12" font-family="monospace" font-size="14.00">A2\nEarth</text>
+<text xml:space="preserve" text-anchor="middle" x="517.38" y="-60.12" font-family="monospace" font-size="14.00">E1\nEarth</text>
 </g>
 <!-- net_1 -->
 <g id="node9" class="node">
 <title>net_1</title>
 <ellipse fill="none" stroke="black" cx="517.38" cy="-5.4" rx="5.4" ry="5.4"/>
 </g>
-<!-- A2&#45;&gt;net_1 -->
-<g id="edge2" class="edge">
-<title>A2&#45;&gt;net_1</title>
+<!-- E1&#45;&gt;net_1 -->
+<g id="edge8" class="edge">
+<title>E1&#45;&gt;net_1</title>
 <path fill="none" stroke="black" d="M517.38,-46.58C517.38,-34.43 517.38,-18.99 517.38,-11.26"/>
 <text xml:space="preserve" text-anchor="middle" x="509.5" y="-38.03" font-family="monospace" font-size="9.00">out</text>
 </g>
@@ -50,13 +50,13 @@
 <text xml:space="preserve" text-anchor="middle" x="372.38" y="-60.12" font-family="monospace" font-size="14.00">L1\n0.0004H aerial</text>
 </g>
 <!-- L1&#45;&gt;net_1 -->
-<g id="edge8" class="edge">
+<g id="edge10" class="edge">
 <title>L1&#45;&gt;net_1</title>
 <path fill="none" stroke="black" d="M416.27,-46.42C451.62,-32.43 497.76,-14.17 512.57,-8.3"/>
 <text xml:space="preserve" text-anchor="middle" x="411.02" y="-37.87" font-family="monospace" font-size="9.00">t2</text>
 </g>
 <!-- L1&#45;&gt;net_2 -->
-<g id="edge7" class="edge">
+<g id="edge9" class="edge">
 <title>L1&#45;&gt;net_2</title>
 <path fill="none" stroke="black" d="M346.27,-46.58C326.05,-33.24 299.83,-15.93 289.66,-9.23"/>
 <text xml:space="preserve" text-anchor="middle" x="341.02" y="-38.03" font-family="monospace" font-size="9.00">t1</text>
@@ -68,13 +68,13 @@
 <text xml:space="preserve" text-anchor="middle" x="198.38" y="-60.12" font-family="monospace" font-size="14.00">C1\n1e&#45;11–3e&#45;10F</text>
 </g>
 <!-- C1&#45;&gt;net_1 -->
-<g id="edge4" class="edge">
+<g id="edge5" class="edge">
 <title>C1&#45;&gt;net_1</title>
 <path fill="none" stroke="black" d="M272.56,-48.48C275.54,-47.91 278.48,-47.34 281.38,-46.8 373.29,-29.52 485.94,-11.41 511.87,-7.27"/>
 <text xml:space="preserve" text-anchor="middle" x="277.81" y="-51.18" font-family="monospace" font-size="9.00">t2</text>
 </g>
 <!-- C1&#45;&gt;net_2 -->
-<g id="edge3" class="edge">
+<g id="edge4" class="edge">
 <title>C1&#45;&gt;net_2</title>
 <path fill="none" stroke="black" d="M224.48,-46.58C244.7,-33.24 270.92,-15.93 281.09,-9.23"/>
 <text xml:space="preserve" text-anchor="middle" x="219.23" y="-38.03" font-family="monospace" font-size="9.00">t1</text>
@@ -91,13 +91,13 @@
 <ellipse fill="none" stroke="black" cx="754.38" cy="-5.4" rx="5.4" ry="5.4"/>
 </g>
 <!-- D1&#45;&gt;net_0 -->
-<g id="edge6" class="edge">
+<g id="edge7" class="edge">
 <title>D1&#45;&gt;net_0</title>
 <path fill="none" stroke="black" d="M667.22,-46.42C697.11,-32.7 735.97,-14.85 749.48,-8.65"/>
 <text xml:space="preserve" text-anchor="middle" x="648.84" y="-37.87" font-family="monospace" font-size="9.00">cathode</text>
 </g>
 <!-- D1&#45;&gt;net_2 -->
-<g id="edge5" class="edge">
+<g id="edge6" class="edge">
 <title>D1&#45;&gt;net_2</title>
 <path fill="none" stroke="black" d="M579.82,-48.76C576.97,-48.06 574.14,-47.4 571.38,-46.8 459.62,-22.66 320.07,-9.47 290.88,-6.88"/>
 <text xml:space="preserve" text-anchor="middle" x="566.7" y="-40.21" font-family="monospace" font-size="9.00">anode</text>
@@ -120,21 +120,21 @@
 <path fill="none" stroke="black" d="M829.71,-48.61C826.9,-47.96 824.11,-47.35 821.38,-46.8 701.88,-22.59 552.91,-9.37 522.82,-6.85"/>
 <text xml:space="preserve" text-anchor="middle" x="824.46" y="-51.31" font-family="monospace" font-size="9.00">t2</text>
 </g>
-<!-- LS1 -->
+<!-- BZ1 -->
 <g id="node7" class="node">
-<title>LS1</title>
+<title>BZ1</title>
 <polygon fill="none" stroke="black" points="811.88,-82.8 696.88,-82.8 696.88,-46.8 811.88,-46.8 811.88,-82.8"/>
-<text xml:space="preserve" text-anchor="middle" x="754.38" y="-60.12" font-family="monospace" font-size="14.00">LS1\ncrystal</text>
+<text xml:space="preserve" text-anchor="middle" x="754.38" y="-60.12" font-family="monospace" font-size="14.00">BZ1\ncrystal</text>
 </g>
-<!-- LS1&#45;&gt;net_0 -->
-<g id="edge9" class="edge">
-<title>LS1&#45;&gt;net_0</title>
+<!-- BZ1&#45;&gt;net_0 -->
+<g id="edge2" class="edge">
+<title>BZ1&#45;&gt;net_0</title>
 <path fill="none" stroke="black" d="M754.38,-46.58C754.38,-34.43 754.38,-18.99 754.38,-11.26"/>
 <text xml:space="preserve" text-anchor="middle" x="749.12" y="-38.03" font-family="monospace" font-size="9.00">t1</text>
 </g>
-<!-- LS1&#45;&gt;net_1 -->
-<g id="edge10" class="edge">
-<title>LS1&#45;&gt;net_1</title>
+<!-- BZ1&#45;&gt;net_1 -->
+<g id="edge3" class="edge">
+<title>BZ1&#45;&gt;net_1</title>
 <path fill="none" stroke="black" d="M696.65,-49.09C693.51,-48.31 690.41,-47.54 687.38,-46.8 622.56,-30.88 543.6,-12.49 522.67,-7.63"/>
 <text xml:space="preserve" text-anchor="middle" x="691.4" y="-51.79" font-family="monospace" font-size="9.00">t2</text>
 </g>

@@ -38,7 +38,7 @@ one-line description from the class docstring.
 | `U` | `components.chips.cd4069.CD4069` | chip | Texas Instruments CD4069UB — hex unbuffered inverter. | `Package_DIP:DIP-14_W7.62mm` | — |
 | `C` | `components.passives.capacitor.Capacitor` | passive | Ideal capacitor.  Charge accumulates: Q = C × V, I = C × dV/dt. | `Capacitor_SMD:C_0603_1608Metric` | — |
 | `BT` | `components.passives.cell.Cell` | passive | Single-cell Li-Ion battery, modelled as a voltage source. | `Battery:BatteryHolder_Keystone_1042_1x18650` | — |
-| `LS` | `components.transducers.crystal_earpiece.CrystalEarpiece` | transducer | High-impedance piezo-crystal earpiece — the iconic transducer of the 1920s–1970s crystal radio set. | `Buzzer_Beeper:Buzzer_12x9.5RM7.6` | — |
+| `BZ` | `components.transducers.crystal_earpiece.CrystalEarpiece` | transducer | High-impedance piezo-crystal earpiece — the iconic transducer of the 1920s–1970s crystal radio set. | `Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical` | — |
 | `D` | `components.diodes.d1n4001.D1N4001` | diode | 1N4001 — 50 V / 1 A general-purpose silicon rectifier (DO-41). | `Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal` | — |
 | `D` | `components.diodes.d1n4007.D1N4007` | diode | 1N4007 — 1000 V / 1 A general-purpose silicon rectifier (DO-41). | `Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal` | — |
 | `D` | `components.diodes.d1n4148.D1N4148` | diode | 1N4148 — fast signal switching diode (100 V / 200 mA, DO-35). | `Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal` | — |
@@ -55,8 +55,8 @@ one-line description from the class docstring.
 | `U` | `components.chips.display5641as.Display5641AS` | chip | 5641AS — 4-digit common-anode 7-segment LED display module (0.56" digits, 12-pin DIP-like single-row package). | `Display_7Segment:Display_5641AS` | — |
 | `U` | `components.chips.esp32_wroom_32.ESP32_WROOM_32` | chip | Espressif ESP32-WROOM-32 — Wi-Fi + Bluetooth SMD module with ESP32-D0WDQ6, 4 MB flash (38-pad). | `RF_Module:ESP32-WROOM-32` | — |
 | `U` | `components.chips.esp8266_12f.ESP8266_12F` | chip | Ai-Thinker ESP-12F — Wi-Fi SMD module with ESP8266EX, 4 MB flash (22-pad). | `RF_Module:ESP-12E` | — |
-| `A` | `components.transducers.earth.Earth` | transducer | Earth-ground connection — the literal soil, the cold-water pipe, or the mains-protective-earth terminal. | — | — |
-| `L` | `components.passives.ferrite_aerial.FerriteAerial` | passive | Ferrite-rod tuned aerial coil — the antenna *and* the inductor in one part. | `Inductor_THT:L_Radial_D10.0mm_P5.00mm_Vertical` | — |
+| `E` | `components.transducers.earth.Earth` | transducer | Earth-ground connection — the literal soil, the cold-water pipe, or the mains-protective-earth terminal. | — | — |
+| `L` | `components.passives.ferrite_aerial.FerriteAerial` | passive | Ferrite-rod tuned aerial coil — the antenna *and* the inductor in one part. | `Connector:Conn_01x02_Pin` | — |
 | `U` | `components.chips.hcsr04.HCSR04` | chip | HC-SR04 — ultrasonic ranging breakout module (4-pin SIP, 2.54 mm). | `Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical` | — |
 | `P` | `components.connectors.video.HDMITypeAPlug` | connector | HDMI Type-A plug (cable-side). | `Connector_Video:HDMI_A_Amphenol_10029449-001RLF_Horizontal` | — |
 | `J` | `components.connectors.video.HDMITypeAReceptacle` | connector | HDMI Type-A receptacle (board-side). | `Connector_Video:HDMI_A_Amphenol_10029449-001RLF_Horizontal` | — |
@@ -159,7 +159,7 @@ one-line description from the class docstring.
 | `J` | `components.connectors.usb.USBCReceptacle` | connector | USB Type-C receptacle (full 24-pin). | `Connector_USB:USB_C_Receptacle_GCT_USB4105-GF-A_16P_TopMnt_Horizontal` | — |
 | `P` | `components.connectors.usb.USBMicroBPlug` | connector | USB Micro-B plug. | `Connector_USB:USB_Micro-B_GCT_USB3076-30-A_Horizontal` | — |
 | `J` | `components.connectors.usb.USBMicroBReceptacle` | connector | USB Micro-B receptacle. | `Connector_USB:USB_Micro-B_GCT_USB3076-30-A_Horizontal` | — |
-| `C` | `components.passives.variable_capacitor.VariableCapacitor` | passive | Tuning capacitor — a mechanical variable capacitor. | `Capacitor_THT:CP_Radial_D10.0mm_P5.00mm` | — |
+| `C` | `components.passives.variable_capacitor.VariableCapacitor` | passive | Tuning capacitor — a mechanical variable capacitor. | `Connector:Conn_01x02_Pin` | — |
 
 ## Filtering at the command line
 

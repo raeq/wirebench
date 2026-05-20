@@ -1,6 +1,6 @@
 Refdes,Value,Footprint,Quantity,Parent,Description
-C1,VC 1e-11–3e-10F,Capacitor_THT:CP_Radial_D10.0mm_P5.00mm,1,,Variable capacitor (tuning)
+BZ1,crystal earpiece 32000Ω,Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical,1,,Crystal earpiece (piezo high-Z)
+C1,VC 1e-11–3e-10F,Connector:Conn_01x02_Pin,1,,Variable capacitor (tuning)
 D1,D_OA90,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,1,,D_OA90
-L1,0.0004H ferrite aerial,Inductor_THT:L_Radial_D10.0mm_P5.00mm_Vertical,1,,Ferrite-rod tuned aerial coil
-LS1,crystal earpiece 32000Ω,Buzzer_Beeper:Buzzer_12x9.5RM7.6,1,,Crystal earpiece (piezo high-Z)
+L1,0.0004H ferrite aerial,Connector:Conn_01x02_Pin,1,,Ferrite-rod tuned aerial coil
 R1,100000Ω,Resistor_SMD:R_0603_1608Metric,1,,Resistor

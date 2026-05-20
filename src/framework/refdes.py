@@ -37,10 +37,12 @@ IEEE_315_PREFIXES: frozenset[str] = frozenset({
     'AT',  # attenuator
     'B',   # motor
     'BT',  # battery / cell
+    'BZ',  # buzzer / piezo earpiece (distinct from LS speaker family)
     'C',   # capacitor
     'CB',  # circuit breaker
     'D',   # diode (incl. LED, photodiode)
     'DS',  # display / indicator lamp
+    'E',   # earth-ground terminal (distinct from A antenna)
     'F',   # fuse
     'FL',  # filter
     'G',   # generator / power supply

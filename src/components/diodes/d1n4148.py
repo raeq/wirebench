@@ -24,6 +24,11 @@ class D1N4148(Diode):
     FOOTPRINT: ClassVar[str | None] = "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
+    # Typical forward voltage drop at 10 mA, room temperature.  Silicon
+    # signal diode — the canonical ~0.7 V figure.
+    V_F: ClassVar[float] = 0.7
+    V_BREAKDOWN_R: ClassVar[float | None] = None
+
     VERIFY: ClassVar[tuple[str, ...]] = (
         "**Use the multimeter's diode-test mode on a silicon diode "
         "like the 1N4148.** Red probe on the anode (unmarked end), "

@@ -16,18 +16,22 @@
           },
           "type": "Antenna"
         },
-        "A2": {
+        "BZ1": {
           "connections": {
-            "out": [
+            "t1": [
+              2
+            ],
+            "t2": [
               3
             ]
           },
           "hide_name": 0,
           "parameters": {},
           "port_directions": {
-            "out": "output"
+            "t1": "inout",
+            "t2": "inout"
           },
-          "type": "Earth"
+          "type": "CrystalEarpiece"
         },
         "C1": {
           "connections": {
@@ -63,6 +67,19 @@
           },
           "type": "D_OA90"
         },
+        "E1": {
+          "connections": {
+            "out": [
+              3
+            ]
+          },
+          "hide_name": 0,
+          "parameters": {},
+          "port_directions": {
+            "out": "output"
+          },
+          "type": "Earth"
+        },
         "L1": {
           "connections": {
             "t1": [
@@ -79,23 +96,6 @@
             "t2": "inout"
           },
           "type": "FerriteAerial"
-        },
-        "LS1": {
-          "connections": {
-            "t1": [
-              2
-            ],
-            "t2": [
-              3
-            ]
-          },
-          "hide_name": 0,
-          "parameters": {},
-          "port_directions": {
-            "t1": "inout",
-            "t2": "inout"
-          },
-          "type": "CrystalEarpiece"
         },
         "R1": {
           "connections": {

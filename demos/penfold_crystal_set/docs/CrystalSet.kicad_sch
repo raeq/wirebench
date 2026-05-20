@@ -1470,38 +1470,38 @@
   )
   (symbol
     (lib_id "power:Earth")
-    (at 101.6 25.4 0)
+    (at 101.6 63.5 0)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
     (on_board yes)
     (dnp no)
-    (uuid "7de44b5b-fb35-71e9-95b6-8ba1c264ff8d")
-    (property "Reference" "A2"
-      (at 104.14 22.86 0)
+    (uuid "9aab6a55-786b-91b9-005b-cffdcf792dd2")
+    (property "Reference" "E1"
+      (at 104.14 60.96 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Earth"
-      (at 101.6 27.94 0)
+      (at 101.6 66.04 0)
       (effects (font (size 1.27 1.27)))
     )
-    (pin "1" (uuid "d9ca592f-1396-f11b-bc7a-25f87beaf4ed"))
+    (pin "1" (uuid "c10dd602-9d99-e469-2fd4-4e733cb81162"))
   )
   (wire
-    (pts (xy 101.6 25.4) (xy 101.6 27.94))
+    (pts (xy 101.6 63.5) (xy 101.6 66.04))
     (stroke (width 0) (type default))
-    (uuid "00d21aa7-f513-d47b-6b1a-c2c3ffd37fc6")
+    (uuid "8de8e7cb-ec6e-5373-952e-d7e29f60e5f5")
   )
-  (global_label "Net-(A2-out)"
+  (global_label "Net-(BZ1-t2)"
     (shape input)
-    (at 101.6 27.94 0)
+    (at 101.6 66.04 0)
     (fields_autoplaced yes)
     (effects (font (size 1.27 1.27)) (justify right))
     (property "Intersheet References" "${INTERSHEET_REFS}"
       (at 0 0 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
-    (uuid "ae50061c-b322-09a6-e20a-810915b4feff")
+    (uuid "12aea2ee-07ee-a442-2de3-864658d2374d")
   )
   (symbol
     (lib_id "Device:L_Ferrite")
@@ -1544,7 +1544,7 @@
     (stroke (width 0) (type default))
     (uuid "ecd04788-955b-ef97-13f9-0e190c4ca674")
   )
-  (global_label "Net-(A2-out)"
+  (global_label "Net-(BZ1-t2)"
     (shape input)
     (at 63.5 95.25 0)
     (fields_autoplaced yes)
@@ -1596,7 +1596,7 @@
     (stroke (width 0) (type default))
     (uuid "a9420e75-c105-1f74-e7af-6302e6ffde74")
   )
-  (global_label "Net-(A2-out)"
+  (global_label "Net-(BZ1-t2)"
     (shape input)
     (at 63.5 19.05 0)
     (fields_autoplaced yes)
@@ -1648,7 +1648,7 @@
     (stroke (width 0) (type default))
     (uuid "84c1360b-3613-6e17-daa2-ff2af2a6bd3c")
   )
-  (global_label "Net-(D1-cathode)"
+  (global_label "Net-(BZ1-t1)"
     (shape input)
     (at 69.85 63.5 0)
     (fields_autoplaced yes)
@@ -1684,7 +1684,7 @@
     (stroke (width 0) (type default))
     (uuid "b2a67e50-9801-fd5e-e608-98e95e5d428f")
   )
-  (global_label "Net-(D1-cathode)"
+  (global_label "Net-(BZ1-t1)"
     (shape input)
     (at 101.6 107.95 0)
     (fields_autoplaced yes)
@@ -1700,7 +1700,7 @@
     (stroke (width 0) (type default))
     (uuid "4242b99f-209f-dd36-86ea-11b2cd233569")
   )
-  (global_label "Net-(A2-out)"
+  (global_label "Net-(BZ1-t2)"
     (shape input)
     (at 101.6 95.25 0)
     (fields_autoplaced yes)
@@ -1713,55 +1713,55 @@
   )
   (symbol
     (lib_id "Device:Speaker_Crystal")
-    (at 101.6 63.5 0)
+    (at 101.6 25.4 0)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
     (on_board yes)
     (dnp no)
-    (uuid "0149d833-99af-2f86-6bf8-2913ee3c9263")
-    (property "Reference" "LS1"
-      (at 104.14 60.96 0)
+    (uuid "92872fec-e4fb-f18c-1f54-9fc6ada61cdb")
+    (property "Reference" "BZ1"
+      (at 104.14 22.86 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Earpiece"
-      (at 101.6 66.04 0)
+      (at 101.6 27.94 0)
       (effects (font (size 1.27 1.27)))
     )
-    (pin "1" (uuid "87d20919-0de8-2a04-6672-94530d6a45f8"))
-    (pin "2" (uuid "61493a0b-56e7-e9d9-0d85-c70eb3ebec4a"))
+    (pin "1" (uuid "c29cc99a-9faf-9500-3c72-568674d9ebba"))
+    (pin "2" (uuid "0a389e20-71f3-c168-5c23-23136c7dd8fd"))
   )
   (wire
-    (pts (xy 96.52 63.5) (xy 93.98 63.5))
+    (pts (xy 96.52 25.4) (xy 93.98 25.4))
     (stroke (width 0) (type default))
-    (uuid "f8ae396f-dc0b-6e8d-f189-f761818f8a88")
+    (uuid "9a99e96f-a20e-40d8-d2c0-05a33b4bb8f7")
   )
-  (global_label "Net-(D1-cathode)"
+  (global_label "Net-(BZ1-t1)"
     (shape input)
-    (at 93.98 63.5 0)
+    (at 93.98 25.4 0)
     (fields_autoplaced yes)
     (effects (font (size 1.27 1.27)) (justify right))
     (property "Intersheet References" "${INTERSHEET_REFS}"
       (at 0 0 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
-    (uuid "64d7f13c-a8f7-cb33-0243-60bf4070c7e8")
+    (uuid "0651d557-3ff2-2fbc-a180-af22c992c02e")
   )
   (wire
-    (pts (xy 96.52 60.96) (xy 93.98 60.96))
+    (pts (xy 96.52 22.86) (xy 93.98 22.86))
     (stroke (width 0) (type default))
-    (uuid "857daedc-24f5-73db-dee3-0f2dfeff39b4")
+    (uuid "155db232-a62f-66c2-b02f-3ed7b6e38f3f")
   )
-  (global_label "Net-(A2-out)"
+  (global_label "Net-(BZ1-t2)"
     (shape input)
-    (at 93.98 60.96 0)
+    (at 93.98 22.86 0)
     (fields_autoplaced yes)
     (effects (font (size 1.27 1.27)) (justify right))
     (property "Intersheet References" "${INTERSHEET_REFS}"
       (at 0 0 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
-    (uuid "db54f026-09c4-a69b-ecb7-4a8bdd1125dc")
+    (uuid "aaeb5cca-0f14-026d-d615-d3209200bede")
   )
   (wire
     (pts (xy 25.4 17.78) (xy 57.15 17.78))
@@ -1789,49 +1789,54 @@
     (uuid "117ab817-c96a-c02a-3c79-71b092180ceb")
   )
   (wire
+    (pts (xy 69.85 63.5) (xy 93.98 63.5))
+    (stroke (width 0) (type default))
+    (uuid "8f01b9bf-1a8d-8ef8-f37a-9c90da176611")
+  )
+  (wire
+    (pts (xy 93.98 63.5) (xy 93.98 25.4))
+    (stroke (width 0) (type default))
+    (uuid "f1e9bb12-20df-9333-d48b-c94d749793a1")
+  )
+  (wire
+    (pts (xy 93.98 25.4) (xy 101.6 25.4))
+    (stroke (width 0) (type default))
+    (uuid "304b9399-b213-844a-3d1d-0f87776c9ae2")
+  )
+  (wire
+    (pts (xy 101.6 25.4) (xy 101.6 107.95))
+    (stroke (width 0) (type default))
+    (uuid "6f3f3856-0143-bb90-8c8e-0701c6c5f5ce")
+  )
+  (wire
     (pts (xy 63.5 19.05) (xy 63.5 95.25))
     (stroke (width 0) (type default))
-    (uuid "3dfd263f-ecb8-3e95-17bb-6cad19ce9c30")
+    (uuid "9b65b38a-8a34-fe09-7505-534a458d72f7")
   )
   (wire
     (pts (xy 63.5 95.25) (xy 93.98 95.25))
     (stroke (width 0) (type default))
-    (uuid "669959b2-0f98-fda9-1d74-8fe4c376aefb")
+    (uuid "b43b042d-b2d2-80cb-7db3-a95af148ce92")
   )
   (wire
-    (pts (xy 93.98 95.25) (xy 93.98 60.96))
+    (pts (xy 93.98 95.25) (xy 93.98 22.86))
     (stroke (width 0) (type default))
-    (uuid "88892a50-6f37-7350-751b-1ef1994c9d55")
+    (uuid "72bb1340-dd64-5e5b-791e-9a264dcc697c")
   )
   (wire
-    (pts (xy 93.98 60.96) (xy 101.6 60.96))
+    (pts (xy 93.98 22.86) (xy 101.6 22.86))
     (stroke (width 0) (type default))
-    (uuid "65547250-951d-10a4-86bb-2ba8e4a796ce")
+    (uuid "2574da1c-457c-4bd9-a40a-ee4902f8a39d")
   )
   (wire
-    (pts (xy 101.6 60.96) (xy 101.6 27.94))
+    (pts (xy 101.6 22.86) (xy 101.6 66.04))
     (stroke (width 0) (type default))
-    (uuid "40759735-c436-7476-941b-7567ebf1043b")
+    (uuid "ff13610a-45f0-f342-d043-ae36f6dd713b")
   )
   (wire
-    (pts (xy 101.6 27.94) (xy 101.6 95.25))
+    (pts (xy 101.6 66.04) (xy 101.6 95.25))
     (stroke (width 0) (type default))
-    (uuid "a257af90-b804-9a7d-f7e2-c17f0373ea47")
-  )
-  (wire
-    (pts (xy 69.85 63.5) (xy 93.98 63.5))
-    (stroke (width 0) (type default))
-    (uuid "db8580b7-7694-013f-e937-400c23476685")
-  )
-  (wire
-    (pts (xy 93.98 63.5) (xy 101.6 63.5))
-    (stroke (width 0) (type default))
-    (uuid "39d4b060-dbe0-ec9a-b8f1-2012c7c879f1")
-  )
-  (wire
-    (pts (xy 101.6 63.5) (xy 101.6 107.95))
-    (stroke (width 0) (type default))
-    (uuid "4739cac3-3c1b-43aa-ad5e-9173dcfa33a1")
+    (uuid "f1420714-806a-9a4f-d286-c13278a0d89b")
   )
   (sheet_instances
     (path "/" (page "1"))

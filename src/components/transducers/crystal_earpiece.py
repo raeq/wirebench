@@ -34,13 +34,27 @@ class CrystalEarpiece(Part):
 
     __slots__ = ('_impedance_ohms', '_ports', '_refdes_number')
 
-    REFDES_PREFIX: ClassVar[str] = 'LS'
-    FOOTPRINT: ClassVar[str | None] = "Buzzer_Beeper:Buzzer_12x9.5RM7.6"
+    # `'BZ'` (the *buzzer* prefix family) keeps the crystal earpiece's
+    # refdes distinct from `Speaker.REFDES_PREFIX = 'LS'`.  Two parts at
+    # the same refdes prefix risk collisions in any future Circuit that
+    # composes a Speaker and a CrystalEarpiece together.
+    REFDES_PREFIX: ClassVar[str] = 'BZ'
+    # Crystal earpiece on Penfold's BP107 P27 is a peripheral on a
+    # 3.5 mm jack lead (`SK1` in the original); the breadboard-side
+    # connection is the jack socket, not a soldered buzzer.  The
+    # previous Buzzer_Beeper:Buzzer_12x9.5RM7.6 footprint mis-modelled
+    # it as a fixed two-pin piezo buzzer.
+    FOOTPRINT: ClassVar[str | None] = "Connector_Audio:Jack_3.5mm_QingPu_WQP-PJ398SM_Vertical"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'t1': 1, 't2': 2}
 
     LAYOUT: ClassVar[dict[str, Any]] = {
-        'kind': 'radial_2lead',
+        'kind': 'off_board_flying_lead',
         'lead_spacing_holes': 2,
+        'description': (
+            'Crystal earpiece on a 3.5 mm jack lead — connects to the '
+            'breadboard via a panel-mount jack socket; the earpiece '
+            'itself plugs into the jack and is off-board.'
+        ),
     }
 
     SERIALIZE_KWARGS: ClassVar[tuple[str, ...]] = ('impedance_ohms',)

@@ -41,6 +41,11 @@ class D1N5817(Diode):
     FOOTPRINT: ClassVar[str | None] = "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
+    # Schottky barrier — low forward voltage drop is the device's whole
+    # selling point.  Typical 0.32 V at 1 A, room temperature.
+    V_F: ClassVar[float] = 0.32
+    V_BREAKDOWN_R: ClassVar[float | None] = None
+
     VERIFY: ClassVar[tuple[str, ...]] = (
         "**A Schottky reads a lower forward voltage than a silicon "
         "diode on the multimeter's diode test.** Red probe on the "

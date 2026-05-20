@@ -6,7 +6,7 @@ from framework.units import Ohms
 
 def test_construction_with_refdes():
     e = CrystalEarpiece(refdes_number=1)
-    assert e.refdes == 'LS1'
+    assert e.refdes == 'BZ1'
 
 
 def test_default_impedance_is_32k():
@@ -17,7 +17,10 @@ def test_default_impedance_is_32k():
 
 
 def test_refdes_prefix():
-    assert CrystalEarpiece.REFDES_PREFIX == 'LS'
+    """`'BZ'` (buzzer / piezo earpiece family) — distinct from
+    `Speaker.REFDES_PREFIX = 'LS'` so the two parts can co-exist in
+    one Circuit without colliding on the refdes number-space."""
+    assert CrystalEarpiece.REFDES_PREFIX == 'BZ'
 
 
 def test_terminals_are_bidir_analog():

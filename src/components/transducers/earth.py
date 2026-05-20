@@ -35,7 +35,12 @@ class Earth(Part):
 
     __slots__ = ('_ports', '_refdes_number')
 
-    REFDES_PREFIX: ClassVar[str] = 'A'
+    # `'E'` matches the conventional schematic label for an *Earth*
+    # terminal in vintage British schematics (which is what Penfold's
+    # BP107 uses throughout).  Distinct from `Antenna.REFDES_PREFIX = 'A'`
+    # so two parts can co-exist in one Circuit without colliding on a
+    # shared number-space.
+    REFDES_PREFIX: ClassVar[str] = 'E'
     FOOTPRINT: ClassVar[str | None] = None
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'out': 1}
 

@@ -24,6 +24,11 @@ class D1N4001(Diode):
     FOOTPRINT: ClassVar[str | None] = "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
+    # Typical forward voltage drop at low forward current; rises to
+    # ~1.1 V at the rated 1 A.  Silicon rectifier.
+    V_F: ClassVar[float] = 0.7
+    V_BREAKDOWN_R: ClassVar[float | None] = None
+
     VERIFY: ClassVar[tuple[str, ...]] = (
         "**Use the multimeter's diode-test mode.** Red probe on the "
         "anode (unmarked end), black probe on the cathode (banded "

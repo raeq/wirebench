@@ -41,12 +41,22 @@ class VariableCapacitor(Part):
     __slots__ = ('_min_farads', '_max_farads', '_ports', '_refdes_number')
 
     REFDES_PREFIX: ClassVar[str] = 'C'
-    FOOTPRINT: ClassVar[str | None] = "Capacitor_THT:CP_Radial_D10.0mm_P5.00mm"
+    # Variable tuning capacitor is panel-mounted with flying leads to two
+    # breadboard tie strips — model the breadboard side as a 2-pin
+    # header.  The actual variable cap is documented in the BOM with the
+    # part number (Jackson Dielecon class) and lives off-board; the
+    # previous Capacitor_THT:CP_Radial_* footprint mis-modelled it as a
+    # polarised electrolytic on a 10 mm radial pad.
+    FOOTPRINT: ClassVar[str | None] = "Connector:Conn_01x02_Pin"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'t1': 1, 't2': 2}
 
     LAYOUT: ClassVar[dict[str, Any]] = {
-        'kind': 'radial_2lead',
+        'kind': 'off_board_flying_lead',
         'lead_spacing_holes': 2,
+        'description': (
+            'Panel-mounted variable tuning capacitor; two flying leads '
+            'connect rotor and stator to breadboard tie strips.'
+        ),
     }
 
     SERIALIZE_KWARGS: ClassVar[tuple[str, ...]] = ('min_farads', 'max_farads')

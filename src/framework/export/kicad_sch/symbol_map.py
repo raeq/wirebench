@@ -33,11 +33,11 @@ _BY_CLASS: dict[str, SymbolEntry] = {
     'Cell':         SymbolEntry('Device', 'Battery_Cell', '',     'B'),
     'Photoresistor':    SymbolEntry('Device', 'R_Photo',         'LDR',     'R'),
     'Speaker':          SymbolEntry('Device', 'Speaker',         'Speaker', 'LS'),
-    'CrystalEarpiece':  SymbolEntry('Device', 'Speaker_Crystal', 'Earpiece','LS'),
+    'CrystalEarpiece':  SymbolEntry('Device', 'Speaker_Crystal', 'Earpiece','BZ'),
     'VariableCapacitor':SymbolEntry('Device', 'C_Variable',      'VC',      'C'),
     'FerriteAerial':    SymbolEntry('Device', 'L_Ferrite',       'Aerial',  'L'),
     'Antenna':          SymbolEntry('Device', 'Antenna',         'Antenna', 'A'),
-    'Earth':            SymbolEntry('power',  'Earth',           'Earth',   'A'),
+    'Earth':            SymbolEntry('power',  'Earth',           'Earth',   'E'),
 
     # ---- discrete diodes ----
     'D1N4001':  SymbolEntry('Diode', '1N4001', '1N4001', 'D'),

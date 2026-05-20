@@ -48,6 +48,7 @@ class D_OA90(Diode):
     # downstream tooling that cares (a SPICE model picker, an
     # assembly-guide blurb) reads it here.
     V_F: ClassVar[float] = 0.2
+    V_BREAKDOWN_R: ClassVar[float | None] = None
 
     VERIFY: ClassVar[tuple[str, ...]] = (
         "**Use your multimeter's diode-test mode to confirm the "

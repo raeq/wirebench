@@ -13,11 +13,11 @@ A four-component MW crystal radio: aerial, tuned tank, detector
 | Refdes | Part | Value / Spec | Quantity | Notes |
 |--------|------|--------------|----------|-------|
 | A1 | Antenna | Antenna | 1 |  |
-| A2 | Earth | Earth | 1 |  |
+| BZ1 | CrystalEarpiece | CrystalEarpiece | 1 |  |
 | C1 | VariableCapacitor | VariableCapacitor | 1 |  |
 | D1 | D_OA90 | D_OA90 | 1 |  |
+| E1 | Earth | Earth | 1 |  |
 | L1 | FerriteAerial | FerriteAerial | 1 |  |
-| LS1 | CrystalEarpiece | CrystalEarpiece | 1 |  |
 | R1 | Resistor | 100000 Ω | 1 | ¼ W carbon film is fine |
 
 Also: a standard 830-pin solderless breadboard, an assortment of jumper wires (red for the positive rail, black for ground rail, any colour for signals), and a 5 V supply.
@@ -25,6 +25,12 @@ Also: a standard 830-pin solderless breadboard, an assortment of jumper wires (r
 ## Layout
 
 Each part below is drawn the way it sits on the breadboard, with every pin labelled. Chips run left-to-right with the notch at the left; pin 1 is the top-left pin (closest to the notch). Sensors and modules are shown as a single horizontal row of pins. 2-lead passives are drawn axially with the value in line.
+
+### BZ1 — CrystalEarpiece
+
+```
+t1 ─┤▮ CrystalEarpiece ▮├─ t2
+```
 
 ### C1 — VariableCapacitor
 
@@ -42,12 +48,6 @@ anode ─▶├─ cathode   [D_OA90]
 
 ```
 t1 ─┤▮ FerriteAerial ▮├─ t2
-```
-
-### LS1 — CrystalEarpiece
-
-```
-t1 ─┤▮ CrystalEarpiece ▮├─ t2
 ```
 
 ### R1 — Resistor
@@ -78,29 +78,29 @@ Before you start wiring, take five minutes to confirm each part actually works. 
    lead to the top `+` rail (positive rail), the negative lead to the top `-`
    rail (ground rail).
 2. Plug L1 (FerriteAerial): one lead at position 12 (any of 12A–12E), the
-   other at position 15 (any of 15A–15E).
-3. Plug C1 (VariableCapacitor): one lead at position 17 (any of 17A–17E), the
-   other at position 19 (any of 19A–19E).
-4. Plug D1 (D_OA90): one lead at position 21 (any of 21A–21E), the other at
-   position 22 (any of 22A–22E).
-5. Plug R1 (Resistor): one lead at position 24 (any of 24A–24E), the other at
-   position 27 (any of 27A–27E).
-6. Plug LS1 (CrystalEarpiece): one lead at position 29 (any of 29A–29E), the
-   other at position 31 (any of 31A–31E).
-7. Run a jumper from C1 t1 to D1 anode — position 17 (any of 17A–17E) to
+   other at position 14 (any of 14A–14E).
+3. Plug C1 (VariableCapacitor): one lead at position 16 (any of 16A–16E), the
+   other at position 18 (any of 18A–18E).
+4. Plug D1 (D_OA90): one lead at position 20 (any of 20A–20E), the other at
    position 21 (any of 21A–21E).
-8. Run a jumper from D1 anode to L1 t1 — position 21 (any of 21A–21E) to
+5. Plug R1 (Resistor): one lead at position 23 (any of 23A–23E), the other at
+   position 26 (any of 26A–26E).
+6. Plug BZ1 (CrystalEarpiece): one lead at position 28 (any of 28A–28E), the
+   other at position 30 (any of 30A–30E).
+7. Run a jumper from C1 t1 to D1 anode — position 16 (any of 16A–16E) to
+   position 20 (any of 20A–20E).
+8. Run a jumper from D1 anode to L1 t1 — position 20 (any of 20A–20E) to
    position 12 (any of 12A–12E).
-9. Run a jumper from C1 t2 to L1 t2 — position 19 (any of 19A–19E) to position
-   15 (any of 15A–15E).
-10. Run a jumper from L1 t2 to LS1 t2 — position 15 (any of 15A–15E) to
-   position 31 (any of 31A–31E).
-11. Run a jumper from LS1 t2 to R1 t2 — position 31 (any of 31A–31E) to
-   position 27 (any of 27A–27E).
-12. Run a jumper from D1 cathode to LS1 t1 — position 22 (any of 22A–22E) to
-   position 29 (any of 29A–29E).
-13. Run a jumper from LS1 t1 to R1 t1 — position 29 (any of 29A–29E) to
-   position 24 (any of 24A–24E).
+9. Run a jumper from BZ1 t1 to D1 cathode — position 28 (any of 28A–28E) to
+   position 21 (any of 21A–21E).
+10. Run a jumper from D1 cathode to R1 t1 — position 21 (any of 21A–21E) to
+   position 23 (any of 23A–23E).
+11. Run a jumper from BZ1 t2 to C1 t2 — position 30 (any of 30A–30E) to
+   position 18 (any of 18A–18E).
+12. Run a jumper from C1 t2 to L1 t2 — position 18 (any of 18A–18E) to
+   position 14 (any of 14A–14E).
+13. Run a jumper from L1 t2 to R1 t2 — position 14 (any of 14A–14E) to
+   position 26 (any of 26A–26E).
 14. Verify nothing is shorted by inspecting the rails with a multimeter
    (continuity beep between `+` and `-` means trouble). Then connect the
    supply and observe.

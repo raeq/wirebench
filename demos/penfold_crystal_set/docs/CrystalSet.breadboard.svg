@@ -929,58 +929,58 @@
 <text x="26" y="335" text-anchor="start" style="font-family:monospace;font-size:8px;fill:#888888;font-weight:bold">J</text>
 </g>
 <g class="jumpers">
-<path d="M 327 144 L 327 64 L 452 64 L 452 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
+<path d="M 327 144 L 327 64 L 427 64 L 427 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
 <circle cx="327" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
-<circle cx="452" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
-<path d="M 452 162 L 452 58 L 552 58 L 552 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
-<circle cx="452" cy="162" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
-<circle cx="552" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
-<path d="M 402 144 L 402 61 L 502 61 L 502 144" class="jumper analog" style="fill:none;stroke:#d4a017;stroke-width:2"/>
-<circle cx="402" cy="144" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
-<circle cx="502" cy="144" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
-<path d="M 502 162 L 502 64 L 702 64 L 702 144" class="jumper analog" style="fill:none;stroke:#d4a017;stroke-width:2"/>
-<circle cx="502" cy="162" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
-<circle cx="702" cy="144" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
-<path d="M 702 162 L 702 58 L 802 58 L 802 144" class="jumper analog" style="fill:none;stroke:#d4a017;stroke-width:2"/>
-<circle cx="702" cy="162" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
-<circle cx="802" cy="144" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
-<path d="M 577 144 L 577 136 L 627 136 L 627 144" class="jumper analog" style="fill:none;stroke:#8b5a2b;stroke-width:2"/>
-<circle cx="577" cy="144" r="3" class="jumper-cap analog" style="fill:#8b5a2b;stroke:#000000;stroke-width:0.5"/>
-<circle cx="627" cy="144" r="3" class="jumper-cap analog" style="fill:#8b5a2b;stroke:#000000;stroke-width:0.5"/>
-<path d="M 627 162 L 627 61 L 752 61 L 752 144" class="jumper analog" style="fill:none;stroke:#8b5a2b;stroke-width:2"/>
-<circle cx="627" cy="162" r="3" class="jumper-cap analog" style="fill:#8b5a2b;stroke:#000000;stroke-width:0.5"/>
-<circle cx="752" cy="144" r="3" class="jumper-cap analog" style="fill:#8b5a2b;stroke:#000000;stroke-width:0.5"/>
+<circle cx="427" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
+<path d="M 427 162 L 427 58 L 527 58 L 527 144" class="jumper analog" style="fill:none;stroke:#e07a17;stroke-width:2"/>
+<circle cx="427" cy="162" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
+<circle cx="527" cy="144" r="3" class="jumper-cap analog" style="fill:#e07a17;stroke:#000000;stroke-width:0.5"/>
+<path d="M 377 144 L 377 61 L 477 61 L 477 144" class="jumper analog" style="fill:none;stroke:#d4a017;stroke-width:2"/>
+<circle cx="377" cy="144" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
+<circle cx="477" cy="144" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
+<path d="M 477 162 L 477 64 L 677 64 L 677 144" class="jumper analog" style="fill:none;stroke:#d4a017;stroke-width:2"/>
+<circle cx="477" cy="162" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
+<circle cx="677" cy="144" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
+<path d="M 677 162 L 677 58 L 777 58 L 777 144" class="jumper analog" style="fill:none;stroke:#d4a017;stroke-width:2"/>
+<circle cx="677" cy="162" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
+<circle cx="777" cy="144" r="3" class="jumper-cap analog" style="fill:#d4a017;stroke:#000000;stroke-width:0.5"/>
+<path d="M 552 144 L 552 136 L 602 136 L 602 144" class="jumper analog" style="fill:none;stroke:#8b5a2b;stroke-width:2"/>
+<circle cx="552" cy="144" r="3" class="jumper-cap analog" style="fill:#8b5a2b;stroke:#000000;stroke-width:0.5"/>
+<circle cx="602" cy="144" r="3" class="jumper-cap analog" style="fill:#8b5a2b;stroke:#000000;stroke-width:0.5"/>
+<path d="M 602 162 L 602 61 L 727 61 L 727 144" class="jumper analog" style="fill:none;stroke:#8b5a2b;stroke-width:2"/>
+<circle cx="602" cy="162" r="3" class="jumper-cap analog" style="fill:#8b5a2b;stroke:#000000;stroke-width:0.5"/>
+<circle cx="727" cy="144" r="3" class="jumper-cap analog" style="fill:#8b5a2b;stroke:#000000;stroke-width:0.5"/>
 </g>
 <g class="component" data-refdes="L1" data-kind="passive">
 <line x1="327" y1="198" x2="327" y2="184" style="stroke:#222222;stroke-width:1"/>
-<line x1="402" y1="198" x2="402" y2="184" style="stroke:#222222;stroke-width:1"/>
-<rect x="329" y="170" width="71" height="14" rx="3" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
-<text x="364.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">L1</text>
+<line x1="377" y1="198" x2="377" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="329" y="170" width="46" height="14" rx="3" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="352" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">L1</text>
 </g>
 <g class="component" data-refdes="C1" data-kind="passive">
-<line x1="452" y1="198" x2="452" y2="184" style="stroke:#222222;stroke-width:1"/>
-<line x1="502" y1="198" x2="502" y2="184" style="stroke:#222222;stroke-width:1"/>
-<rect x="454" y="170" width="46" height="14" rx="3" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
-<text x="477" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">C1</text>
+<line x1="427" y1="198" x2="427" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="477" y1="198" x2="477" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="429" y="170" width="46" height="14" rx="3" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="452" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">C1</text>
 </g>
 <g class="component" data-refdes="D1" data-kind="passive">
+<line x1="527" y1="198" x2="527" y2="184" style="stroke:#222222;stroke-width:1"/>
 <line x1="552" y1="198" x2="552" y2="184" style="stroke:#222222;stroke-width:1"/>
-<line x1="577" y1="198" x2="577" y2="184" style="stroke:#222222;stroke-width:1"/>
-<rect x="554" y="170" width="21" height="14" rx="2" style="fill:#333333;stroke:#000000;stroke-width:1"/>
-<line x1="573" y1="171" x2="573" y2="183" style="stroke:#ffffff;stroke-width:2"/>
-<text x="564.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">D1</text>
+<rect x="529" y="170" width="21" height="14" rx="2" style="fill:#333333;stroke:#000000;stroke-width:1"/>
+<line x1="548" y1="171" x2="548" y2="183" style="stroke:#ffffff;stroke-width:2"/>
+<text x="539.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">D1</text>
 </g>
 <g class="component" data-refdes="R1" data-kind="passive">
-<line x1="627" y1="198" x2="627" y2="184" style="stroke:#222222;stroke-width:1"/>
-<line x1="702" y1="198" x2="702" y2="184" style="stroke:#222222;stroke-width:1"/>
-<rect x="629" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
-<text x="664.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">100000Ω</text>
-<text x="664.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R1</text>
+<line x1="602" y1="198" x2="602" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="677" y1="198" x2="677" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="604" y="170" width="71" height="14" rx="4" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="639.5" y="180" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:normal">100000Ω</text>
+<text x="639.5" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">R1</text>
 </g>
-<g class="component" data-refdes="LS1" data-kind="passive">
-<line x1="752" y1="198" x2="752" y2="184" style="stroke:#222222;stroke-width:1"/>
-<line x1="802" y1="198" x2="802" y2="184" style="stroke:#222222;stroke-width:1"/>
-<rect x="754" y="170" width="46" height="14" rx="3" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
-<text x="777" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">LS1</text>
+<g class="component" data-refdes="BZ1" data-kind="passive">
+<line x1="727" y1="198" x2="727" y2="184" style="stroke:#222222;stroke-width:1"/>
+<line x1="777" y1="198" x2="777" y2="184" style="stroke:#222222;stroke-width:1"/>
+<rect x="729" y="170" width="46" height="14" rx="3" style="fill:#e8d7a8;stroke:#000000;stroke-width:1"/>
+<text x="752" y="167" text-anchor="middle" style="font-family:monospace;font-size:8px;fill:#222222;font-weight:bold">BZ1</text>
 </g>
 </svg>

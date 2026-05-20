@@ -79,9 +79,11 @@ class CrystalSet(Circuit):
         # ── Environment connections ───────────────────────────────
         # `Antenna` and `Earth` are the wirebench-side expression
         # of the antenna-to-EM-field and earth-to-soil contacts.
-        # Both are environment-fed; neither is a `Rail`.
+        # Both are environment-fed; neither is a `Rail`.  Each lives
+        # in its own refdes number-space ('A' for the antenna, 'E'
+        # for the earth-ground terminal).
         self.ant   = Antenna(refdes_number=1)
-        self.earth = Earth(refdes_number=2)
+        self.earth = Earth(refdes_number=1)
 
         # ── Tuned LC tank ─────────────────────────────────────────
         # L1 (ferrite aerial coil) in parallel with VC1 (tuning cap)

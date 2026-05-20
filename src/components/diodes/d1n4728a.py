@@ -28,6 +28,12 @@ class D1N4728A(Diode):
     FOOTPRINT: ClassVar[str | None] = "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'anode': 1, 'cathode': 2}
 
+    # Silicon Zener — forward V_F is the standard silicon ~0.7 V; the
+    # device's *operating point* is the reverse-breakdown V_Z, declared
+    # below as `V_BREAKDOWN_R`.
+    V_F: ClassVar[float] = 0.7
+    V_BREAKDOWN_R: ClassVar[float | None] = 3.3
+
     VERIFY: ClassVar[tuple[str, ...]] = (
         "**A multimeter's diode-test mode can only confirm the Zener "
         "works as a forward diode** — about 0.6 V drop with red on "

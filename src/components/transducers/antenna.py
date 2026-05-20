@@ -42,6 +42,16 @@ class Antenna(Part):
     FOOTPRINT: ClassVar[str | None] = None
     PIN_NUMBERS: ClassVar[dict[str, int]] = {'out': 1}
 
+    # The `out` port is Direction.OUT for topology purposes (the
+    # surrounding net IS driven from the framework's perspective — the
+    # LC tank's one side gets an environment-fed signal), but
+    # `evaluate()` does not propagate a value because the RF signal
+    # isn't representable in the static voltage-only evaluator.  This
+    # informational marker tells downstream consumers (validate CLI,
+    # net-report renderer, SPICE export) that an undriven reading on
+    # this part's net is expected, not a defect.
+    DRIVE_BEHAVIOUR: ClassVar[str] = 'environment_fed'
+
     LAYOUT: ClassVar[dict[str, Any]] = {
         'kind': 'antenna',
         'lead_spacing_holes': 1,
