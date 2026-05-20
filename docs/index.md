@@ -57,4 +57,5 @@ one is first caught.
   with verbatim error-class output for two near-miss snippets.
 - [All wirebench demos on
   GitHub](https://github.com/raeq/wirebench/tree/main/demos) —
-  each carries the same *what this design is protected from* sidebar.
+  most carry the same *what this design is protected from* sidebar
+  (a small number are source-only).

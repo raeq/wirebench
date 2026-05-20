@@ -277,8 +277,8 @@ def test_every_learning_path_demo_link_resolves_to_a_real_demo(
     for slug in demo_links:
         assert slug in existing, (
             f"Learning Path links to demos/{slug}/ but that directory "
-            f"doesn't exist (or has no README.md).  Known demos: "
-            f"{sorted(existing)}"
+            f"doesn't exist (or has no *.py source file).  Known "
+            f"demos: {sorted(existing)}"
         )
 
 
@@ -335,16 +335,34 @@ def test_index_does_not_hardcode_demo_count(index_text: str) -> None:
 
 def test_index_shows_a_concrete_error_message(index_text: str) -> None:
     """Finding 5: the homepage must preview the four-paragraph
-    error-message shape — *what / why / where / try* — concretely.
-    Pinned by checking for the four labels in a fenced text block."""
-    # All four labels must appear in the doc.  We don't assert order
-    # or formatting since the rendered output is what visitors see.
+    error-message shape — *what / why / where / try* — concretely
+    inside a fenced code block.
+
+    The *what* paragraph is the error message itself (no label —
+    starts with the exception class).  The remaining three paragraphs
+    each carry an explicit label.  Both the labels and the surrounding
+    fenced block are required, so the rendered output appears in
+    monospace and visually mirrors what a wirebench user actually
+    sees in their terminal.
+    """
+    # Each of the three labelled paragraphs must appear in the doc.
     for label in ('Why:', 'Wired at:', 'Try:'):
         assert label in index_text, (
             f"docs/index.md should preview the error-message shape "
             f"with a `{label}` line — that's the Phase 2b user-facing "
             f"win this homepage callout exists to surface."
         )
+    # And those labels must live inside a fenced code block so the
+    # rendered output is monospace — not just inline prose.
+    fenced_blocks = re.findall(r'```[^`]+```', index_text, re.DOTALL)
+    assert any(
+        all(label in block for label in ('Why:', 'Wired at:', 'Try:'))
+        for block in fenced_blocks
+    ), (
+        "docs/index.md's error-message preview should sit inside a "
+        "fenced code block so mkdocs renders it as monospace — "
+        "matches what wirebench users see in their terminal."
+    )
 
 
 def test_index_see_also_links_to_a_concrete_demo_readme(

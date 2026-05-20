@@ -46,12 +46,12 @@ Cross-referencing the other way: [`the-rules.md`](the-rules.md) lists, for each 
 
 ## What each demo gives you
 
-Every demo folder has the same shape:
+Every demo folder follows the same broad shape — one or more Python source files plus a `docs/` subfolder of generated artefacts. The Python file usually matches the folder name (`hello_led.py`, `dice.py`), occasionally not (`5v_rail_power/` uses `five_volt_rail_power.py`). Most demos carry a `README.md` with the *what this design is protected from* sidebar; a small number are source-only.
 
 ```text
 demos/<name>/
-    <name>.py                       # the source — read this first
-    README.md                       # what this design is protected from + recipe
+    *.py                            # the source — read this first
+    README.md                       # what this design is protected from + recipe (when present)
     docs/
         <Top>.bom.csv               # BOM ready to paste into a parts cart
         <Top>.net                   # KiCad netlist for PCB layout
@@ -68,7 +68,7 @@ demos/<name>/
         <Top>.interface-report.md   # public Board connector pins
 ```
 
-A live example of the full set sits in the [hello_led/docs/ folder on GitHub](https://github.com/raeq/wirebench/tree/main/demos/hello_led/docs) — that's the authoritative live index, regenerated whenever an exporter changes, so the listing above can't drift from what actually ships.
+`<Top>` is the design's top-level class name (e.g. `HelloLED`, `Dice`). A live example of the full set sits in the [hello_led/docs/ folder on GitHub](https://github.com/raeq/wirebench/tree/main/demos/hello_led/docs) — that's the authoritative live index, regenerated whenever an exporter changes, so the listing above can't drift from what actually ships.
 
 For composite assemblies (the `water_alarm_split`, `fan_cooling`, `bldc_motor`, `isolated_rs232`, and `li_ion_fuel_gauge` demos), there's one set of exports per board *plus* one set for the parent assembly — so you can see how the same model exports differently depending on whether you're producing a per-board netlist or an assembly-level overview.
 
