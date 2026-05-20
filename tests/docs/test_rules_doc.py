@@ -190,14 +190,195 @@ def test_doc_cross_link_to_errors_source_resolves(
 
 # --------------------------------------------------------- learning-path
 
-def test_learning_path_cross_references_the_rules_doc() -> None:
+INDEX_DOC = REPO_ROOT / 'docs' / 'index.md'
+DEMOS_DIR = REPO_ROOT / 'demos'
+
+
+@pytest.fixture(scope='module')
+def learning_path_text() -> str:
+    return LEARNING_PATH_DOC.read_text()
+
+
+@pytest.fixture(scope='module')
+def index_text() -> str:
+    return INDEX_DOC.read_text()
+
+
+def _demos_in_repo() -> set[str]:
+    """Every directory under `demos/` that holds an actual demo —
+    identified by the presence of at least one `*.py` source file
+    (skip strays like a docs-only or assets-only directory).  We don't
+    require `README.md` because not every demo has one yet."""
+    return {
+        d.name for d in DEMOS_DIR.iterdir()
+        if d.is_dir() and any(d.glob('*.py'))
+    }
+
+
+def test_learning_path_cross_references_the_rules_doc(
+    learning_path_text: str,
+) -> None:
     """`docs/learning-path.md` must name `the-rules.md` so the two
     pages cross-reference and the cumulative-rules property is
     discoverable from either direction."""
-    text = LEARNING_PATH_DOC.read_text()
-    assert 'the-rules.md' in text, (
+    assert 'the-rules.md' in learning_path_text, (
         "learning-path.md must link to the-rules.md so the rule "
         "narrative is reachable from the demo path."
+    )
+
+
+def test_learning_path_demo_links_use_github_urls(
+    learning_path_text: str,
+) -> None:
+    """The demo links must point at GitHub folders, not
+    `https://raeq.github.io/wirebench/demos/...` or relative
+    `../demos/...` — both shapes produce broken pages on the published
+    docs site (demos aren't republished as MkDocs pages).
+
+    Pin the GitHub-URL convention so the failure mode the original
+    Phase 2b.2 deploy hit (silent blank pages) can't return.
+    """
+    # No relative `../demos/...` links anywhere on the page.
+    relative = re.findall(
+        r'\]\(\.\./demos/[^)]*\)', learning_path_text,
+    )
+    assert not relative, (
+        f"Relative `../demos/...` links resolve to nothing on the "
+        f"published site.  Offenders: {relative}"
+    )
+    # No raeq.github.io/wirebench/demos/... links either.
+    site_demos = re.findall(
+        r'https://raeq\.github\.io/wirebench/demos/[^)\s]+',
+        learning_path_text,
+    )
+    assert not site_demos, (
+        f"Links to `raeq.github.io/wirebench/demos/...` produce empty "
+        f"body content — demos aren't published as MkDocs pages.  "
+        f"Use GitHub tree URLs instead.  Offenders: {site_demos}"
+    )
+
+
+def test_every_learning_path_demo_link_resolves_to_a_real_demo(
+    learning_path_text: str,
+) -> None:
+    """Every `github.com/raeq/wirebench/tree/main/demos/<slug>/` link
+    on Learning Path must correspond to a real demo directory in the
+    repo.  Catches typos in the URL and demos that have been removed
+    without the table being updated."""
+    demo_links = re.findall(
+        r'https://github\.com/raeq/wirebench/tree/main/demos/([a-z0-9_]+)/?',
+        learning_path_text,
+    )
+    assert demo_links, (
+        "No github.com demo links found on Learning Path — the demo "
+        "table must use the canonical GitHub-tree URLs."
+    )
+    existing = _demos_in_repo()
+    for slug in demo_links:
+        assert slug in existing, (
+            f"Learning Path links to demos/{slug}/ but that directory "
+            f"doesn't exist (or has no *.py source file).  Known "
+            f"demos: {sorted(existing)}"
+        )
+
+
+def test_learning_path_table_covers_every_demo(
+    learning_path_text: str,
+) -> None:
+    """The Learning Path table must have one row per demo directory —
+    a new demo added to `demos/` without a table row would silently
+    fall off the published learning order."""
+    listed = set(re.findall(
+        r'https://github\.com/raeq/wirebench/tree/main/demos/([a-z0-9_]+)/?',
+        learning_path_text,
+    ))
+    expected = _demos_in_repo()
+    missing = expected - listed
+    assert not missing, (
+        f"Demos exist in the repo but aren't listed on Learning Path: "
+        f"{sorted(missing)}.  Add a table row for each."
+    )
+
+
+# --------------------------------------------------------------- index
+
+def test_index_links_to_the_rules(index_text: str) -> None:
+    """Findings 1 + 5 of the site remediation: the homepage's *Where
+    to go* surface must include the rules narrative and link to it."""
+    assert 'the-rules.md' in index_text, (
+        "docs/index.md must link to the-rules.md — it's the most "
+        "distinctive Phase 2b.2 artefact and must be reachable from "
+        "the landing page."
+    )
+
+
+def test_index_does_not_hardcode_demo_count(index_text: str) -> None:
+    """The homepage must not embed a literal demo count — the count
+    will stale every time a demo is added.  Phrasings like *every
+    wirebench demo* delegate to the Learning Path table (which is
+    authoritative and auto-survives demo additions)."""
+    # Reject "twelve demos", "12 demos", "18 demos", etc.  Allow the
+    # word `demo` / `demos` as a noun without a counting modifier.
+    bad = re.findall(
+        r'(?i)\b(?:'
+        r'twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|'
+        r'nineteen|twenty|\d+'
+        r')\s+demos\b',
+        index_text,
+    )
+    assert not bad, (
+        f"docs/index.md hardcodes a demo count ({bad}) — every demo "
+        f"addition would re-stale this line.  Use *every wirebench "
+        f"demo* (or equivalent) and let Learning Path own the count."
+    )
+
+
+def test_index_shows_a_concrete_error_message(index_text: str) -> None:
+    """Finding 5: the homepage must preview the four-paragraph
+    error-message shape — *what / why / where / try* — concretely
+    inside a fenced code block.
+
+    The *what* paragraph is the error message itself (no label —
+    starts with the exception class).  The remaining three paragraphs
+    each carry an explicit label.  Both the labels and the surrounding
+    fenced block are required, so the rendered output appears in
+    monospace and visually mirrors what a wirebench user actually
+    sees in their terminal.
+    """
+    # Each of the three labelled paragraphs must appear in the doc.
+    for label in ('Why:', 'Wired at:', 'Try:'):
+        assert label in index_text, (
+            f"docs/index.md should preview the error-message shape "
+            f"with a `{label}` line — that's the Phase 2b user-facing "
+            f"win this homepage callout exists to surface."
+        )
+    # And those labels must live inside a fenced code block so the
+    # rendered output is monospace — not just inline prose.
+    fenced_blocks = re.findall(r'```[^`]+```', index_text, re.DOTALL)
+    assert any(
+        all(label in block for label in ('Why:', 'Wired at:', 'Try:'))
+        for block in fenced_blocks
+    ), (
+        "docs/index.md's error-message preview should sit inside a "
+        "fenced code block so mkdocs renders it as monospace — "
+        "matches what wirebench users see in their terminal."
+    )
+
+
+def test_index_see_also_links_to_a_concrete_demo_readme(
+    index_text: str,
+) -> None:
+    """Finding 7: the *See also* surface should be one click from the
+    landing page to a real demo's *what this design is protected from*
+    sidebar — not just the demos folder root."""
+    assert re.search(
+        r'https://github\.com/raeq/wirebench/blob/main/demos/'
+        r'[a-z0-9_]+/README\.md',
+        index_text,
+    ), (
+        "docs/index.md *See also* should link to a specific demo's "
+        "README so the discipline-in-action is one click away — not "
+        "just the demos folder root."
     )
 
 
@@ -225,4 +406,31 @@ def test_mkdocs_orders_design_principles_before_rules_before_learning() -> None:
         f"mkdocs.yml ordering wrong: design-principles ({dp_pos}), "
         f"the-rules ({tr_pos}), learning-path ({lp_pos}); expected "
         f"design-principles → the-rules → learning-path."
+    )
+
+
+def test_mkdocs_keeps_the_two_component_pages_adjacent() -> None:
+    """Finding 6: the auto-generated `parts.md` index and the
+    hand-curated `component-library-data.md` narrative serve distinct
+    purposes; the navigation orders them adjacent so the auto/curated
+    distinction reads as one cluster rather than two scattered pages."""
+    text = MKDOCS_YML.read_text()
+    parts_pos = text.find('parts.md')
+    notes_pos = text.find('component-library-data.md')
+    assert parts_pos != -1 and notes_pos != -1
+    # Adjacent in nav order — find the lines containing each entry and
+    # confirm there's nothing else between them.
+    lines = [l.strip() for l in text.splitlines() if l.strip()]
+    parts_line = next(
+        (i for i, l in enumerate(lines) if 'parts.md' in l), None,
+    )
+    notes_line = next(
+        (i for i, l in enumerate(lines) if 'component-library-data.md' in l),
+        None,
+    )
+    assert parts_line is not None and notes_line is not None
+    assert abs(parts_line - notes_line) == 1, (
+        f"mkdocs.yml: the two component pages should be adjacent so "
+        f"the auto/curated distinction reads as one cluster.  Currently "
+        f"separated by {abs(parts_line - notes_line) - 1} nav entries."
     )

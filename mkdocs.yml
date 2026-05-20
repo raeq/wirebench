@@ -17,9 +17,9 @@ nav:
   - Design principles: design-principles.md
   - The rules: the-rules.md
   - Learning path: learning-path.md
-  - Components: parts.md
+  - 'Components — auto index': parts.md
+  - 'Component notes — curated': component-library-data.md
   - Prevention benchmark: prevention-benchmark.md
-  - Component catalogue (narrative): component-library-data.md
 
 markdown_extensions:
   - admonition
