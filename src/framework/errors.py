@@ -286,7 +286,18 @@ class SignalTypeMismatchError(SignalError, TypeError):
         self.port_types: tuple[tuple[str, str], ...] = tuple(port_types)
 
     def suggested_remediation(self) -> str | None:
-        if self.port_types:
+        # Two paths raise this exception: (a) `wire()` joining ports
+        # with mismatched signal_types, where Analog↔Digital is the
+        # canonical case the suggestion below addresses; and (b)
+        # `Port.drive()` failing to coerce a runtime value to the
+        # port's signal_type (e.g. a string onto a numeric port).  The
+        # conversion-element advice fits (a) but not (b) — for (b) the
+        # fix is to supply a correctly-typed value, which depends on
+        # design intent the framework can't infer.  Gate on the
+        # canonical shape: both 'Analog' and 'Digital' must be among
+        # the port_types.
+        types = {t for _, t in self.port_types}
+        if 'Analog' in types and 'Digital' in types:
             return (
                 "Insert a comparator, ADC, or level-shifter between the "
                 "Analog and Digital ports — they can't share copper "

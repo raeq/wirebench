@@ -85,6 +85,30 @@ def test_signal_type_mismatch_suggests_conversion_element() -> None:
     assert 'ADC' in rem or 'level-shifter' in rem
 
 
+def test_signal_type_mismatch_non_analog_digital_returns_none() -> None:
+    """`SignalTypeMismatchError` also fires from `Port.drive()` when
+    a runtime value can't be coerced to the port's signal_type — e.g.
+    a string onto a numeric port.  The Analog↔Digital conversion
+    advice doesn't fit that path; the fix there is to supply a
+    correctly-typed value, which is design-intent territory.  Gate
+    the remediation on the canonical Analog↔Digital shape."""
+    # Port.drive() failure path: incoming value's type isn't a signal
+    # type at all.
+    e = E.SignalTypeMismatchError(
+        "port 'in' expects Digital, got str",
+        port_types=(('in', 'Digital'), ('<incoming>', 'str')),
+    )
+    assert e.suggested_remediation() is None
+
+    # Two-Analog mismatch (e.g. Volts vs Amps) — not the canonical
+    # Analog↔Digital shape either.
+    e = E.SignalTypeMismatchError(
+        "Volts vs Amps",
+        port_types=(('a', 'Volts'), ('b', 'Amps')),
+    )
+    assert e.suggested_remediation() is None
+
+
 def test_refdes_duplicate_suggests_unique_refdes_number() -> None:
     e = E.RefdesError(
         "Duplicate refdes: 'Resistor.R1' and 'Resistor.R1'",
