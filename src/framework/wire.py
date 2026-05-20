@@ -1,3 +1,4 @@
+import os
 import sys
 import warnings
 from collections.abc import Sequence
@@ -17,16 +18,30 @@ def _capture_user_call_site() -> tuple[str, int] | None:
     """Walk up the call stack from inside `wire()` to find the first
     frame that isn't inside pydantic's `validate_call` wrapper.
 
-    Returns `(filename, lineno)` of the user's call site, or `None` if
-    no caller frame is available.  Pydantic frames are identified by
-    'pydantic' appearing in the filename — robust across pydantic
-    versions, where the number of wrapper frames varies.
+    Returns `(basename, lineno)` of the user's call site, or `None` if
+    no caller frame is available or the stack walk fails.  Pydantic
+    frames are identified by 'pydantic' appearing in the filename —
+    robust across pydantic versions, where the number of wrapper
+    frames varies.
+
+    Filenames are normalised to `os.path.basename` so attribution stays
+    portable: `.wirebench` files saved on one machine and loaded on
+    another won't carry someone else's `/Users/...`/`/home/...`/`C:\\...`
+    absolute paths.  Basename collisions across files in a project are
+    rare in practice (one demo per file) and the trade-off is worth
+    the portability.
     """
-    frame: FrameType | None = sys._getframe(1)  # skip wire() itself
+    try:
+        frame: FrameType | None = sys._getframe(1)  # skip wire() itself
+    except ValueError:
+        # `sys._getframe` raises ValueError when called at a depth the
+        # interpreter can't satisfy — vanishingly rare from inside a
+        # real function, but documented behavior worth guarding.
+        return None
     while frame is not None:
         filename = frame.f_code.co_filename
         if 'pydantic' not in filename and filename != __file__:
-            return (filename, frame.f_lineno)
+            return (os.path.basename(filename), frame.f_lineno)
         frame = frame.f_back
     return None
 

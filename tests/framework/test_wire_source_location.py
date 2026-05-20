@@ -69,6 +69,20 @@ def test_explicit_source_location_via_internal_helper() -> None:
     assert out.node.source_locations == (('hello_led.py', 14),)
 
 
+def test_captured_filename_is_basename_for_portability() -> None:
+    """Auto-captured source locations store the file *basename*, never
+    an absolute path — so `.wirebench` files written on one machine
+    stay portable across users / filesystems / CI."""
+    import os
+    out, inp = _make_pair()
+    wire(out, inp)
+    filename, _ = out.node.source_locations[0]
+    assert filename == 'test_wire_source_location.py'
+    assert os.sep not in filename, (
+        f"Captured filename should be a basename; got {filename!r}"
+    )
+
+
 def test_internal_helper_with_none_leaves_node_unattributed() -> None:
     """Passing `source_location=None` to the internal helper means *no
     attribution*: the resulting node carries no source location, even
