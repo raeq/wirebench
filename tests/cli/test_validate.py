@@ -71,6 +71,25 @@ def test_short_circuit_wire_extracts_pins() -> None:
     # Untouched fields stay defaulted.
     assert details['refdes'] is None
     assert details['parts'] == []
+    # High-confidence remediation (two named drivers) → present.
+    assert 'remediation' in details
+    assert 'y_1' in details['remediation']
+    assert 'y_2' in details['remediation']
+
+
+def test_short_circuit_three_way_omits_remediation() -> None:
+    """When the canonical two-driver shape doesn't apply, the
+    `remediation` key is omitted entirely so the JSON shape stays
+    minimal for the low-confidence case."""
+    # Reuse the existing two-driver fixture's path machinery by
+    # constructing inline; the unit test on the framework side
+    # confirms three+ drivers return None.  Here we only confirm that
+    # an exception whose remediation is None doesn't get a JSON entry.
+    from cli.validate import _details_with_remediation
+    from framework.errors import ShortCircuitError
+    e = ShortCircuitError("three-way short", drivers=('a', 'b', 'c'))
+    details = _details_with_remediation(e)
+    assert 'remediation' not in details
 
 
 def test_floating_net_extracts_parts_and_pins() -> None:
@@ -209,11 +228,17 @@ def test_details_keys_always_present_on_failure_and_error(
     args: tuple[str, ...],
 ) -> None:
     """The `details` block has a fixed schema for failed/error statuses
-    so consumers can read every key without per-error-class branching."""
+    so consumers can read every key without per-error-class branching.
+
+    `remediation` is the one exception: it's an *additive* key included
+    only when the framework has a high-confidence fix to suggest, so
+    the consumer must be tolerant of its presence or absence.
+    """
     _, out = _invoke(*args)
     details = out['details']
     assert isinstance(details, dict)
-    assert set(details.keys()) == _DETAIL_KEYS
+    assert _DETAIL_KEYS.issubset(details.keys())
+    assert set(details.keys()) - _DETAIL_KEYS <= {'remediation'}
     # List-typed fields are always lists, never None.
     assert isinstance(details['pins'],  list)
     assert isinstance(details['parts'], list)

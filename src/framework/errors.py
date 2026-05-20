@@ -63,6 +63,23 @@ class WirebenchError(Exception):
         outside the `wire()` path)."""
         return self._source_locations
 
+    def suggested_remediation(self) -> str | None:
+        """Return a high-confidence remediation hint, or `None` if the
+        defect's resolution depends on design intent the framework
+        can't infer.
+
+        Subclasses override to provide per-defect-class suggestions.
+        Default returns `None`, the *silent when confidence is low*
+        posture: the framework names the defect and explains why
+        without pretending to know which fix the designer intended.
+
+        Remediation strings are *teaching-toned* — they explain what
+        to do and offer the alternative when more than one fix is
+        valid, rather than imperative "do X now."  They never suggest
+        bypassing a framework check or silencing the validation.
+        """
+        return None
+
     def __str__(self) -> str:
         base = super().__str__()
         parts = [base]
@@ -75,6 +92,9 @@ class WirebenchError(Exception):
                 for filename, lineno in self._source_locations
             )
             parts.append(f"  Wired at: {locs}")
+        remediation = self.suggested_remediation()
+        if remediation:
+            parts.append(f"  Try: {remediation}")
         return "\n".join(parts)
 
 
@@ -115,6 +135,29 @@ class ShortCircuitError(WiringError, ValueError):
         "the FETs overheat; one driver per shared conductor."
     )
 
+    def __init__(
+        self,
+        *args: Any,
+        drivers: Sequence[str] = (),
+        source_locations: Sequence[tuple[str, int]] | None = None,
+    ) -> None:
+        super().__init__(*args, source_locations=source_locations)
+        self.drivers: tuple[str, ...] = tuple(drivers)
+
+    def suggested_remediation(self) -> str | None:
+        # High confidence only for the two-driver canonical case;
+        # three-or-more shorts could be unintended fan-out, a missing
+        # tri-state enable, or a deliberate wired-OR that should have
+        # been built differently — no single fix dominates.
+        if len(self.drivers) == 2:
+            a, b = self.drivers
+            return (
+                f"Remove one of the two wire() calls connecting "
+                f"{a} and {b}, OR insert a series element (resistor, "
+                f"diode) between them to break the direct conflict."
+            )
+        return None
+
 
 class FloatingNetError(WiringError, ValueError):
     """A net touched only by passive BIDIR ports with no driver
@@ -126,6 +169,35 @@ class FloatingNetError(WiringError, ValueError):
         "switching noise as if the trace were an antenna."
     )
 
+    def __init__(
+        self,
+        *args: Any,
+        kind: str = '',
+        port_refs: Sequence[str] = (),
+        source_locations: Sequence[tuple[str, int]] | None = None,
+    ) -> None:
+        super().__init__(*args, source_locations=source_locations)
+        # `kind`:
+        #   'multi_bidir'  — net has only passive BIDIRs, validate-time
+        #   'all_in'       — wire-time refusal when every port is IN
+        # Suggestions diverge between the two: the multi-BIDIR case has
+        # a high-confidence pair of fixes; the all-IN case typically
+        # means the user forgot a driver entirely, which is design-
+        # intent territory.
+        self.kind: str = kind
+        self.port_refs: tuple[str, ...] = tuple(port_refs)
+
+    def suggested_remediation(self) -> str | None:
+        if self.kind == 'multi_bidir':
+            return (
+                "Wire one port to a Rail (or to an OUT-direction port) so "
+                "something defines the net's value, OR pass "
+                "`dynamically_driven=True` to `wire()` if this is an "
+                "analog feedback node driven through the surrounding "
+                "loop (op-amp bias divider, RC timing network)."
+            )
+        return None
+
 
 class UnconnectedPinError(WiringError, ValueError):
     """A pin declared `mandatory=True` was not connected to any wire
@@ -136,6 +208,25 @@ class UnconnectedPinError(WiringError, ValueError):
         "leaves the silicon stage tied to nothing — the part either "
         "doesn't power up or behaves unpredictably."
     )
+
+    def __init__(
+        self,
+        *args: Any,
+        port_refs: Sequence[str] = (),
+        source_locations: Sequence[tuple[str, int]] | None = None,
+    ) -> None:
+        super().__init__(*args, source_locations=source_locations)
+        self.port_refs: tuple[str, ...] = tuple(port_refs)
+
+    def suggested_remediation(self) -> str | None:
+        if len(self.port_refs) == 1:
+            ref = self.port_refs[0]
+            return (
+                f"Wire {ref} to the supply or signal source it "
+                f"requires — every mandatory pin must be driven inside "
+                f"the enclosing circuit."
+            )
+        return None
 
 
 class NodeMergeError(WiringError, ValueError):
@@ -181,6 +272,29 @@ class SignalTypeMismatchError(SignalError, TypeError):
         "explicit interface (comparator, ADC, level-shifter)."
     )
 
+    def __init__(
+        self,
+        *args: Any,
+        port_types: Sequence[tuple[str, str]] = (),
+        source_locations: Sequence[tuple[str, int]] | None = None,
+    ) -> None:
+        super().__init__(*args, source_locations=source_locations)
+        # Pairs of (port_name, signal_type_class_name) — the framework
+        # knows the participating types but not the designer's intent
+        # for the interface; the suggestion lists the canonical
+        # conversion elements without prescribing one.
+        self.port_types: tuple[tuple[str, str], ...] = tuple(port_types)
+
+    def suggested_remediation(self) -> str | None:
+        if self.port_types:
+            return (
+                "Insert a comparator, ADC, or level-shifter between the "
+                "Analog and Digital ports — they can't share copper "
+                "directly because one carries a continuous voltage and "
+                "the other a logic level."
+            )
+        return None
+
 
 class DomainCrossingError(SignalError, ValueError):
     """A `wire()` or `Port↔Node` attachment crosses a `GroundDomain`
@@ -192,6 +306,29 @@ class DomainCrossingError(SignalError, ValueError):
         "(optocoupler, digital isolator, transformer); a direct wire "
         "would tie the references together and defeat the isolation."
     )
+
+    def __init__(
+        self,
+        *args: Any,
+        port_domains: Sequence[tuple[str, str]] = (),
+        source_locations: Sequence[tuple[str, int]] | None = None,
+    ) -> None:
+        super().__init__(*args, source_locations=source_locations)
+        # Pairs of (port_name, domain_name) — at least two distinct
+        # domains are present for the error to fire at all.
+        self.port_domains: tuple[tuple[str, str], ...] = tuple(port_domains)
+
+    def suggested_remediation(self) -> str | None:
+        domains = {d for _, d in self.port_domains}
+        if len(domains) >= 2:
+            return (
+                "Insert an isolator between the two ground domains — "
+                "an Optocoupler for slow digital signals, an ADuM-class "
+                "digital isolator for fast/SPI, or a transformer for "
+                "AC power.  Direct wiring across domains would tie the "
+                "references together and defeat the isolation."
+            )
+        return None
 
 
 class PortContentionError(SignalError, ValueError):
@@ -222,6 +359,34 @@ class ForbiddenStateError(CircuitError, ValueError):
         "(1,1,1); evaluation produces undefined or destructive output."
     )
 
+    def __init__(
+        self,
+        *args: Any,
+        state_signature: str = '',
+        port_names: Sequence[str] = (),
+        source_locations: Sequence[tuple[str, int]] | None = None,
+    ) -> None:
+        super().__init__(*args, source_locations=source_locations)
+        # `state_signature` identifies the canonical forbidden pattern
+        # (e.g. 'sr_latch_both_active'); per-cell remediations key off
+        # this so the suggestion can be specific without the base
+        # class knowing every cell's forbidden taxonomy.
+        self.state_signature: str = state_signature
+        self.port_names: tuple[str, ...] = tuple(port_names)
+
+    def suggested_remediation(self) -> str | None:
+        if (self.state_signature == 'sr_latch_both_active'
+                and len(self.port_names) == 2):
+            s, r = self.port_names
+            return (
+                f"Drive {s} and {r} from mutually-exclusive sources "
+                f"(e.g. invert one input from the other, or wire them "
+                f"through a one-hot selector), OR use a different "
+                f"latch type — a D-latch with enable, for instance, "
+                f"has no forbidden state."
+            )
+        return None
+
 
 # ------------------------------------------------------------ Part ---
 
@@ -246,6 +411,32 @@ class RefdesError(PartError, ValueError):
         "schematic, the layout, the BOM, and the assembly drawing all "
         "refer to the same physical chip."
     )
+
+    def __init__(
+        self,
+        *args: Any,
+        kind: str = '',
+        duplicate_refdes: str = '',
+        source_locations: Sequence[tuple[str, int]] | None = None,
+    ) -> None:
+        super().__init__(*args, source_locations=source_locations)
+        # `kind` is one of '' (legacy / unknown), 'duplicate',
+        # 'unknown_prefix', 'non_positive', 'duplicate_surface_port'.
+        # Only the 'duplicate' case currently carries a high-confidence
+        # fix; the others depend on which specific value the user
+        # typed wrong.
+        self.kind: str = kind
+        self.duplicate_refdes: str = duplicate_refdes
+
+    def suggested_remediation(self) -> str | None:
+        if self.kind == 'duplicate' and self.duplicate_refdes:
+            return (
+                f"Change one part's `refdes_number=` argument so each "
+                f"part in the circuit gets a unique {self.duplicate_refdes} "
+                f"slot — the schematic, BOM, and assembly drawing all "
+                f"key off the refdes."
+            )
+        return None
 
 
 class DuplicateRegistrationError(PartError, ValueError):
@@ -320,6 +511,35 @@ class IncompatibleMateError(MatingError, TypeError):
         "pitches; calling them mated is asserting a fact contradicted "
         "by the mechanical drawings."
     )
+
+    def __init__(
+        self,
+        *args: Any,
+        actual_class: str = '',
+        expected_class: str = '',
+        partner_class: str = '',
+        source_locations: Sequence[tuple[str, int]] | None = None,
+    ) -> None:
+        super().__init__(*args, source_locations=source_locations)
+        # `actual_class`: the connector class the user passed as `b`.
+        # `expected_class`: type(a).MATES_WITH (the class b should
+        # have been).  `partner_class`: type(a), so the suggestion can
+        # name both sides.  All three present → high-confidence
+        # one-line fix.
+        self.actual_class: str = actual_class
+        self.expected_class: str = expected_class
+        self.partner_class: str = partner_class
+
+    def suggested_remediation(self) -> str | None:
+        if self.actual_class and self.expected_class and self.partner_class:
+            return (
+                f"Use `{self.expected_class}` to mate with "
+                f"`{self.partner_class}` — the declared partner class "
+                f"is unique to that family.  If the design really "
+                f"calls for a `{self.actual_class}`, change the "
+                f"partner side too so the families match."
+            )
+        return None
 
 
 class UnmateableError(MatingError, TypeError):

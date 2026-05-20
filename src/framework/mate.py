@@ -47,7 +47,10 @@ def mate(a: Connector, b: Connector) -> None:
     if type(b) is not mates_with:
         raise IncompatibleMateError(
             f"{type(a).__name__} mates with {mates_with.__name__}, "
-            f"not {type(b).__name__}"
+            f"not {type(b).__name__}",
+            partner_class=type(a).__name__,
+            expected_class=mates_with.__name__,
+            actual_class=type(b).__name__,
         )
     if a.pin_count != b.pin_count:
         raise PinCountMismatchError(

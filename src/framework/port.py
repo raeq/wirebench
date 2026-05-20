@@ -64,7 +64,11 @@ class Port:
         if node.domain is not self.domain:
             raise DomainCrossingError(
                 f"Ground domain mismatch: port '{self.name}' is in domain "
-                f"'{self.domain.name}', node '{node.name}' is in domain '{node.domain.name}'"
+                f"'{self.domain.name}', node '{node.name}' is in domain '{node.domain.name}'",
+                port_domains=(
+                    (self.name, self.domain.name),
+                    (node.name, node.domain.name),
+                ),
             )
         self._node = node
         # Register on the node so orphan-port detection can walk the
@@ -88,7 +92,11 @@ class Port:
                 except (TypeError, ValueError) as e:
                     raise SignalTypeMismatchError(
                         f"port '{self.name}' expects {self.signal_type.__name__}, "
-                        f"got {type(value).__name__}: {e}"
+                        f"got {type(value).__name__}: {e}",
+                        port_types=(
+                            (self.name, self.signal_type.__name__),
+                            ('<incoming>', type(value).__name__),
+                        ),
                     ) from e
         if self._node is not None:
             self._node.drive(value)

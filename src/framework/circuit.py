@@ -210,7 +210,10 @@ class Circuit(Part):
         ]
         if unconnected:
             raise UnconnectedPinError(
-                f"Unconnected mandatory port(s): {', '.join(unconnected)}"
+                f"Unconnected mandatory port(s): {', '.join(unconnected)}",
+                port_refs=tuple(
+                    ref.strip("'") for ref in unconnected
+                ),
             )
 
         # Net-aware short-circuit / floating detection.  Delegated to
@@ -222,8 +225,10 @@ class Circuit(Part):
         from framework.export.nets import compute_logical_nets
         shorts: list[str] = []
         short_locations: list[tuple[str, int]] = []
+        short_drivers: list[str] = []
         floats: list[str] = []
         float_locations: list[tuple[str, int]] = []
+        float_port_refs: list[str] = []
         for net in compute_logical_nets(self):
             outs   = [(o, p) for (o, p) in net.ports if p.direction is Direction.OUT]
             bidirs = [(o, p) for (o, p) in net.ports if p.direction is Direction.BIDIR]
@@ -231,6 +236,8 @@ class Circuit(Part):
             if len(outs) > 1:
                 shorts.append(', '.join(
                     f"'{type(o).__name__}.{p.name}'" for o, p in outs))
+                for o, p in outs:
+                    short_drivers.append(f"{type(o).__name__}.{p.name}")
                 for loc in self._collect_net_source_locations(net.ports):
                     if loc not in short_locations:
                         short_locations.append(loc)
@@ -243,20 +250,32 @@ class Circuit(Part):
                 # detection above stays strict regardless.
                 floats.append(', '.join(
                     f"'{type(o).__name__}.{p.name}'" for o, p in bidirs))
+                for o, p in bidirs:
+                    float_port_refs.append(f"{type(o).__name__}.{p.name}")
                 for loc in self._collect_net_source_locations(net.ports):
                     if loc not in float_locations:
                         float_locations.append(loc)
 
         if shorts:
+            # Carry the structured driver list *only when one net is
+            # shorted* — multi-net diagnostics would conflate drivers
+            # from independent shorts, and the remediation only fires
+            # at the two-driver canonical shape anyway.
+            drivers: tuple[str, ...] = (
+                tuple(short_drivers) if len(shorts) == 1 else ()
+            )
             raise ShortCircuitError(
                 "Short circuit on logical net — multiple drivers: "
                 + '; '.join(shorts),
+                drivers=drivers,
                 source_locations=short_locations,
             )
         if floats:
             raise FloatingNetError(
                 "Floating logical net — multiple passive BIDIRs with no driver: "
                 + '; '.join(floats),
+                kind='multi_bidir',
+                port_refs=tuple(float_port_refs),
                 source_locations=float_locations,
             )
 
@@ -275,8 +294,21 @@ class Circuit(Part):
             else:
                 seen[key] = label
         if collisions:
+            # Single canonical duplicate → carry the refdes string so
+            # the remediation can name it.  Multi-collision diagnostics
+            # are common enough that a generic suggestion would still
+            # apply, but the framework names only the specific case it
+            # can be confident about.
+            duplicate_refdes = ''
+            if len(collisions) == 1:
+                # `collisions[0]` is "'X.Rn' and 'Y.Rn'" — extract the
+                # shared refdes from the right-hand label.
+                tail = collisions[0].rsplit('.', 1)[-1]
+                duplicate_refdes = tail.rstrip("'")
             raise RefdesError(
-                f"Duplicate refdes: {'; '.join(collisions)}"
+                f"Duplicate refdes: {'; '.join(collisions)}",
+                kind='duplicate',
+                duplicate_refdes=duplicate_refdes,
             )
 
     @property
