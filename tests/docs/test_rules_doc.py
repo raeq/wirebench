@@ -129,25 +129,32 @@ def _readme_anchors(readme_path: Path) -> set[str]:
 
 
 def test_every_demo_cross_link_resolves(rules_doc_text: str) -> None:
-    """`../demos/<slug>/README.md#<anchor>` links must resolve: the
-    README file exists and the anchor matches a heading in it.  Plain
-    `../demos/<slug>/` directory links (no anchor) must point at a
-    real demo directory."""
-    # Anchor-bearing README links.
+    """Absolute GitHub URLs of the form
+    `https://github.com/raeq/wirebench/blob/main/demos/<slug>/README.md#<anchor>`
+    must resolve: the README file exists and the anchor matches a
+    heading in it.
+
+    mkdocs strict mode rejects relative links to files outside the
+    `docs/` tree (the README lives under `demos/`, which isn't part
+    of the published site), so the demo cross-links use the absolute
+    GitHub URL — same pattern this doc uses for the
+    `src/framework/errors.py` source link.
+    """
     readme_links = re.findall(
-        r'\(\.\./demos/([a-z0-9_]+)/README\.md#([a-z0-9-]+)\)',
+        r'https://github\.com/raeq/wirebench/blob/main/demos/'
+        r'([a-z0-9_]+)/README\.md#([a-z0-9-]+)',
         rules_doc_text,
     )
     assert readme_links, (
         "the-rules.md should link to demo README sections (the "
-        "*what this design is protected from* near-miss snippets), "
-        "not just demo folders — that's what gives rule entries their "
-        "first-caught traceability."
+        "*what this design is protected from* near-miss snippets) — "
+        "that's what gives rule entries their first-caught "
+        "traceability."
     )
     for slug, anchor in readme_links:
         readme = REPO_ROOT / 'demos' / slug / 'README.md'
         assert readme.is_file(), (
-            f"Doc links to ../demos/{slug}/README.md but {readme} "
+            f"Doc links to demos/{slug}/README.md but {readme} "
             f"doesn't exist"
         )
         anchors = _readme_anchors(readme)
@@ -156,15 +163,18 @@ def test_every_demo_cross_link_resolves(rules_doc_text: str) -> None:
             f"that README produces that GitHub anchor.  Available "
             f"anchors: {sorted(anchors)}"
         )
-    # Plain directory links (no fragment) — also verify the dirs exist.
-    plain_dir_links = set(re.findall(
-        r'\(\.\./demos/([a-z0-9_]+)/\)', rules_doc_text,
-    ))
-    for slug in plain_dir_links:
-        path = REPO_ROOT / 'demos' / slug
-        assert path.is_dir(), (
-            f"Doc links to ../demos/{slug}/ but {path} doesn't exist"
-        )
+
+
+def test_no_relative_demo_links_remain(rules_doc_text: str) -> None:
+    """Relative links into `../demos/` would be rejected by mkdocs
+    strict mode (the demo READMEs aren't part of the mkdocs site
+    tree).  Pin the absolute-URL convention so a future edit doesn't
+    silently re-introduce the failure."""
+    relative = re.findall(r'\]\(\.\./demos/[^)]*\)', rules_doc_text)
+    assert not relative, (
+        f"Relative `../demos/...` links break mkdocs strict mode — "
+        f"use absolute GitHub URLs.  Offenders: {relative}"
+    )
 
 
 def test_doc_cross_link_to_errors_source_resolves(

@@ -17,7 +17,7 @@ If two ports declared `Direction.OUT` end up on the same logical net, `wire()` (
 
 **Why:** Two OUT-direction ports on one net fight each other on the copper. Current sinks through the losing output stage until the FETs overheat. Real silicon has one driver per shared conductor.
 
-**First caught at:** [`hello_led/` — *A shorted supply*](../demos/hello_led/README.md#a-shorted-supply).
+**First caught at:** [`hello_led/` — *A shorted supply*](https://github.com/raeq/wirebench/blob/main/demos/hello_led/README.md#a-shorted-supply).
 
 ## Rule 2 — Every BIDIR-only net needs a driver
 
@@ -27,7 +27,7 @@ A net touched only by passive BIDIR ports (resistor terminals, capacitor leads, 
 
 You can opt out with `wire(*ports, dynamically_driven=True)` when the net is driven through the surrounding loop (op-amp positive feedback, RC timing networks). The opt-out is the designer's explicit assertion that the framework's static check should yield to a known dynamic driver.
 
-**First caught at:** [`hello_led/` — *A floating resistor*](../demos/hello_led/README.md#a-floating-resistor).
+**First caught at:** [`hello_led/` — *A floating resistor*](https://github.com/raeq/wirebench/blob/main/demos/hello_led/README.md#a-floating-resistor).
 
 ## Rule 3 — Mandatory pins must be connected
 
@@ -35,7 +35,7 @@ Some pins are declared `mandatory=True` because the part doesn't function withou
 
 **Why:** A mandatory pin left in air leaves the silicon stage tied to nothing. The part either doesn't power up at all (no current path) or behaves unpredictably (floating reference). The bench equivalent is a board that arrives, populates, and refuses to come on — every solder joint is fine, but one wire was missing in the schematic.
 
-**First caught at:** [`penfold_light_switch/` — *A floating LDR*](../demos/penfold_light_switch/README.md#a-floating-ldr) (the LDR's two terminals are mandatory; forgetting one raises `UnconnectedPinError`).
+**First caught at:** [`penfold_light_switch/` — *A floating LDR*](https://github.com/raeq/wirebench/blob/main/demos/penfold_light_switch/README.md#a-floating-ldr) (the LDR's two terminals are mandatory; forgetting one raises `UnconnectedPinError`).
 
 ## Rule 4 — Signal types stay matched
 
@@ -45,7 +45,7 @@ Every port carries one of two signal families: `Analog` (continuous voltage) or 
 
 A BIDIR port declared as the generic `Analog` base class acts as a *conductor wildcard* — a piece of copper that takes on whatever type the rest of the wire imposes. This is what lets connector contacts and resistor terminals join either domain without breaking the discipline.
 
-**First caught at:** [`penfold_light_switch/` — *A mismatched comparator input domain*](../demos/penfold_light_switch/README.md#a-mismatched-comparator-input-domain).
+**First caught at:** [`penfold_light_switch/` — *A mismatched comparator input domain*](https://github.com/raeq/wirebench/blob/main/demos/penfold_light_switch/README.md#a-mismatched-comparator-input-domain).
 
 ## Rule 5 — Ground domains stay isolated
 
@@ -55,7 +55,7 @@ A `wire()` (or any port-to-node attachment) that crosses two distinct `GroundDom
 
 The framework allows isolator cells (e.g. `ISOW7841`, `Optocoupler`) to have ports in different domains as the legitimate way to bridge.
 
-**First caught at:** [`isolated_rs232/` — *A cross-domain wire*](../demos/isolated_rs232/README.md#a-cross-domain-wire).
+**First caught at:** [`isolated_rs232/` — *A cross-domain wire*](https://github.com/raeq/wirebench/blob/main/demos/isolated_rs232/README.md#a-cross-domain-wire).
 
 ## Rule 6 — Connectors only mate with their declared partner
 
@@ -63,7 +63,7 @@ Every connector class declares its physical mate via `MATES_WITH`. Calling `mate
 
 **Why:** A USB-A receptacle and a TRRS audio jack have different shells, different pin counts, different pitches. Calling them mated is asserting a fact contradicted by the mechanical drawings. The bench equivalent is a parts order with the wrong cable type — the cable arrives and won't seat. The framework catches the mismatch when the code says `mate()`, before the order ships.
 
-**First caught at:** [`water_alarm_split/` — *A wasted parts order — wrong connector family*](../demos/water_alarm_split/README.md#a-wasted-parts-order--wrong-connector-family).
+**First caught at:** [`water_alarm_split/` — *A wasted parts order — wrong connector family*](https://github.com/raeq/wirebench/blob/main/demos/water_alarm_split/README.md#a-wasted-parts-order--wrong-connector-family).
 
 ## Rule 7 — Connectors match on pin count and pitch
 
@@ -71,7 +71,7 @@ Even when the connector families agree, two connectors with mismatched `pin_coun
 
 **Why:** A 4-pin plug into a 5-pin receptacle leaves one pin unmated; a 2.54 mm plug into a 2.00 mm receptacle lands the pins between contacts, not on them. Either way the connection is physically incomplete. As with Rule 6, the bench equivalent is a parts order that arrives, doesn't fit, and goes back.
 
-**First caught at:** [`fan_cooling/` — *A wasted parts order — wrong-pin-count power plug*](../demos/fan_cooling/README.md#a-wasted-parts-order--wrong-pin-count-power-plug).
+**First caught at:** [`fan_cooling/` — *A wasted parts order — wrong-pin-count power plug*](https://github.com/raeq/wirebench/blob/main/demos/fan_cooling/README.md#a-wasted-parts-order--wrong-pin-count-power-plug).
 
 ## Rule 8 — Refdes uniqueness per circuit
 
@@ -87,7 +87,7 @@ Some logical states are valid wirings whose evaluation produces undefined or des
 
 **Why:** Real silicon refuses to enter these states — or worse, enters them once and lets the smoke out. The SR latch with both inputs high is the canonical example: each NOR gate would force the other to zero, so neither output settles, and the chip behaviour is undefined. The framework catches this at `evaluate()` time and names the offending state with a suggested fix (drive the two inputs from mutually-exclusive sources, or use a latch type with no forbidden state).
 
-**First caught at:** [`water_alarm/` — *A locked-up latch*](../demos/water_alarm/README.md#a-locked-up-latch) (S=R=1 on the NOR latch).
+**First caught at:** [`water_alarm/` — *A locked-up latch*](https://github.com/raeq/wirebench/blob/main/demos/water_alarm/README.md#a-locked-up-latch) (S=R=1 on the NOR latch).
 
 ## Rule 10 — `wire()` doesn't merge pre-existing nets
 
