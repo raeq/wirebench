@@ -23,7 +23,7 @@ from framework.port import Port
 from framework.refdes import RefdesBearing
 from framework.errors import LoadError, SaveError
 from framework.registry import lookup
-from framework.wire import wire
+from framework.wire import _wire_with_attribution
 from framework.format_extension import deserialize_kwargs, serialize_kwargs
 from framework.format_records import (
     AssemblyRecord, BoardRecord, CircuitRecord, CircuitryFile,
@@ -206,11 +206,16 @@ def _collect_wires(
             continue
         # Sort port refs lexicographically for determinism.
         sorted_refs = sorted(_port_ref(c, p) for c, p in refs)
+        node = nodes_by_id[nid]
+        # A Node touched by multiple wire() calls accumulates a
+        # list of source locations; round-trip preserves the first
+        # — sufficient for the loader to attribute the reconstructed
+        # WireRecord to the user's original call site.
+        node_locs = getattr(node, 'source_locations', ())
         wires.append(WireRecord(
             ports=sorted_refs,
-            dynamically_driven=getattr(
-                nodes_by_id[nid], 'dynamically_driven', False,
-            ),
+            dynamically_driven=getattr(node, 'dynamically_driven', False),
+            source_location=node_locs[0] if node_locs else None,
         ))
     # Sort wires by their first port-ref for determinism.
     return sorted(wires, key=lambda w: w.ports[0])
@@ -516,7 +521,15 @@ def _from_circuit_record(record: CircuitRecord) -> Circuit:
     components, by_id = _rebuild_circuit_components(record.components)
     for w in record.wires:
         ports = [_resolve_port(r, by_id) for r in w.ports]
-        wire(*ports, dynamically_driven=w.dynamically_driven)
+        # Use the internal helper so a `None` `source_location` from
+        # legacy files stays unattributed — calling the public `wire()`
+        # would auto-capture the loader's frame and fabricate
+        # attribution to framework internals.
+        _wire_with_attribution(
+            ports,
+            dynamically_driven=w.dynamically_driven,
+            source_location=w.source_location,
+        )
     surface_ports = {
         name: _resolve_port(ref, by_id)
         for name, ref in record.surface_ports.items()
@@ -528,7 +541,15 @@ def _from_board_record(record: BoardRecord) -> Board:
     components, by_id = _rebuild_circuit_components(record.components)
     for w in record.wires:
         ports = [_resolve_port(r, by_id) for r in w.ports]
-        wire(*ports, dynamically_driven=w.dynamically_driven)
+        # Use the internal helper so a `None` `source_location` from
+        # legacy files stays unattributed — calling the public `wire()`
+        # would auto-capture the loader's frame and fabricate
+        # attribution to framework internals.
+        _wire_with_attribution(
+            ports,
+            dynamically_driven=w.dynamically_driven,
+            source_location=w.source_location,
+        )
     refdes_number = _refdes_number_from_refdes(record.refdes)
     return Board(
         name=record.name,

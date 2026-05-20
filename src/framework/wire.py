@@ -1,4 +1,8 @@
+import os
+import sys
 import warnings
+from collections.abc import Sequence
+from types import FrameType
 
 from pydantic import validate_call
 
@@ -8,6 +12,38 @@ from framework.errors import (
 )
 from framework.node import Node
 from framework.port import Port, Direction
+
+
+def _capture_user_call_site() -> tuple[str, int] | None:
+    """Walk up the call stack from inside `wire()` to find the first
+    frame that isn't inside pydantic's `validate_call` wrapper.
+
+    Returns `(basename, lineno)` of the user's call site, or `None` if
+    no caller frame is available or the stack walk fails.  Pydantic
+    frames are identified by 'pydantic' appearing in the filename —
+    robust across pydantic versions, where the number of wrapper
+    frames varies.
+
+    Filenames are normalised to `os.path.basename` so attribution stays
+    portable: `.wirebench` files saved on one machine and loaded on
+    another won't carry someone else's `/Users/...`/`/home/...`/`C:\\...`
+    absolute paths.  Basename collisions across files in a project are
+    rare in practice (one demo per file) and the trade-off is worth
+    the portability.
+    """
+    try:
+        frame: FrameType | None = sys._getframe(1)  # skip wire() itself
+    except ValueError:
+        # `sys._getframe` raises ValueError when called at a depth the
+        # interpreter can't satisfy — vanishingly rare from inside a
+        # real function, but documented behavior worth guarding.
+        return None
+    while frame is not None:
+        filename = frame.f_code.co_filename
+        if 'pydantic' not in filename and filename != __file__:
+            return (os.path.basename(filename), frame.f_lineno)
+        frame = frame.f_back
+    return None
 
 
 @validate_call(config={"arbitrary_types_allowed": True})
@@ -26,27 +62,68 @@ def wire(*ports: Port, dynamically_driven: bool = False) -> None:
     `Circuit._validate`'s multi-BIDIR-no-driver check on this net only.
     Promotion is one-way: once a node is annotated, subsequent wire()
     calls that omit the kwarg do not clear it.
+
+    The caller's `(filename, lineno)` is captured automatically and
+    recorded on the resulting `Node`, then surfaced in framework error
+    messages as a `Wired at:` line.  The `.wirebench` loader uses
+    `_wire_with_attribution` directly so legacy files without a
+    captured source stay unattributed across save → load → save.
     """
+    _wire_with_attribution(
+        list(ports),
+        dynamically_driven=dynamically_driven,
+        source_location=_capture_user_call_site(),
+    )
+
+
+def _wire_with_attribution(
+    ports: Sequence[Port],
+    *,
+    dynamically_driven: bool,
+    source_location: tuple[str, int] | None,
+) -> None:
+    """Internal wire-implementation that takes source attribution
+    explicitly.  Pass `source_location=None` to mean *no attribution*:
+    the resulting Node carries no `source_locations` entry, so
+    diagnostics for that net stay free of a fabricated `Wired at:`
+    line and the round-tripped `.wirebench` keeps the field omitted.
+
+    Used by the `.wirebench` loader so reconstructed nodes carry the
+    original user-source attribution (when present in the file) or
+    stay unattributed (when the file pre-dates source-location
+    capture).  Not part of the public API — user code should call
+    `wire()` and let it auto-capture.
+    """
+    call_locs: list[tuple[str, int]] = (
+        [source_location] if source_location is not None else []
+    )
+
     if not ports:
-        raise EmptyWireError("wire() requires at least one port")
+        raise EmptyWireError(
+            "wire() requires at least one port",
+            source_locations=call_locs,
+        )
 
     domains = {p.domain for p in ports}
     if len(domains) > 1:
         names = ', '.join(f"'{p.name}' ({p.domain.name})" for p in ports)
         raise DomainCrossingError(
-            f"Cannot wire ports across ground domains: {names}"
+            f"Cannot wire ports across ground domains: {names}",
+            source_locations=call_locs,
         )
 
     out_ports   = [p for p in ports if p.direction is Direction.OUT]
     bidir_ports = [p for p in ports if p.direction is Direction.BIDIR]
     if len(out_ports) == 0 and len(bidir_ports) == 0:
         raise FloatingNetError(
-            "wire() has no driver: all ports are IN — nothing drives the node"
+            "wire() has no driver: all ports are IN — nothing drives the node",
+            source_locations=call_locs,
         )
     if len(out_ports) > 1:
         names = ', '.join(f"'{p.name}'" for p in out_ports)
         raise ShortCircuitError(
-            f"wire() has multiple drivers ({names}) — short circuit"
+            f"wire() has multiple drivers ({names}) — short circuit",
+            source_locations=call_locs,
         )
 
     from framework.signals import Analog, Digital
@@ -81,7 +158,8 @@ def wire(*ports: Port, dynamically_driven: bool = False) -> None:
         if len(specific) > 1 or (Digital in specific and len(base_types) > 1):
             details = ', '.join(f"'{p.name}': {p.signal_type.__name__}" for p in ports)
             raise SignalTypeMismatchError(
-                f"Signal type mismatch in wire(): {details}"
+                f"Signal type mismatch in wire(): {details}",
+                source_locations=call_locs,
             )
 
     # If any port is already on a node, extend that node (Kirchhoff junction).
@@ -92,8 +170,17 @@ def wire(*ports: Port, dynamically_driven: bool = False) -> None:
     existing = {id(p.node): p.node for p in ports if p.node is not None}
     if len(existing) > 1:
         names = ', '.join(f"'{p.name}' on {p.node.name}" for p in ports if p.node is not None)
+        # Both pre-existing nodes' source-locations help the designer
+        # locate the two wire() calls whose nets the merge would join,
+        # plus this call site itself.
+        merge_locs: list[tuple[str, int]] = list(call_locs)
+        for node in existing.values():
+            for loc in node.source_locations:
+                if loc not in merge_locs:
+                    merge_locs.append(loc)
         raise NodeMergeError(
-            f"wire() would merge two existing nodes — not supported: {names}"
+            f"wire() would merge two existing nodes — not supported: {names}",
+            source_locations=merge_locs,
         )
 
     domain = next(iter(domains))
@@ -102,6 +189,8 @@ def wire(*ports: Port, dynamically_driven: bool = False) -> None:
     else:
         name = '—'.join(p.name for p in ports)
         node = Node(name, domain)
+    if source_location is not None:
+        node._add_source_location(source_location)
     for p in ports:
         if p.node is None:
             p.connect(node)   # connect() registers the port with the node

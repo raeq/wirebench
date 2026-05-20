@@ -87,6 +87,24 @@ class Circuit(Part):
             f"`parts=[]` explicitly."
         )
 
+    @staticmethod
+    def _collect_net_source_locations(
+        net_ports: Sequence[tuple[Part, Port]],
+    ) -> list[tuple[str, int]]:
+        """Deduped source locations of every `wire()` call that touched
+        any port on this net, preserving first-appearance order."""
+        collected: list[tuple[str, int]] = []
+        seen: set[tuple[str, int]] = set()
+        for _, port in net_ports:
+            if port.node is None:
+                continue
+            for loc in port.node.source_locations:
+                if loc in seen:
+                    continue
+                seen.add(loc)
+                collected.append(loc)
+        return collected
+
     def _validate_no_orphan_ports(self, parts: list[Part]) -> None:
         """Rule 2: every port wired to a port we know about must itself
         belong to a part we know about.
@@ -129,7 +147,8 @@ class Circuit(Part):
                         f"the orphan as `self.<name> = …` so the "
                         f"framework auto-collects it, or pass "
                         f"`parts=[…]` explicitly listing every "
-                        f"part."
+                        f"part.",
+                        source_locations=port.node.source_locations,
                     )
 
     def _auto_collect_parts(self) -> list[Part]:
@@ -202,7 +221,9 @@ class Circuit(Part):
         # boundaries.
         from framework.export.nets import compute_logical_nets
         shorts: list[str] = []
+        short_locations: list[tuple[str, int]] = []
         floats: list[str] = []
+        float_locations: list[tuple[str, int]] = []
         for net in compute_logical_nets(self):
             outs   = [(o, p) for (o, p) in net.ports if p.direction is Direction.OUT]
             bidirs = [(o, p) for (o, p) in net.ports if p.direction is Direction.BIDIR]
@@ -210,6 +231,9 @@ class Circuit(Part):
             if len(outs) > 1:
                 shorts.append(', '.join(
                     f"'{type(o).__name__}.{p.name}'" for o, p in outs))
+                for loc in self._collect_net_source_locations(net.ports):
+                    if loc not in short_locations:
+                        short_locations.append(loc)
             elif (len(outs) == 0 and len(bidirs) > 1
                   and not net.dynamically_driven):
                 # `dynamically_driven` is the designer's explicit
@@ -219,16 +243,21 @@ class Circuit(Part):
                 # detection above stays strict regardless.
                 floats.append(', '.join(
                     f"'{type(o).__name__}.{p.name}'" for o, p in bidirs))
+                for loc in self._collect_net_source_locations(net.ports):
+                    if loc not in float_locations:
+                        float_locations.append(loc)
 
         if shorts:
             raise ShortCircuitError(
                 "Short circuit on logical net — multiple drivers: "
-                + '; '.join(shorts)
+                + '; '.join(shorts),
+                source_locations=short_locations,
             )
         if floats:
             raise FloatingNetError(
                 "Floating logical net — multiple passive BIDIRs with no driver: "
-                + '; '.join(floats)
+                + '; '.join(floats),
+                source_locations=float_locations,
             )
 
         # Duplicate-refdes detection. Walks only refdes-bearing children
