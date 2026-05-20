@@ -98,12 +98,69 @@ def test_every_exception_name_in_the_doc_resolves_to_a_class(
         )
 
 
+def _github_anchor(heading: str) -> str:
+    """Mimic GitHub's heading-anchor algorithm so the test can compare
+    a link's `#anchor` fragment against a heading text taken from a
+    demo README.
+
+    Rules (matching GitHub's behaviour for our use cases):
+      - lowercase
+      - keep word characters, spaces, and hyphens; drop everything else
+        (em-dashes, periods, parentheses, apostrophes all drop)
+      - replace each space with a hyphen
+    Consecutive hyphens are preserved (e.g. `order — wrong` becomes
+    `order--wrong`).
+    """
+    text = heading.strip().lower()
+    text = re.sub(r'[^\w\s-]', '', text)
+    text = text.replace(' ', '-')
+    return text
+
+
+def _readme_anchors(readme_path: Path) -> set[str]:
+    """Every GitHub-style anchor produced by an `## …` / `### …`
+    heading in the given README."""
+    anchors: set[str] = set()
+    for line in readme_path.read_text().splitlines():
+        m = re.match(r'^#{2,6}\s+(.+?)\s*$', line)
+        if m:
+            anchors.add(_github_anchor(m.group(1)))
+    return anchors
+
+
 def test_every_demo_cross_link_resolves(rules_doc_text: str) -> None:
-    """`../demos/<name>/` links must point at directories that
-    actually exist."""
-    demo_links = set(re.findall(r'\(\.\./demos/([a-z0-9_]+)/\)', rules_doc_text))
-    assert demo_links, "No demo cross-links found — at minimum a few rules should anchor to demos"
-    for slug in demo_links:
+    """`../demos/<slug>/README.md#<anchor>` links must resolve: the
+    README file exists and the anchor matches a heading in it.  Plain
+    `../demos/<slug>/` directory links (no anchor) must point at a
+    real demo directory."""
+    # Anchor-bearing README links.
+    readme_links = re.findall(
+        r'\(\.\./demos/([a-z0-9_]+)/README\.md#([a-z0-9-]+)\)',
+        rules_doc_text,
+    )
+    assert readme_links, (
+        "the-rules.md should link to demo README sections (the "
+        "*what this design is protected from* near-miss snippets), "
+        "not just demo folders — that's what gives rule entries their "
+        "first-caught traceability."
+    )
+    for slug, anchor in readme_links:
+        readme = REPO_ROOT / 'demos' / slug / 'README.md'
+        assert readme.is_file(), (
+            f"Doc links to ../demos/{slug}/README.md but {readme} "
+            f"doesn't exist"
+        )
+        anchors = _readme_anchors(readme)
+        assert anchor in anchors, (
+            f"Doc links to {readme.name}#{anchor} but no heading in "
+            f"that README produces that GitHub anchor.  Available "
+            f"anchors: {sorted(anchors)}"
+        )
+    # Plain directory links (no fragment) — also verify the dirs exist.
+    plain_dir_links = set(re.findall(
+        r'\(\.\./demos/([a-z0-9_]+)/\)', rules_doc_text,
+    ))
+    for slug in plain_dir_links:
         path = REPO_ROOT / 'demos' / slug
         assert path.is_dir(), (
             f"Doc links to ../demos/{slug}/ but {path} doesn't exist"
