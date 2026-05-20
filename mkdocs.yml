@@ -14,10 +14,11 @@ theme:
 
 nav:
   - Home: index.md
+  - Design principles: design-principles.md
+  - The rules: the-rules.md
   - Learning path: learning-path.md
   - Components: parts.md
   - Prevention benchmark: prevention-benchmark.md
-  - Design principles: design-principles.md
   - Component catalogue (narrative): component-library-data.md
 
 markdown_extensions:
