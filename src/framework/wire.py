@@ -109,6 +109,7 @@ def _wire_with_attribution(
         names = ', '.join(f"'{p.name}' ({p.domain.name})" for p in ports)
         raise DomainCrossingError(
             f"Cannot wire ports across ground domains: {names}",
+            port_domains=tuple((p.name, p.domain.name) for p in ports),
             source_locations=call_locs,
         )
 
@@ -117,12 +118,15 @@ def _wire_with_attribution(
     if len(out_ports) == 0 and len(bidir_ports) == 0:
         raise FloatingNetError(
             "wire() has no driver: all ports are IN — nothing drives the node",
+            kind='all_in',
+            port_refs=tuple(p.name for p in ports),
             source_locations=call_locs,
         )
     if len(out_ports) > 1:
         names = ', '.join(f"'{p.name}'" for p in out_ports)
         raise ShortCircuitError(
             f"wire() has multiple drivers ({names}) — short circuit",
+            drivers=tuple(p.name for p in out_ports),
             source_locations=call_locs,
         )
 
@@ -159,6 +163,9 @@ def _wire_with_attribution(
             details = ', '.join(f"'{p.name}': {p.signal_type.__name__}" for p in ports)
             raise SignalTypeMismatchError(
                 f"Signal type mismatch in wire(): {details}",
+                port_types=tuple(
+                    (p.name, p.signal_type.__name__) for p in ports
+                ),
                 source_locations=call_locs,
             )
 

@@ -93,6 +93,20 @@ def _emit(payload: dict[str, Any]) -> None:
     sys.stdout.write('\n')
 
 
+def _details_with_remediation(e: WirebenchError) -> dict[str, Any]:
+    """Build the `details` dict for a framework exception, merging the
+    structured fields the regex extractor scrapes from the message with
+    the high-confidence remediation hint the exception class produces
+    (when one applies).  Omits the `remediation` key entirely when the
+    class returned `None` — keeps the JSON shape minimal for the
+    common low-confidence case."""
+    details: dict[str, Any] = dict(extract(type(e).__name__, str(e)))
+    remediation = e.suggested_remediation()
+    if remediation is not None:
+        details['remediation'] = remediation
+    return details
+
+
 def _error(message: str, error_class: str, *, design: str | None = None) -> int:
     _emit({
         'status':      'error',
@@ -216,7 +230,7 @@ def run_validate(argv: list[str]) -> int:
             'design':      target.__name__,
             'error_class': type(e).__name__,
             'message':     str(e),
-            'details':     extract(type(e).__name__, str(e)),
+            'details':     _details_with_remediation(e),
         })
         return 1
     except (ValueError, TypeError) as e:

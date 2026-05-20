@@ -46,7 +46,11 @@ class NORLatch(Part):
         s = bool(Digital(self._ports['s'].value))
         r = bool(Digital(self._ports['r'].value))
         if s and r:
-            raise ForbiddenStateError("Invalid: S and R both active")
+            raise ForbiddenStateError(
+                "Invalid: S and R both active",
+                state_signature='sr_latch_both_active',
+                port_names=('s', 'r'),
+            )
         if s:
             self._q = True
         elif r:
