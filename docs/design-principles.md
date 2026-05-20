@@ -162,6 +162,82 @@ The principles above appear as specific patterns throughout the code:
 
 Each pattern is a specific application of the central commitment: *every line of code maps to a physical operation*.
 
+## Rules for component-class authors
+
+If you're adding a new component to `src/components/`, the [scaffold script](#scaffolding-a-new-component) machine-applies most of the rules below. The list is here so the *why* of each rule stays visible — if a refactor tempts you to bypass one, the physical referent is the test.
+
+### Physical fidelity is primary
+
+Each component exposes only the interfaces a real component has. If you couldn't do it with a soldering iron, you cannot do it in code.
+
+**Why:** Every other rule below is a corollary of this one. A class that surfaces an interface no physical part offers is no longer modelling the part — it's modelling something convenient for software, which is what the framework was built to refuse.
+
+### Callable components (functor pattern)
+
+Every component implements `__call__` as its sole signal interface. Invoke components like functions — input in, output out — because that is what physical components are.
+
+**Why:** A real component has no API beyond its electrical interface. A resistor has two leads; you apply a signal, you read a signal. Methods named `apply()` or `update()` are software-layer convenience that has no physical analogue — and once present, they're how the framework's discipline starts leaking.
+
+### No direct state manipulation
+
+Component state may only change via the designated signal path (`__call__`). Never add setters, mutator methods, or public attributes that allow state to be written directly from outside.
+
+**Why:** A real LED isn't lit because something wrote `True` to it — it's lit because current flows from anode to cathode. Setters that bypass the signal path break the *the code matches the breadboard* contract: a `wire()` failure can no longer guarantee the component is in a defined state.
+
+### Explicit wiring in composite components
+
+When composing components, the wiring must be written out explicitly and directionally — each line is a wire, signal flows one way. No component knows about any other; they are connected only by the composite's `__call__` method.
+
+**Why:** Every `wire()` call is a jumper on the breadboard. Hiding the wiring inside a helper or a loop hides the topology — and the framework's whole construction-time validation pass walks the explicit `wire()` calls to detect shorts, floats, and ground-domain crossings. Implicit wiring would have nothing to walk.
+
+### `__slots__` on every component
+
+All component classes must declare `__slots__`. Physical components cannot grow new pins at runtime.
+
+**Why:** A real chip's pinout is fixed at the factory. A class without `__slots__` can grow attributes (and ports) at runtime through accidental assignment — which would be a part that magically grows a third terminal once installed. The framework relies on the pin count being immutable when it validates net topology; `__slots__` is what makes that load-bearing.
+
+### Invalid states must raise
+
+Hardware has forbidden states (e.g. S=R=1 on an SR latch). Model them with leaves from `framework.errors` — `ForbiddenStateError`, `PartParameterError`, `PartConfigurationError`. Never raise bare `ValueError` / `TypeError`.
+
+**Why:** Real silicon doesn't ignore S=R=1 on an SR latch — it enters an undefined state that often costs hardware. The framework's job is to refuse those states with a specific, named exception so the designer learns *what's wrong physically*, not just *something raised*. Bare `ValueError` collapses every defect class into one bucket and erases the teaching the hierarchy was built to deliver.
+
+### Signal types: always `Analog` and `Digital`
+
+Ports, wiring, and signal handling must use `Analog` / `Digital` — never raw `float` / `bool`.
+
+**Why:** Real copper carries either a continuous voltage or a logic level — never both, never something in between. Tagging ports with `Analog` / `Digital` is how the framework refuses cross-type wires at construction time; using raw `bool` / `float` collapses both worlds into one untyped substrate and the check disappears.
+
+### Output polarity matches physical pin behaviour
+
+Model the pin voltage, not the internal device state. An open-collector output is LOW when conducting and HIGH when off — drive `False` for the conducting case.
+
+**Why:** The framework models pins, not silicon insides. A downstream component reading `True` from an open-collector pin should see HIGH (the rest state) — which is what a multimeter would read at that pin. Inverting the polarity inside the part to make the wiring "look right" hides a real-world inversion the schematic still has to show.
+
+### Hardware-pin-name parameters
+
+`__call__` parameter names must be hardware pin names (`s`, `r`, `v_plus`) — not application-layer names (`low`, `high`, `sensor`).
+
+**Why:** Pin names are the join between the model and the datasheet. A reader cross-referencing the chip's pinout should land on the same identifier wirebench uses; software-layer names break that cross-reference and force the reader to translate.
+
+### What not to do
+
+- **No convenience methods that bypass the signal path.**
+  *Why:* A real part has no API beyond its electrical interface. Convenience methods are a software-layer concern; once present, they're how the *callable components* discipline starts leaking and downstream code grows habits that no longer match what the breadboard does.
+
+- **No logging, observers, or callbacks inside component classes.**
+  *Why:* A physical resistor has no logger. Observers and callbacks belong to the surrounding orchestration (the harness, the simulator, the visualiser) — not to the part itself. Putting them on the component invites a class hierarchy that diverges from physical reality.
+
+- **No inheritance between component types — compose, don't inherit.**
+  *Why:* Physical parts don't inherit. A comparator and an op-amp share a package shape and some pin-name conventions, but they're distinct silicon. Inheritance would assert an *is-a* relationship the datasheets don't claim; composition (one part instantiating another as an internal cell) matches how real parts are designed.
+
+- **No default power-on state unless the real part has one.**
+  *Why:* A real chip at power-on may be in any state its silicon allows; some latch types come up in a defined state, most don't. A scaffold that initialises every component to a defined state lies about the bench reality — the user's downstream check for "is this in the right state yet?" never sees the indeterminate-at-power-on case the real chip exhibits.
+
+### Scaffolding a new component
+
+`scripts/scaffold_component.py` machine-applies the rules above. See [`CONTRIBUTING.md`](https://github.com/raeq/wirebench/blob/main/CONTRIBUTING.md#adding-a-new-part) for the invocation; the scaffold's output passes every framework rule by construction, so the contributor only fills in part-specific specification (pin logic, `VERIFY` / `GOTCHAS` strings, layout descriptor).
+
 ## Further reading
 
 - The source code at [github.com/raeq/wirebench](https://github.com/raeq/wirebench) — every framework primitive is annotated with comments explaining the design decisions and trade-offs that produced its current shape.

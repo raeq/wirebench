@@ -43,7 +43,60 @@ for the full pattern.
 
 ## Adding a new part
 
-Take `LM7805` as the canonical example for a linear regulator:
+The recommended path for a new component is the scaffold script. It
+machine-applies every contributor-side rule (`__slots__`, the six
+required ClassVars, `@register`, refdes validation, port shape, test
+stub) so you can focus on the part-specific specification.
+
+```bash
+uv run scripts/scaffold_component.py \
+    --name LM7806 \
+    --kind chip \
+    --refdes-prefix U \
+    --footprint "Package_TO_SOT_THT:TO-220-3_Vertical" \
+    --pins "vin:in:Analog,gnd:in:Analog,vout:out:Analog" \
+    --description "6 V linear regulator — TO-220 fixed-output."
+```
+
+This emits two files:
+
+- `src/components/chips/lm7806.py` — the component class, with
+  `__slots__`, every required ClassVar (`REFDES_PREFIX`, `FOOTPRINT`,
+  `PIN_NUMBERS`, `LAYOUT`, `VERIFY`, `GOTCHAS`), `@register`, a
+  refdes-validating `__init__`, and a placeholder `evaluate()` /
+  `__call__()` shape that drives every OUT pin so the framework's
+  *OUT pin must be driven* invariant passes by default.
+- `tests/components/test_lm7806.py` — a construction-shape test stub
+  that asserts the class refdes, port surface, and per-pin direction +
+  signal-type values.
+
+The scaffold also re-exports the new class from the kind's
+`__init__.py` so `from components.chips import LM7806` works.
+
+You then fill in:
+
+1. The class docstring — the part's real behavioural description,
+   pin table, operating range, framework-relevant gotchas.
+2. The `VERIFY` strings — multimeter / bench-test instructions the
+   builder runs *before* powering the board.
+3. The `GOTCHAS` strings — assembly-time warnings the
+   `assembly_guide` exporter surfaces to the breadboard builder.
+4. The `LAYOUT` descriptor (axial_2lead, dip, qfp, …) so the
+   breadboard SVG visualiser knows how to draw the part.
+5. The real `evaluate()` / `__call__()` logic. For chips with OUT
+   pins, the canonical pattern is a *concept cell* under
+   `src/components/chips/concepts/`: instantiate the cell in
+   `__init__`, wire it to the OUT pin's `.internal` face, let auto-
+   collect pick it up via `self.cell = MyConcept(...)`.
+
+Supported `--kind` values today are `passive` and `chip`. For other
+families (`connector`, `diode`, `transistor`, `relay`, `transducer`),
+the base classes have shapes too varied to template usefully — copy
+an existing example (`src/components/diodes/`, `src/components/connectors/`,
+etc.) and adapt. The framework rules apply equally to hand-written
+components.
+
+If you're not using the scaffold, the manual steps are:
 
 1. Pick the right base class:
    - `Chip` for ICs (anything with internal logic + a pin table)
